@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:form styleClass="column_100" id="formPerson">
+    <h:panelGrid id="panelAdd" columns="4" border="0" cellpadding="1" cellspacing="1"
+      columnClasses="column_5,column_20,column_20,column_5,column_5,column_20,column_20,column_5">
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.first_name}" styleClass="resaltar_negro" />
+      <p:inputText id="firstNameAdd" value="#{personAdminMBean.addObject.names}" required="true"
+        requiredMessage="#{msg.field_required}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="firstNameAdd" id="firstNameAddMsg" />
+
+
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.last_name}" styleClass="resaltar_negro" />
+      <p:inputText id="firstLastNameAdd" value="#{personAdminMBean.addObject.lastNames}" required="true"
+        requiredMessage="#{msg.field_required}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="firstLastNameAdd" id="firstLastNameAddMsg" />
+
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.number_identity}" styleClass="resaltar_negro" />
+      <p:inputText id="numberIdentityAdd" required="true" requiredMessage="#{msg.field_required }"
+        value="#{personAdminMBean.addObject.identity}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="numberIdentityAdd" id="numberIdentityAddMsg" />
+
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.email}" styleClass="resaltar_negro" />
+      <p:inputText pt:type="email" pt:placeholder="#{msg.input_email}" id="emailAdd"
+        value="#{personAdminMBean.addObject.email}" maxlength="50" size="50">
+        <f:validateRequired for="emailAdd" />
+        <f:validator validatorId="emailValidator" for="emailAdd" />
+      </p:inputText>
+      <p:message display="icon" for="emailAdd" id="emailAddMsg" />
+
+      <h:outputText value=" " style="color:red;" />
+      <h:outputLabel value="#{msg.phone}" styleClass="resaltar_negro" />
+      <p:inputText id="phoneAdd" value="#{personAdminMBean.addObject.phone}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="phoneAdd" id="phoneAddMsg" />
+
+      <h:outputText value=" " style="color:red;" />
+      <h:outputLabel value="#{msg.movil}" styleClass="resaltar_negro" />
+      <p:inputText id="movilAdd" value="#{personAdminMBean.addObject.cellPhone}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="movilAdd" id="movilAddMsg" />
+
+      <h:outputText value=" " style="color:red;" />
+      <h:outputLabel value="#{msg.address}" styleClass="resaltar_negro" />
+      <p:inputText id="addressAdd" value="#{personAdminMBean.addObject.address}" pt:placeholder="#{msg.input_address}"
+        maxlength="50" size="50">
+      </p:inputText>
+      <p:message display="icon" for="addressAdd" id="addressAddMsg" />
+
+    </h:panelGrid>
+    <div align="right">
+      <p:commandButton value="#{msg.btn_clear}" id="btnClearPerson" styleClass="button-general" icon="img-clean"
+        update=":formAdd formPerson :formConfirmMod:confirmMod" process="@this"
+        actionListener="#{personAdminMBean.clearObject}" />
+      <p:commandButton value="#{msg.btn_next}" id="btnNextPerson" styleClass="button-general" icon="img-forward"
+        update=":formAdd panelAdd" process="@form" actionListener="#{personAdminMBean.nextTabUser}" />
+      <p:commandButton value="#{msg.btn_save}" disabled="true" update=":formAdd :formConfirmAdd:confirmAdd"
+        process="@form" styleClass="button-general" icon="img-save" actionListener="#{userPortalAdminMBean.load}" />
+    </div>
+
+  </h:form>
+
+</ui:composition>

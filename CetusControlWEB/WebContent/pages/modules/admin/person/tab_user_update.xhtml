@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+  <f:loadBundle var="msg" basename="message_es" />
+
+  <h:panelGrid id="panelUpdate" columns="3" border="0">
+    <h:outputText value="#{msg.lbl_roles}" styleClass="resaltar_negro" />
+    <p:selectManyCheckbox id="rol" required="true" requiredMessage="#{msg.field_required}"
+      value="#{personAdminMBean.selectedOptionsRol}">
+      <f:selectItems value="#{personAdminMBean.listRolItem}" />
+    </p:selectManyCheckbox>
+    <p:message for="rol" id="msgRol" display="icon" />
+
+    <h:outputText value="#{msg.login_cetus}:" styleClass="resaltar_negro" />
+    <p:inputText id="LoginUpdate" value="#{personAdminMBean.addObjectUserPortal.loginCetus}" required="true"
+      requiredMessage="#{msg.field_required}" maxlength="44">
+    </p:inputText>
+    <p:message for="LoginUpdate" id="msgLogin" display="icon" />
+
+    <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
+    <p:selectBooleanButton id="statusUpdate" value="#{personAdminMBean.status}" onLabel="#{msg.active}"
+      offLabel="#{msg.inactive}" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+    <p:message for="statusUpdate" id="msgStatus" display="icon" />
+
+
+  </h:panelGrid>
+  <h:inputHidden value="#{personAdminMBean.addObjectUserPortal.id}" />
+
+  <div align="right">
+    <p:commandButton value="#{msg.btn_clear}" id="btnClearPerson" styleClass="button-general" icon="img-clean"
+      update=":formUpdate formPerson :formConfirmMod:confirmMod" process="@this"
+      actionListener="#{personAdminMBean.clearObject}" />
+    <p:commandButton value="#{msg.btn_next}" id="btnNextPerson" styleClass="button-general" icon="img-forward"
+      disabled="true" update=":formUpdate panelUpdate" process="@form" actionListener="#{personAdminMBean.nextTabUser}" />
+    <p:commandButton value="#{msg.btn_save}" disabled="false" update=":formUpdate :formConfirmMod:confirmMod"
+      process="@form" styleClass="button-general" icon="img-save" actionListener="#{personAdminMBean.loadUpdate}" />
+  </div>
+
+</ui:composition>

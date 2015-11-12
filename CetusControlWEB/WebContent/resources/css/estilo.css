@@ -1,0 +1,89 @@
+body {
+	font-size: 11px !important;
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif !important;
+}
+
+a {
+	text-decoration: underline;
+	border: 0px;
+}
+
+.column_5 {
+	width: 5% !important;
+	vertical-align: top;
+}
+
+.column_10 {
+	width: 10% !important;
+	vertical-align: top;
+}
+
+.column_20 {
+	width: 20% !important;
+	vertical-align: top;
+}
+
+.column_30 {
+	width: 30% !important;
+	vertical-align: top;
+}
+
+.column_40 {
+	width: 40% !important;
+	vertical-align: top;
+}
+
+.column_50 {
+	width: 50% !important;
+	vertical-align: top;
+}
+
+.column_60 {
+	width: 60% !important;
+	vertical-align: top;
+}
+
+.column_70 {
+	width: 70% !important;
+	vertical-align: top;
+}
+
+.column_80 {
+	width: 80% !important;
+	vertical-align: top;
+}
+
+.column_90 {
+	width: 90% !important;
+	vertical-align: top;
+}
+
+.column_100 {
+	width: 100% !important;
+	vertical-align: top;
+}
+
+.resaltar_negro {
+	font-weight: bold;
+}
+
+.resaltar_rojo {
+	font-weight: bold;
+	color: red;
+}
+
+.resaltar_green {
+	font-weight: bold;
+	color: green;
+}
+
+.restaltar_enabled {
+	font-size: 20px !important;
+	color: red;
+	background-color: #CCCCCC;
+}
+
+.error-500 {
+	text-align: center !important;
+	color: red;
+}

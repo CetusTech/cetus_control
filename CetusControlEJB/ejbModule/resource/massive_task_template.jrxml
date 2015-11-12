@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="massive_task_template" pageWidth="1400" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="1400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="cf0fdd01-4da9-4353-858e-7773e59c9128">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.sheet.names.1" value="PLANTILLA CARGUE"/>
+	<property name="net.sf.jasperreports.page.break.no.pagination" value="apply"/>
+	<property name="net.sf.jasperreports.export.xls.sheet.names.2" value="DATOS BASE"/>
+	<property name="net.sf.jasperreports.export.xls.after.before.row" value="true"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<subDataset name="dataset1" uuid="554cc22a-f29d-4a4e-bc07-a2199d6a78bd">
+		<parameter name="ID_CLIENT_CETUS" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select DESCRIPTION from priority where id_client_cetus = $P{ID_CLIENT_CETUS}]]>
+		</queryString>
+		<field name="DESCRIPTION" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset2" uuid="8c887454-702c-440f-9f1b-5dcf9fa17e9c">
+		<parameter name="ID_CLIENT_CETUS" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DESCRIPTION FROM TYPE_TASK WHERE ID_CLIENT_CETUS = $P{ID_CLIENT_CETUS}]]>
+		</queryString>
+		<field name="DESCRIPTION" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset3" uuid="5812c355-dc8e-4860-b513-44e15e4da772">
+		<parameter name="ID_CLIENT_CETUS" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DESCRIPTION FROM AREA WHERE ID_CLIENT_CETUS = $P{ID_CLIENT_CETUS}]]>
+		</queryString>
+		<field name="DESCRIPTION" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset4" uuid="d9066828-5d6f-463d-a7c0-f93b94f4620f">
+		<parameter name="ID_CLIENT_CETUS" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DESCRIPTION FROM STATUS WHERE ID_CLIENT_CETUS = $P{ID_CLIENT_CETUS}]]>
+		</queryString>
+		<field name="DESCRIPTION" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset5" uuid="e4f051a4-288a-4b0e-9bb7-866191e30f0e">
+		<parameter name="ID_CLIENT" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT G.ID,G.NAME
+FROM GROUP_T G,
+     PERSON P,
+     CLIENT C
+WHERE G.ID_PERSON_LIDER = P.ID
+  AND P.ID_CLIENT = C.ID
+  AND C.ID = $P{ID_CLIENT}]]>
+		</queryString>
+		<field name="ID" class="java.math.BigDecimal"/>
+		<field name="NAME" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="ID_CLIENT_CETUS" class="java.lang.String"/>
+	<parameter name="ID_CLIENT" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select NAME from client_cetus limit 1]]>
+	</queryString>
+	<field name="NAME" class="java.lang.String"/>
+	<columnHeader>
+		<band height="44">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="1400" height="24" forecolor="#FFFFFF" backcolor="#8EC120" uuid="7ade5009-e9f2-487d-a287-f634c993676f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CARGA DE TAREAS MASIVAMENTE - CETUS CONTROL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="24" width="81" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="8362f6c8-905b-486f-b54c-8012e7c8764e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TIPO TAREA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="81" y="24" width="79" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="7320a559-d1ac-40bb-a6c7-877ea9b8351a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AREA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="160" y="24" width="72" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="44ceca86-a9f6-4fcf-9427-54cf87fe81dc"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIORIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="232" y="24" width="63" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="9daf3c0d-6da9-49c4-afbb-55c2c603acfc"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="295" y="24" width="107" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="c891c10f-7986-420e-acec-ae61288d105c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID RESPONSABLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="487" y="24" width="99" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="026fde04-4b26-42df-80cc-f6740a43832d"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="586" y="24" width="97" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="eeeb481f-759d-4e59-9ffa-91b68358d081"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBSERVACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="683" y="24" width="79" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="2055a42d-6897-4e15-a288-4533c9e4a6d3"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOLICITANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="762" y="24" width="181" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="6a23b2e7-300a-4dda-929c-4236131d8ca9"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBSERVACION SOLICITANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="943" y="24" width="125" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="5770f765-9350-4b3b-b04d-c5c324b617ad"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[USUARIO FUNCIONAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="1068" y="24" width="116" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="d0fcaf9e-5fa3-42ba-8931-3f21d368646d"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA ASIGNACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="1184" y="24" width="69" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="1b5166c3-9582-4ab4-9433-d06404ce649a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DURACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="1253" y="24" width="69" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="25294aa0-c438-4c75-93e3-4d1f96a1ac03"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA FIN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="1322" y="24" width="78" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="07c4651c-f13a-44d9-95d5-388315cfcf99"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[APROBADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="402" y="24" width="85" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="e762e80e-61b9-45ec-9d81-0cdb5f8055b5"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID GRUPO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band>
+			<staticText>
+				<reportElement x="0" y="0" width="81" height="0" uuid="fb9eb5f9-82fa-4ef5-9f56-34eb94f688af"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="57">
+			<break>
+				<reportElement x="0" y="0" width="100" height="1" uuid="a32d6643-07b5-4d99-b14c-20fb8f57b214">
+					<property name="net.sf.jasperreports.export.xls.after.before.row" value="true"/>
+				</reportElement>
+			</break>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="2" width="150" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="179fd6b1-2375-4155-a983-783e48e38b74"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TIPO TAREA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="160" y="2" width="150" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="e1d0d940-727b-40a3-8337-0b1fc31ab841"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AREA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="320" y="2" width="100" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="41753a48-70a7-4a15-924c-bdb1c100423f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIORIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="431" y="2" width="100" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="70431863-9ef7-4466-876d-4fa2d1c2c194"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="542" y="2" width="298" height="20" forecolor="#FFFFFF" backcolor="#8EC120" uuid="89d809f2-10e4-4366-8829-15c2e642282f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRUPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="542" y="22" width="71" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="de539d59-0074-439a-bd12-6a9d92c66e82"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID GRUPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="613" y="22" width="227" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="03bb5158-0497-4e12-ae64-b1d024e00f39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DEL GRUPO]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="320" y="22" width="100" height="18" uuid="366a7755-0c13-45f2-84ad-367b0d96904e"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="471de985-8b2a-4920-8178-56b6ab1c1f5b">
+						<datasetParameter name="ID_CLIENT_CETUS">
+							<datasetParameterExpression><![CDATA[$P{ID_CLIENT_CETUS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="100">
+						<textField>
+							<reportElement x="0" y="0" width="100" height="18" uuid="6e45cb83-8f87-4932-b177-c7faf8c0d2be"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="0" y="22" width="150" height="18" uuid="5b41e874-516e-4d9a-be3c-29fe124b6aaa"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset2" uuid="3cedbf74-85a3-41d3-9994-e21d8eaadb01">
+						<datasetParameter name="ID_CLIENT_CETUS">
+							<datasetParameterExpression><![CDATA[$P{ID_CLIENT_CETUS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="150">
+						<textField isBlankWhenNull="true">
+							<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="150" height="18" uuid="ddeb591c-0565-442d-93db-c455be26f297"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="160" y="22" width="150" height="18" uuid="4a613475-971f-402b-81d0-7a925c37b1d5"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset3" uuid="2f69eb01-115b-499d-939e-1c5615b93fd8">
+						<datasetParameter name="ID_CLIENT_CETUS">
+							<datasetParameterExpression><![CDATA[$P{ID_CLIENT_CETUS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="150">
+						<textField>
+							<reportElement x="0" y="0" width="150" height="18" uuid="4da2a5fe-3bf5-41e4-a2dd-3c4878f75651"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="431" y="22" width="100" height="18" uuid="1e77d33d-a8c6-4a64-be87-4984a47984f4"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset4" uuid="4a7a53f1-de69-448a-ba59-381eb40bd93e">
+						<datasetParameter name="ID_CLIENT_CETUS">
+							<datasetParameterExpression><![CDATA[$P{ID_CLIENT_CETUS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="100">
+						<textField>
+							<reportElement x="0" y="0" width="100" height="18" uuid="b750e93b-ae3f-4cd1-9083-036440143d31"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="542" y="40" width="298" height="17" uuid="12188100-93ac-4569-bb43-3165df6943cd"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset5" uuid="78268a53-48cd-4d96-af84-137b2c1a9498">
+						<datasetParameter name="ID_CLIENT">
+							<datasetParameterExpression><![CDATA[$P{ID_CLIENT}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="17" width="298">
+						<textField>
+							<reportElement x="0" y="0" width="71" height="17" uuid="749c61ce-fe6d-4aa9-a362-4af8ccdae9d3"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="71" y="0" width="227" height="17" uuid="34314167-7dc6-4101-a156-bce63e7ad793"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="980" y="2" width="98" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="5f29af29-46e3-43ca-a599-fea5c7937644"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[APROBADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="859" y="2" width="107" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="eeb80c4e-ed69-4842-98a1-40ea041bb634"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORMATO FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="859" y="22" width="107" height="18" uuid="41f6eebc-a6de-4c71-b380-500d8b3f3218"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[dd/MM/yyyy]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="980" y="22" width="98" height="18" uuid="5215ab41-024f-4664-9eb2-e97937bc5ad9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[0 = No Aprobado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="980" y="40" width="98" height="17" uuid="ff8547dd-5c16-4139-acf2-05456f22a024"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[1 = Aprobado]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

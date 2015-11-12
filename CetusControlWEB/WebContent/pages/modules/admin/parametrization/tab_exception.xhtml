@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+  <p:contextMenu for="tableExcep">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogViewExcep :alertSelectRowExcep" process="@form"
+      actionListener="#{parametrizationMBean.validateSelectedRecordExcepView}" icon="ui-icon-search" />
+
+    <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
+      update=":formUpdateExcep:pnlUpdateExcep :dialogModExcep :alertSelectRowExcep"
+      actionListener="#{parametrizationMBean.validateSelectedRecordExcepUpd}" />
+
+    <p:separator styleClass="separator-toolbar" />
+
+    <p:menuitem value="#{msg.btn_delete}" icon="ui-icon-trash"
+      update=":formConfirmDeleteExcep:pnlConfirmDeleteExcep :alertSelectRowExcep"
+      actionListener="#{parametrizationMBean.validateSelectedRecordExcepDel}" />
+  </p:contextMenu>
+
+  <p:toolbar styleClass="body_toolbar">
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="addButtonExcep" oncomplete="PF('dialogAddExcepVar').show()" process="@form" title="#{msg.btn_new}"
+        update=":formAddExcep:panelAddExcep" actionListener="#{parametrizationMBean.clearAddException}" immediate="true">
+        <p:graphicImage name="document_add_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <p:commandLink id="viewDetailExcep" title="#{msg.btn_view_detail}" update=":dialogViewExcep :alertSelectRowExcep"
+        process="@form" actionListener="#{parametrizationMBean.validateSelectedRecordExcepView}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:commandLink id="updateButtonExcep" title="#{msg.btn_update}"
+        update=":formUpdateExcep:pnlUpdateExcep :dialogModExcep :alertSelectRowExcep :alertSelectDateBefore"
+        actionListener="#{parametrizationMBean.validateSelectedRecordExcepUpd}">
+        <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <p:commandLink id="deleteButtonExcep" title="#{msg.btn_delete}"
+        update=":formConfirmDeleteExcep:pnlConfirmDeleteExcep :alertSelectRowExcep :alertSelectDateBefore"
+        actionListener="#{parametrizationMBean.validateSelectedRecordExcepDel}">
+        <p:graphicImage name="document_delete_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <h:commandLink id="excelExcep" title="#{msg.btn_excel}">
+        <p:graphicImage name="excel.png" width="32" height="32" library="images" />
+        <p:dataExporter type="xls" target="tableExcep" encoding="ISO-8859-1"
+          fileName="#{msg.report_excel}#{parametrizationMBean.currentDateStr}" />
+      </h:commandLink>
+
+
+      <h:commandLink id="pdfExcep" title="#{msg.btn_pdf}">
+        <p:graphicImage name="pdf.png" width="32" height="32" library="images" />
+        <p:dataExporter type="pdf" encoding="ISO-8859-1" target="tableExcep"
+          fileName="#{msg.report_pdf}#{parametrizationMBean.currentDateStr}" />
+      </h:commandLink>
+    </p:toolbarGroup>
+  </p:toolbar>
+
+  <p:dataTable value="#{parametrizationMBean.listRegisterException}" rows="#{msg.rows_paginator}" id="tableExcep"
+    paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{object.id}" selection="#{parametrizationMBean.selectedObjectExcep}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="object">
+
+
+    <p:column sortBy="#{object.id}" filterBy="#{object.id}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.id}" />
+      </f:facet>
+      <h:outputText value="#{object.id}" />
+    </p:column>
+
+    <p:column sortBy="#{object.dateException}" filterBy="#{object.dateException}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.date_exception}" />
+      </f:facet>
+      <h:outputText value="#{object.dateException}">
+        <f:convertDateTime type="date" pattern="#{msg.PATTERN_DATE}" />
+      </h:outputText>
+    </p:column>
+
+    <p:column sortBy="#{object.jornada != null and object.jornada == 0 ? msg.all_day : object.jornada}"
+      filterBy="#{object.jornada != null and object.jornada == 0 ? msg.all_day : object.jornada}"
+      filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.jornada}" />
+      </f:facet>
+      <h:outputText value="#{object.jornada != null and object.jornada == 0 ? msg.all_day : object.jornada}" />
+    </p:column>
+
+    <p:column sortBy="#{object.description}" filterBy="#{object.description}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.description}" />
+      </f:facet>
+      <h:outputText value="#{object.description}" />
+    </p:column>
+
+
+  </p:dataTable>
+</ui:composition>

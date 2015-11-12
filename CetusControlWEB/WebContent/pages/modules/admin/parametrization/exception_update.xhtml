@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formUpdateExcep" prependId="false">
+
+    <p:panel id="pnlUpdateExcep">
+
+      <h:panelGrid id="panelGridUpdateExcep_1" columns="3" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="#{msg.date_exception}:" for="dateExcepUpd" />
+        <p:calendar id="dateExcepUpd" value="#{parametrizationMBean.selectedObjectExcep.dateException}"
+          pattern="#{msg.PATTERN_DATE}" disabled="true" size="10">
+        </p:calendar>
+        <p:message for="dateExcepUpd" id="dateExcepUpdMsg" />
+
+        <p:outputLabel value="#{msg.jornada}:" for="jornadaExcepUpd" />
+        <p:selectOneMenu id="jornadaExcepUpd" value="#{parametrizationMBean.selectedObjectExcep.jornada}"
+          required="true" requiredMessage="#{msg.field_required}">
+          <f:selectItems value="#{parametrizationMBean.listJornadaExcep}" />
+        </p:selectOneMenu>
+        <p:message for="jornadaExcepUpd" id="jornadaExcepUpdMsg" />
+
+        <p:outputLabel value="#{msg.description}:" for="descriptionExcepUpd" />
+        <p:inputTextarea required="true" requiredMessage="#{msg.field_required}" maxlength="195" cols="40" rows="5"
+          id="descriptionExcepUpd" value="#{parametrizationMBean.selectedObjectExcep.description}" />
+        <p:message for="descriptionExcepUpd" id="descriptionExcepUpdMsg" />
+
+      </h:panelGrid>
+
+      <f:facet name="footer">
+        <center>
+          <p:commandButton id="btnUpdateExcep" value="#{msg.btn_save}"
+            update="pnlUpdateExcep :formConfirmModExcep:confirmModExcep" process="@form" styleClass="button-general"
+            icon="img-save" actionListener="#{parametrizationMBean.loadUpdateExcep}" />
+        </center>
+      </f:facet>
+    </p:panel>
+
+
+  </h:form>
+</ui:composition>

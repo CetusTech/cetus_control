@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:panelGrid id="viewAccount" columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.status}" />
+    </f:facet>
+    <h:outputText value="#{msg.status_id}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.id}" />
+
+    <h:outputText value="#{msg.status_descripcion}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.description}" />
+
+
+    <h:outputText value="#{msg.status_color}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.color}" style="background-color: ##{selectedObject.color}" />
+
+  </p:panelGrid>
+  <p:panelGrid columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.audit}" />
+    </f:facet>
+
+    <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.creationUser}" />
+
+    <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.creationDate}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+
+    <h:outputText value="#{msg.status_lastupdate}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.modificationDate}" />
+
+    <h:outputText value="#{msg.status_lasUser}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{statusMBean.selectedObject.modificationUser}" />
+
+  </p:panelGrid>
+
+  <br />
+  <h:form>
+    <center>
+      <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+        styleClass="button-general">
+        <p:printer target=":viewAccount" />
+      </p:commandButton>
+    </center>
+  </h:form>
+
+
+</ui:composition>

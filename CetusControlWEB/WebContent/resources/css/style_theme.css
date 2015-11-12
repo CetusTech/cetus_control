@@ -1,0 +1,320 @@
+/** ESTE ESTILO ES PARA MODIFICAR EL TEMA QUE ESTA USANDO LA APLICACION DE CETUS**
+/* autor : DAVID SALCEDO */
+
+/*Cambiar el color de las barras*/
+.ui-widget-header {
+	border: 0px solid #B2AED2 !important;
+	color: white;
+	font-weight: bold;
+	background-color: #ffffff;
+	/* cambios css3*/
+	background: #8ec120; /* Old browsers */
+	background: -moz-linear-gradient(top, #8ec120 34%, #abdc28 70%);
+	/* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(34%, #8ec120),
+		color-stop(70%, #abdc28));
+	/* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #8ec120 34%, #abdc28 70%);
+	/* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #8ec120 34%, #abdc28 70%);
+	/* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #8ec120 34%, #abdc28 70%);
+	/* IE10+ */
+	background: linear-gradient(to bottom, #8ec120 34%, #abdc28 70%);
+	/* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8ec120',
+		endColorstr='#abdc28', GradientType=0);
+	/* IE6-9 */
+}
+
+/*Estilo de Iconos de la barra de menus de la aplicacion*/
+.img-new {
+	background-image: url('add-2-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-delete {
+	background-image: url('document_delete_32.png.xhtml?ln=images')
+		!important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-assign {
+	background-image: url('assign.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-view {
+	background-image: url('view-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-edit {
+	background-image: url('edit-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-save {
+	background-image: url('Save-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-ok {
+	background-image: url('Ok-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-cancel {
+	background-image: url('Cancel-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-suspend {
+	background-image: url('suspend-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-back {
+	background-image: url('arrow-left.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-forward {
+	background-image: url('arrow-right.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-printer {
+	background-image: url('printer.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-search {
+	background-image: url('search.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-clean {
+	background-image: url('clear_btn.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-complete {
+	background-image: url('complete-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+
+.img-start {
+	background-image: url('start-icon.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
+/**********************************************************************************************************************/
+
+/*Clase para los botones de la barra de toolbar*/
+.button-toolbar {
+	font-family: Arial !important;
+	color: #ffffff !important;
+	font-size: 20px !important;
+	padding: -14px !important;
+	text-decoration: none !important;
+	-webkit-border-radius: 10px !important;
+	-moz-border-radius: 10px !important;
+	text-shadow: 1px 1px 3px #666666 !important;
+	background: #ffffff !important;
+	width: 38px !important;
+	height: 38px !important;
+}
+
+.button-toolbar:hover {
+	background: #d9d9ff !important;
+}
+
+/**********************************************************************************************************************/
+
+/* Clases para botones generales*/
+.button-general {
+	color: black !important;
+	border-radius: 5px !important;
+	/*width: 100px;*/
+	height: 40px;
+}
+
+.ui-button-text {
+	text-align: center;
+	margin-left: 5px;
+}
+
+/**********************************************************************************************************************/
+/*Paginador*/
+.ui-paginator {
+	width: 99.5% !important;
+	height: 28px !important;
+	color: black !important;
+	text-align: center !important;
+	padding: 2px !important;
+	margin-top: 10px;
+	/* Codigo de generator*/
+	background: #1e5799; /* Old browsers */
+	background: -moz-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8
+		100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #1e5799),
+		color-stop(50%, #2989d8), color-stop(51%, #207cca),
+		color-stop(100%, #7db9e8)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%,
+		#7db9e8 100%);
+	/* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8
+		100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8
+		100%); /* IE10+ */
+	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8
+		100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799',
+		endColorstr='#7db9e8', GradientType=0);
+	/* IE6-9 */
+}
+
+/*Tablas*/
+.ui-datatable table {
+	border-collapse: separate !important;
+	border-spacing: 0px !important;
+	border: 0px solid #a6c9e2 !important;
+}
+
+.ui-datatable-data td {
+	border-left-width: 0px !important;
+	border-left-style: none !important;
+	border-right-style: none !important;
+	border-right-width: 0px !important;
+	border-top-style: none !important;
+	border-top-width: 0px !important;
+	border-bottom-style: none !important;
+	border-bottom-width: 0px !important;
+	border-spacing: 0px !important;
+	border: 0px solid #a6c9e2 !important;
+	height: 25px !important;
+	padding-left: 10px !important;
+}
+
+.ui-datatable .ui-datatable-data td, .ui-datatable .ui-datatable-data-empty td
+	{
+	border-width: 1px;
+	border-style: none !important;
+	border-color: inherit;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+}
+
+.ui-datatable .ui-sortable-column {
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.ui-datatable-empty-message {
+	text-align: center !important;
+	color: red;
+	width: 100%;
+}
+
+.row-color-1 {
+	background: #cccccc;
+}
+
+.row-color-2 {
+	background: #e5e7e8;
+}
+
+/*Color de la seleccion de filas*/
+.ui-datatable tr.ui-state-highlight {
+	background: none repeat scroll 0% 0% #5D5F5C !important;
+}
+
+/**********************************************************************************************************************/
+
+/* ToolBar*/
+.ui-toolbar {
+	padding: 0.2em !important;
+	border-radius: 5px;
+}
+
+.separator-toolbar {
+	margin-top: -20px !important;
+}
+
+/* estilo del wizard */
+.ui-wizard-step-title {
+	font-size: 14px !important;
+	margin: 0 3px 0 0;
+	padding: 0.4em;
+	float: left;
+}
+
+.body_toolbar_nivel_3 {
+	background: linear-gradient(to bottom, #EFEC14 34%, #D8C333 70%)
+		!important;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formUpdate" prependId="false">
+
+    <p:panel id="pnlUpdate">
+      
+      <h:panelGrid id="panelGridUpdate_1" columns="6" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="#{msg.day}:" for="dayUpdate" />
+        <p:selectOneMenu id="dayUpdate" value="#{parametrizationMBean.selectedObject.colDay}" disabled="true">
+          <f:selectItems value="#{parametrizationMBean.listWeekDay}" />
+        </p:selectOneMenu>
+        <p:message for="dayUpdate" id="dayUpdateMsg" />
+
+        <p:outputLabel value="#{msg.jornadas}:" for="jornadaUpdate" />
+        <p:selectOneMenu id="jornadaUpdate" value="#{parametrizationMBean.jornadaListDTO.numberJornada}" disabled="true">
+          <f:selectItems value="#{parametrizationMBean.listJornada}" />
+        </p:selectOneMenu>
+        <p:message for="jornadaUpdate" id="jornadaUpdateMsg" />
+
+      </h:panelGrid>
+
+      <h:panelGrid id="panelGridUpdate_2" columns="5" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="" />
+        <p:outputLabel value="#{msg.start_time}" />
+        <p:outputLabel value="" />
+        <p:outputLabel value="#{msg.end_time}" />
+        <p:outputLabel value="" />
+
+        <p:outputLabel value="#{msg.jornada_1}:" />
+        <p:calendar id="startTime1Update" value="#{parametrizationMBean.jornadaListDTO.starDate1}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable1}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime1Update" id="startTime1UpdateMsg" />
+
+        <p:calendar id="endTime1Update" value="#{parametrizationMBean.jornadaListDTO.endDate1}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable1}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime1Update" id="endTime1UpdateMsg" />
+
+
+
+        <p:outputLabel value="#{msg.jornada_2}:" />
+        <p:calendar id="startTime2Update" value="#{parametrizationMBean.jornadaListDTO.starDate2}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable2}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime2Update" id="startTime2UpdateMsg" />
+
+        <p:calendar id="endTime2Update" value="#{parametrizationMBean.jornadaListDTO.endDate2}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable2}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime2Update" id="endTime2UpdateMsg" />
+
+
+
+        <p:outputLabel value="#{msg.jornada_3}:" />
+        <p:calendar id="startTime3Update" value="#{parametrizationMBean.jornadaListDTO.starDate3}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable3}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime3Update" id="startTime3UpdateMsg" />
+
+        <p:calendar id="endTime3Update" value="#{parametrizationMBean.jornadaListDTO.endDate3}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable3}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime3Update" id="endTime3UpdateMsg" />
+
+
+
+        <p:outputLabel value="#{msg.jornada_4}:" />
+        <p:calendar id="startTime4Update" value="#{parametrizationMBean.jornadaListDTO.starDate4}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable4}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime4Update" id="startTime4UpdateMsg" />
+
+        <p:calendar id="endTime4Update" value="#{parametrizationMBean.jornadaListDTO.endDate4}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable4}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime4Update" id="endTime4UpdateMsg" />
+
+      </h:panelGrid>
+      
+      <f:facet name="footer">
+        <center>
+          <p:commandButton id="btnUpdate" value="#{msg.btn_save}" update="pnlUpdate :formConfirmMod:confirmMod"
+            process="@form" styleClass="button-general" icon="img-save"
+            actionListener="#{parametrizationMBean.loadUpdate}" />
+        </center>
+      </f:facet>
+    </p:panel>
+
+
+  </h:form>
+</ui:composition>

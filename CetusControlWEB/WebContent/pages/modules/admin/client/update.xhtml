@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formUpdate" prependId="false">
+    <p:panel>
+      <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
+        <h:outputText value="#{msg.name}" styleClass="resaltar_negro" />
+        <p:inputText id="nameUpdate" required="true" style="width:100%" size="44" onchange="conMayusculas(this);"
+          onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="44"
+          value="#{clientMBean.selectedObject.name}" disabled="false">
+          <f:validateLength minimum="3" maximum="30" />
+        </p:inputText>
+        <p:message for="nameUpdate" id="msgnameUpdate" />
+
+        <h:outputText value="#{msg.code_client}" styleClass="resaltar_negro" />
+        <p:outputLabel id="codeUpdate" value="#{clientMBean.codeObject}" disabled="true" style="background-color:white;" />
+        <p:message for="codeUpdate" id="msgCodeUpdate" />
+      </h:panelGrid>
+      <f:facet name="footer">
+        <center>
+          <p:commandButton id="btnUpdate" value="#{msg.btn_save}" update="pnlUpdate :formConfirmMod:confirmMod"
+            process="@form" styleClass="button-general" icon="img-save" actionListener="#{clientMBean.loadUpdate}" />
+        </center>
+      </f:facet>
+    </p:panel>
+    <h:inputHidden value="#{clientMBean.selectedObject.code}" />
+
+  </h:form>
+</ui:composition>

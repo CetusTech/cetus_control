@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+  <h:panelGrid id="viewPanel" styleClass="column_100">
+    <p:panelGrid id="viewPanel1" columns="2" cellpadding="2" cellspacing="2" styleClass="column_100">
+      <f:facet name="header">
+        <h:outputText value="#{msg.detail_group}" />
+      </f:facet>
+      <h:outputText value="#{msg.id}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{groupPersonMBean.selectedObject.id}" />
+
+      <h:outputText value="#{msg.name}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{groupPersonMBean.selectedObject.name}" />
+
+      <h:outputText value="#{msg.initDate}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{groupPersonMBean.selectedObject.initDate}">
+        <f:convertDateTime type="date" pattern="#{msg.PATTERN_DATE}" />
+      </h:outputText>
+
+      <h:outputText value="#{msg.endDate}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{groupPersonMBean.selectedObject.endDate}">
+        <f:convertDateTime type="date" pattern="#{msg.PATTERN_DATE}" />
+      </h:outputText>
+
+      <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
+      <h:outputText value=" #{msg.status_created_es}" rendered='#{groupPersonMBean.selectedObject.status == "CREATED"}' />
+      <h:outputText value=" #{msg.status_in_progress_es}"
+        rendered='#{groupPersonMBean.selectedObject.status == "IN_PROGRESS"}' />
+      <h:outputText value=" #{msg.status_closed_es}" rendered='#{groupPersonMBean.selectedObject.status == "CLOSED"}' />
+    </p:panelGrid>
+
+    <h:panelGrid id="viewPanel2" columns="1" cellpadding="2" cellspacing="2" styleClass="column_100">
+      <p:dataList value="#{groupPersonMBean.selectedObject.personGroups}" var="object" type="ordered">
+        <f:facet name="header">
+          <h:outputText value="#{msg.persons_associated}" />
+        </f:facet>
+        <h:outputText value="#{object.person.names} #{object.person.lastNames}" />
+      </p:dataList>
+    </h:panelGrid>
+
+  </h:panelGrid>
+  <br />
+  <h:form>
+    <center>
+      <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+        styleClass="button-general">
+        <p:printer target=":viewPanel" />
+      </p:commandButton>
+    </center>
+  </h:form>
+
+
+</ui:composition>

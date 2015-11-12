@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+  <p:panelGrid id="viewAccount" columns="6" styleClass="column_100">
+    <h:outputText value="#{msg.id}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.id}" />
+
+    <h:outputText value="#{msg.code}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.code}" />
+    
+    <h:outputText value="#{msg.description}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.description}" />
+    
+    <h:outputText value="#{msg.myTask_my_assing_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.assingDate}" >
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+    
+    <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.status.description}" />
+    
+    <h:outputText value="#{msg.myTask_my_group}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.personGroup.groupT.description}" />
+    
+    <h:outputText value="#{msg.myTask_task_creationDate}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.creationDate}" >
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+    
+    <h:outputText value="#{msg.myTask_task_initDate}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.dateInit}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+    
+    <h:outputText value="#{msg.myTask_task_endate}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.dateEnd}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+    
+    <h:outputText value="#{msg.deliveryDate}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.deliveryDate}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+    
+    <h:outputText value="#{msg.area}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.area.description}" />
+    
+    <h:outputText value="#{msg.observation}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.observation}" />
+    
+    <h:outputText value="#{msg.observation_res}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.observationRequestor}" />
+    
+    <h:outputText value="#{msg.duration}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.VDuration}" />
+    
+    <h:outputText value="#{msg.requestor}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.requestor}" />
+    
+    <h:outputText value="#{msg.userFun}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.userFunctional}" />
+    
+    <h:outputText value="#{msg.taskType}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.taskType.description}" />
+    
+    <h:outputText value="#{msg.priority}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{myTaskMBean.selectedObject.priority.description}" />
+
+  </p:panelGrid>
+
+
+</ui:composition>

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="msg" basename="message_es" />
+<h:head>
+  <title>#{msg.title_application}</title>
+  <h:outputStylesheet library="css" name="estilo.css" />
+  <h:outputStylesheet library="css" name="style_theme.css" />
+  <h:outputScript library="js" name="common.js" />
+  <style>  		
+		.ui-panel, div.ui-state-hover {
+		                                margin: 10px;
+		                                width:600px;
+		}
+		                        
+		.ui-dashboard-column {
+		        width:620px;
+		}
+  </style>
+</h:head>
+<h:body>
+  <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+  <div style="height: 600px">
+    <h:form id="fromContenido">
+      <p:growl id="msgs" showDetail="true" />
+
+      <p:dashboard id="board" model="#{myTaskMBean.model}">
+        <p:ajax event="reorder" listener="#{myTaskMBean.handleReorder}"/>
+
+        <p:panel id="task" header="#{msg.myTask_list_task}" style="width:600px;" toggleable="true">
+          <ui:include src="/pages/modules/task/inbox/list.xhtml" />
+        </p:panel>
+
+        <p:panel id="priority" header="#{msg.myTask_my_priority}" style="width:600px;" toggleable="true">
+          <p:chart type="bar" model="#{myTaskMBean.barModel}" style="height:300px;">
+          		<p:ajax event="itemSelect" listener="#{myTaskMBean.itemBarSelect}" update="msgs,dialogViewPriority" />
+          </p:chart>
+        </p:panel>
+
+        <p:panel id="myProgress" header="#{msg.myTask_my_progress}" style="width:600px;" toggleable="true">
+			<p:chart type="pie" model="#{myTaskMBean.pieModel}" style="height:300px;">
+	            <p:ajax event="itemSelect" listener="#{myTaskMBean.itemPieSelect}" update="msgs,dialogViewPriority" />
+	        </p:chart>          
+        </p:panel>
+
+      </p:dashboard>
+
+      <div style="clear: both" />
+    </h:form>
+  </div>
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+  
+  <!-- Dialogo para ver detalle del registro de la tarea seleccionada-->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{myTaskMBean.showViewDetail}"
+    widgetVar="dialogViewVar" closeOnEscape="true">
+    <p:ajax listener="#{myTaskMBean.closeDialogView()}" event="close" />
+    <ui:include src="/pages/modules/task/inbox/view.xhtml" />
+  </p:dialog>
+  
+  <!-- Dialogo para ver detalle del registro de prioridad seleccionada-->  
+  <p:dialog id="dialogViewPriority" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{myTaskMBean.showViewDetail}"
+    widgetVar="dialogViewPriorityVar" closeOnEscape="true">
+    <p:ajax listener="#{myTaskMBean.closeDialogView()}" event="close" />
+    <h:form id="formListPriority">
+    	<ui:include src="/pages/modules/task/inbox/listSelected.xhtml" />
+    </h:form>
+  </p:dialog>
+  
+
+  <script type="text/javascript">
+      function start() {
+        PF('statusDialog').show();
+      }
+
+      function stop() {
+        PF('statusDialog').hide();
+      }
+    </script>
+</h:body>
+</html>

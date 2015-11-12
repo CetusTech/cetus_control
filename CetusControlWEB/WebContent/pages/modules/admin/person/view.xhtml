@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:accordionPanel id="panelView1">
+    <p:tab id="panelView2" title="#{msg.detail_person}">
+      <p:panelGrid id="pnlView" columns="4" styleClass="column_100">
+
+        <h:outputText value="#{msg.code_person}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.code}" styleClass="resaltar_rojo" />
+        <h:outputText value="#{msg.names}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.names} #{personAdminMBean.selectedObject.lastNames}" />
+
+        <h:outputText value="#{msg.number_identity}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.identity}" />
+
+        <h:outputText value="#{msg.email}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.email}" />
+
+
+
+        <h:outputText value="#{msg.phone}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.phone}" />
+
+        <h:outputText value="#{msg.movil}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.cellPhone}" />
+
+        <h:outputText value="#{msg.address}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.address}" />
+
+      </p:panelGrid>
+      <h:form>
+        <center>
+          <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+            styleClass="button-general">
+            <p:printer target=":panelView1:pnlView" />
+          </p:commandButton>
+        </center>
+      </h:form>
+    </p:tab>
+    <p:tab title="#{msg.detail_user}">
+      <h:panelGrid columns="1" cellpadding="10" styleClass="column_100"
+        rendered="#{personAdminMBean.usuarioDTO == null}">
+        <p:outputLabel value="#{msg.empty_user}" />
+      </h:panelGrid>
+      <p:panelGrid id="userView" columns="4" cellpadding="10" styleClass="column_100"
+        rendered="#{personAdminMBean.usuarioDTO != null}">
+
+        <h:outputText value="#{msg.login_cetus}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.usuarioDTO.loginCetus}" />
+
+
+        <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
+        <h:graphicImage name="checkmark.png" title="ACTIVO" rendered='#{personAdminMBean.usuarioDTO.status == 1}'
+          library="images" />
+        <h:graphicImage name="delete.png" title="INACTIVO" rendered='#{personAdminMBean.usuarioDTO.status == 0}'
+          library="images" />
+      </p:panelGrid>
+      <h:form>
+        <center>
+          <p:commandButton value="#{msg.btn_print}" title="#{msg.btn_print}" icon="img-printer" type="button"
+            styleClass="button-general">
+            <p:printer target=":panelView1:userView" />
+          </p:commandButton>
+        </center>
+      </h:form>
+    </p:tab>
+    <p:tab title="#{msg.detail_audit}">
+      <p:panelGrid id="viewAudit" columns="4" styleClass="column_100">
+        <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.creationUser}" />
+
+        <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.creationDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </h:outputText>
+
+
+        <h:outputText value="#{msg.update_user}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.modificationUser}" />
+
+        <h:outputText value="#{msg.update_date}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{personAdminMBean.selectedObject.modificationDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </h:outputText>
+
+      </p:panelGrid>
+    </p:tab>
+  </p:accordionPanel>
+
+
+
+</ui:composition>

@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false" styleClass="column_100">
+
+    <p:tabView id="tabAddPerson" styleClass="column_100" activeIndex="#{personAdminMBean.indexTab}">
+
+      <p:tab id="tabClient" title="#{msg.client}">
+        <ui:include src="/pages/modules/admin/person/tab_client.xhtml" />
+      </p:tab>
+
+      <p:tab id="tabPerson" title="#{msg.data_person}" disabled="#{personAdminMBean.clientSelected}">
+        <ui:include src="/pages/modules/admin/person/tab_person.xhtml" />
+      </p:tab>
+
+      <p:tab id="tabUser" title="#{msg.tag_user}" disabled="#{personAdminMBean.personSelected}">
+        <ui:include src="/pages/modules/admin/person/tab_user.xhtml" />
+      </p:tab>
+
+    </p:tabView>
+  </h:form>
+
+
+</ui:composition>

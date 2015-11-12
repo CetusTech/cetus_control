@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="ejbModule"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss EAP 6.1+ Runtime">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.ejb"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.0.2.Final-redhat-1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/commons-util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CetusControlDTO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CetusControlJPA"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/ClientWSDTO.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/org/hibernate/main/hibernate-core-4.2.7.SP1-redhat-3.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/jasperreports-6.1.0.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

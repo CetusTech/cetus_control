@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false">
+    <p:panel>
+      <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="#{msg.status_descripcion}" for="desAdd" />
+        <p:inputText id="desAdd" required="true" size="40" value="#{statusMBean.addObject.description}" pt:type="string"
+          pt:placeholder="#{msg.input_description}" pt:autofocus="autofocus" onchange="conMayusculas(this);"
+          onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="40" />
+        <p:message for="desAdd" id="desAddMsg" />
+
+
+        <p:outputLabel value="#{msg.status_color}" for="colorAdd" />
+        <p:colorPicker value="#{statusMBean.addObject.color}" id="colorAdd" required="true" />
+        <p:message for="colorAdd" id="colorAddMsg" />
+
+      </h:panelGrid>
+      <f:facet name="footer">
+        <center>
+          <p:commandButton value="#{msg.btn_save}" update="panelAdd :formConfirmAdd:confirmAdd" process="@form"
+            styleClass="button-general" icon="img-save" actionListener="#{statusMBean.load}" />
+
+
+        </center>
+      </f:facet>
+    </p:panel>
+  </h:form>
+</ui:composition>

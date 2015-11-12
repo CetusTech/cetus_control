@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:pe="http://primefaces.org/ui/extensions">
+
+  <p:panel header="#{msg.parameter_general}" id="pnlParameterGeneral" styleClass="column_50">
+    <h:panelGrid columns="3">
+
+      <p:outputLabel value="#{msg.hour_format}:" for="hourFormatAdd" />
+      <p:selectOneMenu id="hourFormatAdd" value="#{parametrizationMBean.parameterGeneralDTO.hourFormat}" required="true"
+        requiredMessage="#{msg.field_required}">
+        <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
+        <f:selectItem itemValue="12H" itemLabel="12H" />
+        <f:selectItem itemValue="24H" itemLabel="24H" />
+      </p:selectOneMenu>
+      <p:message for="hourFormatAdd" id="hourFormatAddMsg" />
+
+      <p:outputLabel value="#{msg.hour_week}:" for="hourWeekAdd" />
+      <p:inputText id="hourWeekAdd" value="#{parametrizationMBean.parameterGeneralDTO.hourWeek}" required="false"
+        size="5" requiredMessage="#{msg.field_required}" maxlength="5" disabled="true">
+      </p:inputText>
+      <p:message for="hourWeekAdd" id="hourWeekAddMsg" />
+
+      <p:outputLabel value="#{msg.day_month}:" for="dayMonthAdd" />
+      <p:inputText id="dayMonthAdd" value="#{parametrizationMBean.parameterGeneralDTO.dayMonth}" required="false"
+        size="5" requiredMessage="#{msg.field_required}" maxlength="5" disabled="true">
+      </p:inputText>
+      <p:message for="dayMonthAdd" id="dayMonthAddMsg" />
+
+      <p:outputLabel value="#{msg.maximum_tasks_progress}:" for="maximumTasksProgressAdd" />
+      <pe:inputNumber id="maximumTasksProgressAdd" required="true" size="5"
+        value="#{parametrizationMBean.parameterGeneralDTO.colNumber1}" requiredMessage="#{msg.field_required}"
+        maxlength="2" minValue="0" title="#{msg.title_time_before_expiration}" maxValue="99" emptyValue="zero"
+        decimalPlaces="0" />
+      <p:message for="maximumTasksProgressAdd" id="maximumTasksProgressAddMsg" />
+
+    </h:panelGrid>
+  </p:panel>
+
+
+
+  <p:panel header="#{msg.parameter_notification}" id="pnlParameterNotifications" styleClass="column_50">
+    <h:panelGrid columns="4">
+
+      <p:outputLabel value="#{msg.time_before_expiration}:" for="timeBeforeExpirationAdd" />
+      <pe:inputNumber id="timeBeforeExpirationAdd" required="true" size="5"
+        value="#{parametrizationMBean.parameterGeneralDTO.timeBeforeExpiration}" requiredMessage="#{msg.field_required}"
+        maxlength="4" minValue="0" title="#{msg.title_time_before_expiration}" maxValue="9999" emptyValue="zero"
+        decimalPlaces="0" />
+
+      <p:outputLabel value="#{msg.minute}" />
+      <p:message for="timeBeforeExpirationAdd" id="timeBeforeExpirationAddMsg" />
+
+
+      <p:outputLabel value="#{msg.time_after_expiration}:" for="timeAfterExpirationAdd" />
+      <pe:inputNumber id="timeAfterExpirationAdd" title="#{msg.title_time_after_expiration}" required="true" size="5"
+        value="#{parametrizationMBean.parameterGeneralDTO.timeAfterExpiration}" requiredMessage="#{msg.field_required}"
+        maxlength="4" minValue="0" maxValue="9999" emptyValue="zero" decimalPlaces="0" />
+
+      <p:outputLabel value="#{msg.minute}" />
+      <p:message for="timeAfterExpirationAdd" id="timeAfterExpirationAddMsg" />
+
+
+      <p:outputLabel value="#{msg.maximum_alerts_overdue_task}:" for="maximumAlertsOverdueTaskAdd" />
+      <pe:inputNumber id="maximumAlertsOverdueTaskAdd" title="#{msg.title_time_after_expiration}" required="true" size="5"
+        value="#{parametrizationMBean.parameterGeneralDTO.colNumber2}" requiredMessage="#{msg.field_required}"
+        maxlength="1" minValue="0" maxValue="9" emptyValue="zero" decimalPlaces="0" />
+
+      <p:outputLabel value="" />
+      <p:message for="maximumAlertsOverdueTaskAdd" id="maximumAlertsOverdueTaskAddMsg" />
+
+
+    </h:panelGrid>
+  </p:panel>
+  <div align="left">
+    <p:commandButton value="#{msg.btn_save}"
+      update="pnlParameterGeneral pnlParameterNotifications :formSaveParameter:confirmSaveParameter" process="@form"
+      styleClass="button-general" icon="img-save" actionListener="#{parametrizationMBean.loadSaveParameter}" />
+  </div>
+</ui:composition>

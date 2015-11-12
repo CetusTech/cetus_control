@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+
+  <!-- Dialogo para guardar parametros -->
+
+
+  <h:form id="formSaveParameter">
+    <p:confirmDialog message="#{msg.confirm_save_parameter}" id="confirmSaveParameter"
+      header="#{msg.header_confirm_save_parameter}" appendToBody="true" widgetVar="confirmSaveParameter"
+      severity="alert" visible="#{parametrizationMBean.showConfirmSaveParameter}">
+      <center>
+        <p:commandButton id="btnConfSaveParameter" value="#{msg.btn_acept}" update=":formContenido:tabView"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmSaveParameter').hide()" process="@this"
+          action="#{parametrizationMBean.saveParameter}" />
+        <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmSaveParameter').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <!-- Dialogo para agregar registro -->
+
+  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_workday}"
+    widgetVar="dialogAddVar">
+    <ui:include src="/pages/modules/admin/parametrization/workday_add.xhtml" />
+  </p:dialog>
+
+  <h:form id="formConfirmAdd">
+    <p:confirmDialog message="#{msg.confirm_add_workday}" id="confirmAdd" header="#{msg.header_confirm_add_workday}"
+      appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{parametrizationMBean.showConfirmAdd}">
+      <center>
+        <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":formContenido:tabView"
+          styleClass="button-general" icon="img-ok"
+          oncomplete="PF('confirmAdd').hide(), PF('dialogAddVar').hide()"
+          process="@this" action="#{parametrizationMBean.add}" />
+        <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAdd').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <p:dialog id="dialogAddExcep" resizable="false" modal="true" appendToBody="true"
+    header="#{msg.register_exception_workday}" widgetVar="dialogAddExcepVar">
+    <ui:include src="/pages/modules/admin/parametrization/exception_add.xhtml" />
+  </p:dialog>
+
+  <h:form id="formConfirmAddExcep">
+    <p:confirmDialog message="#{msg.confirm_add_exception}" id="confirmAddExcep"
+      header="#{msg.header_confirm_add_exception}" appendToBody="true" widgetVar="confirmAddExcep" severity="alert"
+      visible="#{parametrizationMBean.showConfirmAddExcep}">
+      <center>
+        <p:commandButton id="btnConfAddExcep" value="#{msg.btn_acept}" update=":formContenido:tabView"
+          styleClass="button-general" icon="img-ok"
+          oncomplete="PF('confirmAddExcep').hide(), PF('dialogAddExcepVar').hide()"
+          process="@this" action="#{parametrizationMBean.addException}" />
+        <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAddExcep').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <!-- Dialogo para ver detalle del registro -->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{parametrizationMBean.showViewDetail}" widgetVar="dialogViewVar">
+    <ui:include src="/pages/modules/admin/parametrization/workday_view.xhtml" />
+  </p:dialog>
+
+  <p:dialog id="alertSelectRow" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowVar" modal="true" visible="#{parametrizationMBean.showAlertSelectRow}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_select_row_record}" />
+    </h:panelGrid>
+  </p:dialog>
+
+  <p:dialog id="dialogViewExcep" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{parametrizationMBean.showViewDetailExcep}" widgetVar="dialogViewExcepVar">
+    <ui:include src="/pages/modules/admin/parametrization/exception_view.xhtml" />
+  </p:dialog>
+
+  <p:dialog id="alertSelectRowExcep" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowExcepVar" modal="true"
+    visible="#{parametrizationMBean.showAlertSelectRowExcep}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_select_row_record}" />
+    </h:panelGrid>
+  </p:dialog>
+
+  <p:dialog id="alertSelectDateBefore" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectDateBeforeVar" modal="true"
+    visible="#{parametrizationMBean.showAlertSelectDateBefore}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_select_date_before}" />
+    </h:panelGrid>
+  </p:dialog>
+
+  <!-- Dialogo para Modificar registro -->
+  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.update_workday}"
+    visible="#{parametrizationMBean.showConfirmMod}" widgetVar="dialogModVar">
+    <ui:include src="/pages/modules/admin/parametrization/workday_update.xhtml" />
+  </p:dialog>
+
+  <h:form id="formConfirmMod">
+    <p:confirmDialog message="#{msg.confirm_update_workday}" id="confirmMod"
+      header="#{msg.header_confirm_update_workday}" appendToBody="true" widgetVar="confirmMod" severity="alert"
+      visible="#{parametrizationMBean.showDialogConfirmUpdate}">
+      <center>
+        <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":formContenido:tabView"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmMod').hide(), PF('dialogModVar').hide()" process="@this"
+          action="#{parametrizationMBean.update}" />
+        <p:commandButton id="btnConfCancelMod" value="#{msg.btn_cancel}" oncomplete="PF('confirmMod').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <p:dialog id="dialogModExcep" resizable="false" modal="true" appendToBody="true"
+    header="#{msg.update_exception_workday}" visible="#{parametrizationMBean.showConfirmModExcep}"
+    widgetVar="dialogModExcepVar">
+    <ui:include src="/pages/modules/admin/parametrization/exception_update.xhtml" />
+  </p:dialog>
+
+  <h:form id="formConfirmModExcep">
+    <p:confirmDialog message="#{msg.confirm_update_exception}" id="confirmModExcep"
+      header="#{msg.header_confirm_update_exception}" appendToBody="true" widgetVar="confirmModExcep" severity="alert"
+      visible="#{parametrizationMBean.showDialogConfirmUpdExcep}">
+      <center>
+        <p:commandButton id="btnConfModExcep" value="#{msg.btn_acept}" update=":formContenido:tabView"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmModExcep').hide(), PF('dialogModExcepVar').hide()"
+          process="@this" action="#{parametrizationMBean.updateException}" />
+        <p:commandButton id="btnConfCancelModExcep" value="#{msg.btn_cancel}" oncomplete="PF('confirmModExcep').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+
+
+
+  <!-- Dialogo para eliminar el registro -->
+  <h:form id="formConfirmDelete">
+    <h:panelGroup id="pnlConfirmDelete">
+      <p:confirmDialog message="#{msg.confirm_delete_workday}" id="confirmDelete"
+        header="#{msg.header_confirm_delete_workday}" appendToBody="true" widgetVar="confirmDeleteVar" severity="alert"
+        visible="#{parametrizationMBean.showConfirmDelete}">
+        <center>
+          <p:commandButton id="btnConfDelete" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-ok" update=":formContenido:tabView" process="@this"
+            actionListener="#{parametrizationMBean.remove}" />
+          <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-cancel" />
+        </center>
+      </p:confirmDialog>
+    </h:panelGroup>
+  </h:form>
+
+  <h:form id="formConfirmDeleteExcep">
+    <h:panelGroup id="pnlConfirmDeleteExcep">
+      <p:confirmDialog message="#{msg.confirm_delete_exception}" id="confirmDeleteExcep"
+        header="#{msg.header_confirm_delete_exception}" appendToBody="true" widgetVar="confirmDeleteExcepVar"
+        severity="alert" visible="#{parametrizationMBean.showConfirmDeleteExcep}">
+        <center>
+          <p:commandButton id="btnConfDeleteExcep" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteExcepVar').hide()"
+            styleClass="button-general" icon="img-ok" update=":formContenido:tabView" process="@this"
+            actionListener="#{parametrizationMBean.removeException}" />
+          <p:commandButton id="btnConfCancelExcep" value="#{msg.btn_cancel}" oncomplete="PF('confirmDeleteExcepVar').hide()"
+            styleClass="button-general" icon="img-cancel" />
+        </center>
+      </p:confirmDialog>
+    </h:panelGroup>
+  </h:form>
+
+</ui:composition>

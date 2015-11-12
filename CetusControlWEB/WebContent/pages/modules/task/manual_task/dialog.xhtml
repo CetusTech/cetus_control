@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+
+  <!-- Dialogo para agregar registro -->
+
+  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_task}"
+    visible="#{manualTaskMBean.showAddDialog}" widgetVar="dialogAddVar" closeOnEscape="true">
+    <ui:include src="/pages/modules/task/manual_task/add.xhtml" />
+  </p:dialog>
+  <h:form id="formConfirmAdd">
+    <p:confirmDialog message="#{msg.confirm_add_task}" id="confirmAdd" header="#{msg.header_confirm_add_task}"
+      appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{manualTaskMBean.showConfirmAdd}">
+      <center>
+        <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":fromContenido" styleClass="button-general"
+          icon="img-ok" oncomplete="PF('confirmAdd').hide(), PF('dialogAddVar').hide()" process="@this"
+          action="#{manualTaskMBean.add}" />
+        <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAdd').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+
+  <h:form id="formConfirmMod">
+    <p:confirmDialog message="#{msg.confirm_update_task}" id="confirmMod" header="#{msg.header_confirm_update_task}"
+      appendToBody="true" widgetVar="confirmMod" severity="alert" visible="#{manualTaskMBean.showDialogConfirmUpdate}">
+      <center>
+        <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":fromContenido" styleClass="button-general"
+          icon="img-ok" oncomplete="PF('confirmMod').hide(), PF('dialogViewVar').hide()" process="@form"
+          action="#{manualTaskMBean.update}" />
+        <p:commandButton id="btnConfCancelMod" value="#{msg.btn_cancel}" oncomplete="PF('confirmMod').hide()"
+          actionListener="#{manualTaskMBean.cleanVar()}" styleClass="button-general" icon="img-cancel" />
+      </center>
+
+    </p:confirmDialog>
+  </h:form>
+
+  <!-- Dialogo para ver detalle del registro -->
+
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{manualTaskMBean.showViewDetail}" rendered="#{!manualTaskMBean.showAlertSelectRow}"
+    widgetVar="dialogViewVar" closeOnEscape="true">
+    <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" />
+    <ui:include src="/pages/modules/task/manual_task/update.xhtml" />
+  </p:dialog>
+
+
+  <p:dialog id="alertSelectRowGroup" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowGroupVar" modal="true" visible="#{manualTaskMBean.showAlertSelectRow}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{manualTaskMBean.getMessageProperty('alert_select_row_record',msg.group)}" />
+    </h:panelGrid>
+  </p:dialog>
+
+  <p:dialog id="alertSelectRowTask" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowTaskVar" modal="true" visible="#{manualTaskMBean.showAlertSelectRow}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{manualTaskMBean.getMessageProperty('alert_select_row_record',msg.task)}" />
+    </h:panelGrid>
+  </p:dialog>
+
+  <p:dialog id="alertPercetageFull" resizable="false" draggable="false" header="#{msg.header_alert}" appendToBody="true"
+    widgetVar="alertPercetageFullVar" modal="true">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_percentage_full}" />
+    </h:panelGrid>
+  </p:dialog>
+
+
+  <!-- Dialogo para eliminar el registro -->
+  <h:form id="formConfirmDelete">
+    <h:panelGroup id="pnlConfirmDelete">
+      <p:confirmDialog message="#{msg.confirm_delete_task}" id="confirmDelete"
+        header="#{msg.header_confirm_delete_task}" appendToBody="true" widgetVar="confirmDeleteVar" severity="alert"
+        visible="#{manualTaskMBean.showConfirmDelete}">
+        <center>
+          <p:commandButton id="btnConfDelete" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-ok" update=":fromContenido:panel :fromContenido:table" process="@this"
+            actionListener="#{manualTaskMBean.remove}" />
+          <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-cancel" />
+        </center>
+      </p:confirmDialog>
+    </h:panelGroup>
+  </h:form>
+
+
+  <p:dialog id="startedTaskDialog" header="#{msg.title_info_started}" widgetVar="dlgTaskInfo">
+    <h:form>
+      <h:inputHidden id="percentageUpdate" value="#{manualTaskMBean.percentageSelected}" />
+      <h:panelGrid id="pnlInfo" columns="3">
+        <p:outputLabel id="output" value="#{msg.percentage} #{manualTaskMBean.percentageSelected}"
+          style="margin-right: 10px;color: #336699;" />
+        <p:slider for="percentageUpdate" display="output" style="width: 100px"
+          maxValue="#{manualTaskMBean.percentageSelected}" displayTemplate="#{msg.percentage} {value}" />
+        <p:message for="percentageUpdate" id="percentageUpdateMsg" display="icon" />
+
+
+        <p:outputLabel value="#{msg.deliveryDate}" for="deliberyDateUpdate" />
+        <p:calendar id="deliberyDateUpdate" value="#{manualTaskMBean.deliveryDate}" mode="popup" required="true"
+          onchange="PF('deliberyDateAdd').hide()" showButtonPanel="true" pt:placeholder="#{manualTaskMBean.patterDate}"
+          locale="#{manualTaskMBean.locale}" pattern="#{manualTaskMBean.patterDate}" showOn="button" />
+        <p:message for="deliberyDateUpdate" id="deliberyDateUpdateMsg" display="icon" />
+
+        <f:facet name="footer">
+          <center>
+            <p:commandButton value="#{msg.btn_acept}" actionListener="#{manualTaskMBean.startTask()}"
+              update=":fromContenido :fromContenido:table" process="@form" />
+          </center>
+        </f:facet>
+      </h:panelGrid>
+    </h:form>
+  </p:dialog>
+
+
+  <p:dialog id="appletAssignDialog" header="#{msg.person_responsable}" widgetVar="appletAssignDialogVar" modal="true"
+    width="50%">
+    <ui:include src="/pages/modules/task/manual_task/listPerson.xhtml" />
+  </p:dialog>
+
+
+
+  <p:dialog id="dialogViewDisabled" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    width="60%" visible="#{manualTaskMBean.showViewDetail}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
+    <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" />
+    <ui:include src="/pages/modules/task/manual_task/viewEnabled.xhtml" />
+  </p:dialog>
+
+
+</ui:composition>

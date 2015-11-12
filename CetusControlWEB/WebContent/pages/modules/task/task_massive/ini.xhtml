@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="msg" basename="message_es" />
+<h:head>
+  <title>#{msg.title_application}</title>
+  <h:outputStylesheet library="css" name="estilo.css" />
+  <h:outputStylesheet library="css" name="style_theme.css" />
+  <h:outputScript library="js" name="common.js" />
+
+</h:head>
+<h:body>
+  <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+  <h:form id="fromContenido">
+    <p:panel id="panel">
+      <ui:include src="/pages/modules/task/task_massive/process.xhtml" />
+    </p:panel>
+  </h:form>
+</h:body>
+</html>
+

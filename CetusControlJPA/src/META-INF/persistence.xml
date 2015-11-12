@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="CetusControlJPA" transaction-type="JTA">
+		<jta-data-source>java:jboss/datasources/CetusControlDS</jta-data-source>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Area</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Attach</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Client</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.ClientCetus</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.ExceptionWorkday</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.GroupT</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.GroupType</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Notification</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationSendMail</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationTable</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationTask</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.ParameterGeneral</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Person</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.PersonGroup</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Priority</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Status</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Task</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.TaskType</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.TraceTask</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.UserPortal</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.Workday</class>
+		<properties>
+			<property name="hibernate.id.new_generator_mappings" value="false"/>
+		</properties>
+	</persistence-unit>
+</persistence>

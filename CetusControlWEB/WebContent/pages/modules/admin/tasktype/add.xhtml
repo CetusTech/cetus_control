@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false">
+    <h:panelGrid id="panelAdd" columns="2" cellspacing="4" cellpadding="4">
+      <p:outputLabel value="#{msg.taskType_descripcion}" for="taskTypeAdd" />
+      <p:inputText id="taskTypeAdd" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        value="#{taskTypeMBean.addObject.description}" required="true" size="44" requiredMessage="#{msg.field_required}"
+        maxlength="44">
+      </p:inputText>
+      <p:message for="taskTypeAdd" id="taskTypeAddMsg" />
+
+    </h:panelGrid>
+    <center>
+      <p:commandButton value="#{msg.btn_save}" update="panelAdd :formConfirmAdd:confirmAdd" process="@form"
+        styleClass="button-general" icon="img-save" actionListener="#{taskTypeMBean.load}" />
+    </center>
+  </h:form>
+</ui:composition>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+      actionListener="#{groupAdminMBean.validateSelectedRecord}" icon="ui-icon-search" />
+
+    <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
+      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow" actionListener="#{groupAdminMBean.validateSelectedRecord}" />
+    <p:separator styleClass="separator-toolbar" />
+    <p:menuitem value="#{msg.btn_delete}" icon="ui-icon-trash"
+      update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow" actionListener="#{groupAdminMBean.validateSelectedRecord}" />
+  </p:contextMenu>
+
+
+  <p:toolbar styleClass="body_toolbar">
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="addButton" oncomplete="PF('dialogAddVar').show()" process="@form" title="#{msg.btn_new}"
+        update=":formAdd:panelAdd :formAdd:detaildGroup">
+        <p:graphicImage name="document_add_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+        actionListener="#{groupAdminMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="updateButton" title="#{msg.btn_update}"
+        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow" actionListener="#{groupAdminMBean.validateSelectedRecord}">
+        <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="deleteButton" title="#{msg.btn_delete}"
+        update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
+        actionListener="#{groupAdminMBean.validateSelectedRecord}">
+        <p:graphicImage name="document_delete_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <h:commandLink id="excel" title="#{msg.btn_excel}">
+        <p:graphicImage name="excel.png" width="32" height="32" library="images" />
+        <p:dataExporter type="xls" target="table" encoding="ISO-8859-1"
+          fileName="#{msg.report_excel}#{groupAdminMBean.currentDateStr}" />
+      </h:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <h:commandLink id="pdf" title="#{msg.btn_pdf}">
+        <p:graphicImage name="pdf.png" width="32" height="32" library="images" />
+        <p:dataExporter type="pdf" encoding="ISO-8859-1" target="table"
+          fileName="#{msg.report_pdf}#{groupAdminMBean.currentDateStr}" />
+      </h:commandLink>
+    </p:toolbarGroup>
+  </p:toolbar>
+
+  <p:dataTable value="#{groupAdminMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{groupAdminMBean.selectedObject}" selectionMode="single"
+    emptyMessage="#{msg.list_empty}" var="objetc">
+
+
+    <p:column sortBy="#{objetc.name}" filterBy="#{objetc.name}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.group}" />
+      </f:facet>
+      <h:outputText value="#{objetc.name}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.initDate}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.initDate}" />
+      </f:facet>
+      <h:outputText value="#{objetc.initDate}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.endDate}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.endDate}" />
+      </f:facet>
+      <h:outputText value="#{objetc.endDate}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.hour}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.hour}" />
+      </f:facet>
+      <h:outputText value="#{objetc.hour}" />
+    </p:column>
+
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <center>
+        <p:graphicImage name="StatusCreated.png" title="#{msg.status_created_es}"
+          rendered='#{objetc.status == "CREATED"}' library="images" />
+        <p:graphicImage name="StatusInProgress.png" title="#{msg.status_in_progress_es}"
+          rendered="#{objetc.status == 'IN_PROGRESS'}" library="images" />
+        <p:graphicImage name="StatusClosed.png" title="#{msg.status_closed_es}" rendered='#{objetc.status == "CLOSED"}'
+          library="images" />
+      </center>
+    </p:column>
+
+  </p:dataTable>
+</ui:composition>

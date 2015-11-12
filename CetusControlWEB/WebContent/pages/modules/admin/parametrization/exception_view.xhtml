@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+  <p:panelGrid id="viewAccountExcep" columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.workday}" />
+    </f:facet>
+    <h:outputText value="#{msg.id}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.id}" />
+
+    <h:outputText value="#{msg.date_exception}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.dateException}">
+      <f:convertDateTime type="date" timeZone="#{msg.time_zone}" pattern="#{msg.PATTERN_DATE}" />
+    </h:outputText>
+
+    <h:outputText value="#{msg.jornada}:" styleClass="resaltar_negro" />
+    <h:outputText
+      value="#{parametrizationMBean.selectedObjectExcep.jornada != null and parametrizationMBean.selectedObjectExcep.jornada == 0 ? msg.all_day : parametrizationMBean.selectedObjectExcep.jornada}" />
+
+    <h:outputText value="#{msg.description}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.description}" />
+
+  </p:panelGrid>
+  <p:panelGrid id="pnlGridAuditExcep" columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.audit}" />
+    </f:facet>
+
+    <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.creationUser}" />
+
+    <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.creationDate}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+
+    <h:outputText value="#{msg.update_user}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.modificationUser}" />
+
+    <h:outputText value="#{msg.update_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{parametrizationMBean.selectedObjectExcep.modificationDate}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+
+  </p:panelGrid>
+
+  <br />
+  <h:form>
+    <center>
+      <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+        styleClass="button-general">
+        <p:printer target=":viewAccountExcep" />
+      </p:commandButton>
+    </center>
+  </h:form>
+
+
+</ui:composition>

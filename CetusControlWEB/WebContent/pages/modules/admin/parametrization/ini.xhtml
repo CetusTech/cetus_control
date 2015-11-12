@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="msg" basename="message_es" />
+<h:head>
+  <title>#{msg.title_application}</title>
+  <h:outputStylesheet library="css" name="estilo.css" />
+  <h:outputStylesheet library="css" name="style_theme.css" />
+  <h:outputScript library="js" name="common.js" />
+
+</h:head>
+<h:body>
+  <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+  <ui:include src="/pages/modules/admin/parametrization/dialog.xhtml" />
+  <h:form id="formContenido">
+    <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
+    <p:tabView id="tabView">
+      <p:tab id="tabParameterGeneral" title="#{msg.parameter_general}">
+        <ui:include src="/pages/modules/admin/parametrization/tab_parameter.xhtml" />
+      </p:tab>
+      <p:tab id="tabWorkday" title="#{msg.workday}" disabled="#{parametrizationMBean.disabledTabWorkday}">
+        <ui:include src="/pages/modules/admin/parametrization/tab_workday.xhtml" />
+      </p:tab>
+      <p:tab id="tabExceptionWorkday" title="#{msg.exception_workday}"
+        disabled="#{parametrizationMBean.disabledTabExceptionWorkday}">
+        <ui:include src="/pages/modules/admin/parametrization/tab_exception.xhtml" />
+      </p:tab>
+    </p:tabView>
+  </h:form>
+</h:body>
+</html>
+

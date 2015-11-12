@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+      actionListener="#{personAdminMBean.validateSelectedRecord}" icon="ui-icon-search">
+    </p:menuitem>
+
+    <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil" update=":dialogMod :alertSelectRow"
+      actionListener="#{personAdminMBean.validateSelectedRecord}" />
+    <p:separator styleClass="separator-toolbar" />
+    <p:menuitem value="#{msg.btn_delete}" icon="ui-icon-trash"
+      update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
+      actionListener="#{personAdminMBean.validateSelectedRecord}" />
+  </p:contextMenu>
+
+
+  <p:toolbar>
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="addButton" oncomplete="PF('dialogAddVar').show()" process="@this"
+        actionListener="#{personAdminMBean.clearObject}" update=":formAdd:tabAddPerson :dialogAdd">
+        <p:graphicImage name="document_add_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" icon="ui-icon-search"
+        update=":dialogView :alertSelectRow" process="@form" actionListener="#{personAdminMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="updateButton" title="#{msg.btn_update}" icon="ui-icon-pencil"
+        update=":dialogMod :alertSelectRow" actionListener="#{personAdminMBean.validateSelectedRecord}">
+        <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="deleteButton" title="#{msg.btn_delete}" icon="ui-icon-trash"
+        update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
+        actionListener="#{personAdminMBean.validateSelectedRecord}">
+        <p:graphicImage name="document_delete_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+      <p:separator styleClass="separator-toolbar" />
+      <h:commandLink id="excel" title="#{msg.btn_excel}">
+        <p:graphicImage name="excel.png" width="32" height="32" library="images" />
+        <p:dataExporter type="xls" target="table" encoding="ISO-8859-1"
+          fileName="#{msg.report_excel}#{jornadaMBean.formatCurrentDate}" />
+      </h:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <h:commandLink id="pdf" title="#{msg.btn_pdf}">
+        <p:graphicImage name="pdf.png" width="32" height="32" library="images" />
+        <p:dataExporter type="pdf" encoding="ISO-8859-1" target="table"
+          fileName="#{msg.report_pdf}#{jornadaMBean.formatCurrentDate}" />
+      </h:commandLink>
+    </p:toolbarGroup>
+  </p:toolbar>
+  <p:growl id="msgsSelected" showDetail="true" />
+  <p:dataTable value="#{personAdminMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowsPerPageTemplate="#{msg.rows_per_page_template}" currentPageReportTemplate="{currentPage} de {totalPages}"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{personAdminMBean.selectedObject}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
+
+    <p:ajax event="rowUnselect" listener="#{personAdminMBean.onRowUnselect}" update=":fromContenido:msgsSelected" />
+    <p:ajax event="rowSelect" listener="#{personAdminMBean.onRowSelect}" update=":fromContenido:msgsSelected" />
+    <p:column id="column2" sortBy="#{objetc.names} #{objetc.lastNames}" filterBy="#{objetc.names} #{objetc.lastNames}"
+      filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.names}" />
+      </f:facet>
+      <h:outputText value="#{objetc.names} #{objetc.lastNames}" />
+    </p:column>
+
+    <p:column id="column3" sortBy="#{objetc.identity}" filterBy="#{objetc.identity}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.number_identity}" />
+      </f:facet>
+      <h:outputText value="#{objetc.identity}" />
+    </p:column>
+
+    <p:column id="column4" sortBy="#{objetc.code}" filterBy="#{objetc.code}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.code_person}" />
+      </f:facet>
+      <h:outputText value="#{objetc.code}" />
+    </p:column>
+
+    <p:column id="column1" sortBy="#{objetc.client.name}" filterBy="#{objetc.client.name}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.client}" />
+      </f:facet>
+      <h:outputText value="#{objetc.client.name}" />
+    </p:column>
+
+    <p:column id="column5" sortBy="#{objetc.master}" filterBy="#{objetc.master}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.master}" />
+      </f:facet>
+      <h:outputText value="#{objetc.master ==1 ? msg.master_lbl : msg.master_nlb}" />
+    </p:column>
+
+
+  </p:dataTable>
+
+</ui:composition>

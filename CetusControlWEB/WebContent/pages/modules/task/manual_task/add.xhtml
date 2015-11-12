@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false">
+    <h:panelGrid id="panelAdd" columns="3" cellspacing="2" cellpadding="2">
+      <p:outputLabel value="#{msg.description}" for="descriptionAdd" />
+      <p:inputText id="descriptionAdd" required="true" size="60" value="#{manualTaskMBean.addObject.description}"
+        pt:type="string" pt:placeholder="#{msg.input_description}" pt:autofocus="autofocus"
+        onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}"
+        maxlength="60" />
+      <p:message for="descriptionAdd" id="descriptionAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.observation}" for="obsResAdd" />
+      <p:inputTextarea id="obsResAdd" value="#{manualTaskMBean.addObject.observation}" maxlength="300" cols="35"
+        rows="4">
+        <f:validateLength minimum="0" maximum="290" for="obsAddMsg" />
+      </p:inputTextarea>
+      <p:message for="obsResAdd" id="obsResAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.observation_res}" for="obsAdd" />
+      <p:inputTextarea id="obsAdd" value="#{manualTaskMBean.addObject.observationRequestor}" maxlength="300" cols="35"
+        rows="4">
+        <f:validateLength minimum="0" maximum="290" for="obsAddMsg" />
+      </p:inputTextarea>
+      <p:message for="obsAdd" id="obsAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.assingDate}" for="assingDateAdd" />
+      <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" mode="popup" required="true" maxdate="#{manualTaskMBean.currentDateStr}"
+        onchange="PF('assingDateAdd').hide()" showButtonPanel="true" pt:placeholder="dd-MM-yyyy"
+        locale="#{manualTaskMBean.locale}" pattern="dd-MM-yyyy" showOn="button" />
+
+      <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
+    </h:panelGrid>
+
+
+    <h:panelGrid id="panelDetailAdd" columns="6" cellspacing="2" cellpadding="2">
+      <p:outputLabel value="#{msg.duration}" for="durationAdd" />
+      <p:inputText id="durationAdd" required="true" size="3" value="#{manualTaskMBean.addObject.VDuration}"
+        pt:type="int" pt:autofocus="autofocus" requiredMessage="#{msg.field_required}" maxlength="3">
+        <f:validateLongRange minimum="1" maximum="999" />
+      </p:inputText>
+      <p:message for="durationAdd" id="durationAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.approved}" for="aproAdd" />
+      <p:selectBooleanCheckbox value="#{manualTaskMBean.approved}" id="aproAdd" />
+      <p:message for="aproAdd" id="aproAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.requestor}" for="requestorAdd" />
+      <p:inputText id="requestorAdd" required="false" size="20" value="#{manualTaskMBean.addObject.requestor}"
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        maxlength="20" />
+
+      <p:message for="requestorAdd" id="requestorAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.userFun}" for="userAdd" />
+      <p:inputText id="userAdd" required="false" size="20" value="#{manualTaskMBean.addObject.userFunctional}"
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        maxlength="20" />
+
+
+      <p:message for="userAdd" id="userAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.area}" for="areaSelected" />
+      <p:selectOneMenu value="#{manualTaskMBean.addObject.area.id}" id="areaSelected" required="true">
+        <f:selectItem itemLabel="#{msg.selected_area}" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{manualTaskMBean.listAreaItem}" />
+      </p:selectOneMenu>
+      <p:message for="areaSelected" id="areaAddMsg" display="icon" />
+
+
+      <p:outputLabel value="#{msg.taskType}" for="taskTypeSelected" />
+      <p:selectOneMenu value="#{manualTaskMBean.addObject.taskType.id}" id="taskTypeSelected" required="true">
+        <f:selectItem itemLabel="#{msg.selected_type}" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{manualTaskMBean.listTaskTypeItem}" />
+      </p:selectOneMenu>
+      <p:message for="taskTypeSelected" id="taskTypeAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.priority}" for="prioritySelected" />
+      <p:selectOneMenu value="#{manualTaskMBean.addObject.priority.id}" id="prioritySelected" required="true">
+        <f:selectItem itemLabel="#{msg.selected_priority}" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{manualTaskMBean.listPriorityItem}" />
+      </p:selectOneMenu>
+      <p:message for="prioritySelected" id="priorityAddMsg" display="icon" />
+
+
+      <f:facet name="footer">
+        <center>
+          <p:commandButton value="#{msg.btn_save}" update="formAdd :formConfirmAdd:confirmAdd :fromContenido"
+            process="@form" styleClass="button-general" icon="img-save" actionListener="#{manualTaskMBean.load}" />
+
+
+        </center>
+      </f:facet>
+    </h:panelGrid>
+  </h:form>
+</ui:composition>

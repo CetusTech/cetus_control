@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+
+  <!-- Dialogo para agregar registro -->
+
+  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_client}"
+    closeOnEscape="true" widgetVar="dialogAddVar">
+    <ui:include src="/pages/modules/admin/client/add.xhtml" />
+  </p:dialog>
+
+
+
+  <h:form id="formConfirmAdd">
+    <p:confirmDialog message="#{msg.confirm_add_client}" id="confirmAdd" header="#{msg.header_confirm_add_client}"
+      appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{clientMBean.showConfirmAdd}">
+      <center>
+        <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":fromContenido:panel"
+          styleClass="button-general" icon="img-ok"
+          oncomplete="PF('confirmAdd').hide(), PF('dialogAddVar').hide(), handleLoginRequestAdd(xhr, status, args)"
+          process="@this" action="#{clientMBean.add}" />
+        <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAdd').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+
+  <!-- Dialogo para Modificar registro -->
+
+  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.update_client}"
+    closeOnEscape="true" visible="#{clientMBean.showConfirmMod}" widgetVar="dialogModVar">
+    <ui:include src="/pages/modules/admin/client/update.xhtml" />
+  </p:dialog>
+
+
+
+  <h:form id="formConfirmMod">
+    <p:confirmDialog message="#{msg.confirm_update_client}" id="confirmMod" header="#{msg.header_confirm_update_client}"
+      appendToBody="true" widgetVar="confirmMod" severity="alert" visible="#{clientMBean.showDialogConfirmUpdate}">
+      <center>
+        <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":fromContenido:panel"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmMod').hide(), PF('dialogModVar').hide()"
+          process="@this" action="#{clientMBean.update}" />
+        <p:commandButton id="btnConfCancelMod" value="#{msg.btn_cancel}" oncomplete="PF('confirmMod').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <!-- Dialogo para ver detalle del registro -->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{clientMBean.showViewDetail}" widgetVar="dialogViewVar">
+    <ui:include src="/pages/modules/admin/client/view.xhtml" />
+  </p:dialog>
+
+
+  <p:dialog id="alertSelectRow" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowVar" modal="true" visible="#{clientMBean.showAlertSelectRow}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_select_row_record}" />
+    </h:panelGrid>
+  </p:dialog>
+
+
+  <!-- Dialogo para eliminar el registro -->
+  <h:form id="formConfirmDelete">
+    <h:panelGroup id="pnlConfirmDelete">
+      <p:confirmDialog message="#{msg.confirm_delete_client}" id="confirmDelete"
+        header="#{msg.header_confirm_delete_client}" appendToBody="true" widgetVar="confirmDeleteVar" severity="alert"
+        visible="#{clientMBean.showConfirmDelete}">
+        <center>
+          <p:commandButton id="btnConfDelete" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-ok" update=":fromContenido:panel :fromContenido:table" process="@this"
+            actionListener="#{clientMBean.remove}" />
+          <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-cancel" />
+        </center>
+      </p:confirmDialog>
+    </h:panelGroup>
+  </h:form>
+
+</ui:composition>

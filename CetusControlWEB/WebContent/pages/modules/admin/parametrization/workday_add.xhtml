@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false">
+    <p:panel id="panelAdd">
+      <h:panelGrid id="panelGridAdd_1" columns="6" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="#{msg.day}:" for="dayAdd" />
+        <p:selectOneMenu id="dayAdd" value="#{parametrizationMBean.addObject.colDay}" required="true"
+          requiredMessage="#{msg.field_required}">
+          <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
+          <f:selectItems value="#{parametrizationMBean.listWeekDay}" />
+          <p:ajax event="change" update="jornadaAdd panelGridAdd_2 panelGridAdd_3 panelGroupAdd_4" process="@this"
+            listener="#{parametrizationMBean.changeDay}" />
+        </p:selectOneMenu>
+        <p:message for="dayAdd" id="dayAddMsg" />
+
+        <p:outputLabel value="#{msg.jornadas}:" for="jornadaAdd" />
+        <p:selectOneMenu id="jornadaAdd" value="#{parametrizationMBean.addObject.jornada}" required="true"
+          requiredMessage="#{msg.field_required}">
+          <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
+          <f:selectItems value="#{parametrizationMBean.listJornada}" />
+          <p:ajax event="change" update="panelGridAdd_1 panelGridAdd_2 panelGridAdd_3 panelGroupAdd_4"
+            listener="#{parametrizationMBean.changeJornada}" process="@this" />
+        </p:selectOneMenu>
+        <p:message for="jornadaAdd" id="jornadaAddMsg" />
+
+      </h:panelGrid>
+
+      <h:panelGrid id="panelGridAdd_2" columns="5" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="" />
+        <p:outputLabel value="#{msg.start_time}" />
+        <p:outputLabel value="" />
+        <p:outputLabel value="#{msg.end_time}" />
+        <p:outputLabel value="" />
+
+        <p:outputLabel value="#{msg.jornada_1}:" />
+        <p:calendar id="startTime1Add" value="#{parametrizationMBean.jornadaListDTO.starDate1}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable1}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime1Add" id="startTime1AddMsg" />
+
+        <p:calendar id="endTime1Add" value="#{parametrizationMBean.jornadaListDTO.endDate1}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable1}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime1Add" id="endTime1AddMsg" />
+
+
+
+        <p:outputLabel value="#{msg.jornada_2}:" />
+        <p:calendar id="startTime2Add" value="#{parametrizationMBean.jornadaListDTO.starDate2}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable2}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime2Add" id="startTime2AddMsg" />
+
+        <p:calendar id="endTime2Add" value="#{parametrizationMBean.jornadaListDTO.endDate2}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable2}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime2Add" id="endTime2AddMsg" />
+
+
+
+        <p:outputLabel value="#{msg.jornada_3}:" />
+        <p:calendar id="startTime3Add" value="#{parametrizationMBean.jornadaListDTO.starDate3}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable3}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime3Add" id="startTime3AddMsg" />
+
+        <p:calendar id="endTime3Add" value="#{parametrizationMBean.jornadaListDTO.endDate3}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable3}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime3Add" id="endTime3AddMsg" />
+
+
+
+        <p:outputLabel value="#{msg.jornada_4}:" />
+        <p:calendar id="startTime4Add" value="#{parametrizationMBean.jornadaListDTO.starDate4}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable4}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="startTime4Add" id="startTime4AddMsg" />
+
+        <p:calendar id="endTime4Add" value="#{parametrizationMBean.jornadaListDTO.endDate4}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{parametrizationMBean.patterHour}" timeOnly="true" size="8"
+          disabled="#{parametrizationMBean.jornadaListDTO.disable4}" readonlyInput="true">
+        </p:calendar>
+        <p:message for="endTime4Add" id="endTime4AddMsg" />
+
+      </h:panelGrid>
+
+
+      <h:panelGrid id="panelGridAdd_3" columns="2" cellspacing="4" cellpadding="4">
+        <p:outputLabel value="#{msg.clone_workday}:" for="cloneJornadaAdd" />
+        <p:selectBooleanCheckbox id="cloneJornadaAdd" value="#{parametrizationMBean.cloneWorkday}"
+          disabled="#{parametrizationMBean.disableCloneWorkday}">
+          <p:ajax event="change" update="panelGroupAdd_4" listener="#{parametrizationMBean.changeCloneWorkday}"
+            process="@this" />
+        </p:selectBooleanCheckbox>
+      </h:panelGrid>
+      <h:panelGroup id="panelGroupAdd_4">
+        <h:panelGrid id="panelGridAdd_4" columns="2" cellspacing="4" cellpadding="4"
+          rendered="#{parametrizationMBean.showCloneWorkday}">
+          <p:selectManyCheckbox id="cloneWrokday" value="#{parametrizationMBean.selectedCloneWorkday}"  >
+            <f:selectItems value="#{parametrizationMBean.cloneListWeekDay}"/>
+        </p:selectManyCheckbox>
+        </h:panelGrid>
+      </h:panelGroup>
+      <f:facet name="footer">
+        <center>
+          <p:commandButton id="btnSaveWorkdayAdd" value="#{msg.btn_save}" update="panelAdd :formConfirmAdd:confirmAdd"
+            process="@form" styleClass="button-general" icon="img-save" actionListener="#{parametrizationMBean.load}" />
+
+
+        </center>
+      </f:facet>
+    </p:panel>
+  </h:form>
+</ui:composition>

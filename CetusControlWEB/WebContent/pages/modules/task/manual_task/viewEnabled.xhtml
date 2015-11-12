@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:accordionPanel>
+    <p:tab title="#{msg.detail}">
+      <h:panelGrid columns="2" cellpadding="2" cellspacing="5">
+        <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.code}" />
+
+        <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.status.description}" />
+
+        <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.description}" />
+
+        <p:outputLabel value="#{msg.initDate}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.dateInit}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </p:outputLabel>
+
+        <p:outputLabel value="#{msg.date_end}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.dateEnd}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </p:outputLabel>
+
+        <p:outputLabel value="#{msg.time_life}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.VLength}" />
+
+
+      </h:panelGrid>
+    </p:tab>
+    <p:tab title="#{msg.task}">
+      <h:panelGrid columns="2" cellpadding="2" cellspacing="5">
+        <p:outputLabel value="#{msg.duration}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.VDuration}" />
+
+        <p:outputLabel value="#{msg.approved}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{msg.yeah}" rendered="#{manualTaskMBean.selectedObject.approved == 1}" />
+        <p:outputLabel value="#{msg.no}" rendered="#{manualTaskMBean.selectedObject.approved == 0}" />
+
+
+        <p:outputLabel value="#{msg.area}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.area.description}" />
+
+        <p:outputLabel value="#{msg.assingDate}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.assingDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </p:outputLabel>
+
+        <p:outputLabel value="#{msg.deliveryDate}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.deliveryDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </p:outputLabel>
+
+        <p:outputLabel value="#{msg.observation}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.observation}" />
+
+
+        <p:outputLabel value="#{msg.requestor}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.requestor}" />
+
+        <p:outputLabel value="#{msg.observationRequestor}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.observationRequestor}" />
+
+        <p:outputLabel value="#{msg.percentage}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.percentage}">
+          <f:convertNumber pattern="00.##" />
+        </p:outputLabel>
+
+        <p:outputLabel value="#{msg.priority}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.priority.description}" />
+
+        <p:outputLabel value="#{msg.taskType}" styleClass="resaltar_negro" />
+        <p:outputLabel value="#{manualTaskMBean.selectedObject.taskType.description}" />
+
+
+
+      </h:panelGrid>
+    </p:tab>
+  </p:accordionPanel>
+
+
+
+</ui:composition>

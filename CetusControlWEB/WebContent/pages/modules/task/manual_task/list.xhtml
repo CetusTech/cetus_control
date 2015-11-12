@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:contextMenu for="table">
+
+
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowGroup" process="@form"
+      rendered="#{!manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
+      icon="ui-icon-search" />
+
+
+  </p:contextMenu>
+
+
+  <p:toolbar styleClass="body_toolbar_nivel_3" id="bars">
+    <p:toolbarGroup align="left" id="group">
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="addButton" process="@form" title="#{msg.btn_new}" update=":dialogAdd :alertSelectRowGroup"
+        actionListener="#{manualTaskMBean.validateSelectedRecordGroupSelected}">
+        <p:graphicImage name="document_add_32.png" width="24" height="24" library="images" />
+      </p:commandLink>
+
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowTask"
+        rendered="#{!manualTaskMBean.showMenu}" process="@form"
+        actionListener="#{manualTaskMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
+      </p:commandLink>
+
+      <p:commandLink id="viewDetailCompleted" title="#{msg.btn_view_detail}" rendered="#{manualTaskMBean.showMenu}"
+        update=":dialogViewDisabled :alertSelectRowTask" actionListener="#{manualTaskMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
+      </p:commandLink>
+
+
+    </p:toolbarGroup>
+  </p:toolbar>
+
+
+  <p:dataTable value="#{manualTaskMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{manualTaskMBean.selectedObject}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
+
+    <p:ajax event="rowSelect" process="@form" listener="#{manualTaskMBean.onRowSelectTask}"
+      update=":fromContenido :fromContenido:bars" />
+
+    <p:column sortBy="#{objetc.code}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.code}" />
+      </f:facet>
+      <h:outputText value="#{objetc.code}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.description}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.description}" />
+      </f:facet>
+      <h:outputText value="#{objetc.description}" />
+    </p:column>
+    <p:column sortBy="#{objetc.status.description}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <h:outputText value="#{objetc.status.description}" />
+    </p:column>
+
+  </p:dataTable>
+</ui:composition>

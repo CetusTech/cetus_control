@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+  <p:outputPanel id="pnlMsg">
+    <p:messages showDetail="true" />
+  </p:outputPanel>
+  <h:form id="formAdd" prependId="false">
+
+    <p:panel>
+      <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
+        <p:outputLabel value="#{msg.name}" for="nameAdd" />
+        <p:inputText id="nameAdd" required="true" size="40" value="#{groupMBean.addObject.name}" pt:type="string"
+          pt:placeholder="#{msg.input_name}" pt:autofocus="autofocus" onchange="conMayusculas(this);"
+          onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="40" />
+        <p:message for="nameAdd" id="nameAddMsg" display="icon" />
+
+        <p:outputLabel value="#{msg.group_type}" for="groupTypeSelected" />
+        <p:selectOneMenu value="#{groupMBean.addObject.groupType.id}" id="groupTypeSelected" required="true">
+          <f:selectItem itemLabel="#{msg.selected_type}" itemValue="" noSelectionOption="true" />
+          <f:selectItems value="#{groupMBean.listGroupTypeItem}" />
+        </p:selectOneMenu>
+        <p:message for="groupTypeSelected" id="groupTypeAddMsg" display="icon" />
+
+        <p:outputLabel value="#{msg.description}" for="desAdd" />
+        <p:editor id="desAdd" value="#{groupMBean.addObject.description}" maxlength="300" width="700" height="200"
+          controls="bold italic underline strikethrough">
+          <f:validateLength minimum="0" maximum="290" for="desAddMsg" />
+        </p:editor>
+        <p:message for="desAdd" id="desAddMsg" display="icon" />
+
+      </h:panelGrid>
+
+
+
+
+      <h:panelGrid columns="9" id="detaildGroup" cellspacing="4" cellpadding="4">
+
+
+
+
+        <p:outputLabel value="#{msg.status}" for="status" />
+        <p:selectOneMenu value="#{groupMBean.addObject.status}" id="status" required="true">
+          <f:selectItem itemLabel="#{msg.selected_status}" itemValue="" noSelectionOption="true" />
+          <f:selectItems value="#{groupMBean.status}" />
+        </p:selectOneMenu>
+        <p:message for="status" id="statusAddMsg" display="icon" />
+
+
+        <p:outputLabel value="#{msg.hour}" for="hourAdd" />
+        <p:inputText id="hourAdd" required="true" size="3" maxlength="3" value="#{groupMBean.addObject.hour}"
+          requiredMessage="#{msg.field_required}">
+          <f:validateLongRange minimum="1" maximum="999" />
+        </p:inputText>
+        <p:message for="hourAdd" id="hourAddMsg" display="icon" />
+
+
+        <p:outputLabel value="#{msg.initDate}" for="initDateAdd" />
+        <p:calendar id="initDateAdd" value="#{groupMBean.addObject.initDate}" mode="popup" required="true"
+          onchange="PF('endDateAdd').hide()" showButtonPanel="true" pt:placeholder="dd-MM-yyyy"
+          locale="#{groupMBean.locale}" pattern="dd-MM-yyyy" showOn="button">
+          <p:ajax event="dateSelect" listener="#{groupMBean.handleDateSelectInit}" update="pnlCal" />
+        </p:calendar>
+        <p:message for="initDateAdd" id="initDateAddMsg" display="icon" />
+
+        <p:outputLabel value="#{msg.endDate}" for="endDateAdd" />
+        <p:outputPanel id="pnlCal">
+          <p:calendar id="endDateAdd" value="#{groupMBean.addObject.endDate}" mode="popup" showButtonPanel="true"
+            required="true" disabled="#{groupMBean.statusDateEnd}" navigator="true" pt:placeholder="dd-MM-yyyy"
+            locale="#{groupMBean.locale}" pattern="dd-MM-yyyy" showOn="button">
+            <p:ajax event="dateSelect" process="@this" listener="#{groupMBean.handleDateSelect}" update=":pnlMsg" />
+          </p:calendar>
+        </p:outputPanel>
+        <p:message for="endDateAdd" id="endDateAddMsg" display="icon" />
+      </h:panelGrid>
+
+      <f:facet name="footer">
+        <center>
+          <p:commandButton value="#{msg.btn_save}" update="formAdd :formConfirmAdd:confirmAdd" process="@form"
+            styleClass="button-general" icon="img-save" actionListener="#{groupMBean.load}" />
+
+
+        </center>
+      </f:facet>
+    </p:panel>
+  </h:form>
+</ui:composition>

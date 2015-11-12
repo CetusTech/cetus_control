@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false">
+    <p:panel>
+      <h:panelGrid id="panelAdd" columns="1" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="#{msg.notification_descripcion}" for="notificationAdd" styleClass="resaltar_negro"/>
+        <p:inputText id="notificationAdd" value="#{notificationMBean.addObject.description}" required="true" size="44" disabled="#{notificationMBean.disableNotifications}"
+          requiredMessage="#{msg.field_required}" maxlength="44">
+        </p:inputText>
+        <p:message for="notificationAdd" id="notificationAddMsg" />
+
+        <p:outputLabel value="#{msg.notification_acciones}:" styleClass="resaltar_negro" />
+        
+        <p:outputLabel value="#{msg.notification_elementLabel}:"/>
+        <p:selectOneMenu id="noTableCbox" value="#{notificationMBean.notificationTableCbox}" style="width:125px" required="true" requiredMessage="#{msg.field_required}">
+          <f:selectItem itemValue="" itemLabel="#{msg.selected}"/>
+          <f:selectItems value="#{notificationMBean.listRegisterNoTable}" var="nt" itemValue="#{nt.id}" itemLabel="#{nt.description}"/>
+        </p:selectOneMenu>
+        <p:message for="noTableCbox" id="noTableCboxMess" />
+
+        <h:panelGrid columns="5" style="border-style:none;">
+          <p:outputLabel value="#{msg.notification_accCreate}" />
+          <p:selectBooleanCheckbox value="#{notificationMBean.addObject.createAction}" disabled="#{notificationMBean.disableNotifications}"/>                      
+          <p:outputLabel value="#{msg.notification_accMessage}" />
+          <p:inputText id="notiCreateMessInput" value="#{notificationMBean.addObject.createActionMessage}" size="44" disabled="#{notificationMBean.disableNotifications}"
+          maxlength="100" />
+          <p:message for="notiCreateMessInput" id="notiCreateMess" />
+          
+          <p:outputLabel value="#{msg.notification_accUpdate}" />        
+          <p:selectBooleanCheckbox value="#{notificationMBean.addObject.updateAction}" disabled="#{notificationMBean.disableNotifications}"/>
+          <p:outputLabel value="#{msg.notification_accMessage}" />
+          <p:inputText id="notiUpdateMessInput" value="#{notificationMBean.addObject.updateActionMessage}" size="44" disabled="#{notificationMBean.disableNotifications}"
+          maxlength="100" />
+          <p:message for="notiUpdateMessInput" id="notiUpdateMess" />          
+          
+          <p:outputLabel value="#{msg.notification_accDelete}" />
+          <p:selectBooleanCheckbox value="#{notificationMBean.addObject.deleteAction}" disabled="#{notificationMBean.disableNotifications}"/>
+          <p:outputLabel value="#{msg.notification_accMessage}" />
+          <p:inputText id="notideleteMessInput" value="#{notificationMBean.addObject.deleteActionMessage}" size="44" disabled="#{notificationMBean.disableNotifications}"
+            maxlength="100" />
+          <p:message for="notideleteMessInput" id="notiDeleteMess" />
+          
+          <p:outputLabel value="#{msg.notification_accActiva}" />
+          <p:selectBooleanCheckbox value="#{notificationMBean.addObject.active}" />
+          
+        </h:panelGrid>      
+        
+        <p:outputLabel value="#{msg.notification_mails}:" for="pickListAdd" styleClass="resaltar_negro"/>
+        <p:pickList id="pickListAdd" value="#{notificationMBean.emailsPickList}" var="emails" itemLabel="#{emails}" required="true" requiredMessage="#{msg.field_required}"
+          itemValue="#{emails}" />
+        <p:message for="pickListAdd" id="notificationpickListAddAddMsg" />
+
+      </h:panelGrid>
+      <f:facet name="footer">
+        <center>
+          <p:commandButton value="#{msg.btn_save}" update="pickListAdd panelAdd notiCreateMess :formConfirmAdd:confirmAdd"
+            process="@form" styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.load}" />
+        </center>
+      </f:facet>
+    </p:panel>
+  </h:form>
+</ui:composition>

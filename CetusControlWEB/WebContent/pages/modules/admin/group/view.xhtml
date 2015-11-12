@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+  <p:accordionPanel id="panelViewGroup">
+    <p:tab id="panelViewGroup2" title="#{msg.detail_group}">
+      <p:panelGrid id="viewAccount" styleClass="column_100">
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.status_id}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText value="#{groupMBean.selectedObject.id}" />
+          </p:column>
+        </p:row>
+
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.group}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText value="#{groupMBean.selectedObject.name}" />
+          </p:column>
+        </p:row>
+
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.group_type}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText value="#{groupMBean.selectedObject.groupType.description}" />
+          </p:column>
+        </p:row>
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.person_responsable}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText
+              value="#{groupMBean.selectedObject.person.names} #{groupMBean.selectedObject.person.lastNames}" />
+          </p:column>
+        </p:row>
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <p:graphicImage name="StatusCreated.png" title="#{msg.status_created_es}"
+              rendered='#{groupMBean.selectedObject.status == "CREATED"}' library="images" />
+            <p:graphicImage name="StatusInProgress.png" title="#{msg.status_in_progress_es}"
+              rendered="#{groupMBean.selectedObject.status == 'IN_PROGRESS'}" library="images" />
+            <p:graphicImage name="StatusClosed.png" title="#{msg.status_closed_es}"
+              rendered='#{groupMBean.selectedObject.status == "CLOSED"}' library="images" />
+          </p:column>
+        </p:row>
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.initDate}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText value="#{groupMBean.selectedObject.initDate}" />
+          </p:column>
+        </p:row>
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.endDate}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText value="#{groupMBean.selectedObject.endDate}" />
+          </p:column>
+        </p:row>
+        <p:row>
+          <p:column>
+            <h:outputText value="#{msg.hour}:" styleClass="resaltar_negro" />
+          </p:column>
+          <p:column>
+            <h:outputText value="#{groupMBean.selectedObject.hour}" />
+          </p:column>
+        </p:row>
+        <p:row>
+          <p:column colspan="2" style="text-align:center">
+            <p:editor controls="bold" height="150" width="500" value="#{groupMBean.selectedObject.description}" disabled="true" />
+          </p:column>
+        </p:row>
+      </p:panelGrid>
+      <h:form>
+        <center>
+          <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+            styleClass="button-general">
+            <p:printer target=":panelViewGroup" />
+          </p:commandButton>
+        </center>
+      </h:form>
+    </p:tab>
+    <p:tab title="#{msg.detail_audit}">
+      <p:panelGrid columns="2" styleClass="column_100">
+
+        <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{groupMBean.selectedObject.creationUser}" />
+
+        <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{groupMBean.selectedObject.creationDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </h:outputText>
+
+        <h:outputText value="#{msg.status_lastupdate}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{groupMBean.selectedObject.modificationDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+        </h:outputText>
+
+        <h:outputText value="#{msg.status_lasUser}:" styleClass="resaltar_negro" />
+        <h:outputText value="#{groupMBean.selectedObject.modificationUser}" />
+
+      </p:panelGrid>
+
+    </p:tab>
+  </p:accordionPanel>
+</ui:composition>

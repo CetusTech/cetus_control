@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:messages id="msgClientUpdate" showDetail="true" for="btnNext" />
+  <p:outputPanel autoUpdate="false" id="pnlTabClientUpdate">
+    <h:panelGrid columns="1" border="0" styleClass="column_100">
+      <p:dataTable value="#{personAdminMBean.listClientDTO}" styleClass="column_100" rows="3" id="tableClientUpdate"
+        paginator="true" currentPageReportTemplate="{currentPage} de {totalPages}"
+        rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{personAdminMBean.selectedClientDTO}"
+        emptyMessage="#{msg.list_empty}" var="objetc">
+
+        <f:facet name="header">
+          <h:outputLabel value="#{msg.list_client}" />
+        </f:facet>
+
+        <p:column selectionMode="single" style="width:2%" />
+
+        <p:column headerText="#{msg.code_client}" sortBy="#{objetc.code}" styleClass="column_20"
+          filterBy="#{objetc.code}" filterMatchMode="contains">
+          <h:outputText value="#{objetc.code}" />
+        </p:column>
+
+        <p:column headerText="#{msg.client}" styleClass="column_20" sortBy="#{objetc.name}" filterBy="#{objetc.name}"
+          filterMatchMode="contains">
+          <h:outputText value="#{objetc.name}" />
+        </p:column>
+
+      </p:dataTable>
+    </h:panelGrid>
+
+    <div align="right">
+      <p:commandButton value="#{msg.btn_clear}" styleClass="button-general" icon="img-clean"
+        update=":formAdd formPerson :formConfirmMod:confirmMod" process="@this"
+        actionListener="#{personAdminMBean.clearObject}" />
+      <p:commandButton value="#{msg.btn_next}" id="btnNext" styleClass="button-general" icon="img-forward"
+        update="pnlTabClientUpdate msgClientUpdate :formUpdate" process="pnlTabClientUpdate"
+        actionListener="#{personAdminMBean.nextTabDataPersonUpdate('btnNext')}" />
+    </div>
+  </p:outputPanel>
+</ui:composition>

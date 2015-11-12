@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:pe="http://primefaces.org/ui/extensions">
+
+  <h:form id="formAdd" prependId="false">
+    <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
+      <p:outputLabel value="#{msg.description}" for="descriptionAdd" />
+      <p:inputText id="descriptionAdd" required="true" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        size="40" value="#{priorityMBean.addObject.description}" requiredMessage="#{msg.field_required}" maxlength="50" />
+      <p:message for="descriptionAdd" id="descriptionAddMsg" />
+
+      <p:outputLabel value="#{msg.value}" for="valueAdd" />
+      <pe:inputNumber id="valueAdd" required="true" size="20" value="#{priorityMBean.addObject.value}"
+        requiredMessage="#{msg.field_required}" maxlength="1" minValue="0" maxValue="9" 
+        decimalPlaces="0"/>
+      <p:message for="valueAdd" id="valueAddMsg" />
+
+    </h:panelGrid>
+    <center>
+      <p:commandButton value="#{msg.btn_save}" update="panelAdd :formConfirmAdd:confirmAdd" process="@form"
+        styleClass="button-general" icon="img-save" actionListener="#{priorityMBean.load}" />
+    </center>
+  </h:form>
+</ui:composition>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+      actionListener="#{groupPersonMBean.viewGroupPerson}" icon="ui-icon-search" />
+
+    <p:menuitem value="#{msg.btn_add}" icon="ui-icon-plus" update=":dialogAdd :alertSelectRow"
+      actionListener="#{groupPersonMBean.addGroupPerson}" />
+
+  </p:contextMenu>
+
+
+  <p:toolbar styleClass="body_toolbar">
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="addButton" process="@form" title="#{msg.btn_new}"
+        update=":formAdd:panelAdd :dialogAdd :alertSelectRow" actionListener="#{groupPersonMBean.addGroupPerson}">
+        <p:graphicImage name="document_add_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+        actionListener="#{groupPersonMBean.viewGroupPerson}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+    </p:toolbarGroup>
+  </p:toolbar>
+
+  <p:dataTable value="#{groupPersonMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{object.id}" selection="#{groupPersonMBean.selectedObject}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="object">
+
+
+    <p:column sortBy="#{object.name}" filterBy="#{object.name}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.name}" />
+      </f:facet>
+      <h:outputText value="#{object.name}" />
+    </p:column>
+
+    <p:column sortBy="#{object.initDate}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.initDate}" />
+      </f:facet>
+      <h:outputText value="#{object.initDate}">
+        <f:convertDateTime type="date" pattern="#{msg.PATTERN_DATE}" />
+      </h:outputText>
+    </p:column>
+
+    <p:column sortBy="#{object.endDate}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.endDate}" />
+      </f:facet>
+      <h:outputText value="#{object.endDate}">
+        <f:convertDateTime type="date" pattern="#{msg.PATTERN_DATE}" />
+      </h:outputText>
+    </p:column>
+
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <center>
+        <p:graphicImage name="StatusCreated.png" title="#{msg.status_created_es}"
+          rendered='#{object.status == "CREATED"}' library="images" />
+        <p:graphicImage name="StatusInProgress.png" title="#{msg.status_in_progress_es}"
+          rendered="#{object.status == 'IN_PROGRESS'}" library="images" />
+        <p:graphicImage name="StatusClosed.png" title="#{msg.status_closed_es}" rendered='#{object.status == "CLOSED"}'
+          library="images" />
+      </center>
+    </p:column>
+
+  </p:dataTable>
+</ui:composition>

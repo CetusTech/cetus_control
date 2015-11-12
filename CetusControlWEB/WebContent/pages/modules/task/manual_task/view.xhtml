@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+  <p:panelGrid id="viewAccount" columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.area}" />
+    </f:facet>
+    <h:outputText value="#{msg.id}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{manualTaskMBean.selectedObject.id}" />
+
+    <h:outputText value="#{msg.description}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{manualTaskMBean.selectedObject.description}" />
+
+  </p:panelGrid>
+  <p:panelGrid columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.audit}" />
+    </f:facet>
+
+    <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{manualTaskMBean.selectedObject.creationUser}" />
+
+    <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{manualTaskMBean.selectedObject.creationDate}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+
+    <h:outputText value="#{msg.update_user}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{manualTaskMBean.selectedObject.modificationUser}" />
+
+    <h:outputText value="#{msg.update_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{manualTaskMBean.selectedObject.modificationDate}">
+      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+    </h:outputText>
+
+
+  </p:panelGrid>
+
+  <br />
+  <h:form>
+    <center>
+      <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+        styleClass="button-general">
+        <p:printer target=":viewAccount" />
+      </p:commandButton>
+    </center>
+  </h:form>
+
+
+</ui:composition>

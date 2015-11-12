@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    closeOnEscape="true" showHeader="false">
+    <p:graphicImage name="ajax-loader.gif" library="images" />
+  </p:dialog>
+
+  <!-- Dialogo para agregar registro -->
+
+  <p:dialog id="dialogAdd" resizable="false" modal="true" styleClass="column_80" appendToBody="true"
+    closeOnEscape="true" header="#{msg.register_person}" widgetVar="dialogAddVar">
+    <ui:include src="/pages/modules/admin/person/add.xhtml" />
+  </p:dialog>
+
+
+
+  <h:form id="formConfirmAdd">
+    <p:confirmDialog message="#{msg.confirm_add_person}" id="confirmAdd" header="#{msg.header_confirm_add_person}"
+      appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{personAdminMBean.showConfirmAdd}">
+      <center>
+        <center>
+          <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":fromContenido:panel"
+            styleClass="button-general" icon="img-ok"
+            oncomplete="PF('confirmAdd').hide(), PF('dialogAddVar').hide(), handleLoginRequestAdd(xhr, status, args)"
+            process="@this" action="#{personAdminMBean.add}" />
+          <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAdd').hide()"
+            process="@none" styleClass="button-general" icon="img-cancel" />
+        </center>
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+
+  <!-- Dialogo para Modificar registro -->
+
+  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.register_person}"
+    closeOnEscape="true" styleClass="column_80" visible="#{personAdminMBean.showConfirmMod}" widgetVar="dialogModVar">
+    <ui:include src="/pages/modules/admin/person/update.xhtml" />
+  </p:dialog>
+
+
+
+  <h:form id="formConfirmMod">
+    <p:confirmDialog message="#{msg.confirm_update_person}" id="confirmMod" header="#{msg.header_confirm_update_person}"
+      closeOnEscape="true" appendToBody="true" widgetVar="confirmMod" severity="alert"
+      visible="#{personAdminMBean.showDialogConfirmUpdate}">
+      <center>
+        <center>
+          <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":fromContenido" styleClass="button-general"
+            icon="img-ok" oncomplete="PF('confirmMod').hide(), PF('dialogModVar').hide()" process="@this"
+            action="#{personAdminMBean.update}" />
+          <p:commandButton id="btnConfCancelMod" value="#{msg.btn_cancel}" oncomplete="PF('confirmMod').hide()"
+            styleClass="button-general" icon="img-cancel" />
+        </center>
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <!-- Dialogo para ver detalle del registro -->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    closeOnEscape="true" visible="#{personAdminMBean.showViewDetail}" widgetVar="dialogViewVar">
+    <ui:include src="/pages/modules/admin/person/view.xhtml" />
+  </p:dialog>
+
+
+  <p:dialog id="alertSelectRow" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    closeOnEscape="true" appendToBody="true" widgetVar="alertSelectRowVar" modal="true"
+    visible="#{personAdminMBean.showAlertSelectRow}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_select_row_record}" />
+    </h:panelGrid>
+  </p:dialog>
+
+
+  <!-- Dialogo para eliminar el registro -->
+  <h:form id="formConfirmDelete">
+    <h:panelGroup id="pnlConfirmDelete">
+      <p:confirmDialog message="#{msg.confirm_delete_person}" id="confirmDelete"
+        header="#{msg.header_confirm_delete_person}" appendToBody="true" widgetVar="confirmDeleteVar" severity="alert"
+        visible="#{personAdminMBean.showConfirmDelete}">
+        <center>
+          <p:commandButton id="btnConfDelete" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-ok" update=":fromContenido:panel :fromContenido:table" process="@this"
+            actionListener="#{personAdminMBean.remove}" />
+          <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmDeleteVar').hide()"
+            styleClass="button-general" icon="img-cancel" />
+        </center>
+      </p:confirmDialog>
+    </h:panelGroup>
+  </h:form>
+
+</ui:composition>

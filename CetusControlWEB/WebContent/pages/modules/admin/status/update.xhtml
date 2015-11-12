@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formUpdate" prependId="false">
+
+    <p:panel>
+      <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
+
+        <p:outputLabel value="#{msg.status_descripcion}" for="desUpdate" styleClass="resaltar_negro" />
+        <p:inputText id="desUpdate" required="true" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+          size="40" value="#{statusMBean.selectedObject.description}" requiredMessage="#{msg.field_required}"
+          maxlength="40" />
+        <p:message for="desUpdate" id="desUpdMsg" />
+
+
+        <p:outputLabel value="#{msg.status_color}" for="colorUpdate" styleClass="resaltar_negro" />
+        <p:colorPicker value="#{statusMBean.selectedObject.color}" id="colorUpdate" required="true" />
+        <p:message for="colorUpdate" id="colorUpdMsg" />
+
+      </h:panelGrid>
+      <f:facet name="footer">
+        <center>
+          <p:commandButton id="btnUpdate" value="#{msg.btn_save}" update="pnlUpdate :formConfirmMod:confirmMod"
+            process="@form" styleClass="button-general" icon="img-save" actionListener="#{statusMBean.loadUpdate}" />
+        </center>
+      </f:facet>
+    </p:panel>
+
+
+  </h:form>
+</ui:composition>

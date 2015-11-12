@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:panel id="panelProcess" header="#{msg.load_massive_task}">
+    <h:panelGrid columns="1">
+      <h:panelGroup>
+        <h:outputLabel value="#{msg.text_template_task_massive}" />
+        <h:commandLink value="#{msg.here}" actionListener="#{taskMassiveMBean.createTemplateTaskMassive}"
+          onclick="PrimeFaces.monitorDownload(start, stop);">
+          <p:fileDownload value="#{taskMassiveMBean.fileTemplate}" />
+        </h:commandLink>
+      </h:panelGroup>
+
+      <br />
+      <p:fileUpload styleClass="body_toolbar" fileUploadListener="#{taskMassiveMBean.handleFileUpload}" mode="advanced"
+        dragDropSupport="true" update="msgs resultProcess" allowTypes="/(\.|\/)(xls|xlsx)$/" fileLimit="1"
+        fileLimitMessage="#{msg.file_limit_message}" invalidFileMessage="#{msg.invalid_file_message}"
+        cancelLabel="#{msg.btn_cancel}" uploadLabel="#{msg.btn_upload}" label="#{msg.btn_choose}" onstart="start();"
+        oncomplete="stop();" />
+    </h:panelGrid>
+    <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
+    <br />
+    <h:panelGroup id="resultProcess">
+      <h:panelGrid columns="1" rendered="#{taskMassiveMBean.showResultProcess}">
+        <h:panelGroup>
+          <p:graphicImage name="Ok-icon.png" width="20" height="20" library="images" />
+          <h:outputLabel value="  #{taskMassiveMBean.contSuccess}  #{msg.text_result_massive_successful}" />
+        </h:panelGroup>
+        <h:panelGroup>
+          <p:graphicImage name="error.png" width="20" height="20" library="images" />
+          <h:outputLabel value="  #{taskMassiveMBean.contError}  #{msg.text_result_massive_with_Error}" />
+        </h:panelGroup>
+        <br />
+
+        <h:panelGroup>
+          <h:outputLabel value="#{msg.text_download_result_process} " />
+          <h:commandLink value="#{msg.here}" actionListener="#{taskMassiveMBean.downloadResultProcess}"
+            onclick="PrimeFaces.monitorDownload(start, stop);">
+            <p:fileDownload value="#{taskMassiveMBean.fileResultProcess}" />
+          </h:commandLink>
+        </h:panelGroup>
+      </h:panelGrid>
+    </h:panelGroup>
+  </p:panel>
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+
+  <script type="text/javascript">
+    function start() {
+        PF('statusDialog').show();
+    }
+     
+    function stop() {
+        PF('statusDialog').hide();
+    }
+  </script>
+</ui:composition>

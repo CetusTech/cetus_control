@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:pe="http://primefaces.org/ui/extensions">
+
+  <h:form id="formUpdate" prependId="false">
+    <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
+
+      <h:outputText value="#{msg.description}" styleClass="resaltar_negro" />
+      <p:inputText id="descriptionUpdate" required="true" style="width:100%" size="40" onchange="conMayusculas(this);"
+        onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="50"
+        value="#{priorityMBean.selectedObject.description}">
+      </p:inputText>
+      <p:message for="descriptionUpdate" id="descriptionUpdateMsg" />
+
+      <p:outputLabel value="#{msg.value}" for="valueUpdate" />
+      <pe:inputNumber id="valueUpdate" required="true" size="20" value="#{priorityMBean.selectedObject.value}"
+        requiredMessage="#{msg.field_required}" maxlength="1" minValue="0" maxValue="9" decimalPlaces="0" />
+
+
+
+      <p:message for="valueUpdate" id="valueUpdateMsg" />
+
+
+    </h:panelGrid>
+    <center>
+      <p:commandButton id="btnUpdate" value="#{msg.btn_save}" update="pnlUpdate :formConfirmMod:confirmMod"
+        process="@form" styleClass="button-general" icon="img-save" actionListener="#{priorityMBean.loadUpdate}" />
+    </center>
+
+
+  </h:form>
+</ui:composition>

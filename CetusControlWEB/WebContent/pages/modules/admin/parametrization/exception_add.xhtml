@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAddExcep" prependId="false">
+    <p:panel id="panelAddExcep">
+      <h:panelGrid id="panelGridAddExcep_1" columns="3" cellspacing="4" cellpadding="4">
+        <p:outputLabel value="#{msg.date_exception}:" for="dateExcepAdd" />
+        <p:calendar id="dateExcepAdd" value="#{parametrizationMBean.addObjectExcep.dateException}" required="true"
+          requiredMessage="#{msg.field_required}" pattern="#{msg.PATTERN_DATE}" readonlyInput="true"
+          mindate="#{parametrizationMBean.currentDateStr}" showOn="button" timeZone="#{msg.time_zone}" size="10">
+          <p:ajax event="dateSelect" listener="#{parametrizationMBean.dateExceptionSelect}"
+            update="panelGridAddExcep_1 btnSaveExcepAdd" />
+        </p:calendar>
+        <p:message for="dateExcepAdd" id="dateExcepAddMsg" />
+
+        <p:outputLabel value="#{msg.jornada}:" for="jornadaExcepAdd" />
+        <p:selectOneMenu id="jornadaExcepAdd" value="#{parametrizationMBean.addObjectExcep.jornada}" required="true"
+          requiredMessage="#{msg.field_required}">
+          <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
+          <f:selectItems value="#{parametrizationMBean.listJornadaExcep}" />
+        </p:selectOneMenu>
+        <p:message for="jornadaExcepAdd" id="jornadaExcepAddMsg" />
+
+        <p:outputLabel value="#{msg.description}:" for="descriptionExcepAdd" />
+        <p:inputTextarea required="true" requiredMessage="#{msg.field_required}" maxlength="195" cols="40" rows="5"
+          id="descriptionExcepAdd" value="#{parametrizationMBean.addObjectExcep.description}" />
+        <p:message for="descriptionExcepAdd" id="descriptionExcepAddMsg" />
+
+      </h:panelGrid>
+
+      <f:facet name="footer">
+        <center>
+          <p:commandButton id="btnSaveExcepAdd" value="#{msg.btn_save}"
+            disabled="#{parametrizationMBean.disableBtnAddException}"
+            update="panelAddExcep :formConfirmAddExcep:confirmAddExcep" process="@form" styleClass="button-general"
+            icon="img-save" actionListener="#{parametrizationMBean.loadAddException}" />
+
+
+        </center>
+      </f:facet>
+    </p:panel>
+  </h:form>
+</ui:composition>

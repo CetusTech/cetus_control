@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:form styleClass="column_100" id="formPerson">
+    <h:panelGrid id="panelUpdate" columns="4" border="0" cellpUpdateing="2" cellspacing="1"
+      columnClasses="column_5,column_20,column_20,column_5,column_5,column_20,column_20,column_5">
+      <h:outputText value="" style="color:red;" />
+      <h:outputLabel value="#{msg.code_person}" styleClass="resaltar_negro" />
+      <p:outputLabel id="codeUpdate" value="#{personAdminMBean.selectedObject.code}" styleClass="resaltar_rojo" />
+      <p:message display="icon" for="codeUpdate" id="codeUpdateMsg" />
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.first_name}" styleClass="resaltar_negro" />
+      <p:inputText id="firstNameUpdate" value="#{personAdminMBean.selectedObject.names}" required="true"
+        requiredMessage="#{msg.field_required}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="firstNameUpdate" id="firstNameUpdateMsg" />
+
+
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.last_name}" styleClass="resaltar_negro" />
+      <p:inputText id="firstLastNameUpdate" value="#{personAdminMBean.selectedObject.lastNames}" required="true"
+        requiredMessage="#{msg.field_required}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="firstLastNameUpdate" id="firstLastNameUpdateMsg" />
+
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.number_identity}" styleClass="resaltar_negro" />
+      <p:inputText id="numberIdentityUpdate" required="true" requiredMessage="#{msg.field_required }"
+        value="#{personAdminMBean.selectedObject.identity}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="numberIdentityUpdate" id="numberIdentityUpdateMsg" />
+
+      <h:outputText value="*" style="color:red;" />
+      <h:outputLabel value="#{msg.email}" styleClass="resaltar_negro" />
+      <p:inputText id="emailUpdate" value="#{personAdminMBean.selectedObject.email}" maxlength="50" size="50"
+        pt:placeholder="#{msg.input_email}">
+        <f:validateRequired for="emailUpdate" />
+        <f:validator validatorId="emailValidator" for="emailUpdate" />
+      </p:inputText>
+      <p:message display="icon" for="emailUpdate" id="emailUpdateMsg" />
+
+      <h:outputText value=" " style="color:red;" />
+      <h:outputLabel value="#{msg.phone}" styleClass="resaltar_negro" />
+      <p:inputText id="phoneUpdate" value="#{personAdminMBean.selectedObject.phone}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="phoneUpdate" id="phoneUpdateMsg" />
+
+      <h:outputText value=" " style="color:red;" />
+      <h:outputLabel value="#{msg.movil}" styleClass="resaltar_negro" />
+      <p:inputText id="movilUpdate" value="#{personAdminMBean.selectedObject.cellPhone}" maxlength="44">
+      </p:inputText>
+      <p:message display="icon" for="movilUpdate" id="movilUpdateMsg" />
+
+      <h:outputText value=" " style="color:red;" />
+      <h:outputLabel value="#{msg.address}" styleClass="resaltar_negro" />
+      <p:inputText id="addressUpdate" value="#{personAdminMBean.selectedObject.address}" maxlength="50" size="50"
+        pt:placeholder="#{msg.input_address}">
+      </p:inputText>
+      <p:message display="icon" for="addressUpdate" id="addressUpdateMsg" />
+
+    </h:panelGrid>
+    <h:inputHidden value="#{personAdminMBean.selectedObject.id}" />
+    <h:inputHidden value="#{personAdminMBean.selectedObject.code}" />
+
+    <div align="right">
+      <p:commandButton value="#{msg.btn_clear}" id="btnClearPerson" styleClass="button-general" icon="img-clean"
+        update=":formUpdate formPerson :formConfirmMod:confirmMod" process="@this"
+        actionListener="#{personAdminMBean.clearObject}" />
+      <p:commandButton value="#{msg.btn_next}" id="btnNextPerson" styleClass="button-general" icon="img-forward"
+        update=":formUpdate panelUpdate" process="@form" actionListener="#{personAdminMBean.nextTabUserUpdate}" />
+    </div>
+
+  </h:form>
+
+</ui:composition>

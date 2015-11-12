@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+      actionListener="#{parametrizationMBean.validateSelectedRecord}" icon="ui-icon-search" />
+
+    <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
+      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
+      actionListener="#{parametrizationMBean.updateWorkday}" />
+
+    <p:separator styleClass="separator-toolbar" />
+
+    <p:menuitem value="#{msg.btn_delete}" icon="ui-icon-trash"
+      update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
+      actionListener="#{parametrizationMBean.validateSelectedRecord}" />
+  </p:contextMenu>
+
+  <p:toolbar styleClass="body_toolbar">
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="addButton" oncomplete="PF('dialogAddVar').show()" process="@form" title="#{msg.btn_new}"
+        update=":formAdd:panelAdd" actionListener="#{parametrizationMBean.clearAddWorkDay}" immediate="true">
+        <p:graphicImage name="document_add_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+        actionListener="#{parametrizationMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:commandLink id="updateButton" title="#{msg.btn_update}"
+        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
+        actionListener="#{parametrizationMBean.updateWorkday}">
+        <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <p:commandLink id="deleteButton" title="#{msg.btn_delete}"
+        update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
+        actionListener="#{parametrizationMBean.validateSelectedRecord}">
+        <p:graphicImage name="document_delete_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <h:commandLink id="excel" title="#{msg.btn_excel}">
+        <p:graphicImage name="excel.png" width="32" height="32" library="images" />
+        <p:dataExporter type="xls" target="table" encoding="ISO-8859-1" 
+          fileName="#{msg.report_excel}#{parametrizationMBean.currentDateStr}" />
+      </h:commandLink>
+
+
+      <h:commandLink id="pdf" title="#{msg.btn_pdf}">
+        <p:graphicImage name="pdf.png" width="32" height="32" library="images" />
+        <p:dataExporter type="pdf" encoding="ISO-8859-1" target="table"
+          fileName="#{msg.report_pdf}#{parametrizationMBean.currentDateStr}" />
+      </h:commandLink>
+    </p:toolbarGroup>
+  </p:toolbar>
+
+  <p:dataTable value="#{parametrizationMBean.listRegisterWorkday}" rows="#{msg.rows_paginator}" id="table"
+    paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{object.id}" selection="#{parametrizationMBean.selectedObject}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="object">
+
+
+    <p:column sortBy="#{object.id}" filterBy="#{object.id}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.id}" />
+      </f:facet>
+      <h:outputText value="#{object.id}" />
+    </p:column>
+
+    <p:column sortBy="#{object.colDay}" filterBy="#{object.colDay}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.day}" />
+      </f:facet>
+      <h:outputText value="#{object.colDay}" />
+    </p:column>
+
+    <p:column sortBy="#{object.jornada}" filterBy="#{object.jornada}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.jornada}" />
+      </f:facet>
+      <h:outputText value="#{object.jornada}" />
+    </p:column>
+
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.start_time}" />
+      </f:facet>
+      <h:outputText value="#{object.startTimeStr}" />
+    </p:column>
+
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.end_time}" />
+      </f:facet>
+      <h:outputText value="#{object.endTimeStr}" />
+    </p:column>
+  </p:dataTable>
+
+
+</ui:composition>

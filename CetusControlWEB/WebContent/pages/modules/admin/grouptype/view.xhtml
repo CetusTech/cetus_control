@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+  <p:panelGrid id="viewAccount" columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.groupType}" />
+    </f:facet>
+    <h:outputText value="#{msg.groupType_id}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.id}" />
+
+    <h:outputText value="#{msg.groupType_descripcion}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.description}" />
+    
+    <h:outputText value="#{msg.groupType_acronnym}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.acronym}" />
+
+  </p:panelGrid>
+  <p:panelGrid columns="2" styleClass="column_100">
+    <f:facet name="header">
+      <h:outputText value="#{msg.audit}" />
+    </f:facet>
+
+    <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.creationUser}" />
+
+    <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.creationDate}" />
+
+    <h:outputText value="#{msg.groupType_lastupdate}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.modificationDate}" />
+
+    <h:outputText value="#{msg.groupType_lasUser}:" styleClass="resaltar_negro" />
+    <h:outputText value="#{groupTypeMBean.selectedObject.modificationUser}" />
+
+  </p:panelGrid>
+
+  <br />
+  <h:form>
+    <center>
+      <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
+        styleClass="button-general">
+        <p:printer target=":viewAccount" />
+      </p:commandButton>
+    </center>
+  </h:form>
+
+
+</ui:composition>

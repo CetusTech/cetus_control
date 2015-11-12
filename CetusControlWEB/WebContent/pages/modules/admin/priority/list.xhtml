@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+      actionListener="#{priorityMBean.validateSelectedRecord}" icon="ui-icon-search" />
+
+    <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
+      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow" actionListener="#{priorityMBean.validateSelectedRecord}" />
+    <p:separator styleClass="separator-toolbar" />
+    <p:menuitem value="#{msg.btn_delete}" icon="ui-icon-trash"
+      update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow" actionListener="#{priorityMBean.validateSelectedRecord}" />
+  </p:contextMenu>
+
+
+  <p:toolbar styleClass="body_toolbar">
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="addButton" oncomplete="PF('dialogAddVar').show()" process="@form" title="#{msg.btn_new}"
+        update=":formAdd:panelAdd">
+        <p:graphicImage name="document_add_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+        actionListener="#{priorityMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="updateButton" title="#{msg.btn_update}"
+        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow" actionListener="#{priorityMBean.validateSelectedRecord}">
+        <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="deleteButton" title="#{msg.btn_delete}"
+        update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
+        actionListener="#{priorityMBean.validateSelectedRecord}">
+        <p:graphicImage name="document_delete_32.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <h:commandLink id="excel" title="#{msg.btn_excel}">
+        <p:graphicImage name="excel.png" width="32" height="32" library="images" />
+        <p:dataExporter type="xls" target="table" encoding="ISO-8859-1"
+          fileName="#{msg.report_excel}#{priorityMBean.currentDateStr}" />
+      </h:commandLink>
+
+      <p:separator styleClass="separator-toolbar" />
+      <h:commandLink id="pdf" title="#{msg.btn_pdf}">
+        <p:graphicImage name="pdf.png" width="32" height="32" library="images" />
+        <p:dataExporter type="pdf" encoding="ISO-8859-1" target="table"
+          fileName="#{msg.report_pdf}#{priorityMBean.currentDateStr}" />
+      </h:commandLink>
+    </p:toolbarGroup>
+  </p:toolbar>
+
+  <p:dataTable value="#{priorityMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{object.id}" selection="#{priorityMBean.selectedObject}" selectionMode="single"
+    emptyMessage="#{msg.list_empty}" var="object">
+
+
+    <p:column sortBy="#{object.id}" filterBy="#{object.id}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.id}" />
+      </f:facet>
+      <h:outputText value="#{object.id}" />
+    </p:column>
+
+    <p:column sortBy="#{object.description}" filterBy="#{object.description}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.description}" />
+      </f:facet>
+      <h:outputText value="#{object.description}" />
+    </p:column>
+
+    <p:column sortBy="#{object.value.intValue()}" filterBy="#{object.value.intValue()}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.value}" />
+      </f:facet>
+      <h:outputText value="#{object.value.intValue()}" />
+    </p:column>
+
+  </p:dataTable>
+</ui:composition>
