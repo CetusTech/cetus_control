@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="massive_task_template" pageWidth="1400" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="1400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="cf0fdd01-4da9-4353-858e-7773e59c9128">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="3301"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.sheet.names.1" value="PLANTILLA CARGUE"/>
@@ -66,7 +66,9 @@ WHERE G.ID_PERSON_LIDER = P.ID
 	<queryString>
 		<![CDATA[select NAME from client_cetus limit 1]]>
 	</queryString>
-	<field name="NAME" class="java.lang.String"/>
+	<field name="NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="44">
 			<staticText>
@@ -295,23 +297,15 @@ WHERE G.ID_PERSON_LIDER = P.ID
 			</staticText>
 		</band>
 	</columnHeader>
-	<detail>
-		<band>
-			<staticText>
-				<reportElement x="0" y="0" width="81" height="0" uuid="fb9eb5f9-82fa-4ef5-9f56-34eb94f688af"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-		</band>
-	</detail>
 	<summary>
-		<band height="57">
+		<band height="74">
 			<break>
 				<reportElement x="0" y="0" width="100" height="1" uuid="a32d6643-07b5-4d99-b14c-20fb8f57b214">
 					<property name="net.sf.jasperreports.export.xls.after.before.row" value="true"/>
 				</reportElement>
 			</break>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="2" width="150" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="179fd6b1-2375-4155-a983-783e48e38b74"/>
+				<reportElement mode="Opaque" x="0" y="2" width="81" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="179fd6b1-2375-4155-a983-783e48e38b74"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -325,7 +319,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[TIPO TAREA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="160" y="2" width="150" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="e1d0d940-727b-40a3-8337-0b1fc31ab841"/>
+				<reportElement mode="Opaque" x="217" y="2" width="35" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="e1d0d940-727b-40a3-8337-0b1fc31ab841"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -339,7 +333,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[AREA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="320" y="2" width="100" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="41753a48-70a7-4a15-924c-bdb1c100423f"/>
+				<reportElement mode="Opaque" x="412" y="2" width="65" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="41753a48-70a7-4a15-924c-bdb1c100423f"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -353,7 +347,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[PRIORIDAD]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="431" y="2" width="100" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="70431863-9ef7-4466-876d-4fa2d1c2c194"/>
+				<reportElement mode="Opaque" x="587" y="2" width="50" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="70431863-9ef7-4466-876d-4fa2d1c2c194"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -367,7 +361,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[ESTADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="542" y="2" width="298" height="20" forecolor="#FFFFFF" backcolor="#8EC120" uuid="89d809f2-10e4-4366-8829-15c2e642282f"/>
+				<reportElement mode="Opaque" x="747" y="2" width="132" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="de539d59-0074-439a-bd12-6a9d92c66e82"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -378,38 +372,10 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[GRUPO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="542" y="22" width="71" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="de539d59-0074-439a-bd12-6a9d92c66e82"/>
-				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
-					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[ID GRUPO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="613" y="22" width="227" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="03bb5158-0497-4e12-ae64-b1d024e00f39"/>
-				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="0">
-					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[NOMBRE DEL GRUPO]]></text>
+				<text><![CDATA[ID GRUPO / NOMBRE]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="320" y="22" width="100" height="18" uuid="366a7755-0c13-45f2-84ad-367b0d96904e"/>
+				<reportElement x="477" y="2" width="100" height="18" uuid="366a7755-0c13-45f2-84ad-367b0d96904e"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset1" uuid="471de985-8b2a-4920-8178-56b6ab1c1f5b">
 						<datasetParameter name="ID_CLIENT_CETUS">
@@ -433,7 +399,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				</jr:list>
 			</componentElement>
 			<componentElement>
-				<reportElement x="0" y="22" width="150" height="18" uuid="5b41e874-516e-4d9a-be3c-29fe124b6aaa"/>
+				<reportElement x="81" y="2" width="126" height="18" uuid="5b41e874-516e-4d9a-be3c-29fe124b6aaa"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset2" uuid="3cedbf74-85a3-41d3-9994-e21d8eaadb01">
 						<datasetParameter name="ID_CLIENT_CETUS">
@@ -441,9 +407,9 @@ WHERE G.ID_PERSON_LIDER = P.ID
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:listContents height="18" width="150">
+					<jr:listContents height="18" width="126">
 						<textField isBlankWhenNull="true">
-							<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="150" height="18" uuid="ddeb591c-0565-442d-93db-c455be26f297"/>
+							<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="126" height="18" uuid="ddeb591c-0565-442d-93db-c455be26f297"/>
 							<box>
 								<pen lineWidth="0.5"/>
 								<topPen lineWidth="0.5"/>
@@ -457,7 +423,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				</jr:list>
 			</componentElement>
 			<componentElement>
-				<reportElement x="160" y="22" width="150" height="18" uuid="4a613475-971f-402b-81d0-7a925c37b1d5"/>
+				<reportElement x="252" y="2" width="150" height="18" uuid="4a613475-971f-402b-81d0-7a925c37b1d5"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset3" uuid="2f69eb01-115b-499d-939e-1c5615b93fd8">
 						<datasetParameter name="ID_CLIENT_CETUS">
@@ -481,7 +447,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				</jr:list>
 			</componentElement>
 			<componentElement>
-				<reportElement x="431" y="22" width="100" height="18" uuid="1e77d33d-a8c6-4a64-be87-4984a47984f4"/>
+				<reportElement x="637" y="2" width="100" height="18" uuid="1e77d33d-a8c6-4a64-be87-4984a47984f4"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset4" uuid="4a7a53f1-de69-448a-ba59-381eb40bd93e">
 						<datasetParameter name="ID_CLIENT_CETUS">
@@ -505,7 +471,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				</jr:list>
 			</componentElement>
 			<componentElement>
-				<reportElement x="542" y="40" width="298" height="17" uuid="12188100-93ac-4569-bb43-3165df6943cd"/>
+				<reportElement x="879" y="2" width="230" height="18" uuid="12188100-93ac-4569-bb43-3165df6943cd"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset5" uuid="78268a53-48cd-4d96-af84-137b2c1a9498">
 						<datasetParameter name="ID_CLIENT">
@@ -513,9 +479,9 @@ WHERE G.ID_PERSON_LIDER = P.ID
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:listContents height="17" width="298">
+					<jr:listContents height="18" width="230">
 						<textField>
-							<reportElement x="0" y="0" width="71" height="17" uuid="749c61ce-fe6d-4aa9-a362-4af8ccdae9d3"/>
+							<reportElement x="0" y="0" width="70" height="18" uuid="749c61ce-fe6d-4aa9-a362-4af8ccdae9d3"/>
 							<box>
 								<pen lineWidth="0.5"/>
 								<topPen lineWidth="0.5"/>
@@ -526,7 +492,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 							<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="71" y="0" width="227" height="17" uuid="34314167-7dc6-4101-a156-bce63e7ad793"/>
+							<reportElement x="70" y="0" width="159" height="18" uuid="34314167-7dc6-4101-a156-bce63e7ad793"/>
 							<box>
 								<pen lineWidth="0.5"/>
 								<topPen lineWidth="0.5"/>
@@ -540,7 +506,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				</jr:list>
 			</componentElement>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="980" y="2" width="98" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="5f29af29-46e3-43ca-a599-fea5c7937644"/>
+				<reportElement mode="Opaque" x="1118" y="38" width="105" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="5f29af29-46e3-43ca-a599-fea5c7937644"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -554,7 +520,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[APROBADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="859" y="2" width="107" height="20" forecolor="#FFFFFF" backcolor="#2989D8" uuid="eeb80c4e-ed69-4842-98a1-40ea041bb634"/>
+				<reportElement mode="Opaque" x="1118" y="2" width="105" height="18" forecolor="#FFFFFF" backcolor="#2989D8" uuid="eeb80c4e-ed69-4842-98a1-40ea041bb634"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -568,7 +534,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[FORMATO FECHA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="859" y="22" width="107" height="18" uuid="41f6eebc-a6de-4c71-b380-500d8b3f3218"/>
+				<reportElement x="1223" y="2" width="86" height="18" uuid="41f6eebc-a6de-4c71-b380-500d8b3f3218"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -580,7 +546,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[dd/MM/yyyy]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="980" y="22" width="98" height="18" uuid="5215ab41-024f-4664-9eb2-e97937bc5ad9"/>
+				<reportElement x="1223" y="38" width="86" height="18" uuid="5215ab41-024f-4664-9eb2-e97937bc5ad9"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -592,7 +558,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<text><![CDATA[0 = No Aprobado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="980" y="40" width="98" height="17" uuid="ff8547dd-5c16-4139-acf2-05456f22a024"/>
+				<reportElement x="1223" y="56" width="86" height="17" uuid="ff8547dd-5c16-4139-acf2-05456f22a024"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -603,6 +569,36 @@ WHERE G.ID_PERSON_LIDER = P.ID
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[1 = Aprobado]]></text>
 			</staticText>
+			<rectangle>
+				<reportElement x="207" y="2" width="10" height="18" backcolor="#8EC120" uuid="43c7f6df-3553-4e07-a0cb-a0aa41d75939"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="402" y="2" width="10" height="18" backcolor="#8EC120" uuid="d653f444-87c4-4ec7-a0b0-0a00c8679bbd"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="577" y="2" width="10" height="18" backcolor="#8EC120" uuid="4cf318ac-b133-4d1d-8f35-43e81acdcc53"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="737" y="2" width="10" height="18" backcolor="#8EC120" uuid="90eb9133-40a3-471a-9c87-32cf4d083a92"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1108" y="2" width="10" height="18" backcolor="#8EC120" uuid="c982d0b6-a37c-4a83-b223-423d9cfd69b2"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
 		</band>
 	</summary>
 </jasperReport>
