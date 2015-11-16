@@ -1691,6 +1691,7 @@ public class CetusControlProcess {
   public ResponseDTO getTemplateTaskMassive ( int idClientCetus, int idClient ) {
     ResponseDTO responseDTO = null;
     try {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", idClient=" + idClient );
       InputStream reportJasper = this.getClass().getClassLoader().getResourceAsStream( "resource/massive_task_template.jasper" );
       Map< String, Object > parameters = new HashMap< String, Object >();
       parameters.put( "ID_CLIENT_CETUS", String.valueOf( idClientCetus ) );
