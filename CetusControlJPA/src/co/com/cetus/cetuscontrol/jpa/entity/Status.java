@@ -1,11 +1,22 @@
 package co.com.cetus.cetuscontrol.jpa.entity;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -13,6 +24,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="STATUS")
 @NamedQueries ( {
   @NamedQuery ( name = "Status.findAll", query = "SELECT s FROM Status s" ),
   @NamedQuery (

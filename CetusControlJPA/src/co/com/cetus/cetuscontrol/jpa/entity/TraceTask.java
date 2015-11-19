@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="trace_task")
+@Table(name="TRACE_TASK")
 @NamedQuery(name="TraceTask.findAll", query="SELECT t FROM TraceTask t")
 public class TraceTask implements Serializable {
 	private static final long serialVersionUID = 1L;

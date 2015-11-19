@@ -13,6 +13,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="PERSON")
 @NamedQueries ( {
   @NamedQuery ( name = "Person.findAll", query = "SELECT p FROM Person p" ),
   @NamedQuery ( name = "Person.findPersonByClient", query = "select p from Person p where p.client.id = :idClient and p.master <> 1 order by p.names,p.lastNames" ),

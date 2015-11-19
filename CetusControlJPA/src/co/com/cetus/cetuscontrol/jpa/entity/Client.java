@@ -13,6 +13,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="CLIENT")
 @NamedQueries ( {
   @NamedQuery ( name = "Client.findAll", query = "SELECT c FROM Client c" ),
   @NamedQuery ( name = "Client.findClientByClientCetus", query = "select c from Client c where c.clientCetus.id = :idClientCetus order by c.name, c.code" ) } )

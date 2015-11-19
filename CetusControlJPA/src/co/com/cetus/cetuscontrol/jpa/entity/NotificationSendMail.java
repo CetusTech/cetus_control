@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="notification_send_mail")
+@Table(name="NOTIFICATION_SEND_MAIL")
 @NamedQuery(name="NotificationSendMail.findAll", query="SELECT n FROM NotificationSendMail n")
 public class NotificationSendMail implements Serializable {
 	private static final long serialVersionUID = 1L;

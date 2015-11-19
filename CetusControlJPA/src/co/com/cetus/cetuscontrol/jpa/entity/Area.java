@@ -12,6 +12,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="AREA")
 @NamedQueries ( {
                  @NamedQuery ( name = "Area.findAll", query = "SELECT a FROM Area a" ),
                  @NamedQuery ( name = "Area.findAreaByClientCetus", query = "SELECT a FROM Area a WHERE a.clientCetus.id = :idClientCetus order by a.description" )

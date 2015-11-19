@@ -10,6 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
+@Table(name="WORKDAY")
 @NamedQueries ( {
   @NamedQuery(name="Workday.findAll", query="SELECT w FROM Workday w"),
   @NamedQuery(name="Workday.findWorkDayByClientCetus", query="SELECT w FROM Workday w WHERE w.clientCetus.id = :idClientCetus order by w.colDay, w.jornada"),

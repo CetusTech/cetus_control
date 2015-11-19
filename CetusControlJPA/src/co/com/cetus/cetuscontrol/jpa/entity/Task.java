@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,6 +23,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
+@Table(name="TASK")
 @NamedQueries ( {
                  @NamedQuery ( name = "Task.findAll", query = "SELECT t FROM Task t" ),
                  @NamedQuery ( name = "Task.getPercentageCurrent", query = "select sum(t.percentage) from Task t where t.status.id = '2' and t.personGroup.person.id = :idPerson" ),

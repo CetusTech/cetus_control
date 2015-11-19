@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,6 +22,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
+@Table(name="PRIORITY")
 @NamedQueries ( {
   @NamedQuery ( name = "Priority.findAll", query = "SELECT p FROM Priority p" ),
   @NamedQuery ( name = "Priority.findPriorityByClientCetus", query = "SELECT p FROM Priority p WHERE p.clientCetus.id = :idClientCetus order by p.description" )
