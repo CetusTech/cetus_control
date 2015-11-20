@@ -14,7 +14,7 @@
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[select DESCRIPTION from priority where id_client_cetus = $P{ID_CLIENT_CETUS}]]>
+			<![CDATA[select DESCRIPTION from PRIORITY where id_client_cetus = $P{ID_CLIENT_CETUS}]]>
 		</queryString>
 		<field name="DESCRIPTION" class="java.lang.String"/>
 	</subDataset>
@@ -64,7 +64,7 @@ WHERE G.ID_PERSON_LIDER = P.ID
 	<parameter name="ID_CLIENT_CETUS" class="java.lang.String"/>
 	<parameter name="ID_CLIENT" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select NAME from client_cetus limit 1]]>
+		<![CDATA[select NAME from CLIENT_CETUS limit 1]]>
 	</queryString>
 	<field name="NAME" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
