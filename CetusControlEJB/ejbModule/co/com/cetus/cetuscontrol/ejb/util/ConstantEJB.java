@@ -50,8 +50,8 @@ public class ConstantEJB {
   public static String                    RESULT_SQL_OK                      = "OK";
   public static String                    RESULT_SQL_ERROR                   = "ERROR";
   
-  public static String                    TIME_HOUR_EXECUTE_TIMER_CONTROLLER = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
-                                                                                                    "TIME_HOUR_EXECUTE_TIMER_CONTROLLER" );
+  public static String                    TIME_EXECUTE_TIMER_CONTROLLER_0 = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
+                                                                                                    "TIME_EXECUTE_TIMER_CONTROLLER_0" );
   
   public static String                    NAME_TIMER_BEFORE_EXPIRATION_TASKS = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
                                                                                                     "NAME_TIMER_BEFORE_EXPIRATION_TASKS" );
@@ -62,17 +62,18 @@ public class ConstantEJB {
   public static String                    NAME_TIMER_EXPIRATION_TASKS = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
       "NAME_TIMER_EXPIRATION_TASKS" );
   
-  public static String                    TEMPLATE_EMAIL_BEFORE_EXPIRATION   = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
-                                                                                                    "TEMPLATE_EMAIL_BEFORE_EXPIRATION" );
-  public static String                    SMTP_HOST                          = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "SMTP_HOST" );
-  public static String                    SMPT_PORT                          = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "SMPT_PORT" );
-  public static String                    SMTP_FROM                          = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "SMTP_FROM" );
-  public static String                    SMTP_PASS                          = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "SMTP_PASS" );
-  public static String                    SMTP_USERNAME                      = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "SMTP_USERNAME" );
-  public static String                    SUBJECT_BEFORE_EXPIRATION          = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "SUBJECT_BEFORE_EXPIRATION" );
-  public static String                    WSDL_CETUS_MESSAGE_SERVICE        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "WSDL_CETUS_MESSAGE_SERVICE" );
-  public static String                    USER_WS_MESSAGE_SERVICE        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "USER_WS_MESSAGE_SERVICE" );
-  public static String                    PASSWORD_WS_MESSAGE_SERVICE        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "PASSWORD_WS_MESSAGE_SERVICE" );
+  public static String                    TEMPLATE_EMAIL_BEFORE_EXPIRATION   = "TEMPLATE_EMAIL_BEFORE_EXPIRATION";
+  public static String                    SMTP_HOST                          = "SMTP_HOST";
+  public static String                    SMPT_PORT                          = "SMPT_PORT";
+  public static String                    SMTP_FROM                          = "SMTP_FROM";
+  public static String                    SMTP_PASS                          = "SMTP_PASS";
+  public static String                    SMTP_USERNAME                      = "SMTP_USERNAME";
+  public static String                    SUBJECT_BEFORE_EXPIRATION          = "SUBJECT_BEFORE_EXPIRATION";
+  public static String                    WSDL_CETUS_MESSAGE_SERVICE         = "WSDL_CETUS_MESSAGE_SERVICE";
+  public static String                    USER_WS_MESSAGE_SERVICE            = "USER_WS_MESSAGE_SERVICE";
+  public static String                    PASSWORD_WS_MESSAGE_SERVICE        = "PASSWORD_WS_MESSAGE_SERVICE";
+  
+  public static String                    TIME_HOUR_EXECUTE_TIMER_CONTROLLER = "TIME_HOUR_EXECUTE_TIMER_CONTROLLER";
   
   
   public static HashMap< String, String > parameter                          = null;

@@ -1,6 +1,7 @@
 package co.com.cetus.cetuscontrol.ejb.process;
 
-import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.DependsOn;
@@ -66,12 +67,12 @@ public class TimerProcess {
    * @return el long
    * @since CetusControlEJB (26/07/2015)
    */
-  public long findJornadaMax ( long idClientCetus, String day ) {
+  public long findJornadaMax ( int idClientCetus, String day ) {
     long max = -1;
-    TypedQuery< BigDecimal > query = null;
-    BigDecimal resp = null;
+    TypedQuery< Integer > query = null;
+    Integer resp = null;
     try {
-      query = em.createNamedQuery( "Workday.findJornadaMax", BigDecimal.class );
+      query = em.createNamedQuery( "Workday.findJornadaMax", Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
       query.setParameter( "day", day );
       resp = query.getSingleResult();
@@ -93,12 +94,12 @@ public class TimerProcess {
    * @return el long
    * @since CetusControlEJB (26/07/2015)
    */
-  public long findJornadaMin ( long idClientCetus, String day ) {
+  public long findJornadaMin ( int idClientCetus, String day ) {
     long max = -1;
-    TypedQuery< BigDecimal > query = null;
-    BigDecimal resp = null;
+    TypedQuery< Integer > query = null;
+    Integer resp = null;
     try {
-      query = em.createNamedQuery( "Workday.findJornadaMin", BigDecimal.class );
+      query = em.createNamedQuery( "Workday.findJornadaMin", Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
       query.setParameter( "day", day );
       resp = query.getSingleResult();
@@ -119,12 +120,12 @@ public class TimerProcess {
    * @return el long
    * @since CetusControlEJB (31/07/2015)
    */
-  public long findTimeBeforeExpiration ( long idClientCetus ) {
+  public long findTimeBeforeExpiration ( int idClientCetus ) {
     long time = -1;
-    TypedQuery< BigDecimal > query = null;
-    BigDecimal resp = null;
+    TypedQuery< Integer > query = null;
+    Integer resp = null;
     try {
-      query = em.createNamedQuery( "ParameterGeneral.findTimeBeforeExpirationByClientCetus", BigDecimal.class );
+      query = em.createNamedQuery( "ParameterGeneral.findTimeBeforeExpirationByClientCetus", Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
       resp = query.getSingleResult();
       if ( resp != null && resp.longValue() > 0 ) {
@@ -144,24 +145,27 @@ public class TimerProcess {
    * @return el list
    * @since CetusControlEJB (17/08/2015)
    */
-  public List< Long > findIdTaskBeforeExpiration ( long idClientCetus, Integer timeBefore ) {
-    List< Long > list = null;
-    TypedQuery< Long > query = null;
+  public List< Integer > findIdTaskBeforeExpiration ( int idClientCetus, Integer timeBefore ) {
+    List< Integer > list = null;
+    TypedQuery< Integer > query = null;
     try {
-      
+      Calendar calMin = Calendar.getInstance();
+      calMin.add( Calendar.MINUTE, -timeBefore.intValue() );
+      Date dateMin = calMin.getTime();
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", timeBefore=" + timeBefore.intValue() + ", dateMin=" + dateMin );
       query = em.createQuery( "SELECT t.id "
-                            + "FROM Task t "
-                            + "JOIN t.personGroup pg "
-                            + "JOIN pg.person p "
-                            + "JOIN p.client c "
-                            + "JOIN c.clientCetus cc "
-                            + "WHERE TO_DATE(SYSDATE, 'yyyy-MM-dd HH24:mi') "
-                            + "    BETWEEN TO_DATE((t.deliveryDate - ( :timeBefore / 1440)), 'yyyy-MM-dd HH24:mi') "
-                            + "    AND TO_DATE(t.deliveryDate, 'yyyy-MM-dd HH24:mi') "
-                            + "AND cc.id = :idClientCetus"
-                              , Long.class );
+                              + "FROM Task t "
+                              + "JOIN t.personGroup pg "
+                              + "JOIN pg.person p "
+                              + "JOIN p.client c "
+                              + "JOIN c.clientCetus cc "
+                              + "WHERE DATE_FORMAT(now(), '%Y-%m-%d %H:%i') "
+                              + "    BETWEEN DATE_FORMAT( :dateMin , '%Y-%m-%d %H:%i') "
+                              + "    AND DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') "
+                              + "AND cc.id = :idClientCetus"
+                              , Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
-      query.setParameter( "timeBefore", timeBefore );
+      query.setParameter( "dateMin", dateMin );
       list = query.getResultList();
       
     } catch ( Exception e ) {
@@ -179,20 +183,20 @@ public class TimerProcess {
    * @return el long
    * @since CetusControlEJB (22/08/2015)
    */
-  public long findNotificationSent ( long idTask, String event ) {
-    long sent = 0;
-    TypedQuery< BigDecimal > query = null;
-    BigDecimal resp = null;
+  public long findNotificationSent ( int idTask, String event ) {
+    int sent = 0;
+    TypedQuery< Integer > query = null;
+    Integer resp = null;
     try {
-      query = em.createNamedQuery( "NotificationTask.findNotificationSent", BigDecimal.class );
+      query = em.createNamedQuery( "NotificationTask.findNotificationSent", Integer.class );
       query.setParameter( "idTask", idTask );
       query.setParameter( "event", event );
       
       resp = query.getSingleResult();
-      if ( resp != null && resp.longValue() > 0 ) {
-        sent = resp.longValue();
+      if ( resp != null && resp.intValue() > 0 ) {
+        sent = resp.intValue();
       }
-    } catch (NoResultException nr){
+    } catch ( NoResultException nr ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( "No se encontraron registros de notificacion para la tarea " + idTask + " en el evento " + event );
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
@@ -208,8 +212,7 @@ public class TimerProcess {
    * @return el string[]
    * @since CetusControlEJB (10/09/2015)
    */
-  public String[] getInformationForNotification ( long idTask ) {
-    long sent = 0;
+  public String[] getInformationForNotification ( int idTask ) {
     TypedQuery< Object[] > query = null;
     Object[] resp = null;
     String[] response = new String[3];

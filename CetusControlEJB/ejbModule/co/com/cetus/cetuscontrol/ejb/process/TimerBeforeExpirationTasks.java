@@ -1,6 +1,5 @@
 package co.com.cetus.cetuscontrol.ejb.process;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,11 +16,9 @@ import javax.ejb.TimerService;
 
 import co.com.cetus.cetuscontrol.ejb.delegate.CetusMessageServiceDelegate;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
-import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.messageservice.ejb.service.ResponseWSDTO;
 import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
-import co.com.cetus.messageservice.ejb.service.UserWSDTO;
 
 /**
  * The Class TimerBeforeExpirationTasks.
@@ -102,7 +99,7 @@ public class TimerBeforeExpirationTasks {
    */
   @Timeout
   public void executeProcess ( Timer timer ) {
-    List< Long > listTask = null;
+    List< Integer > listTask = null;
     String idClientCetus = null;
     String nameTimer = ( String ) timer.getInfo();
     String event = ConstantEJB.EVENT_BEFORE_EXPIRATION;
@@ -111,23 +108,22 @@ public class TimerBeforeExpirationTasks {
     String[] infoNotification = null;
     String wsdlMessageService = null;
     SendMailRequestDTO sendMailRequestDTO = null;
-    List< String > listRecipients = null;
-    List< String > listParameters = null;
     ResponseWSDTO responseWSDTO = null;
     try {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date() );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
+                                               + " ---------------" );
       
       idClientCetus = nameTimer.substring( ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS.length() );
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
-      timeBefore = timerProcess.findTimeBeforeExpiration( Long.parseLong( idClientCetus ) );
-      listTask = timerProcess.findIdTaskBeforeExpiration( Long.parseLong( idClientCetus ), new Integer( ( int ) timeBefore ) );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
+      timeBefore = timerProcess.findTimeBeforeExpiration( Integer.parseInt( idClientCetus ) );
+      listTask = timerProcess.findIdTaskBeforeExpiration( Integer.parseInt( idClientCetus ), new Integer( ( int ) timeBefore ) );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] timeBefore=" + timeBefore + ", listTask=" + listTask );
       if ( listTask != null && listTask.size() > 0 ) {
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia la construccion del objeto para enviar el correo " );
         wsdlMessageService = cetusControlProcess.getValueParameter( ConstantEJB.WSDL_CETUS_MESSAGE_SERVICE );
-        
         sendMailRequestDTO = new SendMailRequestDTO();
         sendMailRequestDTO.setUser( cetusControlProcess.getValueParameter( ConstantEJB.USER_WS_MESSAGE_SERVICE ) );
         sendMailRequestDTO.setPassword( cetusControlProcess.getValueParameter( ConstantEJB.PASSWORD_WS_MESSAGE_SERVICE ) );
-        
         sendMailRequestDTO.setNameTemplateHTML( ConstantEJB.TEMPLATE_EMAIL_BEFORE_EXPIRATION );
         sendMailRequestDTO.setSenderEmail( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_FROM ) );
         sendMailRequestDTO.setSenderName( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_USERNAME ) );
@@ -138,9 +134,10 @@ public class TimerBeforeExpirationTasks {
         
         CetusMessageServiceDelegate messageServiceDelegate = new CetusMessageServiceDelegate( wsdlMessageService );
         
-        for ( Long idTask: listTask ) {
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia envio de correo para cada tarea " + listTask );
+        for ( Integer idTask: listTask ) {
           notificationSent = 0;
-          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] tarea a validar idTask=" + idTask );
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] tarea a validar idTask=" + idTask.intValue() );
           notificationSent = timerProcess.findNotificationSent( idTask, event );
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Notificaciones enviadas para la tarea " + idTask + " = "
                                                    + notificationSent );
@@ -152,9 +149,9 @@ public class TimerBeforeExpirationTasks {
             if ( infoNotification != null && infoNotification.length > 0 ) {
               ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Informacion para la notificacion de la tarea : "
                                                        + Arrays.toString( infoNotification ) );
-
-              sendMailRequestDTO.setRecipients( infoNotification[2] );
-              sendMailRequestDTO.setParametersTemplateHTML( infoNotification[0]+","+infoNotification[1] );
+              
+              sendMailRequestDTO.setRecipients( new String[]{ infoNotification[2] } );
+              sendMailRequestDTO.setParametersTemplateHTML( new String[]{ infoNotification[0], infoNotification[1] } );
               
               responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
               
@@ -169,7 +166,8 @@ public class TimerBeforeExpirationTasks {
           }
         }
       }
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "FINALIZA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date() );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- FINALIZA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
+                                               + " ---------------" );
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
@@ -202,6 +200,19 @@ public class TimerBeforeExpirationTasks {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
     return exists;
+  }
+  
+  public void stopAllTimer () {
+    try {
+      if ( timerService.getTimers() != null ) {
+        for ( Timer timer: timerService.getTimers() ) {
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Deteniendo el timer [" + timer.getInfo() + "]" );
+          timer.cancel();
+        }
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
   }
   
 }
