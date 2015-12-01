@@ -1,8 +1,5 @@
 package co.com.cetus.cetuscontrol.ejb.process;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.ScheduleExpression;
@@ -17,8 +14,8 @@ import co.com.cetus.common.util.UtilCommon;
 /**
  * The Class TimerExpirationTasks.
  *
- * @author eChia - Cetus Technology
- * @version CetusControlEJB (9/09/2015)
+ * @author Jose David Salcedo M. - Cetus Technology
+ * @version CetusControlEJB (1/12/2015)
  */
 public class TimerExpirationTasks {
   
@@ -30,7 +27,6 @@ public class TimerExpirationTasks {
   
   public TimerExpirationTasks () {
   }
-  
   
   public void startTimer ( String nameTimer, String rangeHours, String minutesForExecute ) {
     try {
@@ -59,7 +55,6 @@ public class TimerExpirationTasks {
     }
   }
   
-  
   public boolean existsTimerRunning ( String nameTimer ) {
     boolean exists = false;
     try {
@@ -82,31 +77,30 @@ public class TimerExpirationTasks {
   
   @Timeout
   public void executeProcess ( Timer timer ) {
-//    List< Long > listTask = null;
-//    String idClientCetus = null;
-//    String nameTimer = ( String ) timer.getInfo();
-//    String event = ConstantEJB.EVENT_EXPIRATION;
-//    long notificationSent = 0;
-//    long timeBefore = 0;
-//    try {
-//      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date() );
-//      
-//      idClientCetus = nameTimer.substring( ConstantEJB.NAME_TIMER_EXPIRATION_TASKS.length() );
-//      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
-//      timeBefore = timerProcess.findTimeBeforeExpiration(  Integer.parseInt( idClientCetus ) );
-//      listTask = timerProcess.findIdTaskBeforeExpiration( Long.parseLong( idClientCetus ), new Integer(( int ) timeBefore) );
-//      for ( Long idTask: listTask ) {
-//        notificationSent = 0;
-//        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] tarea a validar idTask=" + idTask );
-//        notificationSent = timerProcess.findNotificationSent( idTask, event );
-//        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Notificaciones enviadas para la tarea " + idTask + " " + notificationSent );
-//      }
-//      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "FINALIZA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date() );
-//    } catch ( Exception e ) {
-//      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-//    }
+    //    List< Long > listTask = null;
+    //    String idClientCetus = null;
+    //    String nameTimer = ( String ) timer.getInfo();
+    //    String event = ConstantEJB.EVENT_EXPIRATION;
+    //    long notificationSent = 0;
+    //    long timeBefore = 0;
+    //    try {
+    //      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date() );
+    //      
+    //      idClientCetus = nameTimer.substring( ConstantEJB.NAME_TIMER_EXPIRATION_TASKS.length() );
+    //      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
+    //      timeBefore = timerProcess.findTimeBeforeExpiration(  Integer.parseInt( idClientCetus ) );
+    //      listTask = timerProcess.findIdTaskBeforeExpiration( Long.parseLong( idClientCetus ), new Integer(( int ) timeBefore) );
+    //      for ( Long idTask: listTask ) {
+    //        notificationSent = 0;
+    //        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] tarea a validar idTask=" + idTask );
+    //        notificationSent = timerProcess.findNotificationSent( idTask, event );
+    //        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Notificaciones enviadas para la tarea " + idTask + " " + notificationSent );
+    //      }
+    //      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "FINALIZA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date() );
+    //    } catch ( Exception e ) {
+    //      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    //    }
     
   }
-  
   
 }

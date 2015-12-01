@@ -16,6 +16,9 @@ import javax.ejb.TimerService;
 
 import co.com.cetus.cetuscontrol.ejb.delegate.CetusMessageServiceDelegate;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
+import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
+import co.com.cetus.cetuscontrol.jpa.entity.Task;
+import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.messageservice.ejb.service.ResponseWSDTO;
 import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
@@ -102,13 +105,12 @@ public class TimerBeforeExpirationTasks {
     List< Integer > listTask = null;
     String idClientCetus = null;
     String nameTimer = ( String ) timer.getInfo();
-    String event = ConstantEJB.EVENT_BEFORE_EXPIRATION;
-    long notificationSent = 0;
     long timeBefore = 0;
     String[] infoNotification = null;
     String wsdlMessageService = null;
     SendMailRequestDTO sendMailRequestDTO = null;
     ResponseWSDTO responseWSDTO = null;
+    boolean respCreate = false;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
                                                + " ---------------" );
@@ -136,33 +138,38 @@ public class TimerBeforeExpirationTasks {
         
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia envio de correo para cada tarea " + listTask );
         for ( Integer idTask: listTask ) {
-          notificationSent = 0;
-          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] tarea a validar idTask=" + idTask.intValue() );
-          notificationSent = timerProcess.findNotificationSent( idTask, event );
-          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Notificaciones enviadas para la tarea " + idTask + " = "
-                                                   + notificationSent );
           
-          if ( notificationSent == 0 ) {
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Se procede a enviar una alerta (proxima a vencer) para la tarea "
-                                                     + idTask );
-            infoNotification = timerProcess.getInformationForNotification( idTask );
-            if ( infoNotification != null && infoNotification.length > 0 ) {
-              ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Informacion para la notificacion de la tarea : "
-                                                       + Arrays.toString( infoNotification ) );
-              
-              sendMailRequestDTO.setRecipients( new String[]{ infoNotification[2] } );
-              sendMailRequestDTO.setParametersTemplateHTML( new String[]{ infoNotification[0], infoNotification[1] } );
-              
-              responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
-              
-              if ( responseWSDTO != null ) {
-                ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Respuesta del envio de la notificacion de la tarea : " + idTask
-                                                         + ", " + responseWSDTO.toString() );
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Se procede a enviar una alerta (proxima a vencer) para la tarea "
+                                                   + idTask );
+          infoNotification = timerProcess.getInformationForNotification( idTask );
+          if ( infoNotification != null && infoNotification.length > 0 ) {
+            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Informacion para la notificacion de la tarea : "
+                                                     + Arrays.toString( infoNotification ) );
+            
+            sendMailRequestDTO.setRecipients( new String[]{ infoNotification[2] } );
+            sendMailRequestDTO.setParametersTemplateHTML( new String[]{ infoNotification[0], infoNotification[1] } );
+            
+            responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
+            
+            if ( responseWSDTO != null ) {
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Respuesta del envio de la notificacion de la tarea : " + idTask
+                                                       + ", " + responseWSDTO.toString() );
+              if ( responseWSDTO.getCode() != null && responseWSDTO.getCode().equals( ConstantCommon.WSResponse.CODE_ONE ) ) {
+                NotificationTask notificationTask = new NotificationTask();
+                notificationTask.setCreationDate( new Date() );
+                notificationTask.setCreationUser( nameTimer );
+                notificationTask.setEvent( ConstantEJB.EVENT_BEFORE_EXPIRATION );
+                notificationTask.setSent( 1 );
+                notificationTask.setTask( new Task() );
+                notificationTask.getTask().setId( Integer.parseInt( infoNotification[0] ) );
+                notificationTask.setTaskDeliveryDate( new Date( Long.parseLong( infoNotification[3] ) ) );
+                respCreate = timerProcess.createNotificationTable( notificationTask );
+                
+                ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Respuesta de la creacion del registro de notificacion : "
+                                                         + respCreate );
+                
               }
             }
-          } else {
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Ya fue alertada la tarea " + idTask
-                                                     + " con el evento proxima a vencer" );
           }
         }
       }

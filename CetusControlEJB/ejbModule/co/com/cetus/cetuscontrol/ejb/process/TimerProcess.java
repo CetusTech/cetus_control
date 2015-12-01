@@ -16,6 +16,7 @@ import javax.persistence.TypedQuery;
 
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.jpa.entity.ClientCetus;
+import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
 
 /**
  * The Class TimerProcess.
@@ -162,10 +163,15 @@ public class TimerProcess {
                               + "WHERE DATE_FORMAT(now(), '%Y-%m-%d %H:%i') "
                               + "    BETWEEN DATE_FORMAT( :dateMin , '%Y-%m-%d %H:%i') "
                               + "    AND DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') "
-                              + "AND cc.id = :idClientCetus"
+                              + "AND cc.id = :idClientCetus "
+                              + "AND t.id NOT IN (SELECT nt.task.id FROM NotificationTask nt "
+                              + "                 WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.taskDeliveryDate, '%Y-%m-%d %H:%i') "
+                              + "                 AND nt.event = :event )"
                               , Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
       query.setParameter( "dateMin", dateMin );
+      query.setParameter( "event", ConstantEJB.EVENT_BEFORE_EXPIRATION );
+      
       list = query.getResultList();
       
     } catch ( Exception e ) {
@@ -215,9 +221,9 @@ public class TimerProcess {
   public String[] getInformationForNotification ( int idTask ) {
     TypedQuery< Object[] > query = null;
     Object[] resp = null;
-    String[] response = new String[3];
+    String[] response = new String[4];
     try {
-      query = em.createQuery( "SELECT t.id, t.description, p.email " +
+      query = em.createQuery( "SELECT t.id, t.description, p.email, t.deliveryDate " +
                               "FROM Task t " +
                               " JOIN t.personGroup pg " +
                               " JOIN pg.person p " +
@@ -229,11 +235,33 @@ public class TimerProcess {
         response[0] = String.valueOf( resp[0] );
         response[1] = String.valueOf( resp[1] );
         response[2] = String.valueOf( resp[2] );
+        response[3] = String.valueOf( ((Date)resp[3]).getTime() );
       }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
     return response;
+  }
+
+  /**
+   * </p> Creates the notification task. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param notificationTask the notification task
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlEJB (1/12/2015)
+   */
+  public boolean createNotificationTable( NotificationTask notificationTask ){
+    boolean result = false;
+    try {
+      notificationTask = generalProcess.create( notificationTask );
+      if( notificationTask != null && notificationTask.getId() > 0 ){
+        result = true;
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return result;
   }
   
 }

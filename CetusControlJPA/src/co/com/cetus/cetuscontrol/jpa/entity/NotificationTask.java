@@ -33,11 +33,9 @@ public class NotificationTask implements Serializable {
   private String            event;
   
   @Temporal ( TemporalType.TIMESTAMP )
-  @Column ( name = "MODIFICATION_DATE" )
-  private Date              modificationDate;
+  @Column ( name = "TASK_DELIVERY_DATE" )
+  private Date              taskDeliveryDate;
   
-  @Column ( name = "MODIFICATION_USER" )
-  private String            modificationUser;
   
   private int               sent;
   
@@ -81,23 +79,14 @@ public class NotificationTask implements Serializable {
     this.event = event;
   }
   
+  public Date getTaskDeliveryDate () {
+    return taskDeliveryDate;
+  }
 
-  public Date getModificationDate () {
-    return this.modificationDate;
+  public void setTaskDeliveryDate ( Date taskDeliveryDate ) {
+    this.taskDeliveryDate = taskDeliveryDate;
   }
-  
-  public void setModificationDate ( Date modificationDate ) {
-    this.modificationDate = modificationDate;
-  }
-  
-  public String getModificationUser () {
-    return this.modificationUser;
-  }
-  
-  public void setModificationUser ( String modificationUser ) {
-    this.modificationUser = modificationUser;
-  }
-  
+
   public int getSent () {
     return this.sent;
   }
