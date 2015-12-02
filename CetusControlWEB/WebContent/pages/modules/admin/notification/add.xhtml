@@ -3,8 +3,8 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:form id="formAdd" prependId="false">
-    <p:panel>
-      <h:panelGrid id="panelAdd" columns="1" cellspacing="4" cellpadding="4">
+    
+    <h:panelGrid id="panelAdd" columns="1" cellspacing="4" cellpadding="4">
 
         <p:outputLabel value="#{msg.notification_descripcion}" for="notificationAdd" styleClass="resaltar_negro"/>
         <p:inputText id="notificationAdd" value="#{notificationMBean.addObject.description}" required="true" size="44" disabled="#{notificationMBean.disableNotifications}"
@@ -53,13 +53,11 @@
           itemValue="#{emails}" />
         <p:message for="pickListAdd" id="notificationpickListAddAddMsg" />
 
-      </h:panelGrid>
-      <f:facet name="footer">
-        <center>
-          <p:commandButton value="#{msg.btn_save}" update="pickListAdd panelAdd notiCreateMess :formConfirmAdd:confirmAdd"
-            process="@form" styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.load}" />
-        </center>
-      </f:facet>
-    </p:panel>
+      </h:panelGrid>    
+    
+    <center>
+      <p:commandButton value="#{msg.btn_save}" update="panelAdd :formConfirmAdd:confirmAdd" process="@form"
+        styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.load}" />
+    </center>
   </h:form>
 </ui:composition>

@@ -7,12 +7,10 @@
       actionListener="#{notificationMBean.validateSelectedRecord}" icon="ui-icon-search" />
 
     <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
-      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
-      actionListener="#{notificationMBean.validateSelectedRecord}" />
+      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow" actionListener="#{notificationMBean.validateSelectedRecord}" />
     <p:separator styleClass="separator-toolbar" />
     <p:menuitem value="#{msg.btn_delete}" icon="ui-icon-trash"
-      update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow"
-      actionListener="#{notificationMBean.validateSelectedRecord}" />
+      update=":formConfirmDelete:pnlConfirmDelete :alertSelectRow" actionListener="#{notificationMBean.validateSelectedRecord}" />
   </p:contextMenu>
 
 
@@ -34,8 +32,7 @@
 
       <p:separator styleClass="separator-toolbar" />
       <p:commandLink id="updateButton" title="#{msg.btn_update}"
-        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
-        actionListener="#{notificationMBean.validateSelectedRecord}">
+        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow" actionListener="#{notificationMBean.validateSelectedRecord}">
         <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
       </p:commandLink>
 
@@ -49,50 +46,40 @@
       <p:separator styleClass="separator-toolbar" />
       <h:commandLink id="excel" title="#{msg.btn_excel}">
         <p:graphicImage name="excel.png" width="32" height="32" library="images" />
-        <p:dataExporter type="xls" target="table" encoding="ISO-8859-1" pageOnly="true"
+        <p:dataExporter type="xls" target="table" encoding="ISO-8859-1"
           fileName="#{msg.report_excel}#{notificationMBean.currentDateStr}" />
       </h:commandLink>
 
       <p:separator styleClass="separator-toolbar" />
       <h:commandLink id="pdf" title="#{msg.btn_pdf}">
         <p:graphicImage name="pdf.png" width="32" height="32" library="images" />
-        <p:dataExporter type="pdf" encoding="ISO-8859-1" pageOnly="true" target="table"
+        <p:dataExporter type="pdf" encoding="ISO-8859-1" target="table"
           fileName="#{msg.report_pdf}#{notificationMBean.currentDateStr}" />
       </h:commandLink>
     </p:toolbarGroup>
   </p:toolbar>
 
-  <p:dataTable value="#{notificationMBean.listRegisterNo}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+  <p:dataTable value="#{notificationMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
     rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
     currentPageReportTemplate="({currentPage} de {totalPages})"
     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{notificationMBean.selectedObject}"
-    selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{notificationMBean.selectedObject}" selectionMode="single"
+    emptyMessage="#{msg.list_empty}" var="objetc">
 
 
     <p:column sortBy="#{objetc.id}" filterBy="#{objetc.id}" filterMatchMode="contains">
       <f:facet name="header">
-        <h:outputText value="#{msg.notification_id}" />
+        <h:outputText value="#{msg.id}" />
       </f:facet>
       <h:outputText value="#{objetc.id}" />
     </p:column>
 
     <p:column sortBy="#{objetc.description}" filterBy="#{objetc.description}" filterMatchMode="contains">
       <f:facet name="header">
-        <h:outputText value="#{msg.notification_descripcion}" />
+        <h:outputText value="#{msg.description}" />
       </f:facet>
       <h:outputText value="#{objetc.description}" />
     </p:column>
 
-    <p:column sortBy="#{objetc.noTableSystem}" filterBy="#{objetc.noTableSystem}" filterMatchMode="contains">
-      <f:facet name="header">
-        <h:outputText value="#{msg.notification_NotSystem}" />
-      </f:facet>
-      <h:outputText value="#{objetc.noTableSystem=='true'?'SI':'NO'}" />
-    </p:column>
-    
-    
-		
-	</p:dataTable>
-
+  </p:dataTable>
 </ui:composition>
