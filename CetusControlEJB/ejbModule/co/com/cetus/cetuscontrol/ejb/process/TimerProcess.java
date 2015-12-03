@@ -146,31 +146,34 @@ public class TimerProcess {
    * @return el list
    * @since CetusControlEJB (17/08/2015)
    */
-  public List< Integer > findIdTaskBeforeExpiration ( int idClientCetus, Integer timeBefore ) {
+  public List< Integer > findIdTaskBeforeExpiration ( int idClientCetus, Integer timeBefore, int status ) {
     List< Integer > list = null;
     TypedQuery< Integer > query = null;
     try {
-      Calendar calMin = Calendar.getInstance();
-      calMin.add( Calendar.MINUTE, -timeBefore.intValue() );
-      Date dateMin = calMin.getTime();
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", timeBefore=" + timeBefore.intValue() + ", dateMin=" + dateMin );
+      Calendar calMax = Calendar.getInstance();
+      calMax.add( Calendar.MINUTE, timeBefore.intValue() );
+      Date dateMax = calMax.getTime();
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", timeBefore=" + timeBefore.intValue() + ", dateMax=" + dateMax );
       query = em.createQuery( "SELECT t.id "
                               + "FROM Task t "
                               + "JOIN t.personGroup pg "
                               + "JOIN pg.person p "
                               + "JOIN p.client c "
                               + "JOIN c.clientCetus cc "
-                              + "WHERE DATE_FORMAT(now(), '%Y-%m-%d %H:%i') "
-                              + "    BETWEEN DATE_FORMAT( :dateMin , '%Y-%m-%d %H:%i') "
-                              + "    AND DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') "
+                              + "WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') "
+                              + "    BETWEEN DATE_FORMAT( now() , '%Y-%m-%d %H:%i') "
+                              + "    AND DATE_FORMAT(:dateMax, '%Y-%m-%d %H:%i') "
                               + "AND cc.id = :idClientCetus "
+                              + "AND t.status.id = :status "
                               + "AND t.id NOT IN (SELECT nt.task.id FROM NotificationTask nt "
                               + "                 WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.taskDeliveryDate, '%Y-%m-%d %H:%i') "
                               + "                 AND nt.event = :event )"
                               , Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
-      query.setParameter( "dateMin", dateMin );
+      query.setParameter( "dateMax", dateMax );
       query.setParameter( "event", ConstantEJB.EVENT_BEFORE_EXPIRATION );
+      query.setParameter( "status", status );
+      
       
       list = query.getResultList();
       
@@ -184,30 +187,35 @@ public class TimerProcess {
    * </p> Find notification sent. </p>
    *
    * @author Jose David Salcedo M. - Cetus Technology
-   * @param idtask the idtask
+   * @param idTask the id task
    * @param event the event
-   * @return el long
+   * @param deliveryDate the delivery date
+   * @return el NotificationTask
    * @since CetusControlEJB (22/08/2015)
    */
-  public long findNotificationSent ( int idTask, String event ) {
-    int sent = 0;
-    TypedQuery< Integer > query = null;
-    Integer resp = null;
+  public NotificationTask findNotificationSent ( int idTask, String event, Date deliveryDate ) {
+    TypedQuery< NotificationTask > query = null;
+    NotificationTask notificationTask = null;
     try {
-      query = em.createNamedQuery( "NotificationTask.findNotificationSent", Integer.class );
+      
+      query = em.createQuery( "SELECT n.sent FROM NotificationTask n "
+                            + "WHERE n.task.id = :idTask "
+                            + "AND n.event = :event "
+                            + "AND DATE_FORMAT(n.task.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(:deliveryDate, '%Y-%m-%d %H:%i')"
+          , NotificationTask.class );
+      
+      query = em.createNamedQuery( "NotificationTask.findNotificationSent", NotificationTask.class );
       query.setParameter( "idTask", idTask );
       query.setParameter( "event", event );
+      query.setParameter( "deliveryDate", event );      
       
-      resp = query.getSingleResult();
-      if ( resp != null && resp.intValue() > 0 ) {
-        sent = resp.intValue();
-      }
+      notificationTask = query.getSingleResult();
     } catch ( NoResultException nr ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( "No se encontraron registros de notificacion para la tarea " + idTask + " en el evento " + event );
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
-    return sent;
+    return notificationTask;
   }
   
   /**
@@ -251,7 +259,7 @@ public class TimerProcess {
    * @return true, si el proceso fue exitoso
    * @since CetusControlEJB (1/12/2015)
    */
-  public boolean createNotificationTable( NotificationTask notificationTask ){
+  public boolean createNotificationTask( NotificationTask notificationTask ){
     boolean result = false;
     try {
       notificationTask = generalProcess.create( notificationTask );
@@ -263,5 +271,84 @@ public class TimerProcess {
     }
     return result;
   }
+
+  /**
+   * </p> Update notification task. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param notificationTask the notification task
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlEJB (3/12/2015)
+   */
+  public boolean updateNotificationTask( NotificationTask notificationTask ){
+    boolean result = false;
+    try {
+      result = generalProcess.edit( notificationTask );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return result;
+  }
+
+ /* public List< Integer > findIdTaskBeforeExpiration ( int idClientCetus, Integer timeBefore, int status ) {
+    List< Integer > list = null;
+    TypedQuery< Integer > query = null;
+    try {
+      Calendar calMax = Calendar.getInstance();
+      calMax.add( Calendar.MINUTE, timeBefore.intValue() );
+      Date dateMax = calMax.getTime();
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", timeBefore=" + timeBefore.intValue() + ", dateMax=" + dateMax );
+      query = em.createQuery( "SELECT t.id "
+                              + "FROM Task t "
+                              + "JOIN t.personGroup pg "
+                              + "JOIN pg.person p "
+                              + "JOIN p.client c "
+                              + "JOIN c.clientCetus cc "
+                              + "WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') "
+                              + "    BETWEEN DATE_FORMAT( now() , '%Y-%m-%d %H:%i') "
+                              + "    AND DATE_FORMAT(:dateMax, '%Y-%m-%d %H:%i') "
+                              + "AND cc.id = :idClientCetus "
+                              + "AND t.status.id = :status "
+                              + "AND t.id NOT IN (SELECT nt.task.id FROM NotificationTask nt "
+                              + "                 WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.taskDeliveryDate, '%Y-%m-%d %H:%i') "
+                              + "                 AND nt.event = :event )"
+                              , Integer.class );
+      
+      SELECT t.id, t.DELIVERY_DATE, now()
+      FROM TASK t
+      JOIN PERSON_GROUP pg
+      JOIN PERSON p
+      JOIN CLIENT c
+      JOIN CLIENT_CETUS cc
+      JOIN PARAMETER_GENERAL peg
+      WHERE t.ID_GROUP_PERSON = pg.ID
+      and pg.ID_PERSON = p.ID
+      and p.ID_CLIENT = c.ID
+      AND c.ID_CLIENT_CETUS = cc.ID
+      and cc.ID = peg.ID_CLIENT_CETUS
+      and DATE_FORMAT(now(), '%Y-%m-%d %H:%i')
+       BETWEEN DATE_FORMAT( t.DELIVERY_DATE , '%Y-%m-%d %H:%i')
+       AND DATE_FORMAT('2015-12-03 17:37:00', '%Y-%m-%d %H:%i')
+      AND cc.id = 1
+      AND t.id_status = 2
+      AND t.id NOT IN (SELECT nt.ID_TASK FROM NOTIFICATION_TASK nt
+              WHERE DATE_FORMAT(t.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i')
+              AND nt.EVENT = 'EXPIRATION_TASK' and nt.SENT >= peg.COL_NUMBER_2)
+      ;
+      
+      
+      query.setParameter( "idClientCetus", idClientCetus );
+      query.setParameter( "dateMax", dateMax );
+      query.setParameter( "event", ConstantEJB.EVENT_BEFORE_EXPIRATION );
+      query.setParameter( "status", status );
+      
+      
+      list = query.getResultList();
+      
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return list;
+  }*/
   
 }

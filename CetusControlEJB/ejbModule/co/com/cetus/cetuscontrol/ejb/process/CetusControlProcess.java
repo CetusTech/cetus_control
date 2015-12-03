@@ -2082,42 +2082,49 @@ public class CetusControlProcess {
     Connection conn = null;
     
     try {
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      conn = sessionFactory.getConnectionProvider().getConnection();
-      if ( conn != null ) {
-        // Llamada al procedimiento almacenado
-        cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
-        
-        if ( cst != null ) {
-          cst.setInt( 1, idTask );
-          cst.registerOutParameter( 2, java.sql.Types.VARCHAR );
-          cst.registerOutParameter( 3, java.sql.Types.VARCHAR );
-          cst.executeUpdate();
-          result = cst.getString( 2 );
-          duration = cst.getString( 3 );
-          if ( result != null && result.equals( ConstantEJB.RESULT_SQL_OK ) ) {
-            responseDTO = UtilCommon.createMessageSUCCESS();
-            responseDTO.setObjectResponse( duration );
-          } else {
-            responseDTO = UtilCommon.createMessageFAILURE();
-          }
-          
-          cst.close();
-        }
-        
-        conn.close();
-      }
+      
+      //Se comenta porque aun no esta funcionando el PL, POR SOLICITUD DE ANDRES
+      responseDTO = UtilCommon.createMessageSUCCESS();
+      responseDTO.setObjectResponse( "100" );
+      
+      
+      
+//      Session ses = ( Session ) em.getDelegate();
+//      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
+//      conn = sessionFactory.getConnectionProvider().getConnection();
+//      if ( conn != null ) {
+//        // Llamada al procedimiento almacenado
+//        cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
+//        
+//        if ( cst != null ) {
+//          cst.setInt( 1, idTask );
+//          cst.registerOutParameter( 2, java.sql.Types.VARCHAR );
+//          cst.registerOutParameter( 3, java.sql.Types.VARCHAR );
+//          cst.executeUpdate();
+//          result = cst.getString( 2 );
+//          duration = cst.getString( 3 );
+//          if ( result != null && result.equals( ConstantEJB.RESULT_SQL_OK ) ) {
+//            responseDTO = UtilCommon.createMessageSUCCESS();
+//            responseDTO.setObjectResponse( duration );
+//          } else {
+//            responseDTO = UtilCommon.createMessageFAILURE();
+//          }
+//          
+//          cst.close();
+//        }
+//        
+//        conn.close();
+//      }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
       responseDTO = createMessageFAILURE();
     } finally {
-      try {
-        conn.close();
-        cst.close();
-      } catch ( SQLException e ) {
-        e.printStackTrace();
-      }
+//      try {
+//        conn.close();
+//        cst.close();
+//      } catch ( SQLException e ) {
+//        e.printStackTrace();
+//      }
       
     }
     return responseDTO;

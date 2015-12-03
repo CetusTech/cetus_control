@@ -42,15 +42,15 @@ public class ConstantEJB {
   public static String                    MINUTE_FOR_EXECUTE_TIMER_BEFORE    = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
                                                                                                     "MINUTE_FOR_EXECUTE_TIMER_BEFORE" );
   
-  public static String                    TASK_STATUS_FINAL                  = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,"TASK_STATUS_FINAL" );
-  public static String                    DES_NEXT_OVERCOME                  = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,"DES_NEXT_OVERCOME" );
-  public static String                    DES_FINISH                         = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,"DES_FINISH" );
-  public static String                    DES_RUN                            = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,"DES_RUN" );
-  public static String                    DES_EXPIRED                        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,"DES_EXPIRED" );
+  public static String                    TASK_STATUS_FINAL                  = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "TASK_STATUS_FINAL" );
+  public static String                    DES_NEXT_OVERCOME                  = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "DES_NEXT_OVERCOME" );
+  public static String                    DES_FINISH                         = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "DES_FINISH" );
+  public static String                    DES_RUN                            = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "DES_RUN" );
+  public static String                    DES_EXPIRED                        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "DES_EXPIRED" );
   public static String                    RESULT_SQL_OK                      = "OK";
   public static String                    RESULT_SQL_ERROR                   = "ERROR";
   
-  public static String                    TIME_EXECUTE_TIMER_CONTROLLER_0 = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
+  public static String                    TIME_EXECUTE_TIMER_CONTROLLER_0    = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
                                                                                                     "TIME_EXECUTE_TIMER_CONTROLLER_0" );
   
   public static String                    NAME_TIMER_BEFORE_EXPIRATION_TASKS = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
@@ -59,8 +59,8 @@ public class ConstantEJB {
   
   public static String                    EVENT_EXPIRATION                   = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO, "EVENT_EXPIRATION" );
   
-  public static String                    NAME_TIMER_EXPIRATION_TASKS = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
-      "NAME_TIMER_EXPIRATION_TASKS" );
+  public static String                    NAME_TIMER_EXPIRATION_TASKS        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
+                                                                                                    "NAME_TIMER_EXPIRATION_TASKS" );
   
   public static String                    TEMPLATE_EMAIL_BEFORE_EXPIRATION   = "TEMPLATE_EMAIL_BEFORE_EXPIRATION";
   public static String                    SMTP_HOST                          = "SMTP_HOST";
@@ -74,7 +74,13 @@ public class ConstantEJB {
   public static String                    PASSWORD_WS_MESSAGE_SERVICE        = "PASSWORD_WS_MESSAGE_SERVICE";
   
   public static String                    TIME_HOUR_EXECUTE_TIMER_CONTROLLER = "TIME_HOUR_EXECUTE_TIMER_CONTROLLER";
-  
+  public static String                    TASK_STATUS_IN_PROGRESS            = "TASK_STATUS_IN_PROGRESS";
+  public static String                    THREAD_BEFORE_EXPIRATION_TASK      = "THREAD_BEFORE_EXPIRATION_TASK";
+  public static String                    CONTEXT_TIMER_PROCESS              = "java:app/CetusControlEJB/TimerProcess!co.com.cetus.cetuscontrol.ejb.process.TimerProcess";
+  public static String                    CONTEXT_CETUS_CONTROL_PROCESS      = "java:app/CetusControlEJB/CetusControlProcess!co.com.cetus.cetuscontrol.ejb.process.CetusControlProcess";
+  public static String                    TEMPLATE_EMAIL_EXPIRATION          = "TEMPLATE_EMAIL_EXPIRATION";
+  public static String                    SUBJECT_EXPIRATION_TASK            = "SUBJECT_EXPIRATION_TASK";
+  public static String                    EVENT_EXPIRATION_TASK              = "EVENT_EXPIRATION_TASK";
   
   public static HashMap< String, String > parameter                          = null;
   

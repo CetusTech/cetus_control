@@ -1,6 +1,6 @@
 package co.com.cetus.cetuscontrol.ejb.process;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +14,8 @@ import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 
-import co.com.cetus.cetuscontrol.ejb.delegate.CetusMessageServiceDelegate;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
-import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
-import co.com.cetus.cetuscontrol.jpa.entity.Task;
-import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.UtilCommon;
-import co.com.cetus.messageservice.ejb.service.ResponseWSDTO;
-import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 
 /**
  * The Class TimerBeforeExpirationTasks.
@@ -106,11 +100,14 @@ public class TimerBeforeExpirationTasks {
     String idClientCetus = null;
     String nameTimer = ( String ) timer.getInfo();
     long timeBefore = 0;
-    String[] infoNotification = null;
-    String wsdlMessageService = null;
-    SendMailRequestDTO sendMailRequestDTO = null;
-    ResponseWSDTO responseWSDTO = null;
-    boolean respCreate = false;
+    int numThread = 0;
+    int numSubList = 0;
+    int numResidue = 0;
+    int contStart = 0;
+    int contEnd = 0;
+    List< Integer > subList = null;
+    List< List< Integer > > list = null;
+    ThreadBeforeExpirationTasks thread = null;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
                                                + " ---------------" );
@@ -118,60 +115,46 @@ public class TimerBeforeExpirationTasks {
       idClientCetus = nameTimer.substring( ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS.length() );
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
       timeBefore = timerProcess.findTimeBeforeExpiration( Integer.parseInt( idClientCetus ) );
-      listTask = timerProcess.findIdTaskBeforeExpiration( Integer.parseInt( idClientCetus ), new Integer( ( int ) timeBefore ) );
+      listTask = timerProcess.findIdTaskBeforeExpiration( Integer.parseInt( idClientCetus ),
+                                                          new Integer( ( int ) timeBefore ),
+                                                          Integer.parseInt( cetusControlProcess.getValueParameter( ConstantEJB.TASK_STATUS_IN_PROGRESS ) ) );
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] timeBefore=" + timeBefore + ", listTask=" + listTask );
       if ( listTask != null && listTask.size() > 0 ) {
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia la construccion del objeto para enviar el correo " );
-        wsdlMessageService = cetusControlProcess.getValueParameter( ConstantEJB.WSDL_CETUS_MESSAGE_SERVICE );
-        sendMailRequestDTO = new SendMailRequestDTO();
-        sendMailRequestDTO.setUser( cetusControlProcess.getValueParameter( ConstantEJB.USER_WS_MESSAGE_SERVICE ) );
-        sendMailRequestDTO.setPassword( cetusControlProcess.getValueParameter( ConstantEJB.PASSWORD_WS_MESSAGE_SERVICE ) );
-        sendMailRequestDTO.setNameTemplateHTML( ConstantEJB.TEMPLATE_EMAIL_BEFORE_EXPIRATION );
-        sendMailRequestDTO.setSenderEmail( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_FROM ) );
-        sendMailRequestDTO.setSenderName( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_USERNAME ) );
-        sendMailRequestDTO.setSenderPassword( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_PASS ) );
-        sendMailRequestDTO.setServerPort( cetusControlProcess.getValueParameter( ConstantEJB.SMPT_PORT ) );
-        sendMailRequestDTO.setServerSmtp( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_HOST ) );
-        sendMailRequestDTO.setSubject( cetusControlProcess.getValueParameter( ConstantEJB.SUBJECT_BEFORE_EXPIRATION ) );
         
-        CetusMessageServiceDelegate messageServiceDelegate = new CetusMessageServiceDelegate( wsdlMessageService );
+        numThread = Integer.parseInt( cetusControlProcess.getValueParameter( ConstantEJB.THREAD_BEFORE_EXPIRATION_TASK ) );
+        numSubList = listTask.size() / numThread;
+        numResidue = listTask.size() % numThread;
         
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia envio de correo para cada tarea " + listTask );
-        for ( Integer idTask: listTask ) {
-          
-          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Se procede a enviar una alerta (proxima a vencer) para la tarea "
-                                                   + idTask );
-          infoNotification = timerProcess.getInformationForNotification( idTask );
-          if ( infoNotification != null && infoNotification.length > 0 ) {
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Informacion para la notificacion de la tarea : "
-                                                     + Arrays.toString( infoNotification ) );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] numThread :: " + numThread + ", numSubList :: " + numSubList
+                                                 + ", numResidue :: " + numResidue );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia la construccion de las listas para cada hilo..." );
+        list = new ArrayList< List< Integer > >();
+        if ( numSubList == 0 ) {
+          list.add( listTask );
+        } else {
+          for ( int i = 0; i < numThread; i++ ) {
+            contEnd += numSubList;
             
-            sendMailRequestDTO.setRecipients( new String[]{ infoNotification[2] } );
-            sendMailRequestDTO.setParametersTemplateHTML( new String[]{ infoNotification[0], infoNotification[1] } );
-            
-            responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
-            
-            if ( responseWSDTO != null ) {
-              ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Respuesta del envio de la notificacion de la tarea : " + idTask
-                                                       + ", " + responseWSDTO.toString() );
-              if ( responseWSDTO.getCode() != null && responseWSDTO.getCode().equals( ConstantCommon.WSResponse.CODE_ONE ) ) {
-                NotificationTask notificationTask = new NotificationTask();
-                notificationTask.setCreationDate( new Date() );
-                notificationTask.setCreationUser( nameTimer );
-                notificationTask.setEvent( ConstantEJB.EVENT_BEFORE_EXPIRATION );
-                notificationTask.setSent( 1 );
-                notificationTask.setTask( new Task() );
-                notificationTask.getTask().setId( Integer.parseInt( infoNotification[0] ) );
-                notificationTask.setTaskDeliveryDate( new Date( Long.parseLong( infoNotification[3] ) ) );
-                respCreate = timerProcess.createNotificationTable( notificationTask );
-                
-                ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Respuesta de la creacion del registro de notificacion : "
-                                                         + respCreate );
-                
-              }
+            if ( numResidue > 0 ) {
+              contEnd++;
+              numResidue--;
             }
+            subList = new ArrayList< Integer >();
+            subList = listTask.subList( contStart, contEnd );
+            contStart = contEnd;
+            
+            list.add( subList );
+            
           }
         }
+        
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia la ejecucion de cada hilo..." );
+        
+        for ( List< Integer > subL: list ) {
+          thread = new ThreadBeforeExpirationTasks( subL );
+          thread.start();
+        }
+        
       }
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- FINALIZA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
                                                + " ---------------" );

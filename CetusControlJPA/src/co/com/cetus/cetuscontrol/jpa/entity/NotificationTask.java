@@ -13,8 +13,7 @@ import java.util.Date;
 @Entity
 @Table ( name = "NOTIFICATION_TASK" )
 @NamedQueries ( {
-                 @NamedQuery ( name = "NotificationTask.findAll", query = "SELECT n FROM NotificationTask n" ),
-                 @NamedQuery ( name = "NotificationTask.findNotificationSent", query = "SELECT n.sent FROM NotificationTask n WHERE n.task.id = :idTask AND n.event = :event" )
+                 @NamedQuery ( name = "NotificationTask.findAll", query = "SELECT n FROM NotificationTask n" )
 } )
 public class NotificationTask implements Serializable {
   private static final long serialVersionUID = 1L;
