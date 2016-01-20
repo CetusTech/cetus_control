@@ -15,7 +15,7 @@ public class GeneralDelegate {
   private static GeneralDelegate generalDelegate = null;
   
   public static GeneralDelegate getInstance () {
-    ConstantWEB.WEB_LOG.debug( "######### OBTENIENDO INSTANCIA PARA EL GENERALDELEGATE" );
+//    ConstantWEB.WEB_LOG.debug( "######### OBTENIENDO INSTANCIA PARA EL GENERALDELEGATE" );
     if ( generalDelegate == null ) {
       synchronized ( GeneralDelegate.class )
       {

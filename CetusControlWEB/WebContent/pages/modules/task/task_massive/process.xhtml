@@ -17,7 +17,7 @@
         dragDropSupport="true" update="msgs resultProcess" allowTypes="/(\.|\/)(xls|xlsx)$/" fileLimit="1"
         fileLimitMessage="#{msg.file_limit_message}" invalidFileMessage="#{msg.invalid_file_message}"
         cancelLabel="#{msg.btn_cancel}" uploadLabel="#{msg.btn_upload}" label="#{msg.btn_choose}" onstart="start();"
-        oncomplete="stop();" />
+        oncomplete="stop();" auto="true" />
     </h:panelGrid>
     <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
     <br />

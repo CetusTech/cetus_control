@@ -613,9 +613,9 @@ public class TaskMassiveMBean extends GeneralManagedBean {
           // Obtener el valor de la duracion de la tarea
           if ( mapPosCell.get( ETemplateTaskMassive.DURATION.getName() ).intValue() == cell.getColumnIndex() ) {
             if ( cell.getCellType() == cell.CELL_TYPE_NUMERIC ) {
-              taskDTO.setVDuration( Integer.parseInt( String.valueOf( cell.getNumericCellValue() ) ) );
+              taskDTO.setVDuration( ( new Double( String.valueOf( cell.getNumericCellValue() ) ).intValue() ) );
             } else {
-              taskDTO.setVDuration( Integer.parseInt( cell.getStringCellValue() ) );
+              taskDTO.setVDuration( ( new Double( String.valueOf( cell.getStringCellValue() ) ).intValue() ) );
             }
             continue;
           }
@@ -652,11 +652,11 @@ public class TaskMassiveMBean extends GeneralManagedBean {
           // Obtener el valor de la duracion de la tarea
           if ( mapPosCell.get( ETemplateTaskMassive.APPROVED.getName() ).intValue() == cell.getColumnIndex() ) {
             try {
-              Object approved = null;
+              Integer approved = null;
               if ( cell.getCellType() == cell.CELL_TYPE_NUMERIC ) {
-                approved = cell.getNumericCellValue();
+                approved = ( new Double( String.valueOf( cell.getNumericCellValue() ) ) ).intValue();
               } else {
-                approved = cell.getStringCellValue();
+                approved = ( new Double( String.valueOf( cell.getStringCellValue() ) ) ).intValue();
               }
               writeFile( "Columna Aprobado de la tarea [" + approved.toString() + "]" );
               
@@ -815,9 +815,9 @@ public class TaskMassiveMBean extends GeneralManagedBean {
     ByteArrayInputStream byteArrayFileResultProcess = null;
     try {
       byteArrayFileResultProcess = ( ByteArrayInputStream ) getObjectSession( "byteArrayFileResultProcess" );
-      
+      ConstantWEB.WEB_LOG.info( "byteArrayFileResultProcess ::>" + byteArrayFileResultProcess );
       fileResultProcess = new DefaultStreamedContent( byteArrayFileResultProcess, "text/plain", ConstantWEB.NAME_FILE_RESULT_PROCESS + ".txt" );
-      
+      ConstantWEB.WEB_LOG.info( "fileResultProcess ::>" + fileResultProcess );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );

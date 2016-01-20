@@ -167,7 +167,7 @@ public class TimerProcess {
                               + "AND t.status.id = :status "
                               + "AND t.id NOT IN (SELECT nt.task.id FROM NotificationTask nt "
                               + "                 WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.taskDeliveryDate, '%Y-%m-%d %H:%i') "
-                              + "                 AND nt.event = :event )"
+                              + "                 AND nt.event = :event AND nt.task.id = t.id ) "
                               , Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
       query.setParameter( "dateMax", dateMax );
@@ -314,27 +314,42 @@ public class TimerProcess {
                               + "                 AND nt.event = :event )"
                               , Integer.class );
       
-      SELECT t.id, t.DELIVERY_DATE, now()
-      FROM TASK t
-      JOIN PERSON_GROUP pg
-      JOIN PERSON p
-      JOIN CLIENT c
-      JOIN CLIENT_CETUS cc
-      JOIN PARAMETER_GENERAL peg
-      WHERE t.ID_GROUP_PERSON = pg.ID
-      and pg.ID_PERSON = p.ID
-      and p.ID_CLIENT = c.ID
-      AND c.ID_CLIENT_CETUS = cc.ID
-      and cc.ID = peg.ID_CLIENT_CETUS
-      and DATE_FORMAT(now(), '%Y-%m-%d %H:%i')
-       BETWEEN DATE_FORMAT( t.DELIVERY_DATE , '%Y-%m-%d %H:%i')
-       AND DATE_FORMAT('2015-12-03 17:37:00', '%Y-%m-%d %H:%i')
-      AND cc.id = 1
-      AND t.id_status = 2
-      AND t.id NOT IN (SELECT nt.ID_TASK FROM NOTIFICATION_TASK nt
-              WHERE DATE_FORMAT(t.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i')
-              AND nt.EVENT = 'EXPIRATION_TASK' and nt.SENT >= peg.COL_NUMBER_2)
-      ;
+SELECT T.ID
+FROM TASK T,
+   PERSON_GROUP PG,
+   PERSON P,
+   CLIENT C,
+     CLIENT_CETUS CC,
+   PARAMETER_GENERAL PEG
+WHERE T.ID_GROUP_PERSON = PG.ID
+AND PG.ID_PERSON = P.ID
+AND P.ID_CLIENT = C.ID
+AND C.ID_CLIENT_CETUS = CC.ID
+AND CC.ID = PEG.ID_CLIENT_CETUS
+AND CC.ID = 1
+AND T.ID_STATUS = 2
+AND ( ( T.ID NOT IN (SELECT NT.ID_TASK 
+                     FROM NOTIFICATION_TASK NT
+                     WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i')
+                     AND NT.EVENT = 'EXPIRATION_TASK'
+                     AND T.ID = NT.ID_TASK
+            )
+    AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i')
+        BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION ) MINUTE) , '%Y-%m-%d %H:%i')
+        AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * 2) MINUTE) , '%Y-%m-%d %H:%i')
+     )
+  OR
+  T.ID IN (SELECT NT.ID_TASK 
+           FROM NOTIFICATION_TASK NT 
+           WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i')
+           AND NT.EVENT = 'EXPIRATION_TASK' 
+           AND T.ID = NT.ID_TASK 
+           AND NT.SENT < PEG.COL_NUMBER_2
+           AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i')
+            BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 1)) MINUTE) , '%Y-%m-%d %H:%i')
+            AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 2)) MINUTE) , '%Y-%m-%d %H:%i')
+      )
+  )
       
       
       query.setParameter( "idClientCetus", idClientCetus );
