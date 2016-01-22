@@ -80,7 +80,8 @@ public class ConstantEJB {
   public static String                    CONTEXT_CETUS_CONTROL_PROCESS      = "java:app/CetusControlEJB/CetusControlProcess!co.com.cetus.cetuscontrol.ejb.process.CetusControlProcess";
   public static String                    TEMPLATE_EMAIL_EXPIRATION          = "TEMPLATE_EMAIL_EXPIRATION";
   public static String                    SUBJECT_EXPIRATION_TASK            = "SUBJECT_EXPIRATION_TASK";
-  public static String                    EVENT_EXPIRATION_TASK              = "EVENT_EXPIRATION_TASK";
+  public static String                    EVENT_EXPIRATION_TASK              = "EXPIRATION_TASK";
+  public static String                    THREAD_EXPIRATION_TASK             = "THREAD_EXPIRATION_TASK";
   
   public static HashMap< String, String > parameter                          = null;
   

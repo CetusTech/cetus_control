@@ -107,7 +107,7 @@ public class TimerControllerForWarning {
           if ( timerBeforeExpirationTasks.existsTimerRunning( nameTimerBefore ) ) {
             ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer [" + nameTimerBefore
                                                      + "] esta en ejecucion, se procede a validar si se puede detener " );
-            if ( validateTimerStop( clientCetus.getId() ) ) {
+            if ( validateTimerStopBefore( clientCetus.getId() ) ) {
               ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Se procede a detener el timer [" + nameTimerBefore + "]" );
               timerBeforeExpirationTasks.stopTimer( nameTimerBefore );;
             }
@@ -116,9 +116,6 @@ public class TimerControllerForWarning {
             startTimerBeforeExpirationTasks( nameTimerBefore, clientCetus.getId() );;
           }
           // Fin Control TimerBeforeExpirationTasks
-          
-//          if( !timerBeforeExpirationTasks.existsTimerRunning( nameTimerBefore ) )
-//            timerBeforeExpirationTasks.startTimer( nameTimerBefore, "*", "*" );
           
         }
       }
@@ -163,7 +160,7 @@ public class TimerControllerForWarning {
    * @return true, si el proceso fue exitoso
    * @since CetusControlEJB (26/07/2015)
    */
-  private boolean validateTimerStop ( int idClientCetus ) {
+  private boolean validateTimerStopBefore ( int idClientCetus ) {
     boolean result = false;
     Calendar cal = Calendar.getInstance();
     Calendar currentCal = Calendar.getInstance();

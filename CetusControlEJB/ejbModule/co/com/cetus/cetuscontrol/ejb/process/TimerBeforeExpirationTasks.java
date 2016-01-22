@@ -16,6 +16,7 @@ import javax.ejb.TimerService;
 
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.common.util.UtilCommon;
+import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 
 /**
  * The Class TimerBeforeExpirationTasks.
@@ -148,10 +149,23 @@ public class TimerBeforeExpirationTasks {
           }
         }
         
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia la construccion del objeto para enviar el correo " );
+        String wsdlMessageService = cetusControlProcess.getValueParameter( ConstantEJB.WSDL_CETUS_MESSAGE_SERVICE );
+        SendMailRequestDTO sendMailRequestDTO = new SendMailRequestDTO();
+        sendMailRequestDTO.setUser( cetusControlProcess.getValueParameter( ConstantEJB.USER_WS_MESSAGE_SERVICE ) );
+        sendMailRequestDTO.setPassword( cetusControlProcess.getValueParameter( ConstantEJB.PASSWORD_WS_MESSAGE_SERVICE ) );
+        sendMailRequestDTO.setNameTemplateHTML( ConstantEJB.TEMPLATE_EMAIL_BEFORE_EXPIRATION );
+        sendMailRequestDTO.setSenderEmail( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_FROM ) );
+        sendMailRequestDTO.setSenderName( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_USERNAME ) );
+        sendMailRequestDTO.setSenderPassword( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_PASS ) );
+        sendMailRequestDTO.setServerPort( cetusControlProcess.getValueParameter( ConstantEJB.SMPT_PORT ) );
+        sendMailRequestDTO.setServerSmtp( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_HOST ) );
+        sendMailRequestDTO.setSubject( cetusControlProcess.getValueParameter( ConstantEJB.SUBJECT_BEFORE_EXPIRATION ) );
+        
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] Inicia la ejecucion de cada hilo..." );
         
         for ( List< Integer > subL: list ) {
-          thread = new ThreadBeforeExpirationTasks( subL );
+          thread = new ThreadBeforeExpirationTasks( subL, sendMailRequestDTO, wsdlMessageService );
           thread.start();
         }
         

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-
 import co.com.cetus.cetuscontrol.ejb.delegate.CetusMessageServiceDelegate;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
@@ -22,24 +21,29 @@ import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
  */
 public class ThreadBeforeExpirationTasks extends Thread {
   
-  private TimerProcess        timerProcess;
+  private TimerProcess       timerProcess;
   
-  private CetusControlProcess cetusControlProcess;
+  private List< Integer >    listTask           = null;
   
-  private List< Integer >     listTask = null;
+  private SendMailRequestDTO sendMailRequestDTO = null;
+  
+  private String             wsdlMessageService = null;
   
   /**
    * </p> Instancia un nuevo thread before expiration tasks. </p>
    *
    * @author Jose David Salcedo M. - Cetus Technology
    * @param listTask the list task
+   * @param sendMailRequestDTO the send mail request dto
    * @since CetusControlEJB (1/12/2015)
    */
-  public ThreadBeforeExpirationTasks ( List< Integer > listTask ) {
+  public ThreadBeforeExpirationTasks ( List< Integer > listTask, SendMailRequestDTO sendMailRequestDTO, String wsdlMessageService ) {
     try {
       this.listTask = listTask;
+      this.sendMailRequestDTO = sendMailRequestDTO;
+      this.wsdlMessageService = wsdlMessageService;
+      
       timerProcess = UtilCommon.getLookup( ConstantEJB.CONTEXT_TIMER_PROCESS );
-      cetusControlProcess = UtilCommon.getLookup( ConstantEJB.CONTEXT_CETUS_CONTROL_PROCESS );
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
@@ -51,26 +55,12 @@ public class ThreadBeforeExpirationTasks extends Thread {
   @Override
   public void run () {
     String[] infoNotification = null;
-    String wsdlMessageService = null;
-    SendMailRequestDTO sendMailRequestDTO = null;
     ResponseWSDTO responseWSDTO = null;
     boolean respCreate = false;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "////////////// INICIA LA EJECUCION DEL HILO [" + this.getName() + "] //////////////" );
       if ( listTask != null && listTask.size() > 0 ) {
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] listTask= " + listTask );
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Inicia la construccion del objeto para enviar el correo " );
-        wsdlMessageService = cetusControlProcess.getValueParameter( ConstantEJB.WSDL_CETUS_MESSAGE_SERVICE );
-        sendMailRequestDTO = new SendMailRequestDTO();
-        sendMailRequestDTO.setUser( cetusControlProcess.getValueParameter( ConstantEJB.USER_WS_MESSAGE_SERVICE ) );
-        sendMailRequestDTO.setPassword( cetusControlProcess.getValueParameter( ConstantEJB.PASSWORD_WS_MESSAGE_SERVICE ) );
-        sendMailRequestDTO.setNameTemplateHTML( ConstantEJB.TEMPLATE_EMAIL_BEFORE_EXPIRATION );
-        sendMailRequestDTO.setSenderEmail( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_FROM ) );
-        sendMailRequestDTO.setSenderName( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_USERNAME ) );
-        sendMailRequestDTO.setSenderPassword( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_PASS ) );
-        sendMailRequestDTO.setServerPort( cetusControlProcess.getValueParameter( ConstantEJB.SMPT_PORT ) );
-        sendMailRequestDTO.setServerSmtp( cetusControlProcess.getValueParameter( ConstantEJB.SMTP_HOST ) );
-        sendMailRequestDTO.setSubject( cetusControlProcess.getValueParameter( ConstantEJB.SUBJECT_BEFORE_EXPIRATION ) );
         
         CetusMessageServiceDelegate messageServiceDelegate = new CetusMessageServiceDelegate( wsdlMessageService );
         
