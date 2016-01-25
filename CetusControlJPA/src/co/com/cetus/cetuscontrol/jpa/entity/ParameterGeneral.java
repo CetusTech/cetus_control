@@ -16,7 +16,8 @@ import java.util.Date;
 @NamedQueries ( {
   @NamedQuery(name="ParameterGeneral.findAll", query="SELECT p FROM ParameterGeneral p"),
   @NamedQuery(name="ParameterGeneral.findParameterGeneralByClientCetus", query="SELECT p FROM ParameterGeneral p WHERE p.clientCetus.id = :idClientCetus "),
-  @NamedQuery(name="ParameterGeneral.findTimeBeforeExpirationByClientCetus", query="SELECT p.timeBeforeExpiration FROM ParameterGeneral p WHERE p.clientCetus.id = :idClientCetus ")
+  @NamedQuery(name="ParameterGeneral.findTimeBeforeExpirationByClientCetus", query="SELECT p.timeBeforeExpiration FROM ParameterGeneral p WHERE p.clientCetus.id = :idClientCetus "),
+  @NamedQuery(name="ParameterGeneral.findTimeAfterExpirationByClientCetus", query="SELECT p.timeAfterExpiration FROM ParameterGeneral p WHERE p.clientCetus.id = :idClientCetus ")
 } )
 public class ParameterGeneral implements Serializable {
 	private static final long serialVersionUID = 1L;

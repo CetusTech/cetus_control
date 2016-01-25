@@ -85,7 +85,7 @@ public class ThreadExpirationTasks extends Thread {
                                                                     ( Date ) task[3] );
               if ( notificationTask != null ) {
                 notificationTask.setSent( notificationTask.getSent() + 1 );
-                
+                notificationTask.setCreationDate( new Date() );
                 respNotification = timerProcess.updateNotificationTask( notificationTask );
                 
                 ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Respuesta de la actualizacion del registro de notificacion : "

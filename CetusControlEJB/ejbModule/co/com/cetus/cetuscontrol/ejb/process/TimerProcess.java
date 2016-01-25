@@ -352,5 +352,30 @@ public class TimerProcess {
     }
     return list;
   }
+
+  /**
+   * </p> Find time after expiration. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @return el long
+   * @since CetusControlEJB (25/01/2016)
+   */
+  public long findTimeAfterExpiration ( int idClientCetus ) {
+    long time = -1;
+    TypedQuery< Integer > query = null;
+    Integer resp = null;
+    try {
+      query = em.createNamedQuery( "ParameterGeneral.findTimeAfterExpirationByClientCetus", Integer.class );
+      query.setParameter( "idClientCetus", idClientCetus );
+      resp = query.getSingleResult();
+      if ( resp != null && resp.longValue() > 0 ) {
+        time = resp.longValue();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return time;
+  }
   
 }
