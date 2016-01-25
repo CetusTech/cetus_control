@@ -4,20 +4,28 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:form id="formUpdate" prependId="false">
+
     <h:inputHidden id="percentageUpdate" value="#{manualTaskMBean.percentageCurrent}" />
 
 
     <h:panelGrid id="pnlUpdate" columns="6" style="width:100%" cellspacing="1" cellpadding="1">
+
+      <p:outputLabel value="#{msg.person_responsable}" for="personAssign" styleClass="resaltar_negro" />
+      <p:outputLabel id="personAssign"
+        value="#{manualTaskMBean.selectedObjectPerson.person.names} #{manualTaskMBean.selectedObjectPerson.person.lastNames}"
+        disabled="true" />
+      <p:message for="personAssign" display="icon" />
+
       <p:outputLabel value="#{msg.code}" />
       <p:outputLabel id="codeUpdate" value="#{manualTaskMBean.code}" styleClass="resaltar_rojo" />
-      <p:message for="codeUpdate" id="codeUpdateMsg" />
+      <p:message for="codeUpdate" id="codeUpdateMsg" display="icon" />
 
       <p:outputLabel value="#{msg.description}" />
-      <p:inputText id="descriptionUpdate" required="true" style="width:100%" size="40" onchange="conMayusculas(this);"
+      <p:inputText id="descriptionUpdate" required="true" style="width:100%" size="25" onchange="conMayusculas(this);"
         disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" onkeyup="conMayusculas(this);"
-        requiredMessage="#{msg.field_required}" maxlength="50" value="#{manualTaskMBean.selectedObject.description}">
+        requiredMessage="#{msg.field_required}" maxlength="25" value="#{manualTaskMBean.selectedObject.description}">
       </p:inputText>
-      <p:message for="descriptionUpdate" id="descriptionUpdateMsg" />
+      <p:message for="descriptionUpdate" id="descriptionUpdateMsg" display="icon" />
 
       <p:outputLabel value="#{msg.observation}" for="obsResUpdate" />
       <p:inputTextarea id="obsResUpdate" value="#{manualTaskMBean.selectedObject.observation}" maxlength="300" cols="30"
@@ -46,11 +54,6 @@
       <p:outputLabel id="assingDateUpdate" value="#{manualTaskMBean.selectedObject.assingDate}" disabled="true" />
       <p:message for="assingDateUpdate" id="assingDateUpdateMsg" display="icon" />
 
-      <p:outputLabel value="#{msg.person_responsable}" for="personAssign" styleClass="resaltar_negro"
-        rendered="#{manualTaskMBean.selectedObject.status.id == 5}" />
-      <p:outputLabel id="personAssign" value="#{manualTaskMBean.selectedObjectPerson.person.names}" disabled="true"
-        rendered="#{manualTaskMBean.selectedObject.status.id == 5}" />
-      <p:message for="personAssign" display="icon" rendered="#{manualTaskMBean.selectedObject.status.id == 5}" />
 
 
 
@@ -150,7 +153,7 @@
             styleClass="button-general" icon="img-start" />
 
           <p:commandButton id="btnAssign" value="#{msg.btn_reassign}"
-            actionListener="#{manualTaskMBean.viewAppletAssign}" update="formUpdate :appletAssignDialog"
+            actionListener="#{manualTaskMBean.viewAppletAssign()}" update="formUpdate :appletAssignDialog"
             rendered="#{manualTaskMBean.status == 5 }" process="@form" styleClass="button-general" icon="img-assign" />
 
           <p:commandButton id="btnCancel" value="#{msg.btn_cancel}"
@@ -162,7 +165,7 @@
             rendered="#{manualTaskMBean.status >= 2 and manualTaskMBean.status != 4 and manualTaskMBean.status != 5 and manualTaskMBean.status != 3  }"
             process="@form" styleClass="button-general" icon="img-suspend" action="#{manualTaskMBean.suspendTask}" />
 
-          <p:commandButton id="btnComplete" value="#{msg.btn_complete}" update=":fromContenido"
+          <p:commandButton id="btnComplete" value="#{msg.btn_complete}" update=":formUpdate"
             disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
             rendered="#{manualTaskMBean.status >= 2 and manualTaskMBean.status != 4 and manualTaskMBean.status != 5 and manualTaskMBean.status != 3}"
             process="@form" styleClass="button-general" icon="img-complete"

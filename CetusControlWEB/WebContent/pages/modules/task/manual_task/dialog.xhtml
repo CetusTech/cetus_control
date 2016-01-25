@@ -98,7 +98,7 @@
 
 
   <p:dialog id="startedTaskDialog" header="#{msg.title_info_started}" widgetVar="dlgTaskInfo">
-    <h:form>
+    <h:form id="formStartedDialog">
       <h:inputHidden id="percentageUpdate" value="#{manualTaskMBean.percentageSelected}" />
       <h:panelGrid id="pnlInfo" columns="3">
         <p:outputLabel id="output" value="#{msg.percentage} #{manualTaskMBean.percentageSelected}"
@@ -117,13 +117,17 @@
         <f:facet name="footer">
           <center>
             <p:commandButton value="#{msg.btn_acept}" actionListener="#{manualTaskMBean.startTask()}"
-              update=":fromContenido :fromContenido:table" process="@form" />
+              update="formStartedDialog :fromContenido:panel :fromContenido:growl" process="@form" />
           </center>
         </f:facet>
       </h:panelGrid>
     </h:form>
   </p:dialog>
 
+
+
+  
+  
 
   <p:dialog id="appletAssignDialog" header="#{msg.person_responsable}" widgetVar="appletAssignDialogVar" modal="true"
     width="50%">

@@ -7,10 +7,12 @@
   <h:outputStylesheet library="css" name="estilo.css" />
   <h:outputStylesheet library="css" name="style_theme.css" />
   <h:outputScript library="js" name="common.js" />
+  <h:outputScript library="js" name="calendar.js" />
 </h:head>
 <h:body>
   <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
   <h:form id="fromContenido">
+    <p:growl id="growl" showDetail="true" sticky="true" life="10" />
     <p:panelGrid columns="2" columnClasses="column_40,column_60">
       <p:panel id="panelGroup" header="#{msg.my_groups}">
         <ui:include src="/pages/modules/task/manual_task/listGroup.xhtml" />
@@ -19,7 +21,7 @@
         <ui:include src="/pages/modules/task/manual_task/list.xhtml" />
       </p:panel>
     </p:panelGrid>
-    <p:messages id="msgs2" showDetail="true" showSummary="true"/>
+    
   </h:form>
   <ui:include src="/pages/modules/task/manual_task/dialog.xhtml" />
 </h:body>
