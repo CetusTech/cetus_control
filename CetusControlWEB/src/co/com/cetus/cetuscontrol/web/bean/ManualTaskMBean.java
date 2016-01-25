@@ -1004,6 +1004,10 @@ public class ManualTaskMBean extends GeneralManagedBean {
     try {
       selectedObject = ( ( TaskDTO ) event.getObject() );
       if ( selectedObject != null ) {
+        if ( selectedObject.getPersonGroup()!= null ){
+          selectedObjectPerson = selectedObject.getPersonGroup();
+          addObjectSession( selectedObjectPerson, "selectedObjectPerson" );
+        }
         //al 100% se le debe restar lo que ya el responsable tiene asignado
         addObjectSession( ( 100 - percentage ), "percentageSelected" );
         visibleButtons = true;
@@ -1023,6 +1027,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       }
       
       addObjectSession( selectedObject.getStatus().getId(), "status" );
+      addObjectSession( selectedObject, "selectedObject" );
       addObjectSession( selectedObject, "selectedObject" );
       
     } catch ( Exception e ) {

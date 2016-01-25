@@ -28,14 +28,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-
 import org.hibernate.Session;
 import org.hibernate.internal.SessionFactoryImpl;
 
@@ -90,6 +82,13 @@ import co.com.cetus.portal.ejb.service.FindRolsByLoginResponseDTO;
 import co.com.cetus.portal.ejb.service.ResponseWSDTO;
 import co.com.cetus.portal.ejb.service.UpdateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.UserDTO;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
 /**
  * The Class CetusControlProcess.
@@ -105,19 +104,19 @@ public class CetusControlProcess {
   /** The general process. */
   @EJB
   private GeneralProcess               generalProcess;
-  
+                                       
   @EJB
   private CetusControlParameterProcess parameterProcess;
-  
+                                       
   /** The converter. */
   private Converter                    converter;
-  
+                                       
   private CetusVortalDelegate          delegateVortal;
-  
+                                       
   /** The em. */
   @PersistenceContext ( unitName = "CetusControlJPA" )
   private EntityManager                em;
-  
+                                       
   public CetusControlProcess () {
   }
   
@@ -1289,8 +1288,8 @@ public class CetusControlProcess {
     List< NotificationTableDTO > listAll = null;
     try {
       listAll = em.createNamedQuery( "NotificationTable.findAllDtoNoSystem", NotificationTableDTO.class ).getResultList();
-      listAct = em.createNamedQuery( "NotificationTable.findByClientNotification", NotificationTableDTO.class ).
-                  setParameter( "idClientCetus", idclientCetus ).getResultList();
+      listAct = em.createNamedQuery( "NotificationTable.findByClientNotification", NotificationTableDTO.class )
+                  .setParameter( "idClientCetus", idclientCetus ).getResultList();
       responseDTO = createMessageSUCCESS();
       
       listAll.removeAll( listAct );
@@ -1842,59 +1841,61 @@ public class CetusControlProcess {
       int valorItem;
       valorItem = ( int ) em.createQuery(
                                           " SELECT"
-                                              + " COUNT(t.id)"
-                                              + " FROM Task t"
-                                              + " JOIN t.status s"
-                                              + " JOIN t.personGroup pg"
-                                              + " JOIN pg.person p"
-                                              + " WHERE p.id = :idPerson AND s.description = :statusDes" ).setParameter( "idPerson", pIdPerson )
+                                          + " COUNT(t.id)"
+                                          + " FROM Task t"
+                                          + " JOIN t.status s"
+                                          + " JOIN t.personGroup pg"
+                                          + " JOIN pg.person p"
+                                          + " WHERE p.id = :idPerson AND s.description = :statusDes" )
+                            .setParameter( "idPerson", pIdPerson )
                             .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
                             .getSingleResult();
-      
+                            
       progressTask.put( ConstantEJB.DES_FINISH, valorItem );
       
       /**Proximas a vencer:**/
       valorItem = ( int ) em.createQuery(
                                           " SELECT"
-                                              + " COUNT(t.id)"
-                                              + " FROM Task t"
-                                              + " JOIN t.personGroup pg"
-                                              + " JOIN pg.person p"
-                                              + " JOIN p.client c"
-                                              + " JOIN c.clientCetus cc"
-                                              + " JOIN cc.parameterGenerals pgral"
-                                              + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND t.deliveryDate - ( pgral.timeBeforeExpiration / 1440 ) >= sysdate"
-                                              + " AND sysdate + ( pgral.timeBeforeExpiration / 1440 ) <= t.deliveryDate" )
+                                          + " COUNT(t.id)"
+                                          + " FROM Task t"
+                                          + " JOIN t.personGroup pg"
+                                          + " JOIN pg.person p"
+                                          + " JOIN p.client c"
+                                          + " JOIN c.clientCetus cc"
+                                          + " JOIN cc.parameterGenerals pgral"
+                                          + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND t.deliveryDate - ( pgral.timeBeforeExpiration / 1440 ) >= sysdate"
+                                          + " AND sysdate + ( pgral.timeBeforeExpiration / 1440 ) <= t.deliveryDate" )
                             .setParameter( "idClientCetus", pidClientCetus ).setParameter( "idPerson", pIdPerson ).getSingleResult();
-      
+                            
       progressTask.put( ConstantEJB.DES_NEXT_OVERCOME, valorItem );
       
       /**En Curso:**/
       valorItem = ( int ) em.createQuery(
                                           " SELECT"
-                                              + " COUNT(t.id)"
-                                              + " FROM Task t"
-                                              + " JOIN t.status s"
-                                              + " JOIN t.personGroup pg"
-                                              + " JOIN pg.person p"
-                                              + " WHERE p.id = :idPerson AND s.description <> :statusDes" ).setParameter( "idPerson", pIdPerson )
+                                          + " COUNT(t.id)"
+                                          + " FROM Task t"
+                                          + " JOIN t.status s"
+                                          + " JOIN t.personGroup pg"
+                                          + " JOIN pg.person p"
+                                          + " WHERE p.id = :idPerson AND s.description <> :statusDes" )
+                            .setParameter( "idPerson", pIdPerson )
                             .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
                             .getSingleResult();
-      
+                            
       progressTask.put( ConstantEJB.DES_RUN, valorItem );
       
       /**Vencidas:**/
       valorItem = ( int ) em.createQuery(
                                           " SELECT"
-                                              + " COUNT(t.id)"
-                                              + " FROM Task t"
-                                              + " JOIN t.status s"
-                                              + " JOIN t.personGroup pg"
-                                              + " JOIN pg.person p"
-                                              + " WHERE p.id = :idPerson AND s.description <> :statusDes AND sysdate > t.deliveryDate " )
+                                          + " COUNT(t.id)"
+                                          + " FROM Task t"
+                                          + " JOIN t.status s"
+                                          + " JOIN t.personGroup pg"
+                                          + " JOIN pg.person p"
+                                          + " WHERE p.id = :idPerson AND s.description <> :statusDes AND sysdate > t.deliveryDate " )
                             .setParameter( "idPerson", pIdPerson ).setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
                             .getSingleResult();
-      
+                            
       progressTask.put( ConstantEJB.DES_EXPIRED, valorItem );
       responseDTO = createMessageSUCCESS();
       responseDTO.setObjectResponse( progressTask );
@@ -1916,15 +1917,15 @@ public class CetusControlProcess {
     try {
       list = ( ArrayList< Task > ) em.createQuery(
                                                    " SELECT"
-                                                       + " t"
-                                                       + " FROM Task t"
-                                                       + " JOIN t.status s"
-                                                       + " JOIN t.personGroup pg"
-                                                       + " JOIN pg.person p"
-                                                       + " WHERE p.id = :idPerson AND s.description = :statusDes" )
+                                                   + " t"
+                                                   + " FROM Task t"
+                                                   + " JOIN t.status s"
+                                                   + " JOIN t.personGroup pg"
+                                                   + " JOIN pg.person p"
+                                                   + " WHERE p.id = :idPerson AND s.description = :statusDes" )
                                      .setParameter( "idPerson", pIdPerson )
                                      .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL ).getResultList();
-      
+                                     
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -1954,17 +1955,17 @@ public class CetusControlProcess {
     try {
       list = ( ArrayList< Task > ) em.createQuery(
                                                    " SELECT"
-                                                       + " t"
-                                                       + " FROM Task t"
-                                                       + " JOIN t.personGroup pg"
-                                                       + " JOIN pg.person p"
-                                                       + " JOIN p.client c"
-                                                       + " JOIN c.clientCetus cc"
-                                                       + " JOIN cc.parameterGenerals pgral"
-                                                       + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND t.deliveryDate - ( pgral.timeBeforeExpiration / 1440 ) >= sysdate"
-                                                       + " AND sysdate + ( pgral.timeBeforeExpiration / 1440 ) <= t.deliveryDate" )
+                                                   + " t"
+                                                   + " FROM Task t"
+                                                   + " JOIN t.personGroup pg"
+                                                   + " JOIN pg.person p"
+                                                   + " JOIN p.client c"
+                                                   + " JOIN c.clientCetus cc"
+                                                   + " JOIN cc.parameterGenerals pgral"
+                                                   + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND t.deliveryDate - ( pgral.timeBeforeExpiration / 1440 ) >= sysdate"
+                                                   + " AND sysdate + ( pgral.timeBeforeExpiration / 1440 ) <= t.deliveryDate" )
                                      .setParameter( "idClientCetus", pidClientCetus ).setParameter( "idPerson", pIdPerson ).getResultList();
-      
+                                     
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -1994,15 +1995,15 @@ public class CetusControlProcess {
     try {
       list = ( ArrayList< Task > ) em.createQuery(
                                                    " SELECT"
-                                                       + " t"
-                                                       + " FROM Task t"
-                                                       + " JOIN t.status s"
-                                                       + " JOIN t.personGroup pg"
-                                                       + " JOIN pg.person p"
-                                                       + " WHERE p.id = :idPerson AND s.description <> :statusDes" )
+                                                   + " t"
+                                                   + " FROM Task t"
+                                                   + " JOIN t.status s"
+                                                   + " JOIN t.personGroup pg"
+                                                   + " JOIN pg.person p"
+                                                   + " WHERE p.id = :idPerson AND s.description <> :statusDes" )
                                      .setParameter( "idPerson", pIdPerson )
                                      .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL ).getResultList();
-      
+                                     
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -2031,15 +2032,15 @@ public class CetusControlProcess {
     try {
       list = ( ArrayList< Task > ) em.createQuery(
                                                    " SELECT"
-                                                       + " COUNT(t.id)"
-                                                       + " FROM Task t"
-                                                       + " JOIN t.status s"
-                                                       + " JOIN t.personGroup pg"
-                                                       + " JOIN pg.person p"
-                                                       + " WHERE p.id = :idPerson AND s.description <> :statusDes AND sysdate > t.deliveryDate " )
+                                                   + " COUNT(t.id)"
+                                                   + " FROM Task t"
+                                                   + " JOIN t.status s"
+                                                   + " JOIN t.personGroup pg"
+                                                   + " JOIN pg.person p"
+                                                   + " WHERE p.id = :idPerson AND s.description <> :statusDes AND sysdate > t.deliveryDate " )
                                      .setParameter( "idPerson", pIdPerson ).setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
                                      .getResultList();
-      
+                                     
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -2084,47 +2085,45 @@ public class CetusControlProcess {
     try {
       
       //Se comenta porque aun no esta funcionando el PL, POR SOLICITUD DE ANDRES
-      responseDTO = UtilCommon.createMessageSUCCESS();
-      responseDTO.setObjectResponse( "100" );
+      //      responseDTO = UtilCommon.createMessageSUCCESS();
+      //      responseDTO.setObjectResponse( "100" );
       
-      
-      
-//      Session ses = ( Session ) em.getDelegate();
-//      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-//      conn = sessionFactory.getConnectionProvider().getConnection();
-//      if ( conn != null ) {
-//        // Llamada al procedimiento almacenado
-//        cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
-//        
-//        if ( cst != null ) {
-//          cst.setInt( 1, idTask );
-//          cst.registerOutParameter( 2, java.sql.Types.VARCHAR );
-//          cst.registerOutParameter( 3, java.sql.Types.VARCHAR );
-//          cst.executeUpdate();
-//          result = cst.getString( 2 );
-//          duration = cst.getString( 3 );
-//          if ( result != null && result.equals( ConstantEJB.RESULT_SQL_OK ) ) {
-//            responseDTO = UtilCommon.createMessageSUCCESS();
-//            responseDTO.setObjectResponse( duration );
-//          } else {
-//            responseDTO = UtilCommon.createMessageFAILURE();
-//          }
-//          
-//          cst.close();
-//        }
-//        
-//        conn.close();
-//      }
+      Session ses = ( Session ) em.getDelegate();
+      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
+      conn = sessionFactory.getConnectionProvider().getConnection();
+      if ( conn != null ) {
+        // Llamada al procedimiento almacenado
+        cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
+        
+        if ( cst != null ) {
+          cst.setInt( 1, idTask );
+          cst.registerOutParameter( 2, java.sql.Types.VARCHAR );
+          cst.registerOutParameter( 3, java.sql.Types.VARCHAR );
+          cst.executeUpdate();
+          result = cst.getString( 2 );
+          duration = cst.getString( 3 );
+          if ( result != null && result.equals( ConstantEJB.RESULT_SQL_OK ) ) {
+            responseDTO = UtilCommon.createMessageSUCCESS();
+            responseDTO.setObjectResponse( duration );
+          } else {
+            responseDTO = UtilCommon.createMessageFAILURE();
+          }
+          
+          cst.close();
+        }
+        
+        conn.close();
+      }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
       responseDTO = createMessageFAILURE();
     } finally {
-//      try {
-//        conn.close();
-//        cst.close();
-//      } catch ( SQLException e ) {
-//        e.printStackTrace();
-//      }
+      try {
+        conn.close();
+        cst.close();
+      } catch ( SQLException e ) {
+        e.printStackTrace();
+      }
       
     }
     return responseDTO;
