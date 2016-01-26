@@ -105,6 +105,7 @@ public class TimerControllerForWarning {
       list = timerProcess.findClientCetusEnabledTimer();
       if ( list != null && list.size() > 0 ) {
         for ( ClientCetus clientCetus: list ) {
+          
           // Inicio Control TimerBeforeExpirationTasks
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Validando el TimerBeforeExpirationTasks del cliente cetus [" + clientCetus.getId() + "]" );
           nameTimerBefore = ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS + clientCetus.getId();
@@ -132,8 +133,8 @@ public class TimerControllerForWarning {
               timerExpirationTasks.stopTimer( nameTimerBefore );
             }
           } else {
-            //            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer [" + nameTimerBefore + "] NO esta en ejecucion, se procede crearlo " );
-            //            startTimerBeforeExpirationTasks( nameTimerBefore, clientCetus.getId() );;
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer [" + nameTimerBefore + "] NO esta en ejecucion, se procede crearlo " );
+              startTimerExpirationTasks( nameTimerBefore, clientCetus.getId() );
           }
           // Fin Control TimerBeforeExpirationTasks
           
@@ -232,25 +233,22 @@ public class TimerControllerForWarning {
         max = timerProcess.findJornadaMax( idClientCetus, weekDay );
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] max = " + max );
         
-        calMin.set( Calendar.HOUR_OF_DAY, ( int ) min );
-        calMin.set( Calendar.MINUTE, 0 );
+        calMin.set( Calendar.HOUR_OF_DAY, ( int ) ( min / 100 ) );
+        calMin.set( Calendar.MINUTE, ( int ) ( min % 100 ) );
         calMin.set( Calendar.SECOND, 0 );
         
         timeBeforeExpiration = timerProcess.findTimeBeforeExpiration( idClientCetus );
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] timeBeforeExpiration = " + timeBeforeExpiration );
         
         if ( timeBeforeExpiration > 0 ) {
-          timeMin = timeBeforeExpiration * 1.5;
+          timeMin = timeBeforeExpiration * ConstantEJB.ADITIONAL_TIME_BEFORE_EXPIRATION;
           calMin.add( Calendar.MINUTE, ( -timeMin.intValue() ) );
         }
         
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] fecha inicio timer = " + calMin.getTime() );
         
-        max = ( max / 100 );
-        max++;
-        
-        calMax.set( Calendar.HOUR_OF_DAY, ( int ) max );
-        calMax.set( Calendar.MINUTE, 0 );
+        calMax.set( Calendar.HOUR_OF_DAY, ( int ) ( max / 100 ) );
+        calMax.set( Calendar.MINUTE, ( int ) ( max % 100 ) );
         calMax.set( Calendar.SECOND, 0 );
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] fecha fin timer = " + calMax.getTime() );
         
@@ -312,7 +310,7 @@ public class TimerControllerForWarning {
           timeAfterExpiration = timerProcess.findTimeAfterExpiration( idClientCetus );
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[idClientCetus = " + idClientCetus + "] timeAfterExpiration = " + timeAfterExpiration );
           if ( timeAfterExpiration > 0 ) {
-            aditionalTime = timeAfterExpiration * 1.5;
+            aditionalTime = timeAfterExpiration * ConstantEJB.ADITIONAL_TIME_EXPIRATION_TASK;
             cal.add( Calendar.MINUTE, aditionalTime.intValue() );
             ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[idClientCetus = " + idClientCetus + "] fecha maxima del timer = " + cal.getTime() );
           }
@@ -326,6 +324,81 @@ public class TimerControllerForWarning {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
     return result;
+  }
+  
+  /**
+   * </p> Start timer expiration tasks. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param nameTimer the name timer
+   * @param idClientCetus the id client cetus
+   * @since CetusControlEJB (26/01/2016)
+   */
+  private void startTimerExpirationTasks ( String nameTimer, int idClientCetus ) {
+    Calendar calMin = Calendar.getInstance();
+    Calendar calMax = Calendar.getInstance();
+    Calendar currentCal = Calendar.getInstance();
+    long max = 0;
+    long min = 0;
+    String weekDay = null;
+    long timeExpiration = 0;
+    Double aditionalTime = 0.0;
+    String rangeHours = "*";
+    String minutesForExecute = "*/";
+    try {
+      weekDay = EWeekDay.getValue( currentCal.get( Calendar.DAY_OF_WEEK ) );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] obteniendo jornada minima. idClientCetus=" + idClientCetus
+                                               + ", weekDay=" + weekDay );
+      min = timerProcess.findJornadaMin( idClientCetus, weekDay );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] min = " + min );
+      if ( min == -1 ) {
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "No existe jornada par el dia " + weekDay + ", por lo tanto no se crea el timer " + nameTimer );
+      } else {
+        max = timerProcess.findJornadaMax( idClientCetus, weekDay );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] max = " + max );
+        
+        calMin.set( Calendar.HOUR_OF_DAY, ( int ) ( min / 100 ) );
+        calMin.set( Calendar.MINUTE, ( int ) ( min % 100 ) );
+        calMin.set( Calendar.SECOND, 0 );
+        
+        timeExpiration = timerProcess.findTimeAfterExpiration( idClientCetus );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] timeExpiration = " + timeExpiration );
+        
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] fecha inicio timer = " + calMin.getTime() );
+        
+        calMax.set( Calendar.HOUR_OF_DAY, ( int ) ( max / 100 ) );
+        calMax.set( Calendar.MINUTE, (int) ( max % 100 ) );
+        calMax.set( Calendar.SECOND, 0 );
+        
+        
+        if ( timeExpiration > 0 ) {
+          aditionalTime = timeExpiration * ConstantEJB.ADITIONAL_TIME_BEFORE_EXPIRATION;
+          calMax.add( Calendar.MINUTE, ( aditionalTime.intValue() ) );
+        }
+        
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] fecha fin timer = " + calMax.getTime() );
+        
+        currentCal.set( Calendar.SECOND, 0 );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] fecha actula del sistema = " + currentCal.getTime() );
+        
+        minutesForExecute += cetusControlProcess.getValueParameter( ConstantEJB.MINUTE_FOR_EXECUTE_TIMER_BEFORE );
+        
+        if ( calMin.before( currentCal ) && calMax.after( currentCal ) ) {
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] rangeHours = " + rangeHours + ", minutesForExecute = "
+                                                   + minutesForExecute );
+          timerBeforeExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
+        } else if ( calMin.after( currentCal ) ) {
+          rangeHours = min + "-" + max;
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] rangeHours = " + rangeHours + ", minutesForExecute = "
+                                                   + minutesForExecute );
+          timerBeforeExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
+        } else {
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] El timer " + nameTimer + " ya termino la ejecucion en este dia" );
+        }
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
   }
   
 }
