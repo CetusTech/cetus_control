@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.ScheduleExpression;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
@@ -22,6 +24,8 @@ import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
  * @author Jose David Salcedo M. - Cetus Technology
  * @version CetusControlEJB (1/12/2015)
  */
+@Singleton
+@Startup
 public class TimerExpirationTasks {
   
   @Resource
