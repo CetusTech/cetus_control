@@ -13,7 +13,8 @@
   <!-- Dialogo para agregar registro -->
 
   <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_task}"
-    visible="#{manualTaskMBean.showAddDialog}" widgetVar="dialogAddVar" closeOnEscape="true">
+    maximizable="true" visible="#{manualTaskMBean.showAddDialog}" widgetVar="dialogAddVar" closeOnEscape="true">
+    <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task/add.xhtml" />
   </p:dialog>
   <h:form id="formConfirmAdd">
@@ -126,8 +127,8 @@
 
 
 
-  
-  
+
+
 
   <p:dialog id="appletAssignDialog" header="#{msg.person_responsable}" widgetVar="appletAssignDialogVar" modal="true"
     width="50%">

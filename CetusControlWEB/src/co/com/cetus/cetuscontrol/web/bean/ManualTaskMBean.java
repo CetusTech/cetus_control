@@ -1,5 +1,10 @@
 package co.com.cetus.cetuscontrol.web.bean;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -9,16 +14,19 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.UploadedFile;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
+import co.com.cetus.cetuscontrol.dto.AttachDTO;
 import co.com.cetus.cetuscontrol.dto.PersonDTO;
 import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
 import co.com.cetus.cetuscontrol.dto.PriorityDTO;
@@ -33,11 +41,11 @@ import co.com.cetus.common.mail.SendMail;
 import co.com.cetus.common.util.UtilCommon;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class ManualTaskMBean extends GeneralManagedBean {
   
   private static final long      serialVersionUID        = -3255236201554716426L;
-  
+  ArrayList< UploadedFile >      listFilesTask           = null;
   private UserPortalDTO          userPortalDTO           = null;
   private List< TaskDTO >        listRegister            = null;
   private List< PersonGroupDTO > listRegisterGroup       = null;
@@ -68,12 +76,15 @@ public class ManualTaskMBean extends GeneralManagedBean {
   private String                 code                    = null;
   private SendMail               sendMail                = null;
   private String                 noteTask                = null;
-  private int                   status;
+  private int                    status;
   private double                 percentage;
   private double                 percentageSelected;
   private double                 percentageCurrent;
   private Date                   deliveryDate            = null;
-  
+  private String                 idUsuario;
+  private String                 destination             = "D:\\tmp\\";
+  private String                 separador               = System.getProperty( "file.separator" );
+                                                         
   public ManualTaskMBean () {
     super();
     addObject = new TaskDTO();
@@ -102,6 +113,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       listStatus( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       getPercentageNow();
+      idUsuario = String.valueOf( getUserDTO().getId() );
     } else {
       try {
         getResponse().sendRedirect( getRequest().getContextPath() + ConstantWEB.URL_PAGE_USER_NOVALID );
@@ -125,6 +137,26 @@ public class ManualTaskMBean extends GeneralManagedBean {
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
+  }
+  
+  public void handleFileUpload ( FileUploadEvent event ) {
+    try {
+      System.out.println( "Session del Usuario cargando el archivo ::: > " + getUserDTO().getId() );
+      if ( getObjectSession( "listFilesTask" ) == null ) {
+        listFilesTask = new ArrayList< >();
+        listFilesTask.add( event.getFile() );
+      } else {
+        listFilesTask.add( event.getFile() );
+      }
+      copyFile( event.getFile().getFileName(), event.getFile().getInputstream() );
+    } catch ( IOException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    addObjectSession( listFilesTask, "listFilesTask" );
+    FacesMessage message = new FacesMessage( "Succesful", event.getFile().getFileName() + " is uploaded." );
+    FacesContext.getCurrentInstance().addMessage( null, message );
+    
   }
   
   public void loadUpdate ( ActionEvent event ) {
@@ -321,7 +353,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
               if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
                 sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
                                          replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-                
+                                         
                 sendMail.start();
               }
             }
@@ -442,7 +474,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
               if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
                 sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
                                          replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-                
+                                         
                 sendMail.start();
               }
             }
@@ -587,6 +619,24 @@ public class ManualTaskMBean extends GeneralManagedBean {
     selectedObject.setPriority( new PriorityDTO() );
     selectedObject.setStatus( new StatusDTO() );
     selectedObject.setTaskType( new TaskTypeDTO() );
+    removerFileUploads();
+  }
+  
+  private void removerFileUploads () {
+    // TODO Auto-generated method stub
+    cleanObjectSession( "listFilesTask" );
+    if (destination != null && idUsuario != null){
+      File archivos = new File( destination+separador+idUsuario );
+      File[] lista = archivos.listFiles();
+      if ( archivos.listFiles() != null && archivos.listFiles().length > 0){
+        for ( File file: lista ) {
+          if (!file.isDirectory()){
+            file.delete();
+          }
+        }
+      }
+    }
+    
   }
   
   @SuppressWarnings ( "unchecked" )
@@ -808,7 +858,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
           
           //LIstar Tareas
-          responseDTO = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson().getId() );
+          responseDTO = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(),
+                                                               userPortalDTO.getPerson().getId() );
           if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
             //Tiene Usuario portal la persona seleecionada 
             listRegister = ( ( List< TaskDTO > ) responseDTO.getObjectResponse() );
@@ -854,6 +905,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
   @Override
   public String add () {
     ResponseDTO responseDTO = null;
+    AttachDTO attachDTO = null;
+    TaskDTO tmpTask;
     try {
       this.showConfirmAdd = false;
       addObject = ( TaskDTO ) getObjectSession( "addObject" );
@@ -874,10 +927,45 @@ public class ManualTaskMBean extends GeneralManagedBean {
         addObject.setCreationDate( currentDate );
         addObject.setSuspended( ConstantWEB.NO_SUSPENDED );
         responseDTO = generalDelegate.create( addObject );
+        tmpTask = ( TaskDTO ) responseDTO.getObjectResponse();
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           ConstantWEB.WEB_LOG.info( "TAREA CREADA EXITOSAMENTE" );
           this.initElement();
-          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, MessageFormat.format( ConstantWEB.MESSAGE_TASK_CREATED, addObject.getCode() ) );
+          if ( getObjectSession( "listFilesTask" ) != null ) {
+            listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
+            if ( listFilesTask.size() > 0 ) {
+              //Tiene archivos para agregar! 
+              System.out.println( "CARGANDO ARCHIVOS...." );
+              File directory = new File( destination + separador + idUsuario );
+              System.out.println( "Session del Usuario ::: > " + idUsuario );
+              for ( UploadedFile att: listFilesTask ) {
+                if ( directory != null ) {
+                  File[] contents = directory.listFiles();
+                  System.out.println( contents );
+                  interno: for ( File file: contents ) {
+                    if ( file.getName().equals( att.getFileName() ) ) {
+                      attachDTO = new AttachDTO();
+                      attachDTO.setTask( tmpTask );
+                      attachDTO.setFileName( att.getFileName() );
+                      File userUploads = new File( destination + separador + idUsuario, String.valueOf( attachDTO.getTask().getId() ) );
+                      attachDTO.setPath( userUploads.getPath() );
+                      attachDTO.setCreationDate( currentDate );
+                      attachDTO.setCreationUser( getUserInSession() );
+                      responseDTO = generalDelegate.create( attachDTO );
+                      userUploads.mkdir();
+                      System.out.println( "Ruta del Archivo Nuevo " + userUploads.getPath() );
+                      renombrarArchivo( att.getFileName(), userUploads.getPath() + separador, destination + separador + idUsuario );
+                      break interno;
+                    }
+                  }
+                }
+              }
+              if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+                addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, MessageFormat.format( ConstantWEB.MESSAGE_TASK_CREATED, addObject.getCode() ) );
+              }
+            }
+          }
+          
           //Enviar EMAIL temporalmente          
           String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
           String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
@@ -913,6 +1001,64 @@ public class ManualTaskMBean extends GeneralManagedBean {
       addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE, null );
     }
     return null;
+  }
+  
+  /**
+   * Funcion para mover y renombrar un archivo
+   *
+   * @param String archivo Archivo o directorio a renombrar
+   * @param String directorio Directorio destino
+   * @exception RCException Se genera una excepción genérica.
+   * @return boolean
+   */
+  public boolean renombrarArchivo ( String archivo, String directorio, String pathAnterior ) {
+    try {
+      File archivos = new File( pathAnterior + separador, archivo );
+      File dir = new File( directorio );
+      String name = archivos.getName();
+      int j = name.indexOf( "." );
+      String newname = name.substring( 0, j ) + "_OK" + name.substring( j, name.length() );
+      boolean semovio = archivos.renameTo( new File( dir, newname ) );
+      if ( !semovio ) {
+        System.out.print( "El archivo no se ha Movido ..." );
+        return false;
+      } else {
+        System.out.print( "Se Movio ..." );
+        return true;
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+      System.out.print( "" + e.getMessage() );
+      return false;
+    }
+  }
+  
+  public void copyFile ( String fileName, InputStream in ) {
+    try {
+      
+      System.out.println( "Session del Usuario ::: > " + idUsuario );
+      // write the inputStream to a FileOutputStream
+      File userUploads = new File( destination, String.valueOf( idUsuario ) );
+      userUploads.mkdir();
+      System.out.println( "Ruta del Archivo " + userUploads.getPath() );
+      
+      OutputStream out = new FileOutputStream( new File( userUploads.getPath() + separador + fileName ) );
+      
+      int read = 0;
+      byte[] bytes = new byte[1024];
+      
+      while ( ( read = in.read( bytes ) ) != -1 ) {
+        out.write( bytes, 0, read );
+      }
+      
+      in.close();
+      out.flush();
+      out.close();
+      
+      System.out.println( "New file created!" );
+    } catch ( IOException e ) {
+      System.out.println( e.getMessage() );
+    }
   }
   
   private String replaceContentEmail ( String resParamHtmlMsgTaskAdd, TaskDTO pTaskDTO ) {
@@ -1004,7 +1150,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     try {
       selectedObject = ( ( TaskDTO ) event.getObject() );
       if ( selectedObject != null ) {
-        if ( selectedObject.getPersonGroup()!= null ){
+        if ( selectedObject.getPersonGroup() != null ) {
           selectedObjectPerson = selectedObject.getPersonGroup();
           addObjectSession( selectedObjectPerson, "selectedObjectPerson" );
         }
@@ -1285,8 +1431,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public PersonGroupDTO getSelectedObjectPerson () {
     selectedObjectPerson = ( PersonGroupDTO ) ( getObjectSession( "selectedObjectPerson" ) != null
-                                                                                                  ? getObjectSession( "selectedObjectPerson" )
-                                                                                                  : null );
+                                                                                                   ? getObjectSession( "selectedObjectPerson" )
+                                                                                                   : null );
     return selectedObjectPerson;
   }
   
@@ -1311,6 +1457,16 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public void setShowMenu ( boolean showMenu ) {
     this.showMenu = showMenu;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public ArrayList< UploadedFile > getListFilesTask () {
+    listFilesTask = ( ArrayList< UploadedFile > ) ( getObjectSession( "listFilesTask" ) != null ? getObjectSession( "listFilesTask" ) : null );
+    return listFilesTask;
+  }
+  
+  public void setListFilesTask ( ArrayList< UploadedFile > listFilesTask ) {
+    this.listFilesTask = listFilesTask;
   }
   
 }

@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import co.com.cetus.cetuscontrol.dto.ParameterGeneralDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
@@ -37,22 +38,22 @@ public abstract class GeneralManagedBean implements Serializable {
   
   /** The current date. */
   protected Date            currentDate     = new Date();
-  
+                                            
   /** The current date str. */
   protected String          currentDateStr  = formatDatePattern();
-  
+                                            
   /** The general delegate. */
   protected GeneralDelegate generalDelegate = GeneralDelegate.getInstance();
-  
+                                            
   /** The patter date. */
   private String            patterDate      = null;
-  
+                                            
   /** The patter hour. */
   private String            patterHour      = null;
-  
+                                            
   /** The locale. */
   private String            locale          = null;
-  
+                                            
   /**
    * </p> Gets the context path. </p>
    *
@@ -322,7 +323,8 @@ public abstract class GeneralManagedBean implements Serializable {
         login = userDTO.getLoginCetus();
         //hostName = ( String ) getObjectSession( ConstantWEB.hostRequest );
         acronimo = ( String ) getObjectSession( ConstantWEB.DESC_ACRONYM );
-        usuarioCreacion = acronimo + ConstantWEB.SEPARATOR_UNDERSCORE + login + ConstantWEB.SEPARATOR_UNDERSCORE + ip /*+ ConstantWEB.SEPARATOR_UNDERSCORE + hostName*/;
+        usuarioCreacion = acronimo + ConstantWEB.SEPARATOR_UNDERSCORE + login + ConstantWEB.SEPARATOR_UNDERSCORE
+                          + ip /*+ ConstantWEB.SEPARATOR_UNDERSCORE + hostName*/;
       } else {
         usuarioCreacion = null;
       }
@@ -561,8 +563,20 @@ public abstract class GeneralManagedBean implements Serializable {
     return new Timestamp( date.getTime() );
   }
   
-  public static void main(String... arg){
+  public static void main ( String... arg ) {
     java.util.Date date = new java.util.Date();
-    System.out.println(date);
+    System.out.println( date );
+  }
+  
+  public String getIdSessionCurrent () {
+    String sessionId = null;
+    try {
+      FacesContext fCtx = FacesContext.getCurrentInstance();
+      HttpSession session = ( HttpSession ) fCtx.getExternalContext().getSession( false );
+      sessionId = session.getId();
+    } catch ( Exception e ) {
+      throw e;
+    }
+    return sessionId;
   }
 }

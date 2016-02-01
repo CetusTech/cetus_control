@@ -4,7 +4,7 @@
   xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
-  <h:form id="formAdd" prependId="false">
+  <h:form id="formAdd" prependId="false" enctype="multipart/form-data">
     <h:panelGrid id="panelAdd" columns="3" cellspacing="2" cellpadding="2">
       <p:outputLabel value="#{msg.description}" for="descriptionAdd" />
       <p:inputText id="descriptionAdd" required="true" size="60" value="#{manualTaskMBean.addObject.description}"
@@ -28,9 +28,9 @@
       <p:message for="obsAdd" id="obsAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.assingDate}" for="assingDateAdd" />
-      <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" mode="popup" required="true" maxdate="#{manualTaskMBean.currentDateStr}"
-        onchange="PF('assingDateAdd').hide()" showButtonPanel="true" pt:placeholder="dd-MM-yyyy"
-        locale="#{manualTaskMBean.locale}" pattern="dd-MM-yyyy" showOn="button" />
+      <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" mode="popup" required="true"
+        maxdate="#{manualTaskMBean.currentDateStr}" onchange="PF('assingDateAdd').hide()" showButtonPanel="true"
+        pt:placeholder="dd-MM-yyyy" locale="#{manualTaskMBean.locale}" pattern="dd-MM-yyyy" showOn="button" />
 
       <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
     </h:panelGrid>
@@ -88,12 +88,22 @@
 
       <f:facet name="footer">
         <center>
-          <p:commandButton value="#{msg.btn_save}" update="formAdd :formConfirmAdd:confirmAdd"
-            process="@form" styleClass="button-general" icon="img-save" actionListener="#{manualTaskMBean.load}" />
-
-
+          <p:commandButton value="#{msg.btn_save}" update="formAdd :formConfirmAdd:confirmAdd" process="@form"
+            styleClass="button-general" icon="img-save" actionListener="#{manualTaskMBean.load}" />
         </center>
       </f:facet>
     </h:panelGrid>
+    <p:panelGrid id="pnlListFiles">
+      <p:dataList value="#{manualTaskMBean.listFilesTask}" var="objFile" type="ordered" id="listFiles">
+        <f:facet name="header">
+            Archivos Cargados
+        </f:facet>
+        #{objFile.fileName}
+      </p:dataList>
+    </p:panelGrid>
+    <p:fileUpload fileUploadListener="#{manualTaskMBean.handleFileUpload}" mode="advanced" dragDropSupport="true"
+      update="listFiles messages" sizeLimit="1000000" allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" />
+
+    <p:growl id="messages" showDetail="true" />
   </h:form>
 </ui:composition>
