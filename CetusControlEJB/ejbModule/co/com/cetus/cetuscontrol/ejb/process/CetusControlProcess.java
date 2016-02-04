@@ -665,7 +665,6 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
-  @SuppressWarnings ( "unchecked" )
   public ResponseDTO findStatus ( int idclientCetus ) {
     ResponseDTO responseDTO = null;
     List< Status > list = null;
@@ -694,7 +693,6 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
-  @SuppressWarnings ( "unchecked" )
   public ResponseDTO findTaskType ( int idclientCetus ) {
     ResponseDTO responseDTO = null;
     List< TaskType > list = null;
@@ -1451,7 +1449,6 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
-  @SuppressWarnings ( "unchecked" )
   public ResponseDTO findGroupType ( int idclientCetus ) {
     ResponseDTO responseDTO = null;
     List< GroupType > list = null;

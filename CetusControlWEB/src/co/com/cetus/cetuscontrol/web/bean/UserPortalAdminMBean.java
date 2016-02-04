@@ -15,67 +15,66 @@ import co.com.cetus.portal.ejb.service.FindRolsByApplicationRequestDTO;
 import co.com.cetus.portal.ejb.service.FindRolsByApplicationResponseDTO;
 import co.com.cetus.portal.ejb.service.RolDTO;
 
-
 public class UserPortalAdminMBean extends GeneralManagedBean {
   
   /** The Constant serialVersionUID. */
   private static final long     serialVersionUID        = -3255236201554716426L;
-  
+                                                        
   /** The list register. */
   private List< UserPortalDTO > listRegister            = null;
-  
+                                                        
   /** The add object. */
   private UserPortalDTO         addObject               = null;
-  
+                                                        
   /** The selected object. */
   private UserPortalDTO         selectedObject          = null;
-  
+                                                        
   /** The show confirm add. */
   private boolean               showConfirmAdd          = false;
-  
+                                                        
   /** The show confirm mod. */
   private boolean               showConfirmMod          = false;
-  
+                                                        
   /** The show dialog confirm update. */
   private boolean               showDialogConfirmUpdate = false;
-  
+                                                        
   /** The show confirm delete. */
   private boolean               showConfirmDelete       = false;
-  
+                                                        
   /** The show alert select row. */
   private boolean               showAlertSelectRow      = false;
-  
+                                                        
   /** The show view detail. */
   private boolean               showViewDetail          = false;
-  
+                                                        
   /** The person dto. */
   private PersonDTO             personDTO               = null;
-  
+                                                        
   /** The identity. */
   private String                identity                = null;
-  
+                                                        
   private String                typeIdentity            = null;
-  
+                                                        
   /** The exists person. */
   private boolean               existsPerson            = false;
-  
+                                                        
   /** The message. */
   private String                message                 = null;
-  
+                                                        
   private boolean               skip;
-  
+                                
   private List< ClientDTO >     listClientDTO           = null;
-  
+                                                        
   private ClientDTO             selectedClientDTO       = null;
-  
+                                                        
   private List< PersonDTO >     listPersonDTO           = null;
-  
+                                                        
   private List< RolDTO >        listRol;
-  
+                                
   private List< SelectItem >    listRolItem;
-  
+                                
   private List< String >        selectedOptionsRol      = null;
-  
+                                                        
   public UserPortalAdminMBean () {
     addObject = new UserPortalDTO();
     addObject.setPerson( new PersonDTO() );
@@ -97,9 +96,11 @@ public class UserPortalAdminMBean extends GeneralManagedBean {
         findRolsByApplicationRequestDTO.setIdApplication( idApp );
         findRolsByApplicationRequestDTO.setUser( ConstantWEB.USER_PROPERTIE );
         findRolsByApplicationRequestDTO.setPassword( ConstantWEB.PASSWORD_PROPERTIE );
-        //response = generalDelegate.findRolByApplication( findRolsByApplicationRequestDTO );
+        response = generalDelegate.findRolByApplication( findRolsByApplicationRequestDTO.getIdApplication() );
+        
         if ( response != null && UtilCommon.validateResponseSuccess( response ) ) {
           //Existen roles asociados a la aplicacion
+          
           FindRolsByApplicationResponseDTO f = ( FindRolsByApplicationResponseDTO ) response.getObjectResponse();
           listRol = f.getRol();
           if ( listRol != null ) {
@@ -112,7 +113,7 @@ public class UserPortalAdminMBean extends GeneralManagedBean {
         } else {
           addMessageError( null,
                            ConstantWEB.MESSAGE_ERROR, response != null && response.getMessage() != null ? response.getMessage()
-                                                                                                       : ConstantWEB.MESSAGE_ERROR_CREATE );
+                                                                                                        : ConstantWEB.MESSAGE_ERROR_CREATE );
         }
       }
       

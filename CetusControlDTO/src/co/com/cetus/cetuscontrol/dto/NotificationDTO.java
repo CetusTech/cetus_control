@@ -2,7 +2,6 @@ package co.com.cetus.cetuscontrol.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * The persistent class for the notification database table.

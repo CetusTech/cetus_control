@@ -3,25 +3,25 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/commons-util"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss EAP 6.1+ Runtime">
+	<classpathentry combineaccessrules="false" kind="src" path="/CetusControlDTO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CetusControlInterface"/>
+	<classpathentry exported="true" kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.0.2.Final-redhat-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/wildfly-9.0.2.Final/modules/system/layers/base/cetus/wildfly/lib/main/ClientWSDTO.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/wildfly-9.0.2.Final/modules/system/layers/base/cetus/wildfly/lib/main/xmlbeans-2.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/wildfly-9.0.2.Final/modules/system/layers/base/cetus/wildfly/lib/main/poi-ooxml-3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/wildfly-9.0.2.Final/modules/system/layers/base/cetus/wildfly/lib/main/poi-ooxml-schemas-3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/wildfly-9.0.2.Final/modules/system/layers/base/cetus/wildfly/lib/main/jasperreports-6.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/wildfly-9.0.2.Final/modules/system/layers/base/cetus/wildfly/lib/main/poi-3.12.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 9.x Runtime">
 		<attributes>
-			<attribute name="owner.project.facets" value="jst.web;#system#;jst.jsf"/>
+			<attribute name="owner.project.facets" value="jst.jsf;#system#;jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_66">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/CetusControlDTO"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CetusControlInterface"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.0.2.Final-redhat-1.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/ClientWSDTO.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/xmlbeans-2.3.0.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/poi-ooxml-3.12.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/poi-ooxml-schemas-3.12.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/jasperreports-6.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-eap-6.2/modules/system/layers/base/cetus/jbosseap/lib/main/poi-3.12.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

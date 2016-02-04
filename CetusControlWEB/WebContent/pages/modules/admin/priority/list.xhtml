@@ -81,11 +81,11 @@
       <h:outputText value="#{object.description}" />
     </p:column>
 
-    <p:column sortBy="#{object.value.intValue()}" filterBy="#{object.value.intValue()}" filterMatchMode="contains">
+    <p:column sortBy="#{object.value}" filterBy="#{object.value}" filterMatchMode="contains">
       <f:facet name="header">
         <h:outputText value="#{msg.value}" />
       </f:facet>
-      <h:outputText value="#{object.value.intValue()}" />
+      <h:outputText value="#{object.value}" />
     </p:column>
 
   </p:dataTable>

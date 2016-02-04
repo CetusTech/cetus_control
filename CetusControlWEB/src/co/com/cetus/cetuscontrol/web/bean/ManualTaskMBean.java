@@ -993,6 +993,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
    * @param idGroup the id group
    * @since CetusControlWEB (2/02/2016)
    */
+  @SuppressWarnings ( "unchecked" )
   private void listPersonByGroup ( int idGroup ) {
     ResponseDTO response = null;
     try {

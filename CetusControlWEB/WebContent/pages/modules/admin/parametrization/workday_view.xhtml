@@ -19,11 +19,11 @@
 
     <h:outputText value="#{msg.start_time}:" styleClass="resaltar_negro" />
     <h:outputText
-      value="#{parametrizationMBean.formatHourForView(parametrizationMBean.selectedObject.startTime.intValue())}" />
+      value="#{parametrizationMBean.formatHourForView(parametrizationMBean.selectedObject.startTime)}" />
 
     <h:outputText value="#{msg.end_time}:" styleClass="resaltar_negro" />
     <h:outputText
-      value="#{parametrizationMBean.formatHourForView(parametrizationMBean.selectedObject.endTime.intValue())}" />
+      value="#{parametrizationMBean.formatHourForView(parametrizationMBean.selectedObject.endTime)}" />
 
   </p:panelGrid>
   <p:panelGrid id="pnlGridAudit" columns="2" styleClass="column_100">
