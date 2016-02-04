@@ -9,19 +9,19 @@ import java.util.Date;
  */
 public class AttachDTO implements Serializable {
   private static final long serialVersionUID = 1L;
-  
+                                             
   private int               id;
-  
+                            
   private Date              creationDate;
-  
+                            
   private String            creationUser;
-  
+                            
   private String            fileName;
-  
-  private byte[]            objFile;
-  
+                            
+  private String            path;
+                            
   private TaskDTO           task;
-  
+                            
   public AttachDTO () {
   }
   
@@ -57,12 +57,12 @@ public class AttachDTO implements Serializable {
     this.fileName = fileName;
   }
   
-  public byte[] getObjFile () {
-    return this.objFile;
+  public String getPath () {
+    return path;
   }
   
-  public void setObjFile ( byte[] objFile ) {
-    this.objFile = objFile;
+  public void setPath ( String path ) {
+    this.path = path;
   }
   
   public TaskDTO getTask () {
