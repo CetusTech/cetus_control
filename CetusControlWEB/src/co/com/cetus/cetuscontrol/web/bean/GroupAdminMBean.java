@@ -30,40 +30,40 @@ public class GroupAdminMBean extends GeneralManagedBean {
    * 
    */
   private static final long    serialVersionUID        = 1L;
-  
+                                                       
   /** The list register. */
   private List< GroupTDTO >    listRegister            = null;
-  
+                                                       
   /** The add object. */
   private GroupTDTO            addObject               = null;
-  
+                                                       
   /** The selected object. */
   private GroupTDTO            selectedObject          = null;
-  
+                                                       
   /** The show confirm add. */
   private boolean              showConfirmAdd          = false;
-  
+                                                       
   /** The show confirm mod. */
   private boolean              showConfirmMod          = false;
-  
+                                                       
   /** The show dialog confirm update. */
   private boolean              showDialogConfirmUpdate = false;
-  
+                                                       
   /** The show confirm delete. */
   private boolean              showConfirmDelete       = false;
-  
+                                                       
   /** The show alert select row. */
   private boolean              showAlertSelectRow      = false;
-  
+                                                       
   /** The show view detail. */
   private boolean              showViewDetail          = false;
-  
+                                                       
   private List< PersonDTO >    listPerson              = null;
   private List< ClientDTO >    listClient              = null;
   private long                 idClient;
-  private int                 idPerson;
-  private int                 idClientUpdate;
-  private int                 idPersonUpdate;
+  private int                  idPerson;
+  private long                 idClientUpdate;
+  private long                  idPersonUpdate;
   private ClientDTO            clientDTO               = null;
   private PersonDTO            personDTO               = null;
   private boolean              statusDateEnd           = true;
@@ -72,7 +72,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
   private List< GroupTypeDTO > listGroupType           = null;
   private List< SelectItem >   listGroupTypeItem       = null;
   private List< SelectItem >   status                  = null;
-  
+                                                       
   public GroupAdminMBean () {
     addObject = new GroupTDTO();
     selectedObject = new GroupTDTO();
@@ -92,7 +92,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
       loadClient();
       loadStatus();
       loadGroupType();
-      loadPersonByClient();
+      //loadPersonByClient();
       addObject = new GroupTDTO();
       addObject.setGroupType( new GroupTypeDTO() );
     } else {
@@ -139,7 +139,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
       status.add( new SelectItem( ConstantWEB.STATUS_GROUP_CLOSED, ConstantWEB.STATUS_GROUP_CLOSED_ES ) );
       
     } catch ( Exception e ) {
-      
+    
     }
   }
   
@@ -195,7 +195,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
     ResponseDTO response = null;
     try {
       cleanObjectSession( "listPersonItem" );
-      response = this.generalDelegate.findPersonByClient( getUserDTO().getPerson().getClient().getClientCetus().getId() );
+      response = this.generalDelegate.findPersonByClient( ( int ) idClient );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         //Respuesta del servicio 
         this.listPerson = ( List< PersonDTO > ) response.getObjectResponse();
@@ -223,7 +223,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
     ResponseDTO response = null;
     try {
       cleanObjectSession( "listPersonItem" );
-      response = this.generalDelegate.findPersonByClient( idClientUpdate );
+      response = this.generalDelegate.findPersonByClient( (int)idClientUpdate );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         //Respuesta del servicio 
         this.listPerson = ( List< PersonDTO > ) response.getObjectResponse();
@@ -334,7 +334,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
         if ( GroupTDTO != null ) {
           selectedObject.setId( GroupTDTO.getId() );
           selectedObject.setPerson( new PersonDTO() );
-          selectedObject.getPerson().setId( idPersonUpdate );
+          selectedObject.getPerson().setId( (int)idPersonUpdate );
           // selectedObject.setClientCetus( GroupTDTO.getClientCetus() );
           selectedObject.setCreationDate( GroupTDTO.getCreationDate() );
           selectedObject.setCreationUser( GroupTDTO.getCreationUser() );
@@ -398,7 +398,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
         if ( selectedObject.getPerson() != null && selectedObject.getPerson().getClient() != null ) {
           idClientUpdate = selectedObject.getPerson().getClient().getId();
           if ( idClientUpdate > 0 ) {
-            response = this.generalDelegate.findPersonByClient( idClientUpdate );
+            response = this.generalDelegate.findPersonByClient( (int)idClientUpdate );
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               listPerson = ( List< PersonDTO > ) response.getObjectResponse();
               if ( listPerson != null ) {
@@ -604,7 +604,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
     return idClientUpdate;
   }
   
-  public void setIdClientUpdate ( int idClientUpdate ) {
+  public void setIdClientUpdate ( long idClientUpdate ) {
     this.idClientUpdate = idClientUpdate;
   }
   
@@ -612,7 +612,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
     return idPersonUpdate;
   }
   
-  public void setIdPersonUpdate ( int idPersonUpdate ) {
+  public void setIdPersonUpdate ( long idPersonUpdate ) {
     this.idPersonUpdate = idPersonUpdate;
   }
   

@@ -14,7 +14,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -40,51 +40,143 @@ import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.mail.SendMail;
 import co.com.cetus.common.util.UtilCommon;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ManualTaskMBean.
+ *
+ * @author Andres Herrera - Cetus Technology
+ * @version CetusControlWEB (2/02/2016)
+ */
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class ManualTaskMBean extends GeneralManagedBean {
   
+  /** The Constant serialVersionUID. */
   private static final long      serialVersionUID        = -3255236201554716426L;
+                                                         
+  /** The list files task. */
   ArrayList< UploadedFile >      listFilesTask           = null;
+                                                         
+  /** The user portal dto. */
   private UserPortalDTO          userPortalDTO           = null;
+                                                         
+  /** The list register. */
   private List< TaskDTO >        listRegister            = null;
+                                                         
+  /** The list register group. */
   private List< PersonGroupDTO > listRegisterGroup       = null;
+                                                         
+  /** The list area. */
   private List< AreaDTO >        listArea                = null;
+                                                         
+  /** The list priority. */
   private List< PriorityDTO >    listPriority            = null;
+                                                         
+  /** The list task type. */
   private List< TaskTypeDTO >    listTaskType            = null;
+                                                         
+  /** The list person. */
   private List< PersonDTO >      listPerson              = null;
+                                                         
+  /** The list person g. */
   private List< PersonGroupDTO > listPersonG             = null;
+                                                         
+  /** The list status. */
   private List< StatusDTO >      listStatus              = null;
+                                                         
+  /** The list area item. */
   private List< SelectItem >     listAreaItem            = null;
+                                                         
+  /** The list priority item. */
   private List< SelectItem >     listPriorityItem        = null;
+                                                         
+  /** The list task type item. */
   private List< SelectItem >     listTaskTypeItem        = null;
+                                                         
+  /** The list status item. */
   private List< SelectItem >     listStatusItem          = null;
+                                                         
+  /** The add object. */
   private TaskDTO                addObject               = null;
+                                                         
+  /** The selected object. */
   private TaskDTO                selectedObject          = null;
+                                                         
+  /** The selected object person. */
   private PersonGroupDTO         selectedObjectPerson    = null;
+                                                         
+  /** The show confirm add. */
   private boolean                showConfirmAdd          = false;
+                                                         
+  /** The show confirm mod. */
   private boolean                showConfirmMod          = false;
+                                                         
+  /** The show dialog confirm update. */
   private boolean                showDialogConfirmUpdate = false;
+                                                         
+  /** The show confirm delete. */
   private boolean                showConfirmDelete       = false;
+                                                         
+  /** The show alert select row. */
   private boolean                showAlertSelectRow      = false;
+                                                         
+  /** The show view detail. */
   private boolean                showViewDetail          = false;
+                                                         
+  /** The show add dialog. */
   private boolean                showAddDialog           = false;
+                                                         
+  /** The show menu. */
   private boolean                showMenu                = false;
+                                                         
+  /** The approved. */
   private boolean                approved                = false;
+                                                         
+  /** The group tdto selected. */
   private PersonGroupDTO         groupTDTOSelected       = null;
+                                                         
+  /** The visible buttons. */
   private boolean                visibleButtons          = false;
+                                                         
+  /** The code. */
   private String                 code                    = null;
+                                                         
+  /** The send mail. */
   private SendMail               sendMail                = null;
+                                                         
+  /** The note task. */
   private String                 noteTask                = null;
+                                                         
+  /** The status. */
   private int                    status;
+                                 
+  /** The percentage. */
   private double                 percentage;
+                                 
+  /** The percentage selected. */
   private double                 percentageSelected;
+                                 
+  /** The percentage current. */
   private double                 percentageCurrent;
+                                 
+  /** The delivery date. */
   private Date                   deliveryDate            = null;
+                                                         
+  /** The id usuario. */
   private String                 idUsuario;
-  private String                 destination             = "D:\\tmp\\";
+                                 
+  /** The destination. */
+  private String                 destination             = ConstantWEB.PATH_FILE_TASK;
+                                                         
+  /** The separador. */
   private String                 separador               = System.getProperty( "file.separator" );
                                                          
+  /**
+   * </p> Instancia un nuevo manual task m bean. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   public ManualTaskMBean () {
     super();
     addObject = new TaskDTO();
@@ -113,7 +205,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
       listStatus( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       getPercentageNow();
-      idUsuario = String.valueOf( getUserDTO().getId() );
+      //Obtener el ID del usuario que esa logueado con el fin de usarlo para almacenamiento de documentos asociados a la tarea
+      idUsuario = String.valueOf( getUserDTO().getPerson().getClient().getClientCetus().getId() );
     } else {
       try {
         getResponse().sendRedirect( getRequest().getContextPath() + ConstantWEB.URL_PAGE_USER_NOVALID );
@@ -123,10 +216,23 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> Obtiene el porcentaje actual de dedicacion del usuario logueado. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   private void getPercentageNow () {
     percentage = generalDelegate.getPercentageCurrent( userPortalDTO.getPerson().getId() );
   }
   
+  /**
+   * </p> Load. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void load ( ActionEvent event ) {
     try {
       if ( addObject != null ) {
@@ -139,26 +245,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
-  public void handleFileUpload ( FileUploadEvent event ) {
-    try {
-      System.out.println( "Session del Usuario cargando el archivo ::: > " + getUserDTO().getId() );
-      if ( getObjectSession( "listFilesTask" ) == null ) {
-        listFilesTask = new ArrayList< >();
-        listFilesTask.add( event.getFile() );
-      } else {
-        listFilesTask.add( event.getFile() );
-      }
-      copyFile( event.getFile().getFileName(), event.getFile().getInputstream() );
-    } catch ( IOException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    addObjectSession( listFilesTask, "listFilesTask" );
-    FacesMessage message = new FacesMessage( "Succesful", event.getFile().getFileName() + " is uploaded." );
-    FacesContext.getCurrentInstance().addMessage( null, message );
-    
-  }
-  
+  /**
+   * </p> Load update. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void loadUpdate ( ActionEvent event ) {
     TaskDTO taskDTO = null;
     try {
@@ -193,6 +286,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> Start task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public void startTask () {
     ResponseDTO responseDTO = null;
@@ -308,6 +407,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> Complete task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public void completeTask () {
     RequestContext context = null;
@@ -395,6 +500,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> View form info. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void viewFormInfo () {
     RequestContext context = null;
     if ( selectedObject != null ) {
@@ -412,6 +523,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> View applet assign. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void viewAppletAssign () {
     RequestContext context = null;
     selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
@@ -430,6 +547,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> Cancel task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public void cancelTask () {
     RequestContext context = null;
@@ -517,6 +640,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> Suspend task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public void suspendTask () {
     RequestContext context = null;
@@ -604,15 +733,60 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> Metodo llamado al cargar un archivo asociado a la tarea. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
+  public void handleFileUpload ( FileUploadEvent event ) {
+    try {
+      if ( event != null ) {
+        if ( getObjectSession( "listFilesTask" ) == null ) {
+          listFilesTask = new ArrayList< >();
+          listFilesTask.add( event.getFile() );
+        } else {
+          listFilesTask.add( event.getFile() );
+        }
+        //copiar archivo a la ruta del usuario como archivo temporal
+        copyFileTmp( event.getFile().getFileName(), event.getFile().getInputstream() );
+        addObjectSession( listFilesTask, "listFilesTask" );
+        addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, event.getFile().getFileName() );
+      }
+    } catch ( IOException e ) {
+      addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getCause().getMessage() );
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> On timeout. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void onTimeout () {
     addMessageInfo( null, "Nota:", "la tarea se ha vencido!" );
   }
   
+  /**
+   * </p> Clean var. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void cleanVar () {
     //cleanObjectSession( "percentageSelected" );
     selectedObject.setPercentage( ( ( double ) getObjectSession( "percentageCurrent" ) ) );
   }
   
+  /**
+   * </p> Close dialog view. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void closeDialogView () {
     selectedObject = new TaskDTO();
     selectedObject.setArea( new AreaDTO() );
@@ -622,16 +796,24 @@ public class ManualTaskMBean extends GeneralManagedBean {
     removerFileUploads();
   }
   
+  /**
+   * </p> Remover file uploads. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (2/02/2016)
+   */
   private void removerFileUploads () {
-    // TODO Auto-generated method stub
     cleanObjectSession( "listFilesTask" );
-    if (destination != null && idUsuario != null){
-      File archivos = new File( destination+separador+idUsuario );
-      File[] lista = archivos.listFiles();
-      if ( archivos.listFiles() != null && archivos.listFiles().length > 0){
-        for ( File file: lista ) {
-          if (!file.isDirectory()){
-            file.delete();
+    if ( destination != null && idUsuario != null ) {
+      
+      File archivos = new File( destination + separador + idUsuario );
+      if ( archivos != null ) {
+        File[] lista = archivos.listFiles();
+        if ( archivos.listFiles() != null && archivos.listFiles().length > 0 ) {
+          for ( File file: lista ) {
+            if ( !file.isDirectory() ) {
+              file.delete();
+            }
           }
         }
       }
@@ -639,6 +821,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> List register group. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param idPerson the id person
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   private void listRegisterGroup ( int idPerson ) {
     ResponseDTO response = null;
@@ -658,6 +847,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> List task type. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   private void listTaskType ( int idClientCetus ) {
     ResponseDTO response = null;
@@ -682,6 +878,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> List status. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   private void listStatus ( int idClientCetus ) {
     ResponseDTO response = null;
@@ -721,6 +924,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> List priority. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   private void listPriority ( int idClientCetus ) {
     ResponseDTO response = null;
@@ -745,6 +955,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> List area. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   private void listArea ( int idClientCetus ) {
     ResponseDTO response = null;
@@ -769,6 +986,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     
   }
   
+  /**
+   * </p> List person by group. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param idGroup the id group
+   * @since CetusControlWEB (2/02/2016)
+   */
   private void listPersonByGroup ( int idGroup ) {
     ResponseDTO response = null;
     try {
@@ -907,13 +1131,18 @@ public class ManualTaskMBean extends GeneralManagedBean {
     ResponseDTO responseDTO = null;
     AttachDTO attachDTO = null;
     TaskDTO tmpTask;
+    File directoryTmp = null;
+    File[] contents = null;
+    String path;
+    File userUploads = null;
     try {
       this.showConfirmAdd = false;
       addObject = ( TaskDTO ) getObjectSession( "addObject" );
       if ( addObject != null ) {
         groupTDTOSelected = ( PersonGroupDTO ) getObjectSession( "groupTDTOSelected" );
         
-        responseDTO = generalDelegate.generateCodeTask();
+        responseDTO = generalDelegate.generateCodeTask();//Generar el codigo de la tarea
+        
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           addObject.setCode( ( String ) responseDTO.getObjectResponse() );
         } else {
@@ -928,59 +1157,61 @@ public class ManualTaskMBean extends GeneralManagedBean {
         addObject.setSuspended( ConstantWEB.NO_SUSPENDED );
         responseDTO = generalDelegate.create( addObject );
         tmpTask = ( TaskDTO ) responseDTO.getObjectResponse();
+        
+        //Tarea creada Exitosamente
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-          ConstantWEB.WEB_LOG.info( "TAREA CREADA EXITOSAMENTE" );
+          ConstantWEB.WEB_LOG.debug( "############# TAREA CREADA EXITOSAMENTE " + tmpTask.getCode() );
           this.initElement();
+          //Tiene archivos cargados en memoria 
           if ( getObjectSession( "listFilesTask" ) != null ) {
             listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
             if ( listFilesTask.size() > 0 ) {
               //Tiene archivos para agregar! 
-              System.out.println( "CARGANDO ARCHIVOS...." );
-              File directory = new File( destination + separador + idUsuario );
-              System.out.println( "Session del Usuario ::: > " + idUsuario );
+              ConstantWEB.WEB_LOG.debug( "############# TIENE ARCHIVOS PARA CARGAR " + listFilesTask.size() );
+              path = destination + separador + idUsuario;
+              directoryTmp = new File( path );
               for ( UploadedFile att: listFilesTask ) {
-                if ( directory != null ) {
-                  File[] contents = directory.listFiles();
-                  System.out.println( contents );
+                if ( directoryTmp != null ) {
+                  contents = directoryTmp.listFiles();
                   interno: for ( File file: contents ) {
-                    if ( file.getName().equals( att.getFileName() ) ) {
+                    if ( !file.isDirectory() && file.getName().substring( 0, file.getName().lastIndexOf( "#" ) )
+                                                    .equals( att.getFileName().substring( 0, att.getFileName().lastIndexOf( "." ) ) ) ) {
                       attachDTO = new AttachDTO();
                       attachDTO.setTask( tmpTask );
                       attachDTO.setFileName( att.getFileName() );
-                      File userUploads = new File( destination + separador + idUsuario, String.valueOf( attachDTO.getTask().getId() ) );
+                      userUploads = new File( path, String.valueOf( attachDTO.getTask().getCode() ) );
                       attachDTO.setPath( userUploads.getPath() );
                       attachDTO.setCreationDate( currentDate );
                       attachDTO.setCreationUser( getUserInSession() );
-                      responseDTO = generalDelegate.create( attachDTO );
                       userUploads.mkdir();
-                      System.out.println( "Ruta del Archivo Nuevo " + userUploads.getPath() );
-                      renombrarArchivo( att.getFileName(), userUploads.getPath() + separador, destination + separador + idUsuario );
+                      //Crear el registro del archivo adjunto a la tarea 
+                      responseDTO = generalDelegate.create( attachDTO );
+                      
+                      //Renombrar el archivo y mover a la carpeta asociada al ID de la tarea
+                      if ( renameAndMoveFileTmp( att.getFileName(), file.getName(), userUploads.getPath() + separador, path ) ) {
+                        //Archivo se movio correctamente
+                        ConstantWEB.WEB_LOG.debug( "############# ARCHIVO MOVIDO CORRECTAMENTE " + att.getFileName() );
+                        
+                      } else {
+                        //Archivo presento problemas al moverlo, se debe validar porque debio ser borrado por ser temporal
+                        ConstantWEB.WEB_LOG.debug( "############# ERROR MOVIENDO EL ARCHIVO " + att.getFileName() );
+                        
+                      }
                       break interno;
                     }
                   }
                 }
               }
               if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-                addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, MessageFormat.format( ConstantWEB.MESSAGE_TASK_CREATED, addObject.getCode() ) );
+                addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES,
+                                MessageFormat.format( ConstantWEB.MESSAGE_TASK_CREATED, addObject.getCode() ) );
               }
             }
           }
+          //TODO Envio de correo temporalmente          
+          sendMailTmp( "HTML_EMAIL_TASK_NEW", "SUBJECT_TASK_NEW", addObject );
           
-          //Enviar EMAIL temporalmente          
-          String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-          String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-          String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-          String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-          String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-          String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-          String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_NEW" );
-          String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_NEW" );
-          
-          if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-            sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-                                     replaceContentEmail( resParamHtmlMsgTaskAdd, addObject ), to, null );
-            sendMail.start();
-          }
+          //Buscar las tareas actualizando el registro nuevo
           responseDTO = generalDelegate.findTaskByPersonGroup( groupTDTOSelected.getGroupT().getId(), userPortalDTO.getPerson().getId() );
           if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
             //Tiene Usuario portal la persona seleecionada 
@@ -989,7 +1220,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
             listRegister = new ArrayList< TaskDTO >();
           }
           addObjectSession( listRegister, "listRegister" );
-          
         } else {
           ConstantWEB.WEB_LOG.error( ConstantWEB.MESSAGE_ERROR_CREATE );
           //Obetener codigo de error de oracle
@@ -1003,64 +1233,113 @@ public class ManualTaskMBean extends GeneralManagedBean {
     return null;
   }
   
+  private void sendMailTmp ( String pParamMsg, String pParamSubject, TaskDTO pObj ) {
+    //Enviar EMAIL temporalmente          
+    String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
+    String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
+    String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
+    String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
+    String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
+    String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
+    String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( pParamMsg );
+    String resParamSubjectTaskAdd = generalDelegate.getValueParameter( pParamSubject );
+    
+    if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
+      sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
+                               replaceContentEmail( resParamHtmlMsgTaskAdd, pObj ), to, null );
+      sendMail.start();
+    }
+  }
+  
   /**
-   * Funcion para mover y renombrar un archivo
-   *
-   * @param String archivo Archivo o directorio a renombrar
-   * @param String directorio Directorio destino
-   * @exception RCException Se genera una excepción genérica.
-   * @return boolean
-   */
-  public boolean renombrarArchivo ( String archivo, String directorio, String pathAnterior ) {
+   *   
+   * @author Andres Herrera - Cetus Technology
+   * @param pFileNameReal Nombre real del archivo cargado
+   * @param pFileNameTmp Nombre del archivo con extension de temporales
+   * @param pTargetDir Directorio destino donde se almacenara el archivo
+   * @param pPathTmp Directorio temporal donde estan los archivos cargados 
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
+  public boolean renameAndMoveFileTmp ( String pFileNameReal, String pFileNameTmp, String pTargetDir, String pPathTmp ) {
+    File filesTmp = null;//Archivo Temporal existente en la ruta especificada
+    File dir = null;
+    String newName = null;
     try {
-      File archivos = new File( pathAnterior + separador, archivo );
-      File dir = new File( directorio );
-      String name = archivos.getName();
-      int j = name.indexOf( "." );
-      String newname = name.substring( 0, j ) + "_OK" + name.substring( j, name.length() );
-      boolean semovio = archivos.renameTo( new File( dir, newname ) );
-      if ( !semovio ) {
-        System.out.print( "El archivo no se ha Movido ..." );
-        return false;
-      } else {
-        System.out.print( "Se Movio ..." );
-        return true;
+      if ( pPathTmp != null && pFileNameTmp != null ) {
+        filesTmp = new File( pPathTmp + separador, pFileNameTmp );
+        dir = new File( pTargetDir );
+        int j = pFileNameReal.lastIndexOf( "." );
+        if ( pFileNameReal != null && !pFileNameReal.isEmpty() ) {
+          newName = pFileNameReal.substring( 0, j ) + pFileNameReal.substring( j, pFileNameReal.length() );
+          return filesTmp.renameTo( new File( dir, newName ) );
+        }
       }
     } catch ( Exception e ) {
-      e.printStackTrace();
-      System.out.print( "" + e.getMessage() );
-      return false;
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
+    return false;
   }
   
-  public void copyFile ( String fileName, InputStream in ) {
+  /**
+   * </p> Copy file. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param pFileName the file name
+   * @param in the in
+   * @throws IOException 
+   * @since CetusControlWEB (2/02/2016)
+   */
+  public void copyFileTmp ( String pFileName, InputStream in ) throws IOException {
+    File userUploads = null;
+    int j = 0;
+    File tmp = null;
+    OutputStream out = null;
+    int read = 0;
+    byte[] bytes = new byte[1024];
     try {
-      
-      System.out.println( "Session del Usuario ::: > " + idUsuario );
-      // write the inputStream to a FileOutputStream
-      File userUploads = new File( destination, String.valueOf( idUsuario ) );
-      userUploads.mkdir();
-      System.out.println( "Ruta del Archivo " + userUploads.getPath() );
-      
-      OutputStream out = new FileOutputStream( new File( userUploads.getPath() + separador + fileName ) );
-      
-      int read = 0;
-      byte[] bytes = new byte[1024];
-      
-      while ( ( read = in.read( bytes ) ) != -1 ) {
-        out.write( bytes, 0, read );
+      userUploads = new File( destination, String.valueOf( idUsuario ) );
+      userUploads.mkdir();//crear el directorio del usuario que esta logueado
+      if ( pFileName != null ) {
+        j = pFileName.lastIndexOf( "." );
+        //Crear un archivo temporal que sera borrado cuando se termine la operacion
+        //Se le agrega un numeral para diferenciar de los numeros que generar java temporalmente asociados al archivo
+        tmp = File.createTempFile( pFileName.substring( 0, j ) + "#", "." + pFileName.substring( j, pFileName.length() ), userUploads );
+        tmp.deleteOnExit();//Indicar que el archivo sera borrado
+        out = new FileOutputStream( tmp );
+        while ( ( read = in.read( bytes ) ) != -1 ) {
+          out.write( bytes, 0, read );
+        }
+        in.close();
+        out.flush();
+        out.close();
+        System.out.println( "New file created!" );
+      }
+    } catch ( IOException e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+      throw e;
+    } finally {
+      try {
+        in.close();
+        out.flush();
+        out.close();
+      } catch ( IOException e ) {
+        ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+        throw e;
       }
       
-      in.close();
-      out.flush();
-      out.close();
-      
-      System.out.println( "New file created!" );
-    } catch ( IOException e ) {
-      System.out.println( e.getMessage() );
     }
   }
   
+  /**
+   * </p> Replace content email. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param resParamHtmlMsgTaskAdd the res param html msg task add
+   * @param pTaskDTO the p task dto
+   * @return el string
+   * @since CetusControlWEB (2/02/2016)
+   */
   private String replaceContentEmail ( String resParamHtmlMsgTaskAdd, TaskDTO pTaskDTO ) {
     
     if ( resParamHtmlMsgTaskAdd != null && !resParamHtmlMsgTaskAdd.isEmpty() ) {
@@ -1084,6 +1363,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     return resParamHtmlMsgTaskAdd;
   }
   
+  /**
+   * </p> Validate selected record. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void validateSelectedRecord ( ActionEvent event ) {
     try {
       if ( selectedObject != null ) {
@@ -1103,6 +1389,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> Validate selected record group selected. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void validateSelectedRecordGroupSelected ( ActionEvent event ) {
     try {
       if ( groupTDTOSelected != null ) {
@@ -1122,6 +1415,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> On row select. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public void onRowSelect ( SelectEvent event ) {
     ResponseDTO response = null;
@@ -1145,6 +1445,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> On row select task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void onRowSelectTask ( SelectEvent event ) {
     
     try {
@@ -1182,6 +1489,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> On row select person. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void onRowSelectPerson ( SelectEvent event ) {
     
     RequestContext context = null;
@@ -1198,237 +1512,622 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  /**
+   * </p> On row unselect. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param event the event
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void onRowUnselect ( UnselectEvent event ) {
     FacesMessage msg = new FacesMessage( "tarea deseleccionada", ( ( TaskDTO ) event.getObject() ).getCode() );
     FacesContext.getCurrentInstance().addMessage( null, msg );
   }
   
+  /**
+   * </p> Gets the list register. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public List< TaskDTO > getListRegister () {
     listRegister = ( List< TaskDTO > ) ( getObjectSession( "listRegister" ) != null ? getObjectSession( "listRegister" ) : null );
     return listRegister;
   }
   
+  /**
+   * </p> Sets the list register. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listRegister the list register
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListRegister ( List< TaskDTO > listRegister ) {
     this.listRegister = listRegister;
   }
   
+  /**
+   * </p> Gets the add object. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el task dto
+   * @since CetusControlWEB (2/02/2016)
+   */
   public TaskDTO getAddObject () {
     return addObject;
   }
   
+  /**
+   * </p> Sets the add object. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param addObject the adds the object
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setAddObject ( TaskDTO addObject ) {
     this.addObject = addObject;
   }
   
+  /**
+   * </p> Gets the selected object. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el task dto
+   * @since CetusControlWEB (2/02/2016)
+   */
   public TaskDTO getSelectedObject () {
     return selectedObject;
   }
   
+  /**
+   * </p> Sets the selected object. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param selectedObject the selected object
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setSelectedObject ( TaskDTO selectedObject ) {
     this.selectedObject = selectedObject;
   }
   
+  /**
+   * </p> Checks if is show confirm add. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowConfirmAdd () {
     return showConfirmAdd;
   }
   
+  /**
+   * </p> Sets the show confirm add. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showConfirmAdd the show confirm add
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowConfirmAdd ( boolean showConfirmAdd ) {
     this.showConfirmAdd = showConfirmAdd;
   }
   
+  /**
+   * </p> Checks if is show confirm mod. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowConfirmMod () {
     return showConfirmMod;
   }
   
+  /**
+   * </p> Sets the show confirm mod. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showConfirmMod the show confirm mod
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowConfirmMod ( boolean showConfirmMod ) {
     this.showConfirmMod = showConfirmMod;
   }
   
+  /**
+   * </p> Checks if is show dialog confirm update. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowDialogConfirmUpdate () {
     return showDialogConfirmUpdate;
   }
   
+  /**
+   * </p> Sets the show dialog confirm update. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showDialogConfirmUpdate the show dialog confirm update
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowDialogConfirmUpdate ( boolean showDialogConfirmUpdate ) {
     this.showDialogConfirmUpdate = showDialogConfirmUpdate;
   }
   
+  /**
+   * </p> Checks if is show confirm delete. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowConfirmDelete () {
     return showConfirmDelete;
   }
   
+  /**
+   * </p> Sets the show confirm delete. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showConfirmDelete the show confirm delete
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowConfirmDelete ( boolean showConfirmDelete ) {
     this.showConfirmDelete = showConfirmDelete;
   }
   
+  /**
+   * </p> Checks if is show alert select row. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowAlertSelectRow () {
     return showAlertSelectRow;
   }
   
+  /**
+   * </p> Sets the show alert select row. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showAlertSelectRow the show alert select row
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowAlertSelectRow ( boolean showAlertSelectRow ) {
     this.showAlertSelectRow = showAlertSelectRow;
   }
   
+  /**
+   * </p> Checks if is show view detail. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowViewDetail () {
     return showViewDetail;
   }
   
+  /**
+   * </p> Sets the show view detail. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showViewDetail the show view detail
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowViewDetail ( boolean showViewDetail ) {
     this.showViewDetail = showViewDetail;
   }
   
+  /**
+   * </p> Gets the user portal dto. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el user portal dto
+   * @since CetusControlWEB (2/02/2016)
+   */
   public UserPortalDTO getUserPortalDTO () {
     return userPortalDTO;
   }
   
+  /**
+   * </p> Sets the user portal dto. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param userPortalDTO the user portal dto
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setUserPortalDTO ( UserPortalDTO userPortalDTO ) {
     this.userPortalDTO = userPortalDTO;
   }
   
+  /**
+   * </p> Gets the list area item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   public List< SelectItem > getListAreaItem () {
     //listAreaItem = ( List< SelectItem > ) ( getObjectSession( "listAreaItem" ) != null ? getObjectSession( "listAreaItem" ) : null );
     return listAreaItem;
   }
   
+  /**
+   * </p> Sets the list area item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listAreaItem the list area item
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListAreaItem ( List< SelectItem > listAreaItem ) {
     this.listAreaItem = listAreaItem;
   }
   
+  /**
+   * </p> Gets the list priority item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public List< SelectItem > getListPriorityItem () {
     listPriorityItem = ( List< SelectItem > ) ( getObjectSession( "listPriorityItem" ) != null ? getObjectSession( "listPriorityItem" ) : null );
     return listPriorityItem;
   }
   
+  /**
+   * </p> Sets the list priority item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listPriorityItem the list priority item
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListPriorityItem ( List< SelectItem > listPriorityItem ) {
     this.listPriorityItem = listPriorityItem;
   }
   
+  /**
+   * </p> Gets the list task type item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public List< SelectItem > getListTaskTypeItem () {
     listTaskTypeItem = ( List< SelectItem > ) ( getObjectSession( "listTaskTypeItem" ) != null ? getObjectSession( "listTaskTypeItem" ) : null );
     return listTaskTypeItem;
   }
   
+  /**
+   * </p> Sets the list task type item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listTaskTypeItem the list task type item
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListTaskTypeItem ( List< SelectItem > listTaskTypeItem ) {
     this.listTaskTypeItem = listTaskTypeItem;
   }
   
+  /**
+   * </p> Gets the list status item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public List< SelectItem > getListStatusItem () {
     listStatusItem = ( List< SelectItem > ) ( getObjectSession( "listStatusItem" ) != null ? getObjectSession( "listStatusItem" ) : null );
     return listStatusItem;
   }
   
+  /**
+   * </p> Sets the list status item. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listStatusItem the list status item
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListStatusItem ( List< SelectItem > listStatusItem ) {
     this.listStatusItem = listStatusItem;
   }
   
+  /**
+   * </p> Gets the serialversionuid. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el long
+   * @since CetusControlWEB (2/02/2016)
+   */
   public static long getSerialversionuid () {
     return serialVersionUID;
   }
   
+  /**
+   * </p> Checks if is approved. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isApproved () {
     approved = ( Boolean ) ( getObjectSession( "approved" ) != null ? getObjectSession( "approved" ) : false );
     return approved;
   }
   
+  /**
+   * </p> Sets the approved. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param approved the approved
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setApproved ( boolean approved ) {
     this.approved = approved;
   }
   
+  /**
+   * </p> Gets the list register group. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   public List< PersonGroupDTO > getListRegisterGroup () {
     return listRegisterGroup;
   }
   
+  /**
+   * </p> Sets the list register group. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listRegisterGroup the list register group
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListRegisterGroup ( List< PersonGroupDTO > listRegisterGroup ) {
     this.listRegisterGroup = listRegisterGroup;
   }
   
+  /**
+   * </p> Gets the group tdto selected. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el person group dto
+   * @since CetusControlWEB (2/02/2016)
+   */
   public PersonGroupDTO getGroupTDTOSelected () {
     return groupTDTOSelected;
   }
   
+  /**
+   * </p> Sets the group tdto selected. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param groupTDTOSelected the group tdto selected
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setGroupTDTOSelected ( PersonGroupDTO groupTDTOSelected ) {
     this.groupTDTOSelected = groupTDTOSelected;
   }
   
+  /**
+   * </p> Checks if is show add dialog. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowAddDialog () {
     return showAddDialog;
   }
   
+  /**
+   * </p> Sets the show add dialog. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showAddDialog the show add dialog
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowAddDialog ( boolean showAddDialog ) {
     this.showAddDialog = showAddDialog;
   }
   
+  /**
+   * </p> Checks if is visible buttons. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isVisibleButtons () {
     return visibleButtons;
   }
   
+  /**
+   * </p> Sets the visible buttons. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param visibleButtons the visible buttons
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setVisibleButtons ( boolean visibleButtons ) {
     this.visibleButtons = visibleButtons;
   }
   
+  /**
+   * </p> Gets the code. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el string
+   * @since CetusControlWEB (2/02/2016)
+   */
   public String getCode () {
     code = ( String ) ( getObjectSession( "code" ) != null ? getObjectSession( "code" ) : null );
     return code;
   }
   
+  /**
+   * </p> Sets the code. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param code the code
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setCode ( String code ) {
     this.code = code;
   }
   
+  /**
+   * </p> Gets the note task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el string
+   * @since CetusControlWEB (2/02/2016)
+   */
   public String getNoteTask () {
     return noteTask;
   }
   
+  /**
+   * </p> Sets the note task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param noteTask the note task
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setNoteTask ( String noteTask ) {
     this.noteTask = noteTask;
   }
   
+  /**
+   * </p> Gets the status. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el int
+   * @since CetusControlWEB (2/02/2016)
+   */
   public int getStatus () {
     status = getObjectSession( "status" ) != null ? ( int ) getObjectSession( "status" ) : 0;
     return status;
   }
   
+  /**
+   * </p> Sets the status. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param status the status
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setStatus ( int status ) {
     this.status = status;
   }
   
+  /**
+   * </p> Gets the percentage. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el double
+   * @since CetusControlWEB (2/02/2016)
+   */
   public double getPercentage () {
     return percentage;
   }
   
+  /**
+   * </p> Sets the percentage. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param percentage the percentage
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setPercentage ( double percentage ) {
     this.percentage = percentage;
   }
   
+  /**
+   * </p> Gets the percentage selected. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el double
+   * @since CetusControlWEB (2/02/2016)
+   */
   public double getPercentageSelected () {
     percentageSelected = getObjectSession( "percentageSelected" ) != null ? ( double ) getObjectSession( "percentageSelected" ) : 0;
     return percentageSelected;
   }
   
+  /**
+   * </p> Sets the percentage selected. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param percentageSelected the percentage selected
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setPercentageSelected ( double percentageSelected ) {
     this.percentageSelected = percentageSelected;
   }
   
+  /**
+   * </p> Gets the delivery date. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el date
+   * @since CetusControlWEB (2/02/2016)
+   */
   public Date getDeliveryDate () {
     return deliveryDate;
   }
   
+  /**
+   * </p> Sets the delivery date. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param deliveryDate the delivery date
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setDeliveryDate ( Date deliveryDate ) {
     this.deliveryDate = deliveryDate;
   }
   
+  /**
+   * </p> Sets the percentage current. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param percentageCurrent the percentage current
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setPercentageCurrent ( double percentageCurrent ) {
     this.percentageCurrent = percentageCurrent;
   }
   
+  /**
+   * </p> Gets the percentage current. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el double
+   * @since CetusControlWEB (2/02/2016)
+   */
   public double getPercentageCurrent () {
     percentageCurrent = getObjectSession( "percentageCurrent" ) != null ? ( double ) getObjectSession( "percentageCurrent" ) : 0;
     return percentageCurrent;
   }
   
+  /**
+   * </p> Gets the selected object person. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el person group dto
+   * @since CetusControlWEB (2/02/2016)
+   */
   public PersonGroupDTO getSelectedObjectPerson () {
     selectedObjectPerson = ( PersonGroupDTO ) ( getObjectSession( "selectedObjectPerson" ) != null
                                                                                                    ? getObjectSession( "selectedObjectPerson" )
@@ -1436,35 +2135,84 @@ public class ManualTaskMBean extends GeneralManagedBean {
     return selectedObjectPerson;
   }
   
+  /**
+   * </p> Sets the selected object person. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param selectedObjectPerson the selected object person
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setSelectedObjectPerson ( PersonGroupDTO selectedObjectPerson ) {
     this.selectedObjectPerson = selectedObjectPerson;
   }
   
+  /**
+   * </p> Gets the list person g. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el list
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public List< PersonGroupDTO > getListPersonG () {
     listPersonG = ( List< PersonGroupDTO > ) ( getObjectSession( "listPersonG" ) != null ? getObjectSession( "listPersonG" ) : null );
     return listPersonG;
   }
   
+  /**
+   * </p> Sets the list person g. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listPersonG the list person g
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListPersonG ( List< PersonGroupDTO > listPersonG ) {
     this.listPersonG = listPersonG;
   }
   
+  /**
+   * </p> Checks if is show menu. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlWEB (2/02/2016)
+   */
   public boolean isShowMenu () {
     showMenu = getObjectSession( "showMenu" ) != null ? ( boolean ) getObjectSession( "showMenu" ) : false;
     return showMenu;
   }
   
+  /**
+   * </p> Sets the show menu. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param showMenu the show menu
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setShowMenu ( boolean showMenu ) {
     this.showMenu = showMenu;
   }
   
+  /**
+   * </p> Gets the list files task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @return el array list
+   * @since CetusControlWEB (2/02/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   public ArrayList< UploadedFile > getListFilesTask () {
     listFilesTask = ( ArrayList< UploadedFile > ) ( getObjectSession( "listFilesTask" ) != null ? getObjectSession( "listFilesTask" ) : null );
     return listFilesTask;
   }
   
+  /**
+   * </p> Sets the list files task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param listFilesTask the list files task
+   * @since CetusControlWEB (2/02/2016)
+   */
   public void setListFilesTask ( ArrayList< UploadedFile > listFilesTask ) {
     this.listFilesTask = listFilesTask;
   }

@@ -12,16 +12,16 @@ public class ConstantWEB {
   
   /** The cetus logs. */
   public static Logger           WEB_LOG                            = Logger.getLogger( "CetusControlWEB" );
-  
+                                                                    
   /** The Constant NAME_BUNDLE_WEB. */
   public final static String     NAME_BUNDLE_WEB                    = "message_es";
-  
+                                                                    
   /** The Constant PATTERN_DATE. */
   public final static String     PATTERN_DATE                       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "PATTERN_DATE" );
   public final static String     AUDIT_DELETE                       = "DELETE";
-  
+                                                                    
   public static PropertiesLoader properties                         = PropertiesLoader.getInstance();
-  
+                                                                    
   /** The Constant WSDL_AGARTHI_CORE_SERVICE. */
   public final static String     JNDI_PROPERTIE                     = properties.getProperty( "JNDI_PROPERTIE" );
   public final static String     CONTEXT_PROPERTIE                  = properties.getProperty( "CONTEXT_PROPERTIE" );
@@ -75,7 +75,7 @@ public class ConstantWEB {
   public final static String     ERROR_EXISTS_EXCEPTION_ALL_JORNADA = UtilWEB.getProperty( NAME_BUNDLE_WEB, "ERROR_EXISTS_EXCEPTION_ALL_JORNADA" );
   public final static String     MESSAGE_ERROR_CHEK_NOTACTIONS      = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CHEK_NOTACTIONS" );
   public final static String     MESSAGE_ERROR_DELETE_NOTACTIONS    = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_DELETE_NOTACTIONS" );
-  
+                                                                    
   public final static String     STATUS_GROUP_CREATED               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "status_created" );
   public final static String     STATUS_GROUP_NEW                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "status_new" );
   public final static String     STATUS_GROUP_CLOSED                = UtilWEB.getProperty( NAME_BUNDLE_WEB, "status_closed" );
@@ -84,12 +84,12 @@ public class ConstantWEB {
   public final static String     STATUS_GROUP_NEW_ES                = UtilWEB.getProperty( NAME_BUNDLE_WEB, "status_new_es" );
   public final static String     STATUS_GROUP_CLOSED_ES             = UtilWEB.getProperty( NAME_BUNDLE_WEB, "status_closed_es" );
   public final static String     STATUS_GROUP_IN_PROGRESS_ES        = UtilWEB.getProperty( NAME_BUNDLE_WEB, "status_in_progress_es" );
-  
+                                                                    
   public final static String     MESSAGE_ERROR_DELETE_GROUP_PERSON  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_DELETE_GROUP_PERSON" );
   public final static String     MESSAGE_ERROR_CREATE_GROUP_PERSON  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CREATE_GROUP_PERSON" );
   public final static String     NAME_TEMPLATE_TASK_MASSIVE         = UtilWEB.getProperty( NAME_BUNDLE_WEB, "NAME_TEMPLATE_TASK_MASSIVE" );
   public final static String     MESSAGE_ERROR_CREATE_TEMPLATE_TM   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CREATE_TEMPLATE_TM" );
-  
+                                                                    
   public final static int        STATUS_ASSIGNED                    = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_ASSIGNED" ) );
   public final static int        STATUS_INPROGRESS                  = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_INPROGRESS" ) );
   public final static int        STATUS_COMPLETED                   = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_COMPLETED" ) );
@@ -101,6 +101,8 @@ public class ConstantWEB {
   public final static String     PATTERN_DATE_TEMPLATE_XLS          = UtilWEB.getProperty( NAME_BUNDLE_WEB, "PATTERN_DATE_TEMPLATE_XLS" );
   public final static String     MSG_STARTED_TASK                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_started_task" );
   public final static String     MESSAGE_TASK_CREATED               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "message_task_created" );
+  public final static String     MESSAGE_TASK_CREATED_FILES         = UtilWEB.getProperty( NAME_BUNDLE_WEB, "message_task_created_files" );
+                                                                    
   public final static int        STATUS_ASSIGNED_VAL                = 1;
   public final static int        STATUS_INPROGRESS_VAL              = 2;
   public final static int        STATUS_COMPLETED_VAL               = 3;
@@ -121,10 +123,12 @@ public class ConstantWEB {
   public final static String     MESSAGE_NOT_STARTED_TASK           = UtilWEB.getProperty( NAME_BUNDLE_WEB, "message_not_started_task" );
   public final static String     MESSAGE_NOT_SUSPENDED_TASK         = UtilWEB.getProperty( NAME_BUNDLE_WEB, "message_not_suspended_task" );
   public final static String     MESSAGE_NOT_COMPLETED_TASK         = UtilWEB.getProperty( NAME_BUNDLE_WEB, "message_not_completed_task" );
-  
+                                                                    
   public final static String     MESSAGE_DES_NEXT_OVERCOME          = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_NEXT_OVERCOME" );
   public final static String     MESSAGE_DES_FINISH                 = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_FINISH" );
   public final static String     MESSAGE_DES_RUN                    = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_RUN" );
   public final static String     MESSAGE_DES_EXPIRED                = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_EXPIRED" );
-  
+                                                                    
+  public final static String     PATH_FILE_TASK                     = properties.getProperty( "PATH_FILE_TASK" );
+                                                                    
 }

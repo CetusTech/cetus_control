@@ -7,7 +7,7 @@
     <p:messages showDetail="true" />
   </p:outputPanel>
   <h:form id="formUpdate" prependId="false">
-
+    <p:growl autoUpdate="true" globalOnly="true" showDetail="true" />
     <p:panel>
       <h:panelGrid id="pnlUpdate" columns="3" cellspacing="4" cellpadding="4">
         <p:outputLabel value="#{msg.name}" for="nameUpdate" />
@@ -17,7 +17,8 @@
         <p:message for="nameUpdate" id="nameUpdateMsg" display="icon" />
 
         <p:outputLabel value="#{msg.group_type}" for="groupTypeSelectedUpdate" />
-        <p:selectOneMenu value="#{groupAdminMBean.selectedObject.groupType.id}" id="groupTypeSelectedUpdate" required="true">
+        <p:selectOneMenu value="#{groupAdminMBean.selectedObject.groupType.id}" id="groupTypeSelectedUpdate"
+          required="true">
           <f:selectItem itemLabel="#{msg.selected_type}" itemValue="" noSelectionOption="true" />
           <f:selectItems value="#{groupAdminMBean.listGroupTypeItem}" />
         </p:selectOneMenu>
@@ -64,8 +65,8 @@
 
 
         <p:outputLabel value="#{msg.hour}" for="hourUpdate" />
-        <p:inputText id="hourUpdate" required="true" size="3" maxlength="3" value="#{groupAdminMBean.selectedObject.hour}"
-          requiredMessage="#{msg.field_required}">
+        <p:inputText id="hourUpdate" required="true" size="3" maxlength="3"
+          value="#{groupAdminMBean.selectedObject.hour}" requiredMessage="#{msg.field_required}">
           <f:validateLongRange minimum="1" maximum="999" />
         </p:inputText>
         <p:message for="hourUpdate" id="hourUpdateMsg" display="icon" />
