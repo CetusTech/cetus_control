@@ -667,15 +667,15 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
-  public ResponseDTO findTaskByPersonPriority ( int pIdPerson, String descripPriority ){
-	  ResponseDTO response = null;
-	    try {
-	      response = cetusControlProcess.findTaskByPersonPriority( pIdPerson, descripPriority );
-	    } catch ( Exception e ) {
-	      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-	      return createMessageFAILURE();
-	    }
-	    return response;
+  public ResponseDTO findTaskByPersonPriority ( int pIdPerson, String descripPriority ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskByPersonPriority( pIdPerson, descripPriority );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
   }
   
   public ResponseDTO generateLengthTask ( int idTask ) {
@@ -688,54 +688,63 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
     return response;
   }
-
-	@Override
-	public ResponseDTO findTaskByPersonCompleted(int pIdPerson, int pidClientCetus) {
-	 ResponseDTO response = null;
-	    try {
-	      response = cetusControlProcess.findTaskByPersonCompleted( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-	      return createMessageFAILURE();
-	    }
-	    return response;
-	}
-	
-	@Override
-	public ResponseDTO findTaskByPersonRun(int pIdPerson, int pidClientCetus) {
-		ResponseDTO response = null;
-	    try {
-	      response = cetusControlProcess.findTaskByPersonRun( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-	      return createMessageFAILURE();
-	    }
-	    return response;
-	}
-	
-	@Override
-	public ResponseDTO findTaskByPersonExpired(int pIdPerson, int pidClientCetus) {
-		ResponseDTO response = null;
-	    try {
-	      response = cetusControlProcess.findTaskByPersonExpired( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-	      return createMessageFAILURE();
-	    }
-	    return response;
-	}
-
-	@Override
-	public ResponseDTO findTaskByPersonNexOvercome(int pIdPerson, int pidClientCetus) {
-		ResponseDTO response = null;
-	    try {
-	      response = cetusControlProcess.findTaskByPersonNexOvercome( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-	      return createMessageFAILURE();
-	    }
-	    return response;
-	}
   
+  @Override
+  public ResponseDTO findTaskByPersonCompleted ( int pIdPerson, int pidClientCetus ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskByPersonCompleted( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
   
+  @Override
+  public ResponseDTO findTaskByPersonRun ( int pIdPerson, int pidClientCetus ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskByPersonRun( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
+  @Override
+  public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pidClientCetus ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskByPersonExpired( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
+  @Override
+  public ResponseDTO findTaskByPersonNexOvercome ( int pIdPerson, int pidClientCetus ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskByPersonNexOvercome( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
+  public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findAttachmentFilesByTaskId( pIdTask );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
 }

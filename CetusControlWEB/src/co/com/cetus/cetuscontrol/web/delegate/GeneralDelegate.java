@@ -11,14 +11,13 @@ import co.com.cetus.common.util.UtilCommon;
 public class GeneralDelegate {
   
   private CetusControlBeanRemote beanRemote;
-  
+                                 
   private static GeneralDelegate generalDelegate = null;
-  
+                                                 
   public static GeneralDelegate getInstance () {
-//    ConstantWEB.WEB_LOG.debug( "######### OBTENIENDO INSTANCIA PARA EL GENERALDELEGATE" );
+    //    ConstantWEB.WEB_LOG.debug( "######### OBTENIENDO INSTANCIA PARA EL GENERALDELEGATE" );
     if ( generalDelegate == null ) {
-      synchronized ( GeneralDelegate.class )
-      {
+      synchronized ( GeneralDelegate.class ) {
         if ( generalDelegate == null ) {
           generalDelegate = new GeneralDelegate();
           ConstantWEB.WEB_LOG.debug( "######### CREADA LA NUEVA INSTANCIA DEL DELEGATE" );
@@ -513,47 +512,44 @@ public class GeneralDelegate {
   }
   
   public ResponseDTO findTaskByPersonCompleted ( int pIdPerson, int pidClientCetus ) {
-	    ResponseDTO responseDTO = null;
-	    try {
-	      responseDTO = beanRemote.findTaskByPersonCompleted( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-	    }
-	    return responseDTO;
-	  }
-  
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findTaskByPersonCompleted( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
   
   public ResponseDTO findTaskByPersonNexOvercome ( int pIdPerson, int pidClientCetus ) {
-	    ResponseDTO responseDTO = null;
-	    try {
-	      responseDTO = beanRemote.findTaskByPersonNexOvercome( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-	    }
-	    return responseDTO;
-	  }
-  
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findTaskByPersonNexOvercome( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
   
   public ResponseDTO findTaskByPersonRun ( int pIdPerson, int pidClientCetus ) {
-	    ResponseDTO responseDTO = null;
-	    try {
-	      responseDTO = beanRemote.findTaskByPersonRun( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-	    }
-	    return responseDTO;
-	  }
-  
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findTaskByPersonRun( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
   
   public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pidClientCetus ) {
-	    ResponseDTO responseDTO = null;
-	    try {
-	      responseDTO = beanRemote.findTaskByPersonExpired( pIdPerson, pidClientCetus );
-	    } catch ( Exception e ) {
-	      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-	    }
-	    return responseDTO;
-	  }
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findTaskByPersonExpired( pIdPerson, pidClientCetus );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
   
   public double getPercentageCurrent ( int idPerson ) {
     Double response = null;
@@ -584,4 +580,15 @@ public class GeneralDelegate {
     }
     return responseDTO;
   }
+  
+  public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findAttachmentFilesByTaskId( pIdTask );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
 }

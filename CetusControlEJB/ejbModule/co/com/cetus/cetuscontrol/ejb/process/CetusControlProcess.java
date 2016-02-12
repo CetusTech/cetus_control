@@ -32,6 +32,7 @@ import org.hibernate.Session;
 import org.hibernate.internal.SessionFactoryImpl;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
+import co.com.cetus.cetuscontrol.dto.AttachDTO;
 import co.com.cetus.cetuscontrol.dto.ClientDTO;
 import co.com.cetus.cetuscontrol.dto.ExceptionWorkdayDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
@@ -52,6 +53,7 @@ import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.ejb.util.EstatusUser;
 import co.com.cetus.cetuscontrol.ejb.validator.CetusControlEJBValidator;
 import co.com.cetus.cetuscontrol.jpa.entity.Area;
+import co.com.cetus.cetuscontrol.jpa.entity.Attach;
 import co.com.cetus.cetuscontrol.jpa.entity.Client;
 import co.com.cetus.cetuscontrol.jpa.entity.ExceptionWorkday;
 import co.com.cetus.cetuscontrol.jpa.entity.GroupT;
@@ -700,6 +702,7 @@ public class CetusControlProcess {
     TaskTypeDTO dto = null;
     List< TaskTypeDTO > listDto = null;
     try {
+      listDto = new ArrayList< TaskTypeDTO >();
       query = em.createNamedQuery( "TaskType.findTaskType", TaskType.class ).setParameter( "idclientCetus", idclientCetus );
       if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
         listDto = new ArrayList< TaskTypeDTO >();
@@ -2122,6 +2125,43 @@ public class CetusControlProcess {
         e.printStackTrace();
       }
       
+    }
+    return responseDTO;
+  }
+  
+  /**
+   * </p> Find attachment files by task id. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param pIdTask the p id task
+   * @return el response dto
+   * @since CetusControlEJB (11/02/2016)
+   */
+  public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask ) {
+    ResponseDTO responseDTO = null;
+    List< Attach > list = null;
+    List< AttachDTO > listDto = null;
+    TypedQuery< Attach > query = null;
+    AttachDTO dto = null;
+    try {
+      query = em.createNamedQuery( "Attach.findAttachmentFilesByTaskId", Attach.class );
+      query.setParameter( "pIdTask", Long.valueOf( pIdTask ).intValue() );
+      list = query.getResultList();
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        listDto = new ArrayList< AttachDTO >();
+        list = query.getResultList();
+        for ( Object entity: list ) {
+          dto = new AttachDTO();
+          converter.convertEntityToDto( entity, dto, false );
+          listDto.add( dto );
+        }
+      }
+      responseDTO = createMessageSUCCESS();
+      responseDTO.setObjectResponse( listDto );
+      
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
     }
     return responseDTO;
   }

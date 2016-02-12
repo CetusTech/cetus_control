@@ -122,4 +122,6 @@ public interface CetusControlBeanRemote {
   
   public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pidClientCetus );
   
+  public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask );
+  
 }

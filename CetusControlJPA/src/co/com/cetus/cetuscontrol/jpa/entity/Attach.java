@@ -9,7 +9,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@NamedQuery ( name = "Attach.findAll", query = "SELECT a FROM Attach a" )
+@NamedQuery ( name = "Attach.findAttachmentFilesByTaskId", query = "SELECT a FROM Attach a where a.task.id =:pIdTask" )
 public class Attach implements Serializable {
   private static final long serialVersionUID = 1L;
                                              

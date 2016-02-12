@@ -1,6 +1,7 @@
 package co.com.cetus.cetuscontrol.web.bean;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -23,6 +25,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
@@ -62,6 +65,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
                                                          
   /** The list register. */
   private List< TaskDTO >        listRegister            = null;
+  private List< AttachDTO >      listAttachFiles         = null;
                                                          
   /** The list register group. */
   private List< PersonGroupDTO > listRegisterGroup       = null;
@@ -170,6 +174,10 @@ public class ManualTaskMBean extends GeneralManagedBean {
                                                          
   /** The separador. */
   private String                 separador               = System.getProperty( "file.separator" );
+                                                         
+  private AttachDTO              attachDTOSelected       = null;
+                                                         
+  private int                    indexTab                = 0;
                                                          
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
@@ -1059,6 +1067,11 @@ public class ManualTaskMBean extends GeneralManagedBean {
   @Override
   public String update () {
     ResponseDTO responseDTO = null;
+    File directoryTmp = null;
+    File[] contents = null;
+    String path;
+    File userUploads = null;
+    AttachDTO attachDTO = null;
     try {
       this.showConfirmMod = false;
       selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
@@ -1075,6 +1088,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
           }
         }
         responseDTO = generalDelegate.edit( selectedObject );
+        
         ConstantWEB.WEB_LOG.info( "Respuesta despues de actualizar el area ::> " + responseDTO.toString() );
         
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
@@ -1082,6 +1096,49 @@ public class ManualTaskMBean extends GeneralManagedBean {
           this.initElement();
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
           
+          //Tiene archivos cargados en memoria 
+          if ( getObjectSession( "listFilesTask" ) != null ) {
+            listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
+            if ( listFilesTask.size() > 0 ) {
+              //Tiene archivos para agregar! 
+              ConstantWEB.WEB_LOG.debug( "############# TIENE ARCHIVOS PARA CARGAR " + listFilesTask.size() );
+              path = destination + separador + idUsuario;
+              directoryTmp = new File( path );
+              for ( UploadedFile att: listFilesTask ) {
+                if ( directoryTmp != null ) {
+                  contents = directoryTmp.listFiles();
+                  interno: for ( File file: contents ) {
+                    if ( !file.isDirectory() && file.getName().substring( 0, file.getName().lastIndexOf( "#" ) )
+                                                    .equals( att.getFileName().substring( 0, att.getFileName().lastIndexOf( "." ) ) ) ) {
+                      attachDTO = new AttachDTO();
+                      attachDTO.setTask( selectedObject );
+                      attachDTO.setFileName( att.getFileName() );
+                      userUploads = new File( path, String.valueOf( attachDTO.getTask().getCode() ) );
+                      attachDTO.setPath( userUploads.getPath() );
+                      attachDTO.setCreationDate( currentDate );
+                      attachDTO.setCreationUser( getUserInSession() );
+                      userUploads.mkdir();
+                      //Crear el registro del archivo adjunto a la tarea 
+                      responseDTO = generalDelegate.create( attachDTO );
+                      
+                      //Renombrar el archivo y mover a la carpeta asociada al ID de la tarea
+                      if ( renameAndMoveFileTmp( att.getFileName(), file.getName(), userUploads.getPath() + separador, path ) ) {
+                        //Archivo se movio correctamente
+                        ConstantWEB.WEB_LOG.debug( "############# ARCHIVO MOVIDO CORRECTAMENTE " + att.getFileName() );
+                        
+                      } else {
+                        //Archivo presento problemas al moverlo, se debe validar porque debio ser borrado por ser temporal
+                        ConstantWEB.WEB_LOG.debug( "############# ERROR MOVIENDO EL ARCHIVO " + att.getFileName() );
+                        
+                      }
+                      break interno;
+                    }
+                  }
+                }
+              }
+            }
+            
+          }
           //LIstar Tareas
           responseDTO = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(),
                                                                userPortalDTO.getPerson().getId() );
@@ -1116,11 +1173,16 @@ public class ManualTaskMBean extends GeneralManagedBean {
           getMessageError( responseDTO );
         }
       }
-    } catch ( Exception e ) {
+    } catch (
+    
+    Exception e )
+    
+    {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
     }
     return null;
+    
   }
   
   /* (non-Javadoc)
@@ -1232,6 +1294,52 @@ public class ManualTaskMBean extends GeneralManagedBean {
       addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE, null );
     }
     return null;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public void removeAttachInTask () {
+    ResponseDTO responseDTO = null;
+    attachDTOSelected = ( AttachDTO ) getObjectSession( "attachDTOSelected" );
+    if ( attachDTOSelected != null ) {
+      //Obtener PATH para abrir el archivo
+      indexTab = 1;
+      File archivos = new File( attachDTOSelected.getPath() + separador + attachDTOSelected.getFileName() );
+      if ( archivos != null ) {
+        if ( archivos.isFile() ) {
+          archivos.delete();
+          responseDTO = generalDelegate.remove( attachDTOSelected );
+          if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+            selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+            responseDTO = generalDelegate.findAttachmentFilesByTaskId( selectedObject.getId() );
+            if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+              //Tiene archivos la tarea 
+              listAttachFiles = ( ( List< AttachDTO > ) responseDTO.getObjectResponse() );
+            } else {
+              listAttachFiles = new ArrayList< AttachDTO >();
+            }
+            addObjectSession( listAttachFiles, "listAttachFiles" );
+          }
+        } else {
+          responseDTO = generalDelegate.remove( attachDTOSelected );
+          if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+            selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+            responseDTO = generalDelegate.findAttachmentFilesByTaskId( selectedObject.getId() );
+            if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+              //Tiene archivos la tarea 
+              listAttachFiles = ( ( List< AttachDTO > ) responseDTO.getObjectResponse() );
+            } else {
+              listAttachFiles = new ArrayList< AttachDTO >();
+            }
+            addObjectSession( listAttachFiles, "listAttachFiles" );
+          }
+        }
+      }
+      
+    } else {
+      indexTab = 1;
+      addMessageWarning( null, MessageFormat.format( ConstantWEB.MESSAGE_ERROR_DELETE, "Archivo" ), null );
+    }
+    cleanObjectSession( "attachDTOSelected" );
   }
   
   private void sendMailTmp ( String pParamMsg, String pParamSubject, TaskDTO pObj ) {
@@ -1453,8 +1561,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
    * @param event the event
    * @since CetusControlWEB (2/02/2016)
    */
+  @SuppressWarnings ( "unchecked" )
   public void onRowSelectTask ( SelectEvent event ) {
-    
+    ResponseDTO response = null;
     try {
       selectedObject = ( ( TaskDTO ) event.getObject() );
       if ( selectedObject != null ) {
@@ -1478,12 +1587,36 @@ public class ManualTaskMBean extends GeneralManagedBean {
         approved = selectedObject.getApproved() == 1 ? true : false;
         addObjectSession( approved, "approved" );
         
+        //validar si tiene archivos adjuntos, consultarlos y traerlos
+        if ( selectedObject.getId() > 0 ) {
+          response = generalDelegate.findAttachmentFilesByTaskId( selectedObject.getId() );
+          if ( UtilCommon.validateResponseSuccess( response ) ) {
+            //Tiene archivos la tarea 
+            listAttachFiles = ( ( List< AttachDTO > ) response.getObjectResponse() );
+          } else {
+            listAttachFiles = new ArrayList< AttachDTO >();
+          }
+          addObjectSession( listAttachFiles, "listAttachFiles" );
+        }
+        
       }
       
       addObjectSession( selectedObject.getStatus().getId(), "status" );
       addObjectSession( selectedObject, "selectedObject" );
       addObjectSession( selectedObject, "selectedObject" );
       
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+      addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
+    }
+  }
+  
+  public void onRowSelectAttachment ( SelectEvent event ) {
+    ResponseDTO response = null;
+    try {
+      attachDTOSelected = ( ( AttachDTO ) event.getObject() );
+      addObjectSession( attachDTOSelected, "attachDTOSelected" );
+      indexTab = 1;
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -2216,6 +2349,56 @@ public class ManualTaskMBean extends GeneralManagedBean {
    */
   public void setListFilesTask ( ArrayList< UploadedFile > listFilesTask ) {
     this.listFilesTask = listFilesTask;
+  }
+  
+  public List< AttachDTO > getListAttachFiles () {
+    listAttachFiles = ( List< AttachDTO > ) ( getObjectSession( "listAttachFiles" ) != null ? getObjectSession( "listAttachFiles" ) : null );
+    return listAttachFiles;
+  }
+  
+  public void setListAttachFiles ( List< AttachDTO > listAttachFiles ) {
+    this.listAttachFiles = listAttachFiles;
+  }
+  
+  private DefaultStreamedContent download;
+  
+  public void setDownload ( DefaultStreamedContent download ) {
+    this.download = download;
+  }
+  
+  public DefaultStreamedContent getDownload () throws Exception {
+    return download;
+  }
+  
+  public void prepDownload ( AttachDTO in ) throws Exception {
+    File file = new File( in.getPath() + separador + in.getFileName() );
+    InputStream input = new FileInputStream( file );
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    setDownload( new DefaultStreamedContent( input, externalContext.getMimeType( file.getName() ), file.getName() ) );
+  }
+  
+  public String getSeparador () {
+    return separador;
+  }
+  
+  public void setSeparador ( String separador ) {
+    this.separador = separador;
+  }
+  
+  public AttachDTO getAttachDTOSelected () {
+    return attachDTOSelected;
+  }
+  
+  public void setAttachDTOSelected ( AttachDTO attachDTOSelected ) {
+    this.attachDTOSelected = attachDTOSelected;
+  }
+  
+  public int getIndexTab () {
+    return indexTab;
+  }
+  
+  public void setIndexTab ( int indexTab ) {
+    this.indexTab = indexTab;
   }
   
 }
