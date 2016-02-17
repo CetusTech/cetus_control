@@ -342,36 +342,7 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
-  public ResponseDTO findNotificationsTableNoSystem ( int idclientCetus ) {
-    ResponseDTO responseDTO = null;
-    try {
-      responseDTO = beanRemote.findNotificationsTableNoSystem( idclientCetus );
-    } catch ( Exception e ) {
-      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-    }
-    return responseDTO;
-  }
-  
-  public ResponseDTO findNotifications ( int idclientCetus ) {
-    ResponseDTO responseDTO = null;
-    try {
-      responseDTO = beanRemote.findNotifications( idclientCetus );
-    } catch ( Exception e ) {
-      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-    }
-    return responseDTO;
-  }
-  
-  public ResponseDTO findNotificationsTable () {
-    ResponseDTO responseDTO = null;
-    try {
-      responseDTO = beanRemote.findNotificationsTable();
-    } catch ( Exception e ) {
-      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-    }
-    return responseDTO;
-  }
-  
+ 
   public String getValueParameter ( String nameParameter ) {
     try {
       return beanRemote.getValueParameter( nameParameter );

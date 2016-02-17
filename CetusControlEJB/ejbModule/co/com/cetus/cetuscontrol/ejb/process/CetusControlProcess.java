@@ -37,8 +37,6 @@ import co.com.cetus.cetuscontrol.dto.ClientDTO;
 import co.com.cetus.cetuscontrol.dto.ExceptionWorkdayDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTypeDTO;
-import co.com.cetus.cetuscontrol.dto.NotificationDTO;
-import co.com.cetus.cetuscontrol.dto.NotificationTableDTO;
 import co.com.cetus.cetuscontrol.dto.ParameterGeneralDTO;
 import co.com.cetus.cetuscontrol.dto.PersonDTO;
 import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
@@ -1283,60 +1281,6 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
-  public ResponseDTO findNotificationsTableNoSystem ( int idclientCetus ) {
-    ResponseDTO responseDTO = null;
-    List< NotificationTableDTO > listAct = null;
-    List< NotificationTableDTO > listAll = null;
-    try {
-      listAll = em.createNamedQuery( "NotificationTable.findAllDtoNoSystem", NotificationTableDTO.class ).getResultList();
-      listAct = em.createNamedQuery( "NotificationTable.findByClientNotification", NotificationTableDTO.class )
-                  .setParameter( "idClientCetus", idclientCetus ).getResultList();
-      responseDTO = createMessageSUCCESS();
-      
-      listAll.removeAll( listAct );
-      
-      responseDTO.setObjectResponse( listAll );
-      
-    } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-      responseDTO = createMessageFAILURE();
-    }
-    return responseDTO;
-  }
-  
-  @SuppressWarnings ( "unchecked" )
-  public ResponseDTO findNotifications ( int idclientCetus ) {
-    ResponseDTO responseDTO = null;
-    List< NotificationDTO > list = null;
-    Query query = null;
-    try {
-      query = em.createNamedQuery( "Notification.findAllByClientCetus", NotificationDTO.class ).setParameter( "idClientCetus", idclientCetus );
-      list = ( List< NotificationDTO > ) query.getResultList();
-      responseDTO = createMessageSUCCESS();
-      responseDTO.setObjectResponse( list );
-      
-    } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-      responseDTO = createMessageFAILURE();
-    }
-    return responseDTO;
-  }
-  
-  public ResponseDTO findNotificationsTable () {
-    ResponseDTO responseDTO = null;
-    List< NotificationTableDTO > listAll = null;
-    try {
-      //      listAll = em.createNamedQuery( "NotificationTable.findAllDto", NotificationTableDTO.class ).getResultList();
-      responseDTO = createMessageSUCCESS();
-      
-      responseDTO.setObjectResponse( listAll );
-      
-    } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-      responseDTO = createMessageFAILURE();
-    }
-    return responseDTO;
-  }
   
   /**
    * </p> Find group by client. </p>

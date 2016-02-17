@@ -19,16 +19,24 @@ public class NotificationSendMail implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String process;
-
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="PROCESS_DATE")
-	private Date processDate;
+	@Column(name="CREATE_DATE")
+	private Date createDate;
 
-	//bi-directional many-to-one association to Notification
-	@ManyToOne
-	@JoinColumn(name="ID_NOTIFICATION")
-	private Notification notification;
+	@Column(name="CREATE_USER")
+	private String createUser;
+
+	private String emails;
+
+	@Column(name="ID_NOTIFICATION_SETTING")
+	private int idNotificationSetting;
+
+	private String parameters;
+
+	private String processed;
+
+	@Column(name="TEMPLATE_NAME")
+	private String templateName;
 
 	public NotificationSendMail() {
 	}
@@ -41,28 +49,60 @@ public class NotificationSendMail implements Serializable {
 		this.id = id;
 	}
 
-	public String getProcess() {
-		return this.process;
+	public Date getCreateDate() {
+		return this.createDate;
 	}
 
-	public void setProcess(String process) {
-		this.process = process;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
-	public Date getProcessDate() {
-		return this.processDate;
+	public String getCreateUser() {
+		return this.createUser;
 	}
 
-	public void setProcessDate(Date processDate) {
-		this.processDate = processDate;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
-	public Notification getNotification() {
-		return this.notification;
+	public String getEmails() {
+		return this.emails;
 	}
 
-	public void setNotification(Notification notification) {
-		this.notification = notification;
+	public void setEmails(String emails) {
+		this.emails = emails;
+	}
+
+	public int getIdNotificationSetting() {
+		return this.idNotificationSetting;
+	}
+
+	public void setIdNotificationSetting(int idNotificationSetting) {
+		this.idNotificationSetting = idNotificationSetting;
+	}
+
+	public String getParameters() {
+		return this.parameters;
+	}
+
+	public void setParameters(String parameters) {
+		this.parameters = parameters;
+	}
+
+	public String getProcessed() {
+		return this.processed;
+	}
+
+	public void setProcessed(String processed) {
+		this.processed = processed;
+	}
+
+	public String getTemplateName() {
+		return this.templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 
 }

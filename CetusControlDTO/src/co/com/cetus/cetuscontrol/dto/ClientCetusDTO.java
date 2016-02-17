@@ -10,40 +10,40 @@ import java.util.List;
  */
 
 public class ClientCetusDTO implements Serializable {
-  private static final long           serialVersionUID = 1L;
-  
-  private int                         id;
-  
-  private Date                        creationDate;
-  
-  private String                      creationUser;
-  
-  private Date                        endDate;
-  
-  private Date                        initDate;
-  
-  private String                      name;
-  
-  private int                         numberLicense;
-  
-  private List< AreaDTO >             areas;
-  
-  private List< ClientDTO >           clients;
-  
-  private List< ExceptionWorkdayDTO > exceptionWorkdays;
-  
-  private List< GroupTypeDTO >        groupTypes;
-  
-  private List< NotificationDTO >     notifications;
-  
-  private List< ParameterGeneralDTO > parameterGenerals;
-  
-  private List< StatusDTO >           statuses;
-  
-  private List< TaskTypeDTO >         typeTasks;
-  
-  private List< WorkdayDTO >          workdays;
-  
+  private static final long              serialVersionUID = 1L;
+                                                          
+  private int                            id;
+                                         
+  private Date                           creationDate;
+                                         
+  private String                         creationUser;
+                                         
+  private Date                           endDate;
+                                         
+  private Date                           initDate;
+                                         
+  private String                         name;
+                                         
+  private int                            numberLicense;
+                                         
+  private List< AreaDTO >                areas;
+                                         
+  private List< ClientDTO >              clients;
+                                         
+  private List< ExceptionWorkdayDTO >    exceptionWorkdays;
+                                         
+  private List< GroupTypeDTO >           groupTypes;
+                                         
+  private List< NotificationGeneralDTO > notifications;
+                                         
+  private List< ParameterGeneralDTO >    parameterGenerals;
+                                         
+  private List< StatusDTO >              statuses;
+                                         
+  private List< TaskTypeDTO >            typeTasks;
+                                         
+  private List< WorkdayDTO >             workdays;
+                                         
   public ClientCetusDTO () {
   }
   
@@ -191,22 +191,22 @@ public class ClientCetusDTO implements Serializable {
     return groupType;
   }
   
-  public List< NotificationDTO > getNotifications () {
+  public List< NotificationGeneralDTO > getNotifications () {
     return this.notifications;
   }
   
-  public void setNotifications ( List< NotificationDTO > notifications ) {
+  public void setNotifications ( List< NotificationGeneralDTO > notifications ) {
     this.notifications = notifications;
   }
   
-  public NotificationDTO addNotification ( NotificationDTO notification ) {
+  public NotificationGeneralDTO addNotification ( NotificationGeneralDTO notification ) {
     getNotifications().add( notification );
     notification.setClientCetus( this );
     
     return notification;
   }
   
-  public NotificationDTO removeNotification ( NotificationDTO notification ) {
+  public NotificationGeneralDTO removeNotification ( NotificationGeneralDTO notification ) {
     getNotifications().remove( notification );
     notification.setClientCetus( null );
     

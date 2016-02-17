@@ -76,12 +76,6 @@ public interface CetusControlBeanRemote {
   
   public ResponseDTO findAllGroupTypeByClientCetus ( int pIdClientCetus );
   
-  public ResponseDTO findNotificationsTableNoSystem ( int idclientCetus );
-  
-  public ResponseDTO findNotifications ( int idclientCetus );
-  
-  public ResponseDTO findNotificationsTable ();
-  
   public ResponseDTO findGroupByClient ( int pIdClient );
   
   public ResponseDTO findGroupByPerson ( int pIdPerson );

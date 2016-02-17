@@ -464,40 +464,7 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
-  public ResponseDTO findNotificationsTableNoSystem ( int idclientCetus ) {
-    ResponseDTO response = null;
-    try {
-      response = cetusControlProcess.findNotificationsTableNoSystem( idclientCetus );
-      return response;
-    } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-      return createMessageFAILURE();
-    }
-  }
-  
-  public ResponseDTO findNotifications ( int idclientCetus ) {
-    ResponseDTO response = null;
-    try {
-      response = cetusControlProcess.findNotifications( idclientCetus );
-      return response;
-    } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-      return createMessageFAILURE();
-    }
-  }
-  
-  @Override
-  public ResponseDTO findNotificationsTable () {
-    ResponseDTO response = null;
-    try {
-      response = cetusControlProcess.findNotificationsTable();
-      return response;
-    } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
-      return createMessageFAILURE();
-    }
-  }
-  
+
   public ResponseDTO findGroupByClient ( int pIdClient ) {
     ResponseDTO response = null;
     try {

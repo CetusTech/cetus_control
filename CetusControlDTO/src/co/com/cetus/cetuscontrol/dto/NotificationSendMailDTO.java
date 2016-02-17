@@ -4,20 +4,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * The persistent class for the notification_send_mail database table.
- * 
+ * The Class NotificationSendMailDTO.
+ *
+ * @author Jose David Salcedo M. - Cetus Technology
+ * @version CetusControlDTO (16/02/2016)
  */
 public class NotificationSendMailDTO implements Serializable {
   private static final long serialVersionUID = 1L;
-  
+                                             
   private int               id;
-  
-  private String            process;
-  
-  private Date              processDate;
-  
-  private NotificationDTO   notification;
-  
+  private Date              createDate;
+  private String            createUser;
+  private String            emails;
+  private int               idNotificationSetting;
+  private String            parameters;
+  private String            processed;
+  private String            templateName;
+                            
   public NotificationSendMailDTO () {
   }
   
@@ -29,28 +32,60 @@ public class NotificationSendMailDTO implements Serializable {
     this.id = id;
   }
   
-  public String getProcess () {
-    return this.process;
+  public Date getCreateDate () {
+    return this.createDate;
   }
   
-  public void setProcess ( String process ) {
-    this.process = process;
+  public void setCreateDate ( Date createDate ) {
+    this.createDate = createDate;
   }
   
-  public Date getProcessDate () {
-    return this.processDate;
+  public String getCreateUser () {
+    return this.createUser;
   }
   
-  public void setProcessDate ( Date processDate ) {
-    this.processDate = processDate;
+  public void setCreateUser ( String createUser ) {
+    this.createUser = createUser;
   }
   
-  public NotificationDTO getNotification () {
-    return this.notification;
+  public String getEmails () {
+    return this.emails;
   }
   
-  public void setNotification ( NotificationDTO notification ) {
-    this.notification = notification;
+  public void setEmails ( String emails ) {
+    this.emails = emails;
+  }
+  
+  public int getIdNotificationSetting () {
+    return this.idNotificationSetting;
+  }
+  
+  public void setIdNotificationSetting ( int idNotificationSetting ) {
+    this.idNotificationSetting = idNotificationSetting;
+  }
+  
+  public String getParameters () {
+    return this.parameters;
+  }
+  
+  public void setParameters ( String parameters ) {
+    this.parameters = parameters;
+  }
+  
+  public String getProcessed () {
+    return this.processed;
+  }
+  
+  public void setProcessed ( String processed ) {
+    this.processed = processed;
+  }
+  
+  public String getTemplateName () {
+    return this.templateName;
+  }
+  
+  public void setTemplateName ( String templateName ) {
+    this.templateName = templateName;
   }
   
 }
