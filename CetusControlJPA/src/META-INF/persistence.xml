@@ -9,9 +9,6 @@
 		<class>co.com.cetus.cetuscontrol.jpa.entity.ExceptionWorkday</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.GroupT</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.GroupType</class>
-		<class>co.com.cetus.cetuscontrol.jpa.entity.Notification</class>
-		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationSendMail</class>
-		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationTable</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationTask</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.ParameterGeneral</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.Person</class>
@@ -23,6 +20,9 @@
 		<class>co.com.cetus.cetuscontrol.jpa.entity.TraceTask</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.UserPortal</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.Workday</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationGeneral</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationSendMail</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationSetting</class>
 		<properties>
 			<property name="hibernate.id.new_generator_mappings" value="false"/>
 		</properties>
