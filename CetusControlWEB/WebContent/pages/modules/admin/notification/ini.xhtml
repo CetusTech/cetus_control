@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="msg" basename="message_es" />
+<h:head>
+  <title>#{msg.title_application}</title>
+  <h:outputStylesheet library="css" name="estilo.css" />
+  <h:outputStylesheet library="css" name="style_theme.css" />
+  <h:outputScript library="js" name="common.js" />
+  <h:outputScript name="local_Es.js" library="js" />
+</h:head>
+<h:body>
+
+  <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+  <h:form id="formContenido">
+    <p:panel id="panel">
+      <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
+      
+      
+      
+      <ui:include src="/pages/modules/admin/notification/list.xhtml" />
+    </p:panel>
+  </h:form>
+  <ui:include src="/pages/modules/admin/notification/dialog.xhtml" />
+</h:body>
+</html>
+

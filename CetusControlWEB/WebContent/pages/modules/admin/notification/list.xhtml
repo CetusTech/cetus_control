@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  
+  <p:dataTable value="#{groupMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{groupMBean.selectedObject}" selectionMode="single"
+    emptyMessage="#{msg.list_empty}" var="objetc">
+
+
+    <p:column sortBy="#{objetc.name}" filterBy="#{objetc.name}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.group}" />
+      </f:facet>
+      <h:outputText value="#{objetc.name}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.initDate}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.initDate}" />
+      </f:facet>
+      <h:outputText value="#{objetc.initDate}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.endDate}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.endDate}" />
+      </f:facet>
+      <h:outputText value="#{objetc.endDate}" />
+    </p:column>
+
+    <p:column sortBy="#{objetc.hour}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.hour}" />
+      </f:facet>
+      <h:outputText value="#{objetc.hour}" />
+    </p:column>
+
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <center>
+        <p:graphicImage name="StatusCreated.png" title="#{msg.status_created_es}"
+          rendered='#{objetc.status == "CREATED"}' library="images" />
+        <p:graphicImage name="StatusInProgress.png" title="#{msg.status_in_progress_es}"
+          rendered="#{objetc.status == 'IN_PROGRESS'}" library="images" />
+        <p:graphicImage name="StatusClosed.png" title="#{msg.status_closed_es}" rendered='#{objetc.status == "CLOSED"}'
+          library="images" />
+      </center>
+    </p:column>
+
+  </p:dataTable>
+</ui:composition>
