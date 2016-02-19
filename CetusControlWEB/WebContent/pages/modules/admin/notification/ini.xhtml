@@ -16,9 +16,17 @@
   <h:form id="formContenido">
     <p:panel id="panel">
       <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
-      
-      
-      
+      <p:outputLabel value="#{msg.group}" for="groupSelected" />
+      <p:selectOneMenu id="groupSelected" value="#{notificationMBean.idGroup}" required="true"
+        requiredMessage="#{msg.field_required}">
+        <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
+        <f:selectItems value="#{notificationMBean.listGroup}" />
+        <p:ajax event="change" update="jornadaAdd panelGridAdd_2 panelGridAdd_3 panelGroupAdd_4" process="@this"
+          listener="#{notificationMBean.changeDay}" />
+      </p:selectOneMenu>
+      <p:message for="groupTypeSelected" id="groupTypeAddMsg" display="icon" />
+
+
       <ui:include src="/pages/modules/admin/notification/list.xhtml" />
     </p:panel>
   </h:form>

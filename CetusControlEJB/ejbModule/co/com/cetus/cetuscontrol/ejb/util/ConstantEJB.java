@@ -84,6 +84,8 @@ public class ConstantEJB {
   public static String                    THREAD_EXPIRATION_TASK             = "THREAD_EXPIRATION_TASK";
   public static Double                    ADITIONAL_TIME_EXPIRATION_TASK     = 1.5;
   public static Double                    ADITIONAL_TIME_BEFORE_EXPIRATION   = 1.5;
+  public static String                    RESPONSIBLE_TASK                   = "RESPONSABLE_TAREA";
+  
   
   public static HashMap< String, String > parameter                          = null;
   
