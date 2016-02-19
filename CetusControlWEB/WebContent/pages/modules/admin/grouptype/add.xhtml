@@ -14,7 +14,7 @@
       <p:outputLabel value="#{msg.groupType_acronnym}" for="groupTypeAddAcron" />
       <p:inputText id="groupTypeAddAcron" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
         value="#{groupTypeMBean.addObject.acronym}" required="true" size="10" requiredMessage="#{msg.field_required}"
-        maxlength="10">
+        maxlength="4">
       </p:inputText>
       <p:message for="groupTypeAddAcron" id="groupTypeAddAcronMsg" />
 

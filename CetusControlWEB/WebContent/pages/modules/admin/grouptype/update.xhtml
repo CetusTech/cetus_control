@@ -16,7 +16,7 @@
         <p:outputLabel value="#{msg.groupType_acronnym}" for="acroUpdate" styleClass="resaltar_negro" />
         <p:inputText id="acroUpdate" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" required="true"
           size="20" value="#{groupTypeMBean.selectedObject.acronym}" requiredMessage="#{msg.field_required}"
-          maxlength="20" />
+          maxlength="4" />
         <p:message for="acroUpdate" id="acroUpdMsg" />
 
       </h:panelGrid>

@@ -14,18 +14,16 @@
 
   <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
   <h:form id="formContenido">
-    <p:panel id="panel">
+    <p:panel id="panel" header="#{msg.notification_parametrizer}">
       <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
-      <p:outputLabel value="#{msg.group}" for="groupSelected" />
-      <p:selectOneMenu id="groupSelected" value="#{notificationMBean.idGroup}" required="true"
-        requiredMessage="#{msg.field_required}">
+      <p:outputLabel value="#{msg.group}:" for="groupSelected" />
+      <p:selectOneMenu id="groupSelected" value="#{notificationMBean.idGroup}">
         <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
         <f:selectItems value="#{notificationMBean.listGroup}" />
-        <p:ajax event="change" update="jornadaAdd panelGridAdd_2 panelGridAdd_3 panelGroupAdd_4" process="@this"
-          listener="#{notificationMBean.changeDay}" />
+        <p:ajax event="change" update="" process="@this" listener="#{notificationMBean.changeGroup()}" />
       </p:selectOneMenu>
-      <p:message for="groupTypeSelected" id="groupTypeAddMsg" display="icon" />
-
+      <p:message for="groupSelected" id="groupAddMsg" display="icon" />
+      <br />
 
       <ui:include src="/pages/modules/admin/notification/list.xhtml" />
     </p:panel>

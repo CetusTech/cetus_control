@@ -9,6 +9,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.model.SelectItem;
 
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
+import co.com.cetus.cetuscontrol.dto.NotificationSettingDTO;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.util.UtilCommon;
@@ -17,14 +18,17 @@ import co.com.cetus.common.util.UtilCommon;
 @RequestScoped
 public class NotificationMBean extends GeneralManagedBean {
   
-  private static final long  serialVersionUID = 1L;
-                                              
+  private static final long              serialVersionUID = 1L;
+                                                          
   /** The selected object. */
-  private int                idGroup          = 0;
-                                              
-  private List< SelectItem > listGroup        = null;
-                                              
+  private int                            idGroup          = 0;
+                                                          
+  private List< SelectItem >             listGroup        = null;
+                                                          
+  private List< NotificationSettingDTO > listRegister     = null;
+                                                          
   public NotificationMBean () {
+    listRegister = new ArrayList< >();
   }
   
   /* (non-Javadoc)
@@ -77,7 +81,7 @@ public class NotificationMBean extends GeneralManagedBean {
       if ( idGroup > 0 ) {
         addObjectSession( idGroup, "idGroup" );
         
-        listNotifications(idGroup);
+        listNotifications( idGroup );
         
       }
     } catch ( Exception e ) {
@@ -145,6 +149,14 @@ public class NotificationMBean extends GeneralManagedBean {
   
   public void setListGroup ( List< SelectItem > listGroup ) {
     this.listGroup = listGroup;
+  }
+  
+  public List< NotificationSettingDTO > getListRegister () {
+    return listRegister;
+  }
+  
+  public void setListRegister ( List< NotificationSettingDTO > listRegister ) {
+    this.listRegister = listRegister;
   }
   
 }

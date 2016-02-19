@@ -77,6 +77,9 @@ public class TimerControllerForWarning {
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS );
         timerBeforeExpirationTasks.stopAllTimer();
         
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_EXPIRATION_TASKS );
+        timerExpirationTasks.stopAllTimer();
+        
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "************************************ Creando TimerControllerForWarning-0 ************************************" );
         timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*" )
                                                                   .minute( "*/" + ConstantEJB.TIME_EXECUTE_TIMER_CONTROLLER_0 ),
