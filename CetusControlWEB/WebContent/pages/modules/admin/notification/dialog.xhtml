@@ -11,5 +11,23 @@
   </p:dialog>
 
 
+  <!-- Dialogo para ver detalle del registro -->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{notificationMBean.showViewDetail}" widgetVar="dialogViewVar">
+    <ui:include src="/pages/modules/admin/notification/view.xhtml" />
+  </p:dialog>
 
+  <p:dialog id="alertSelectRow" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowVar" modal="true" visible="#{notificationMBean.showAlertSelectRow}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_select_row_record}" />
+    </h:panelGrid>
+  </p:dialog>
+  
+    <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.notification_update}"
+    visible="#{notificationMBean.showConfirmMod}" widgetVar="dialogModVar" closeOnEscape="true">
+    <ui:include src="/pages/modules/admin/notification/update.xhtml" />
+  </p:dialog>
+  
 </ui:composition>

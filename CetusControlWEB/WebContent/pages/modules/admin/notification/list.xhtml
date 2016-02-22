@@ -1,11 +1,69 @@
 <!DOCTYPE html>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 
-		<p:dataList value="#{notificationMBean.listRegister}" var="objetc" type="unordered" id="table" rowIndexVar="index"
-				rendered="#{not empty notificationMBean.listRegister}">
-				<h:outputText value="#{objetc.notificationGeneral.name}" />
-		</p:dataList>
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+      actionListener="#{notificationMBean.validateSelectedRecord}" icon="ui-icon-search" />
+
+    <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
+      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
+      actionListener="#{notificationMBean.validateSelectedRecord}" />
+
+  </p:contextMenu>
+
+
+  <p:toolbar styleClass="body_toolbar">
+    <p:toolbarGroup align="left">
+
+      <p:separator styleClass="separator-toolbar" />
+
+      <p:commandLink id="updateButton" title="#{msg.btn_update}"
+        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
+        actionListener="#{notificationMBean.validateSelectedRecord}">
+        <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
+        actionListener="#{notificationMBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
+      </p:commandLink>
+
+    </p:toolbarGroup>
+  </p:toolbar>
+
+
+  <p:dataTable value="#{notificationMBean.listRegister}" id="table"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" emptyMessage="#{msg.list_empty}"
+    var="object" paginator="true" rows="#{msg.rows_paginator}" currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{object.notificationGeneral.id}" selection="#{notificationMBean.selectedObject}"
+    selectionMode="single">
+
+    <p:column styleClass="column_40">
+      <f:facet name="header">
+        <h:outputText value="#{msg.name}" />
+      </f:facet>
+      <h:outputText value="#{object.notificationGeneral.name}" />
+    </p:column>
+
+    <p:column styleClass="column_10">
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <h:outputText value="#{object.id == 0 ? msg.inactive : msg.active}" />
+    </p:column>
+
+    <p:column styleClass="column_50">
+      <f:facet name="header">
+        <h:outputText value="#{msg.notification_mails}" />
+      </f:facet>
+      <h:outputText value="#{object.emails}" />
+    </p:column>
+
+  </p:dataTable>
 
 </ui:composition>
