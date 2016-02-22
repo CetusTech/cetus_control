@@ -27,7 +27,8 @@ import javax.persistence.TemporalType;
 @Table ( name = "NOTIFICATION_GENERAL" )
 @NamedQueries ( {
                   @NamedQuery ( name = "NotificationGeneral.findAll", query = "SELECT n FROM NotificationGeneral n" ),
-                  @NamedQuery ( name = "NotificationGeneral.findByClientCetus", query = "SELECT n FROM NotificationGeneral n where (n.clientCetus.id = :idClientDefault AND n.isDefault = '1') OR n.clientCetus.id = :idClientCetus ORDER BY n.id" )
+                  @NamedQuery ( name = "NotificationGeneral.findByClientCetus", query = "SELECT n FROM NotificationGeneral n "
+                      + "where (n.clientCetus.id = :idClientDefault AND n.isDefault = '1') OR n.clientCetus.id = :idClientCetus ORDER BY n.id" )
 })
 public class NotificationGeneral implements Serializable {
   private static final long           serialVersionUID = 1L;

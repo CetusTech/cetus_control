@@ -342,7 +342,6 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
- 
   public String getValueParameter ( String nameParameter ) {
     try {
       return beanRemote.getValueParameter( nameParameter );
@@ -562,4 +561,23 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
+  public ResponseDTO findNotificationGenClientCetus ( int idClientCetus ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findNotificationGenClientCetus( idClientCetus );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
+  public ResponseDTO findNotificationByGroup ( int idGroup ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findNotificationByGroup( idGroup );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
 }

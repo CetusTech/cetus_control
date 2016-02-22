@@ -118,4 +118,7 @@ public interface CetusControlBeanRemote {
   
   public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask );
   
+  public ResponseDTO findNotificationGenClientCetus ( int idClientCetus );
+  
+  public ResponseDTO findNotificationByGroup ( int idGroup );
 }
