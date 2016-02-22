@@ -464,7 +464,6 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
-
   public ResponseDTO findGroupByClient ( int pIdClient ) {
     ResponseDTO response = null;
     try {
@@ -714,4 +713,43 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
     return response;
   }
+  
+  /**
+   * </p> Find notification gen client cetus. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @return el response dto
+   * @since CetusControlEJB (19/02/2016)
+   */
+  public ResponseDTO findNotificationGenClientCetus ( int idClientCetus ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findNotificationGenClientCetus( idClientCetus );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
+  /**
+   * </p> Find notification by group. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idGroup the id group
+   * @return el response dto
+   * @since CetusControlEJB (21/02/2016)
+   */
+  public ResponseDTO findNotificationByGroup ( int idGroup ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findNotificationByGroup( idGroup );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
 }

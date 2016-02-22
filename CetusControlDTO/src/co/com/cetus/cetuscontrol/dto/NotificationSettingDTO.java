@@ -88,4 +88,11 @@ public class NotificationSettingDTO implements Serializable {
     this.notificationGeneral = notificationGeneral;
   }
   
+  @Override
+  public String toString () {
+    return "NotificationSettingDTO [id=" + id + ", createDate=" + createDate + ", createUser=" + createUser + ", emails=" + emails + ", idGroup="
+           + idGroup + ", modificationDate=" + modificationDate + ", modificationUser=" + modificationUser + ", notificationGeneral="
+           + notificationGeneral + "]";
+  }
+  
 }

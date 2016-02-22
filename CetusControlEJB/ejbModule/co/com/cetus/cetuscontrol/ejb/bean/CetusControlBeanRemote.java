@@ -115,5 +115,8 @@ public interface CetusControlBeanRemote {
   public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pidClientCetus );
   
   public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask );
+
+  public ResponseDTO findNotificationGenClientCetus ( int idClientCetus );
   
+  public ResponseDTO findNotificationByGroup ( int idGroup );
 }

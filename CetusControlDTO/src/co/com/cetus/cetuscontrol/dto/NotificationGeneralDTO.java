@@ -130,4 +130,11 @@ public class NotificationGeneralDTO implements Serializable {
     return notificationSetting;
   }
   
+  @Override
+  public String toString () {
+    return "NotificationGeneralDTO [id=" + id + ", creationDate=" + creationDate + ", description=" + description + ", clientCetus=" + clientCetus
+           + ", mandatory=" + mandatory + ", isDefault=" + isDefault + ", name=" + name + ", tableColumn=" + tableColumn + ", tableName=" + tableName
+           + ", templateName=" + templateName + ", notificationSettings=" + notificationSettings + "]";
+  }
+  
 }

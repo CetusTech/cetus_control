@@ -37,6 +37,8 @@ import co.com.cetus.cetuscontrol.dto.ClientDTO;
 import co.com.cetus.cetuscontrol.dto.ExceptionWorkdayDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTypeDTO;
+import co.com.cetus.cetuscontrol.dto.NotificationGeneralDTO;
+import co.com.cetus.cetuscontrol.dto.NotificationSettingDTO;
 import co.com.cetus.cetuscontrol.dto.ParameterGeneralDTO;
 import co.com.cetus.cetuscontrol.dto.PersonDTO;
 import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
@@ -56,6 +58,8 @@ import co.com.cetus.cetuscontrol.jpa.entity.Client;
 import co.com.cetus.cetuscontrol.jpa.entity.ExceptionWorkday;
 import co.com.cetus.cetuscontrol.jpa.entity.GroupT;
 import co.com.cetus.cetuscontrol.jpa.entity.GroupType;
+import co.com.cetus.cetuscontrol.jpa.entity.NotificationGeneral;
+import co.com.cetus.cetuscontrol.jpa.entity.NotificationSetting;
 import co.com.cetus.cetuscontrol.jpa.entity.ParameterGeneral;
 import co.com.cetus.cetuscontrol.jpa.entity.Person;
 import co.com.cetus.cetuscontrol.jpa.entity.PersonGroup;
@@ -1281,7 +1285,6 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
-  
   /**
    * </p> Find group by client. </p>
    *
@@ -2109,4 +2112,82 @@ public class CetusControlProcess {
     }
     return responseDTO;
   }
+  
+  /**
+   * </p> Find notification gen client cetus. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idClientCetus the id client cetus
+   * @return el response dto
+   * @since CetusControlEJB (19/02/2016)
+   */
+  public ResponseDTO findNotificationGenClientCetus ( int idClientCetus ) {
+    ResponseDTO responseDTO = null;
+    List< NotificationGeneral > list = null;
+    List< NotificationGeneralDTO > listDto = null;
+    TypedQuery< NotificationGeneral > query = null;
+    NotificationGeneralDTO dto = null;
+    try {
+      query = em.createNamedQuery( "NotificationGeneral.findByClientCetus", NotificationGeneral.class );
+      query.setParameter( "idClientDefault", ConstantEJB.ID_CLIENT_CETUS_MASTER );
+      query.setParameter( "idClientCetus", idClientCetus );
+      list = query.getResultList();
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        listDto = new ArrayList< NotificationGeneralDTO >();
+        list = query.getResultList();
+        for ( Object entity: list ) {
+          dto = new NotificationGeneralDTO();
+          converter.convertEntityToDto( entity, dto, false );
+          listDto.add( dto );
+        }
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( listDto );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
+  /**
+   * </p> Find notification by group. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idGroup the id group
+   * @return el response dto
+   * @since CetusControlEJB (21/02/2016)
+   */
+  public ResponseDTO findNotificationByGroup ( int idGroup ) {
+    ResponseDTO responseDTO = null;
+    List< NotificationSetting > list = null;
+    List< NotificationSettingDTO > listDto = null;
+    TypedQuery< NotificationSetting > query = null;
+    NotificationSettingDTO dto = null;
+    try {
+      query = em.createNamedQuery( "NotificationSetting.findNotificationByGroup", NotificationSetting.class );
+      query.setParameter( "idGroup", idGroup );
+      list = query.getResultList();
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        listDto = new ArrayList< NotificationSettingDTO >();
+        list = query.getResultList();
+        for ( Object entity: list ) {
+          dto = new NotificationSettingDTO();
+          converter.convertEntityToDto( entity, dto, false );
+          listDto.add( dto );
+        }
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( listDto );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
 }
