@@ -130,6 +130,10 @@ public class ManualTaskMBean extends GeneralManagedBean {
   /** The show add dialog. */
   private boolean                showAddDialog           = false;
                                                          
+  private boolean                showConfirmCancel       = false;
+                                                         
+  private boolean                showConfirmCompleted    = false;
+                                                         
   /** The show menu. */
   private boolean                showMenu                = false;
                                                          
@@ -253,6 +257,15 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  public void loadCancel ( ActionEvent event ) {
+    if ( noteTask != null && !noteTask.isEmpty() ) {
+      addObjectSession( noteTask, "noteTask" );
+      //addObjectSession( selectedObject, "selectedObject" );
+      showConfirmCancel = true;
+      showConfirmCompleted = true;
+    }
+  }
+  
   /**
    * </p> Load update. </p>
    *
@@ -369,11 +382,11 @@ public class ManualTaskMBean extends GeneralManagedBean {
             String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_STARTED" );
             String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_STARTED" );
             
-            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-              sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-                                       replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-              sendMail.start();
-            }
+            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
+            //              sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
+            //                                       replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
+            //              sendMail.start();
+            //            }
             
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
               ConstantWEB.WEB_LOG.info( "########## SE DA INICIO A LA TAREA  " + selectedObject.getCode() );
@@ -429,6 +442,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     try {
       context = RequestContext.getCurrentInstance();
       selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+      noteTask = ( String ) getObjectSession( "noteTask" );
       if ( selectedObject != null && noteTask != null & !noteTask.isEmpty() ) {
         selectedObject.setStatus( new StatusDTO() );
         selectedObject.getStatus().setId( ConstantWEB.STATUS_COMPLETED_VAL );//Se coloca en COMPLETADA la tarea
@@ -462,14 +476,14 @@ public class ManualTaskMBean extends GeneralManagedBean {
             String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_COMPLETED" );
             String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_COMPLETED" );
             
-            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-              if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
-                sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-                                         replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-                                         
-                sendMail.start();
-              }
-            }
+            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
+            //              if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
+            //                sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
+            //                                         replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
+            //                                         
+            //                sendMail.start();
+            //              }
+            //            }
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA COMPLETADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
@@ -570,8 +584,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
     try {
       context = RequestContext.getCurrentInstance();
       selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
-      if ( selectedObject != null && noteTask != null & !noteTask.isEmpty() ) {
-        
+      noteTask = ( String ) getObjectSession( "noteTask" );
+      if ( selectedObject != null && noteTask != null && !noteTask.isEmpty() ) {
         selectedObject.setStatus( new StatusDTO() );
         selectedObject.getStatus().setId( ConstantWEB.STATUS_CANCELED_VAL );//Se coloca en cancelada la tarea  
         response = generalDelegate.generateLengthTask( selectedObject.getId() );
@@ -592,23 +606,23 @@ public class ManualTaskMBean extends GeneralManagedBean {
             }
             addObjectSession( listRegister, "listRegister" );
             //Enviar EMAIL temporalmente          
-            String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-            String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-            String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-            String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-            String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-            String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-            String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_CANCEL" );
-            String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_CANCEL" );
+            //            String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
+            //            String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
+            //            String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
+            //            String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
+            //            String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
+            //            String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
+            //            String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_CANCEL" );
+            //            String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_CANCEL" );
             
-            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-              if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
-                sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-                                         replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-                                         
-                sendMail.start();
-              }
-            }
+            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
+            //              if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
+            //                sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
+            //                                         replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
+            //                                         
+            //                sendMail.start();
+            //              }
+            //            }
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA CANCELADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
@@ -696,11 +710,11 @@ public class ManualTaskMBean extends GeneralManagedBean {
             String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_SUPENDED" );
             String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_SUSPENDED" );
             
-            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-              sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-                                       replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-              sendMail.start();
-            }
+            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
+            //              sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
+            //                                       replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
+            //              sendMail.start();
+            //            }
             
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA SUSPENDIDA  " + selectedObject.getCode() );
@@ -760,7 +774,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
         //copiar archivo a la ruta del usuario como archivo temporal
         copyFileTmp( event.getFile().getFileName(), event.getFile().getInputstream() );
         addObjectSession( listFilesTask, "listFilesTask" );
-        addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, event.getFile().getFileName() );
+        //addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, event.getFile().getFileName() );
       }
     } catch ( IOException e ) {
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getCause().getMessage() );
@@ -1265,14 +1279,11 @@ public class ManualTaskMBean extends GeneralManagedBean {
                   }
                 }
               }
-              if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-                addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES,
-                                MessageFormat.format( ConstantWEB.MESSAGE_TASK_CREATED, addObject.getCode() ) );
-              }
             }
           }
+          
           //TODO Envio de correo temporalmente          
-          sendMailTmp( "HTML_EMAIL_TASK_NEW", "SUBJECT_TASK_NEW", addObject );
+          //sendMailTmp( "HTML_EMAIL_TASK_NEW", "SUBJECT_TASK_NEW", addObject );
           
           //Buscar las tareas actualizando el registro nuevo
           responseDTO = generalDelegate.findTaskByPersonGroup( groupTDTOSelected.getGroupT().getId(), userPortalDTO.getPerson().getId() );
@@ -1283,6 +1294,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
             listRegister = new ArrayList< TaskDTO >();
           }
           addObjectSession( listRegister, "listRegister" );
+          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES,
+                          MessageFormat.format( ConstantWEB.MESSAGE_TASK_CREATED, addObject.getCode() ) );
+                          
         } else {
           ConstantWEB.WEB_LOG.error( ConstantWEB.MESSAGE_ERROR_CREATE );
           //Obetener codigo de error de oracle
@@ -1306,18 +1320,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
       File archivos = new File( attachDTOSelected.getPath() + separador + attachDTOSelected.getFileName() );
       if ( archivos != null ) {
         if ( archivos.isFile() ) {
-          archivos.delete();
-          responseDTO = generalDelegate.remove( attachDTOSelected );
-          if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-            selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
-            responseDTO = generalDelegate.findAttachmentFilesByTaskId( selectedObject.getId() );
+          if ( archivos.delete() ) {
+            responseDTO = generalDelegate.remove( attachDTOSelected );
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-              //Tiene archivos la tarea 
-              listAttachFiles = ( ( List< AttachDTO > ) responseDTO.getObjectResponse() );
-            } else {
-              listAttachFiles = new ArrayList< AttachDTO >();
+              selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+              responseDTO = generalDelegate.findAttachmentFilesByTaskId( selectedObject.getId() );
+              if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+                //Tiene archivos la tarea 
+                listAttachFiles = ( ( List< AttachDTO > ) responseDTO.getObjectResponse() );
+              } else {
+                listAttachFiles = new ArrayList< AttachDTO >();
+              }
+              addObjectSession( listAttachFiles, "listAttachFiles" );
             }
-            addObjectSession( listAttachFiles, "listAttachFiles" );
+          } else {
+            indexTab = 1;
+            addMessageWarning( null, MessageFormat.format( ConstantWEB.MESSAGE_ERROR_DELETE, "Archivo" ), null );
           }
         } else {
           responseDTO = generalDelegate.remove( attachDTOSelected );
@@ -1339,6 +1357,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       indexTab = 1;
       addMessageWarning( null, MessageFormat.format( ConstantWEB.MESSAGE_ERROR_DELETE, "Archivo" ), null );
     }
+    selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
     cleanObjectSession( "attachDTOSelected" );
   }
   
@@ -1603,8 +1622,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
       
       addObjectSession( selectedObject.getStatus().getId(), "status" );
       addObjectSession( selectedObject, "selectedObject" );
-      addObjectSession( selectedObject, "selectedObject" );
-      
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -1617,6 +1634,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       attachDTOSelected = ( ( AttachDTO ) event.getObject() );
       addObjectSession( attachDTOSelected, "attachDTOSelected" );
       indexTab = 1;
+      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -2399,6 +2417,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public void setIndexTab ( int indexTab ) {
     this.indexTab = indexTab;
+  }
+  
+  public boolean isShowConfirmCancel () {
+    return showConfirmCancel;
+  }
+  
+  public void setShowConfirmCancel ( boolean showConfirmCancel ) {
+    this.showConfirmCancel = showConfirmCancel;
+  }
+  
+  public boolean isShowConfirmCompleted () {
+    return showConfirmCompleted;
+  }
+  
+  public void setShowConfirmCompleted ( boolean showConfirmCompleted ) {
+    this.showConfirmCompleted = showConfirmCompleted;
   }
   
 }

@@ -78,6 +78,33 @@
 
       </h:panelGrid>
     </p:tab>
+    <p:tab title="#{msg.attachment}">
+      <h:form>
+        <h:panelGrid columns="1" style="width:100%" cellspacing="1" cellpadding="1" id="pnlFiles">
+          <p:dataTable id="fileTask" var="objFile" value="#{manualTaskMBean.listAttachFiles}"
+            rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" paginator="true"
+            paginatorPosition="bottom" rowKey="#{objFile.id}" selection="#{manualTaskMBean.attachDTOSelected}"
+            selectionMode="single" emptyMessage="#{msg.list_empty}" rows="5"
+            rowsPerPageTemplate="1,#{manualTaskMBean.listAttachFiles.size()}">
+            <f:facet name="header">
+              <h:outputText value="#{msg.list_files}" />
+            </f:facet>
+
+            <p:column headerText="#{msg.name}" styleClass="column_80">
+              <h:outputText value="#{objFile.fileName}" />
+            </p:column>
+
+            <p:column headerText="#{msg.actions}" style="text-align: right" styleClass="column_20">
+              <p:commandButton id="downloadLink" ajax="false" icon="ui-icon-arrowthickstop-1-s" immediate="true"
+                title="#{msg.download}" actionListener="#{manualTaskMBean.prepDownload(objFile)}">
+                <p:fileDownload value="#{manualTaskMBean.download}" />
+              </p:commandButton>
+
+            </p:column>
+          </p:dataTable>
+        </h:panelGrid>
+      </h:form>
+    </p:tab>
   </p:accordionPanel>
 
 

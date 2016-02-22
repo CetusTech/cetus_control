@@ -3,7 +3,7 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
   <p:contextMenu for="table">
-    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :viewtab:formUpdate :alertSelectRowGroup"
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowGroup"
       process="@this" rendered="#{!manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
       icon="ui-icon-search" />
   </p:contextMenu>

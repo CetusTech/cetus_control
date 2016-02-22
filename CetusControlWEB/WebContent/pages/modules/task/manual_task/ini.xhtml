@@ -12,7 +12,7 @@
 <h:body>
   <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
   <h:form id="fromContenido">
-    <p:growl id="growl" showDetail="true" sticky="true" life="10" />
+    <p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
     <p:panelGrid columns="2" columnClasses="column_40,column_60">
       <p:panel id="panelGroup" header="#{msg.my_groups}">
         <ui:include src="/pages/modules/task/manual_task/listGroup.xhtml" />
@@ -21,7 +21,7 @@
         <ui:include src="/pages/modules/task/manual_task/list.xhtml" />
       </p:panel>
     </p:panelGrid>
-    
+
   </h:form>
   <ui:include src="/pages/modules/task/manual_task/dialog.xhtml" />
 </h:body>
