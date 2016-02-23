@@ -3,8 +3,8 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
   <p:contextMenu for="table">
-    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowGroup"
-      process="@this" rendered="#{!manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowGroup" process="@this"
+      rendered="#{!manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
       icon="ui-icon-search" />
   </p:contextMenu>
 
@@ -36,6 +36,7 @@
   <p:dataTable value="#{manualTaskMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
     rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
     currentPageReportTemplate="({currentPage} de {totalPages})"
+    rowsPerPageTemplate="1,#{manualTaskMBean.listRegister.size()}"
     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
     paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{manualTaskMBean.selectedObject}"
     selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
@@ -57,6 +58,12 @@
       <h:outputText value="#{objetc.description}" />
     </p:column>
     <p:column sortBy="#{objetc.status.description}">
+      <f:facet name="filter">
+        <p:selectCheckboxMenu label="Colors" onchange="PF('carsTable').filter()" panelStyle="width:125px"
+          scrollHeight="150">
+          <f:selectItems value="#{dtFilterView.colors}" />
+        </p:selectCheckboxMenu>
+      </f:facet>
       <f:facet name="header">
         <h:outputText value="#{msg.status}" />
       </f:facet>

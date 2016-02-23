@@ -14,9 +14,10 @@
       <p:message for="descriptionAdd" id="descriptionAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.assingDate}" for="assingDateAdd" styleClass="resaltar_negro" />
-      <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" required="true"
-        maxdate="#{manualTaskMBean.currentDateStr}" onchange="PF('assingDateAdd').hide()" showButtonPanel="false"
-        pt:placeholder="dd-MM-yyyy" locale="#{manualTaskMBean.locale}" pattern="dd-MM-yyyy" mask="true" />
+      <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" required="true" mode="popup"
+        onchange="PF('assingDateAdd').hide()" showButtonPanel="true"
+        pt:placeholder="#{manualTaskMBean.patterDate}" locale="#{manualTaskMBean.locale}"
+        pattern="#{manualTaskMBean.patterDate}" mask="true" />
 
       <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
 

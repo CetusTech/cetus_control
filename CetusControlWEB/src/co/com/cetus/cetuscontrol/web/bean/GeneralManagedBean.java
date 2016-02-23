@@ -397,9 +397,9 @@ public abstract class GeneralManagedBean implements Serializable {
    * @return el string
    * @since CetusControlWEB (23/01/2015)
    */
-  private static String formatDatePattern () {
+  private String formatDatePattern () {
     try {
-      return DateUtility.formatDatePattern( new Date(), ConstantWEB.PATTERN_DATE );
+      return DateUtility.formatDatePattern( new Date(), getPatterDate() );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }

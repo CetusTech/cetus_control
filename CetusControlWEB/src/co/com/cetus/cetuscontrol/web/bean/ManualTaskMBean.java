@@ -16,10 +16,12 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.faces.validator.ValidatorException;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -183,6 +185,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
                                                          
   private int                    indexTab                = 0;
                                                          
+  private List< String >         listStatusFilter;
+                                 
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
    *
@@ -196,6 +200,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     addObject.setPriority( new PriorityDTO() );
     addObject.setStatus( new StatusDTO() );
     addObject.setTaskType( new TaskTypeDTO() );
+    addObject.setAssingDate( new Date() );
     selectedObject = new TaskDTO();
     selectedObject.setArea( new AreaDTO() );
     selectedObject.setPriority( new PriorityDTO() );
@@ -916,11 +921,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         this.listStatus = ( List< StatusDTO > ) response.getObjectResponse();
         listStatusItem = new ArrayList< SelectItem >();
+        listStatusFilter = new ArrayList<>();
         for ( StatusDTO objDTO: listStatus ) {
           if ( objDTO.getId() != ConstantWEB.STATUS_ASSIGNED && objDTO.getId() != ConstantWEB.STATUS_COMPLETED
                && objDTO.getId() != ConstantWEB.STATUS_INPROGRESS && objDTO.getId() != ConstantWEB.STATUS_CANCELED
                && objDTO.getId() != ConstantWEB.STATUS_SUSPENDED ) {
             listStatusItem.add( new SelectItem( objDTO.getId(), objDTO.getDescription() ) );
+            listStatusFilter.add( objDTO.getDescription() );
           }
         }
         if ( ( Integer ) getObjectSession( "status" ) != null ) {
@@ -1359,6 +1366,38 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
     selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
     cleanObjectSession( "attachDTOSelected" );
+  }
+  
+  public void validedDateInit ( FacesContext context, UIComponent component, Object value ) throws ValidatorException {
+    selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+    Date initTask;
+    Date endTask;
+    if ( selectedObject != null ) {
+      initTask = selectedObject.getDateInit();
+      if ( initTask != null ) {
+        endTask = ( Date ) value;
+        if ( !initTask.before( endTask ) ) {
+          throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
+                                                          ConstantWEB.MESSAGE_DATE_END_VALIDATION ) );
+        }
+      }
+    }
+  }
+  
+  public void validedDateAssign ( FacesContext context, UIComponent component, Object value ) throws ValidatorException {
+    selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+    Date assignTask;
+    Date endTask;
+    if ( selectedObject != null ) {
+      assignTask = selectedObject.getAssingDate();
+      if ( assignTask != null ) {
+        endTask = ( Date ) value;
+        if ( !assignTask.before( endTask ) ) {
+          throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
+                                                          ConstantWEB.MESSAGE_DATE_END_VALIDATION ) );
+        }
+      }
+    }
   }
   
   private void sendMailTmp ( String pParamMsg, String pParamSubject, TaskDTO pObj ) {

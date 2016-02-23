@@ -129,6 +129,8 @@ public class ConstantWEB {
   public final static String     MESSAGE_DES_RUN                    = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_RUN" );
   public final static String     MESSAGE_DES_EXPIRED                = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_EXPIRED" );
   public final static String     MESSAGE_ERROR_DELETE               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "alert_select_row_record" );
+  public final static String     MESSAGE_DATE_END_VALIDATION        = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_date_validation_before" );
+                                                                    
   public final static String     PATH_FILE_TASK                     = properties.getProperty( "PATH_FILE_TASK" );
                                                                     
 }

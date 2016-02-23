@@ -151,7 +151,7 @@
 
           <p:tab title="#{msg.attachment}" id="attachFiles">
 
-            <p:growl id="msgDel" />
+            <p:growl id="msgDel" for="iconOnly" />
             <h:panelGrid columns="1" style="width:100%" cellspacing="1" cellpadding="1" id="pnlFiles">
               <p:dataTable id="fileTask" var="objFile" value="#{manualTaskMBean.listAttachFiles}"
                 rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" paginator="true"
@@ -174,7 +174,7 @@
                     <p:fileDownload value="#{manualTaskMBean.download}" />
                   </p:commandButton>
                   <p:commandButton actionListener="#{manualTaskMBean.removeAttachInTask}" id="iconOnly"
-                    icon="ui-icon-trash" process=":viewtab:attachFiles" update=":viewtab :viewtab:msgDel"
+                    icon="ui-icon-trash" process="@this" update=":viewtab :viewtab:msgDel"
                     title="#{msg.delete}" />
                 </p:column>
               </p:dataTable>

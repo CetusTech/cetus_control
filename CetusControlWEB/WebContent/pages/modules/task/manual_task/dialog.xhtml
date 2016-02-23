@@ -21,7 +21,7 @@
     <p:confirmDialog message="#{msg.confirm_add_task}" id="confirmAdd" header="#{msg.header_confirm_add_task}"
       appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{manualTaskMBean.showConfirmAdd}">
       <center>
-        <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":fromContenido:panel"
+        <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":fromContenido:panel :fromContenido:growl"
           styleClass="button-general" icon="img-ok" oncomplete="PF('confirmAdd').hide(), PF('dialogAddVar').hide()"
           process="@form" action="#{manualTaskMBean.add}" />
         <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAdd').hide()"
@@ -138,8 +138,11 @@
 
         <p:outputLabel value="#{msg.deliveryDate}" for="deliberyDateUpdate" />
         <p:calendar id="deliberyDateUpdate" value="#{manualTaskMBean.deliveryDate}" mode="popup" required="true"
-          onchange="PF('deliberyDateAdd').hide()" showButtonPanel="true" pt:placeholder="#{manualTaskMBean.patterDate}"
-          locale="#{manualTaskMBean.locale}" pattern="#{manualTaskMBean.patterDate}" showOn="button" />
+          validator="#{manualTaskMBean.validedDateAssign}" onchange="PF('deliberyDateAdd').hide()"
+          showButtonPanel="true" pt:placeholder="#{manualTaskMBean.patterDate}" locale="#{manualTaskMBean.locale}"
+          pattern="#{manualTaskMBean.patterDate}" showOn="button">
+
+        </p:calendar>
         <p:message for="deliberyDateUpdate" id="deliberyDateUpdateMsg" display="icon" />
 
         <f:facet name="footer">
