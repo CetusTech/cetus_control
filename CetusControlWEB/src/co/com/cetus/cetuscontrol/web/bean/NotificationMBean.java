@@ -34,6 +34,7 @@ public class NotificationMBean extends GeneralManagedBean {
   private boolean                        showViewDetail     = false;
   private boolean                        showAlertSelectRow = false;
   private boolean                        showConfirmMod     = false;
+  private boolean                        activate     = false;
                                                             
   public NotificationMBean () {
     
@@ -268,5 +269,15 @@ public class NotificationMBean extends GeneralManagedBean {
   public void setShowConfirmMod ( boolean showConfirmMod ) {
     this.showConfirmMod = showConfirmMod;
   }
+
+  public boolean isActivate () {
+    return activate;
+  }
+
+  public void setActivate ( boolean activate ) {
+    this.activate = activate;
+  }
+
+  
   
 }

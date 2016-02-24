@@ -6,6 +6,17 @@
   <h:form id="formUpdate" prependId="false">
     <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
 
+      <h:outputText value="#{msg.activate_question}" styleClass="resaltar_negro" />
+      <p:selectBooleanButton id="activate" value="#{notificationMBean.activate}" required="true"
+        requiredMessage="#{msg.field_required}" onLabel="#{msg.yeah}" offLabel="#{msg.no}" onIcon="ui-icon-check"
+        offIcon="ui-icon-close" style="width:60px">
+      </p:selectBooleanButton>
+      <p:message for="activate" id="activateMsg" />
+
+
+      <h:outputText value="#{msg.notification_selected_email}" styleClass="resaltar_negro" />
+      
+
 
     </h:panelGrid>
 

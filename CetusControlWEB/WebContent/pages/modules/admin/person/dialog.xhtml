@@ -71,7 +71,7 @@
     visible="#{personAdminMBean.showAlertSelectRow}">
     <h:panelGrid columns="2" width="400">
       <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
-      <h:outputText value="#{msg.alert_select_row_record}" />
+      <h:outputText value="#{personAdminMBean.getMessageProperty('alert_select_row_record',msg.person)}" />
     </h:panelGrid>
   </p:dialog>
 

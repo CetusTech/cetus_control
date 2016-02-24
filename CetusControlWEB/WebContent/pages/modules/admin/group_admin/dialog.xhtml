@@ -68,7 +68,7 @@
     appendToBody="true" widgetVar="alertSelectRowVar" modal="true" visible="#{groupAdminMBean.showAlertSelectRow}">
     <h:panelGrid columns="2" width="400">
       <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
-      <h:outputText value="#{msg.alert_select_row_record}" />
+      <h:outputText value="#{groupAdminMBean.getMessageProperty('alert_select_row_record',msg.group)}" />
     </h:panelGrid>
   </p:dialog>
 
