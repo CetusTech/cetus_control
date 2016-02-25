@@ -24,10 +24,16 @@
       <h:outputText value="#{notificationMBean.getMessageProperty('alert_select_row_record',msg.notification)}" />
     </h:panelGrid>
   </p:dialog>
-  
-    <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.notification_update}"
+
+  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.notification_update}"
     visible="#{notificationMBean.showConfirmMod}" widgetVar="dialogModVar" closeOnEscape="true">
     <ui:include src="/pages/modules/admin/notification/update.xhtml" />
   </p:dialog>
-  
+
+  <p:dialog id="dialogClone" resizable="false" modal="true" appendToBody="true" header="#{msg.notification_clone}"
+    visible="#{notificationMBean.showConfirmClone}" widgetVar="dialogCloneVar" closeOnEscape="true">
+    <ui:include src="/pages/modules/admin/notification/clone.xhtml" />
+  </p:dialog>
+
+
 </ui:composition>

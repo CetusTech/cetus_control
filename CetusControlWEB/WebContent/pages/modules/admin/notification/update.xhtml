@@ -15,7 +15,10 @@
 
 
       <h:outputText value="#{msg.notification_selected_email}" styleClass="resaltar_negro" />
-      
+      <p:autoComplete id="selectEmail" value="#{notificationMBean.selectEmail}"
+        completeMethod="#{notificationMBean.completeText}">
+        <p:ajax event="itemSelect" listener="#{notificationMBean.onItemSelect}" update=":formContenido:msgs" />
+      </p:autoComplete>
 
 
     </h:panelGrid>

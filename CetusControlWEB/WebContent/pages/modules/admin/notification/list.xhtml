@@ -11,6 +11,9 @@
       update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
       actionListener="#{notificationMBean.validateSelectedRecord}" />
 
+    <p:menuitem value="#{msg.btn_clone}" icon="ui-icon-copy" update=":formClone:pnlClone :dialogClone :alertSelectRow"
+      actionListener="#{notificationMBean.validateSelectedRecord}" />
+
   </p:contextMenu>
 
 
@@ -32,13 +35,21 @@
         <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
       </p:commandLink>
 
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="cloneButton" title="#{msg.btn_clone}" update=":formClone:pnlClone :dialogClone :alertSelectRow"
+        actionListener="#{notificationMBean.validateSelectedRecord}">
+        <p:graphicImage name="CloneRegister.png" width="32" height="32" library="images" />
+      </p:commandLink>
+      
+      <p:separator styleClass="separator-toolbar" />
     </p:toolbarGroup>
   </p:toolbar>
 
 
   <p:dataTable value="#{notificationMBean.listRegister}" id="table"
     rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" emptyMessage="#{msg.list_empty}"
-    var="object" paginator="true" rows="#{msg.rows_paginator}" currentPageReportTemplate="({currentPage} de {totalPages})"
+    var="object" paginator="true" rows="#{msg.rows_paginator}"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
     paginatorPosition="bottom" rowKey="#{object.notificationGeneral.id}" selection="#{notificationMBean.selectedObject}"
     selectionMode="single">

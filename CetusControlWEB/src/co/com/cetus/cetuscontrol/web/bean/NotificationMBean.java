@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+
+import org.primefaces.event.SelectEvent;
 
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
 import co.com.cetus.cetuscontrol.dto.NotificationGeneralDTO;
 import co.com.cetus.cetuscontrol.dto.NotificationSettingDTO;
+import co.com.cetus.cetuscontrol.dto.PersonDTO;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.util.UtilCommon;
@@ -34,7 +39,9 @@ public class NotificationMBean extends GeneralManagedBean {
   private boolean                        showViewDetail     = false;
   private boolean                        showAlertSelectRow = false;
   private boolean                        showConfirmMod     = false;
-  private boolean                        activate     = false;
+  private boolean                        showConfirmClone   = false;
+  private boolean                        activate           = false;
+  private String                         selectEmail        = null;
                                                             
   public NotificationMBean () {
     
@@ -127,8 +134,8 @@ public class NotificationMBean extends GeneralManagedBean {
           response = generalDelegate.findNotificationByGroup( idGroup );
           if ( UtilCommon.validateResponseSuccess( response ) ) {
             listNS = ( List< NotificationSettingDTO > ) response.getObjectResponse();
-          }else{
-            listNS = new ArrayList<NotificationSettingDTO>();
+          } else {
+            listNS = new ArrayList< NotificationSettingDTO >();
           }
           
           this.listRegister = new ArrayList< NotificationSettingDTO >();
@@ -136,14 +143,14 @@ public class NotificationMBean extends GeneralManagedBean {
             int i = 0;
             while ( listNS.size() > 0 && i < listNS.size() ) {
               NotificationSettingDTO nSettingDTO = listNS.get( i );
-              if( notificationGeneralDTO.getId() == nSettingDTO.getNotificationGeneral().getId() ){
+              if ( notificationGeneralDTO.getId() == nSettingDTO.getNotificationGeneral().getId() ) {
                 this.listRegister.add( nSettingDTO );
                 listNS.remove( i );
                 continue forNgeneral;
               }
               i++;
             }
-                       
+            
             notificationSettingDTO = new NotificationSettingDTO();
             notificationSettingDTO.setNotificationGeneral( new NotificationGeneralDTO() );
             notificationSettingDTO.getNotificationGeneral().setId( notificationGeneralDTO.getId() );
@@ -180,14 +187,54 @@ public class NotificationMBean extends GeneralManagedBean {
         this.showAlertSelectRow = false;
         this.showViewDetail = true;
         this.showConfirmMod = true;
+        this.showConfirmClone = true;
       } else {
         this.showAlertSelectRow = true;
         this.showViewDetail = false;
         this.showConfirmMod = false;
+        this.showConfirmClone = false;
       }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
+  }
+  
+  /**
+   * </p> Complete text. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param query the query
+   * @return el list
+   * @since CetusControlWEB (24/02/2016)
+   */
+  @SuppressWarnings ( "unchecked" )
+  public List< String > completeText ( String query ) {
+    List< String > results = new ArrayList< String >();
+    List< PersonDTO > listPerson = null;
+    ResponseDTO response = null;
+    try {
+      listPerson = ( List< PersonDTO > ) getObjectSession( "listPerson" );
+      if ( listPerson == null ) {
+        response = generalDelegate.findPersonByClient( getUserDTO().getPerson().getClient().getId() );
+        if ( UtilCommon.validateResponseSuccess( response ) ) {
+          listPerson = ( List< PersonDTO > ) response.getObjectResponse();
+          addObjectSession( listPerson, "listPerson" );
+        }
+      }
+      
+      if ( listPerson != null && listPerson.size() > 0 ) {
+        for ( PersonDTO personDTO: listPerson ) {
+          results.add( personDTO.getEmail() );
+        }
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return results;
+  }
+  
+  public void onItemSelect ( SelectEvent event ) {
+    FacesContext.getCurrentInstance().addMessage( null, new FacesMessage( "Item Selected", event.getObject().toString() ) );
   }
   
   /* (non-Javadoc)
@@ -269,15 +316,29 @@ public class NotificationMBean extends GeneralManagedBean {
   public void setShowConfirmMod ( boolean showConfirmMod ) {
     this.showConfirmMod = showConfirmMod;
   }
-
+  
   public boolean isActivate () {
     return activate;
   }
-
+  
   public void setActivate ( boolean activate ) {
     this.activate = activate;
   }
-
   
+  public boolean isShowConfirmClone () {
+    return showConfirmClone;
+  }
+  
+  public void setShowConfirmClone ( boolean showConfirmClone ) {
+    this.showConfirmClone = showConfirmClone;
+  }
+  
+  public String getSelectEmail () {
+    return selectEmail;
+  }
+  
+  public void setSelectEmail ( String selectEmail ) {
+    this.selectEmail = selectEmail;
+  }
   
 }

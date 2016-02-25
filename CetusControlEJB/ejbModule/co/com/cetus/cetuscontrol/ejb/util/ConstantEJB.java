@@ -63,11 +63,7 @@ public class ConstantEJB {
                                                                                                     "NAME_TIMER_EXPIRATION_TASKS" );
   
   public static String                    TEMPLATE_EMAIL_BEFORE_EXPIRATION   = "TEMPLATE_EMAIL_BEFORE_EXPIRATION";
-  public static String                    SMTP_HOST                          = "SMTP_HOST";
-  public static String                    SMPT_PORT                          = "SMPT_PORT";
-  public static String                    SMTP_FROM                          = "SMTP_FROM";
-  public static String                    SMTP_PASS                          = "SMTP_PASS";
-  public static String                    SMTP_USERNAME                      = "SMTP_USERNAME";
+
   public static String                    SUBJECT_BEFORE_EXPIRATION          = "SUBJECT_BEFORE_EXPIRATION";
   public static String                    WSDL_CETUS_MESSAGE_SERVICE         = "WSDL_CETUS_MESSAGE_SERVICE";
   public static String                    USER_WS_MESSAGE_SERVICE            = "USER_WS_MESSAGE_SERVICE";
