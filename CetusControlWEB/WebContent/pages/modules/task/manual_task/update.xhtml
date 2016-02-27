@@ -60,10 +60,18 @@
                 rendered="#{manualTaskMBean.status == 2 }" />
 
 
+              <p:outputLabel value="#{msg.myTask_task_initDate}" for="msgDateInit" styleClass="resaltar_negro" />
+              <p:outputLabel id="msgDateInit" value="#{manualTaskMBean.selectedObject.dateInit}" disabled="true">
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+              </p:outputLabel>
+              <p:message for="msgDateInit" id="msgDateInitMsg" display="icon" />
+
+
               <p:outputLabel value="#{msg.deliveryDate}" for="deliberyDateUpdate"
                 rendered="#{manualTaskMBean.status == 2 }" styleClass="resaltar_negro" />
               <p:calendar id="deliberyDateUpdate" value="#{manualTaskMBean.selectedObject.deliveryDate}" mode="popup"
-                required="true" rendered="#{manualTaskMBean.status == 2 }" onchange="PF('deliberyDateAdd').hide()"
+                validator="#{manualTaskMBean.validedDateInit }" required="true"
+                rendered="#{manualTaskMBean.status == 2 }" onchange="PF('deliberyDateAdd').hide()"
                 showButtonPanel="true" pt:placeholder="#{manualTaskMBean.patterDate}" locale="#{manualTaskMBean.locale}"
                 pattern="#{manualTaskMBean.patterDate}" showOn="button" />
               <p:message for="deliberyDateUpdate" id="deliberyDateUpdateMsg" display="icon"
@@ -174,8 +182,7 @@
                     <p:fileDownload value="#{manualTaskMBean.download}" />
                   </p:commandButton>
                   <p:commandButton actionListener="#{manualTaskMBean.removeAttachInTask}" id="iconOnly"
-                    icon="ui-icon-trash" process="@this" update=":viewtab :viewtab:msgDel"
-                    title="#{msg.delete}" />
+                    icon="ui-icon-trash" process="@this" update=":viewtab :viewtab:msgDel" title="#{msg.delete}" />
                 </p:column>
               </p:dataTable>
               <p:dataList value="#{manualTaskMBean.listFilesTask}" var="obj" type="ordered" id="listFiles"
@@ -210,14 +217,16 @@
             rendered="#{manualTaskMBean.status == 5 }" process=":formUpdate" styleClass="button-general"
             icon="img-assign" />
 
-          <p:commandButton id="btnCancel" value="#{msg.btn_cancel}" update=":formUpdate :formConfirmCancel:confirmCancel"
-            global="true"
+          <p:commandButton id="btnCancel" value="#{msg.btn_cancel}"
+            update=":formUpdate :formConfirmCancel:confirmCancel" global="true"
             rendered="#{manualTaskMBean.status >= 1 and manualTaskMBean.status != 4 and manualTaskMBean.status != 3 }"
             process="@form" styleClass="button-general" icon="img-cancel" actionListener="#{manualTaskMBean.loadCancel}" />
 
-          <p:commandButton id="btnSuspend" value="#{msg.btn_suspend}" update=":fromContenido:panel"
+          <p:commandButton id="btnSuspend" value="#{msg.btn_suspend}"
+            update=":formUpdate :formConfirmSuspended:confirmSuspended"
             rendered="#{manualTaskMBean.status >= 2 and manualTaskMBean.status != 4 and manualTaskMBean.status != 5 and manualTaskMBean.status != 3  }"
-            process=":formUpdate" styleClass="button-general" icon="img-suspend" action="#{manualTaskMBean.suspendTask}" />
+            process=":formUpdate" styleClass="button-general" icon="img-suspend"
+            actionListener="#{manualTaskMBean.loadSuspended}" />
 
           <p:commandButton id="btnComplete" value="#{msg.btn_complete}"
             update=":formUpdate :formConfirmCompleted:confirmCompleted"

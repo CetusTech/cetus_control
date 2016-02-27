@@ -57,6 +57,20 @@
       </center>
     </p:confirmDialog>
   </h:form>
+  
+   <h:form id="formConfirmSuspended">
+    <p:confirmDialog message="#{msg.confirm_suspended_task}" id="confirmSuspended"
+      header="#{msg.header_confirm_suspended_task}" appendToBody="true" widgetVar="confirmSuspended" severity="alert"
+      visible="#{manualTaskMBean.showConfirmSuspended}">
+      <center>
+        <p:commandButton value="#{msg.btn_acept}" update=":fromContenido:panel :fromContenido:growl"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmSuspended').hide(), PF('confirmMod').hide()"
+          process="@form" action="#{manualTaskMBean.suspendTask}" />
+        <p:commandButton value="#{msg.btn_cancel}" oncomplete="PF('confirmSuspended').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
 
 
   <h:form id="formConfirmMod">

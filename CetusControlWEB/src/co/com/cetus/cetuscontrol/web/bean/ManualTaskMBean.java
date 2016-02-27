@@ -135,6 +135,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
   private boolean                showConfirmCancel       = false;
                                                          
   private boolean                showConfirmCompleted    = false;
+  private boolean                showConfirmSuspended    = false;
                                                          
   /** The show menu. */
   private boolean                showMenu                = false;
@@ -268,6 +269,14 @@ public class ManualTaskMBean extends GeneralManagedBean {
       //addObjectSession( selectedObject, "selectedObject" );
       showConfirmCancel = true;
       showConfirmCompleted = true;
+    }
+  }
+  
+  public void loadSuspended ( ActionEvent event ) {
+    if ( noteTask != null && !noteTask.isEmpty() ) {
+      addObjectSession( noteTask, "noteTask" );
+      //addObjectSession( selectedObject, "selectedObject" );
+      showConfirmSuspended = true;
     }
   }
   
@@ -682,6 +691,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     try {
       context = RequestContext.getCurrentInstance();
       selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+      noteTask = ( String ) getObjectSession( "noteTask" );
       if ( selectedObject != null && noteTask != null & !noteTask.isEmpty() ) {
         selectedObject.setStatus( new StatusDTO() );
         selectedObject.getStatus().setId( ConstantWEB.STATUS_SUSPENDED_VAL );//Se coloca en suspendido la tarea
@@ -921,7 +931,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         this.listStatus = ( List< StatusDTO > ) response.getObjectResponse();
         listStatusItem = new ArrayList< SelectItem >();
-        listStatusFilter = new ArrayList<>();
+        listStatusFilter = new ArrayList< >();
         for ( StatusDTO objDTO: listStatus ) {
           if ( objDTO.getId() != ConstantWEB.STATUS_ASSIGNED && objDTO.getId() != ConstantWEB.STATUS_COMPLETED
                && objDTO.getId() != ConstantWEB.STATUS_INPROGRESS && objDTO.getId() != ConstantWEB.STATUS_CANCELED
@@ -2472,6 +2482,14 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public void setShowConfirmCompleted ( boolean showConfirmCompleted ) {
     this.showConfirmCompleted = showConfirmCompleted;
+  }
+  
+  public boolean isShowConfirmSuspended () {
+    return showConfirmSuspended;
+  }
+  
+  public void setShowConfirmSuspended ( boolean showConfirmSuspended ) {
+    this.showConfirmSuspended = showConfirmSuspended;
   }
   
 }
