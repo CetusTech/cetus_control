@@ -16,12 +16,52 @@
 
       <h:outputText value="#{msg.notification_selected_email}" styleClass="resaltar_negro" />
       <p:autoComplete id="selectEmail" value="#{notificationMBean.selectEmail}"
-        completeMethod="#{notificationMBean.completeText}">
-        <p:ajax event="itemSelect" listener="#{notificationMBean.onItemSelect}" update=":formContenido:msgs" />
+        completeMethod="#{notificationMBean.completeText}" size="40">
+        <p:ajax event="itemSelect" listener="#{notificationMBean.onItemSelect}" update="pnlGEmail selectEmail" />
       </p:autoComplete>
 
-
     </h:panelGrid>
+    <br />
+    <br />
+
+    <h:panelGroup id="pnlGEmail">
+      <p:dataTable value="#{notificationMBean.listEmail}" var="email" emptyMessage="#{msg.list_empty}" id="tableEmail"
+        rowKey="#{email.id}" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}">
+        <p:column style="width:45% !important;">
+          <f:facet name="header">
+            <h:outputText value="#{msg.email}" />
+          </f:facet>
+          <h:outputText value="#{email.email}" />
+        </p:column>
+
+        <p:column style="width:45% !important;">
+          <f:facet name="header">
+            <h:outputText value="#{msg.name}" />
+          </f:facet>
+          <h:outputText value="#{email.names} #{email.lastNames}" />
+        </p:column>
+
+        <p:column style="width:10% !important;">
+          <f:facet name="header">
+            <h:outputText value="#{msg.delete}" />
+          </f:facet>
+          <center>
+            <p:commandLink id="viewDetail" title="#{msg.btn_delete}" update="pnlGEmail" 
+              process="@this" rendered="#{email.id == 0 ? false : true}"
+              actionListener="#{notificationMBean.deleteEmailList(email.email)}">
+              <p:graphicImage name="error.png" width="16" height="16" library="images" />
+            </p:commandLink>
+          </center>
+        </p:column>
+
+      </p:dataTable>
+    </h:panelGroup>
+    <br />
+    <br />
+    <center>
+      <p:commandButton id="btnUpdateEmail" value="#{msg.btn_save}" update="pnlUpdate :formConfirmMod:confirmMod"
+        process="@form" styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.loadUpdate}" />
+    </center>
 
   </h:form>
 </ui:composition>

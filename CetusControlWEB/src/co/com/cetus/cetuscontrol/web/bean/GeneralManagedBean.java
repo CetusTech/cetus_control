@@ -579,4 +579,30 @@ public abstract class GeneralManagedBean implements Serializable {
     }
     return sessionId;
   }
+  
+  /**
+   * </p> Gets the simplified value. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param value the value
+   * @param limit the limit
+   * @return el string
+   * @since CetusControlWEB (27/02/2016)
+   */
+  public static String getSimplifiedValue ( String value, String limit ) {
+    String simplifyValue = null;
+    try {
+      if ( value.length() > Integer.parseInt( limit ) ) {
+        simplifyValue = value.substring( 0, Integer.parseInt( limit ) );
+        simplifyValue += "...";
+      } else {
+        simplifyValue = value;
+      }
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return simplifyValue;
+  }
+  
 }

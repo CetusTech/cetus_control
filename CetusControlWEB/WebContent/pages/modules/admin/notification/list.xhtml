@@ -4,15 +4,16 @@
 
 
   <p:contextMenu for="table">
-    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
-      actionListener="#{notificationMBean.validateSelectedRecord}" icon="ui-icon-search" />
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow :alertSelectRow2" process="@form"
+      actionListener="#{notificationMBean.validateSelectedRecord2}" icon="ui-icon-search" />
 
     <p:menuitem value="#{msg.btn_update}" icon="ui-icon-pencil"
-      update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
+      update=":formUpdate:pnlUpdate :formUpdate:pnlGEmail :dialogMod :alertSelectRow"
       actionListener="#{notificationMBean.validateSelectedRecord}" />
 
-    <p:menuitem value="#{msg.btn_clone}" icon="ui-icon-copy" update=":formClone:pnlClone :dialogClone :alertSelectRow"
-      actionListener="#{notificationMBean.validateSelectedRecord}" />
+    <p:menuitem value="#{msg.btn_clone}" icon="ui-icon-copy"
+      update=":formClone:pnlClone :formClone:checkboxListGroup :dialogClone :alertSelectRow :alertSelectRow2"
+      actionListener="#{notificationMBean.validateSelectedRecord2}" />
 
   </p:contextMenu>
 
@@ -23,24 +24,26 @@
       <p:separator styleClass="separator-toolbar" />
 
       <p:commandLink id="updateButton" title="#{msg.btn_update}"
-        update=":formUpdate:pnlUpdate :dialogMod :alertSelectRow"
+        update=":formUpdate:pnlUpdate :formUpdate:pnlGEmail :dialogMod :alertSelectRow"
         actionListener="#{notificationMBean.validateSelectedRecord}">
         <p:graphicImage name="edit-icon.png" width="32" height="32" library="images" />
       </p:commandLink>
 
 
       <p:separator styleClass="separator-toolbar" />
-      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRow" process="@form"
-        actionListener="#{notificationMBean.validateSelectedRecord}">
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}"
+        update=":dialogView :alertSelectRow :alertSelectRow2" process="@form"
+        actionListener="#{notificationMBean.validateSelectedRecord2}">
         <p:graphicImage name="view-icon.png" width="32" height="32" library="images" />
       </p:commandLink>
 
       <p:separator styleClass="separator-toolbar" />
-      <p:commandLink id="cloneButton" title="#{msg.btn_clone}" update=":formClone:pnlClone :dialogClone :alertSelectRow"
-        actionListener="#{notificationMBean.validateSelectedRecord}">
+      <p:commandLink id="cloneButton" title="#{msg.btn_clone}"
+        update=":formClone:pnlClone :formClone:checkboxListGroup :dialogClone :alertSelectRow :alertSelectRow2"
+        actionListener="#{notificationMBean.validateSelectedRecord2}">
         <p:graphicImage name="CloneRegister.png" width="32" height="32" library="images" />
       </p:commandLink>
-      
+
       <p:separator styleClass="separator-toolbar" />
     </p:toolbarGroup>
   </p:toolbar>
@@ -72,7 +75,7 @@
       <f:facet name="header">
         <h:outputText value="#{msg.notification_mails}" />
       </f:facet>
-      <h:outputText value="#{object.emails}" />
+      <h:outputText value="#{notificationMBean.getSimplifiedValue(object.emails,'60')}" />
     </p:column>
 
   </p:dataTable>

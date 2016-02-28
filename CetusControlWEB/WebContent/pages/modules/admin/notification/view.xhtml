@@ -6,13 +6,49 @@
   <h:panelGrid id="viewPanel" styleClass="column_100">
     <p:panelGrid id="viewPanel1" columns="2" cellpadding="2" cellspacing="2" styleClass="column_100">
       <f:facet name="header">
-        <h:outputText value="#{msg.detail_group}" />
+        <h:outputText value="#{msg.detail_notification}" />
       </f:facet>
+
+      <h:outputText value="#{msg.notification}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.notificationGeneral.name}" />
+
+      <h:outputText value="#{msg.id}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.id}" />
+
+      <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.id == 0 ? msg.inactive : msg.active}" />
+
+      <h:outputText value="#{msg.group}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.idGroup}" />
+
+      <h:outputText value="#{msg.email}:" styleClass="resaltar_negro" />
+      <p:dataList value="#{notificationMBean.listEmail}" var="email" type="ordered">
+        <h:outputText value="#{email.email}" />
+      </p:dataList>
+
     </p:panelGrid>
 
-    <h:panelGrid id="viewPanel2" columns="1" cellpadding="2" cellspacing="2" styleClass="column_100">
-      
-    </h:panelGrid>
+    <p:panelGrid columns="2" styleClass="column_100">
+      <f:facet name="header">
+        <h:outputText value="#{msg.audit}" />
+      </f:facet>
+
+      <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.createUser}" />
+
+      <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.createDate}">
+        <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{notificationMBean.patterDate}" />
+      </h:outputText>
+
+      <h:outputText value="#{msg.update_user}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.modificationUser}" />
+
+      <h:outputText value="#{msg.update_date}:" styleClass="resaltar_negro" />
+      <h:outputText value="#{notificationMBean.selectedObject.modificationDate}">
+        <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{notificationMBean.patterDate}" />
+      </h:outputText>
+    </p:panelGrid>
 
   </h:panelGrid>
   <br />

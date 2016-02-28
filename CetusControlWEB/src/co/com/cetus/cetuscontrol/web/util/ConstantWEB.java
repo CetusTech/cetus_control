@@ -133,4 +133,8 @@ public class ConstantWEB {
                                                                     
   public final static String     PATH_FILE_TASK                     = properties.getProperty( "PATH_FILE_TASK" );
                                                                     
+  public final static String     ERROR_ACTIVATE_NOTIFICATION        = UtilWEB.getProperty( NAME_BUNDLE_WEB, "ERROR_ACTIVATE_NOTIFICATION" );
+  public final static String     RESPONSIBLE_TASK                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "RESPONSIBLE_TASK" );
+  public final static String     ERROR_GROUP_CLONE                  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "ERROR_GROUP_CLONE" );
+                                                                    
 }

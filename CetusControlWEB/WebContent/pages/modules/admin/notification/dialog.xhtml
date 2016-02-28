@@ -25,15 +25,53 @@
     </h:panelGrid>
   </p:dialog>
 
-  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.notification_update}"
-    visible="#{notificationMBean.showConfirmMod}" widgetVar="dialogModVar" closeOnEscape="true">
+  <p:dialog id="alertSelectRow2" resizable="false" draggable="false" header="#{msg.header_select_row}"
+    appendToBody="true" widgetVar="alertSelectRowVar2" modal="true" visible="#{notificationMBean.showAlertSelectRow2}">
+    <h:panelGrid columns="2" width="400">
+      <p:graphicImage name="Button-Warning-icon.png" width="32" height="32" library="images" />
+      <h:outputText value="#{msg.alert_notification_inactive}" />
+    </h:panelGrid>
+  </p:dialog>
+
+  <p:dialog id="dialogMod" resizable="false" modal="true" styleClass="column_50" appendToBody="true"
+    header="#{msg.notification_update}" visible="#{notificationMBean.showConfirmMod}" widgetVar="dialogModVar"
+    closeOnEscape="true">
     <ui:include src="/pages/modules/admin/notification/update.xhtml" />
   </p:dialog>
 
-  <p:dialog id="dialogClone" resizable="false" modal="true" appendToBody="true" header="#{msg.notification_clone}"
-    visible="#{notificationMBean.showConfirmClone}" widgetVar="dialogCloneVar" closeOnEscape="true">
+  <p:dialog id="dialogClone" resizable="false" modal="true" styleClass="column_60" appendToBody="true"
+    header="#{msg.notification_clone}" visible="#{notificationMBean.showConfirmClone}" widgetVar="dialogCloneVar"
+    closeOnEscape="true">
     <ui:include src="/pages/modules/admin/notification/clone.xhtml" />
   </p:dialog>
+
+  <h:form id="formConfirmMod">
+    <p:confirmDialog message="#{msg.notification_confirm_add}" id="confirmMod"
+      header="#{msg.notification_header_confirm_add}" appendToBody="true" widgetVar="confirmMod" severity="alert"
+      visible="#{notificationMBean.showDialogConfirmUpdate}">
+      <center>
+        <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":formContenido:table :formContenido:msgs"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmMod').hide(), PF('dialogModVar').hide()"
+          process="@this" action="#{notificationMBean.update}" />
+        <p:commandButton id="btnConfCancelMod" value="#{msg.btn_cancel}" oncomplete="PF('confirmMod').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+  <h:form id="formConfirmClone">
+    <p:confirmDialog message="#{msg.notification_confirm_clone}" id="confirmClone"
+      header="#{msg.notification_header_confirm_clone}" appendToBody="true" widgetVar="confirmClone" severity="alert"
+      visible="#{notificationMBean.showDialogConfirmClone}">
+      <center>
+        <p:commandButton id="btnConfClone" value="#{msg.btn_acept}" update=":formContenido:msgs"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmClone').hide(), PF('dialogCloneVar').hide()"
+          process="@this" action="#{notificationMBean.clone}" />
+        <p:commandButton id="btnConfCancelClone" value="#{msg.btn_cancel}" oncomplete="PF('confirmClone').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
 
 
 </ui:composition>
