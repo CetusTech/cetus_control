@@ -2190,4 +2190,38 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
+  /**
+   * </p> Find notification by group gen. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idGroup the id group
+   * @param idGeneral the id general
+   * @return el response dto
+   * @since CetusControlEJB (29/02/2016)
+   */
+  public ResponseDTO findNotificationByGroupGen ( int idGroup, int idGeneral ) {
+    ResponseDTO responseDTO = null;
+    NotificationSetting notificationSetting = null;
+    TypedQuery< NotificationSetting > query = null;
+    NotificationSettingDTO dto = null;
+    try {
+      query = em.createNamedQuery( "NotificationSetting.findNotifGenGroup", NotificationSetting.class );
+      query.setParameter( "idGroup", idGroup );
+      query.setParameter( "idGeneral", idGeneral );
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        notificationSetting = query.getSingleResult();
+        dto = new NotificationSettingDTO();
+        converter.convertEntityToDto( notificationSetting, dto, false );
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( dto );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
 }

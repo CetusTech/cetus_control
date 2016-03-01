@@ -87,8 +87,10 @@ public class NotificationMBean extends GeneralManagedBean {
         list = ( List< GroupTDTO > ) response.getObjectResponse();
         if ( list != null && !list.isEmpty() ) {
           this.listGroup = new ArrayList< SelectItem >();
+          this.listGroupClone = new ArrayList< GroupTDTO >();
           for ( GroupTDTO objDTO: list ) {
             this.listGroup.add( new SelectItem( objDTO.getId(), objDTO.getName() ) );
+            this.listGroupClone.add( objDTO );
           }
         }
       } else {
@@ -530,14 +532,27 @@ public class NotificationMBean extends GeneralManagedBean {
    * @since CetusControlWEB (27/02/2016)
    */
   public void loadClone ( ActionEvent event ) {
+    NotificationSettingDTO notificationSettingDTO = null;
+    List< NotificationSettingDTO > listNotificationSetting = null;
     try {
       selectedObject = ( NotificationSettingDTO ) getObjectSession( "selectedObject" );
       ConstantWEB.WEB_LOG.info( "selectedObject::" + selectedObject );
       if ( selectedObject != null ) {
         ConstantWEB.WEB_LOG.info( "selectedGroupClone::" + selectedGroupClone.size() );
-        if( selectedGroupClone != null && selectedGroupClone.size() > 0 ){
+        if ( selectedGroupClone != null && selectedGroupClone.size() > 0 ) {
           this.showDialogConfirmClone = true;
-        }else{
+          listNotificationSetting = new ArrayList< NotificationSettingDTO >();
+          for ( GroupTDTO group: selectedGroupClone ) {
+            notificationSettingDTO = new NotificationSettingDTO();
+            notificationSettingDTO.setIdGroup( group.getId() );
+            notificationSettingDTO.setEmails( selectedObject.getEmails() );
+            notificationSettingDTO.setNotificationGeneral( new NotificationGeneralDTO() );
+            notificationSettingDTO.getNotificationGeneral().setId( selectedObject.getNotificationGeneral().getId() );
+            listNotificationSetting.add( notificationSettingDTO );
+          }
+          addObjectSession( listNotificationSetting, "listNotificationSetting" );
+          addObjectSession( selectedGroupClone, "selectedGroupClone" );
+        } else {
           addMessageError( "checkboxListGroup", ConstantWEB.ERROR_GROUP_CLONE, null );
         }
       }
@@ -553,15 +568,57 @@ public class NotificationMBean extends GeneralManagedBean {
    * @return el string
    * @since CetusControlWEB (27/02/2016)
    */
+  @SuppressWarnings ( "unchecked" )
   public String clone () {
+    List< NotificationSettingDTO > list = null;
+    ResponseDTO responseDTO = null;
+    NotificationSettingDTO notification = null;
+    int contSuscesfull = 0;
     try {
-      
+      list = ( List< NotificationSettingDTO > ) getObjectSession( "listNotificationSetting" );
+      if ( list != null ) {
+        for ( NotificationSettingDTO notificationSettingDTO: list ) {
+          responseDTO = generalDelegate.findNotificationByGroupGen( notificationSettingDTO.getIdGroup(),
+                                                                    notificationSettingDTO.getNotificationGeneral().getId() );
+          if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+            notification = ( NotificationSettingDTO ) responseDTO.getObjectResponse();
+            notification.setEmails( notificationSettingDTO.getEmails() );
+            notification.setModificationDate( getCurrentDateTime() );
+            notification.setModificationUser( getUserInSession() );
+            
+            ConstantWEB.WEB_LOG.info( "Antes de editar clonar la notificacion :: " + notification.toString() );
+            responseDTO = generalDelegate.edit( notification );
+            ConstantWEB.WEB_LOG.info( "Despues de editar clonar la notificacion :: " + responseDTO.toString() );
+            if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+              contSuscesfull++;
+            }
+            
+          } else if ( UtilCommon.validateResponseNoResult( responseDTO ) ) {
+            notificationSettingDTO.setCreateDate( getCurrentDateTime() );
+            notificationSettingDTO.setCreateUser( getUserInSession() );
+            ConstantWEB.WEB_LOG.info( "Antes de crear clonar la notificacion :: " + notificationSettingDTO.toString() );
+            responseDTO = generalDelegate.create( notificationSettingDTO );
+            ConstantWEB.WEB_LOG.info( "Despues de crear clonar la notificacion :: " + responseDTO.toString() );
+            if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+              contSuscesfull++;
+            }
+          }
+        }
+        
+        if( list.size() == contSuscesfull ){
+          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
+        }else{
+          addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MESSAGE_ERROR_UPDATE );
+        }
+        
+      }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
     return null;
   }
   
+ 
   /* (non-Javadoc)
    * @see co.com.cetus.cetuscontrol.web.bean.GeneralManagedBean#add()
    */
@@ -702,7 +759,5 @@ public class NotificationMBean extends GeneralManagedBean {
   public void setShowDialogConfirmClone ( boolean showDialogConfirmClone ) {
     this.showDialogConfirmClone = showDialogConfirmClone;
   }
-  
-  
   
 }

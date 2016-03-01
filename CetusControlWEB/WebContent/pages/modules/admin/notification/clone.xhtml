@@ -28,11 +28,12 @@
 
     <p:dataTable id="checkboxListGroup" var="group" value="#{notificationMBean.listGroupClone}"
       selection="#{notificationMBean.selectedGroupClone}" rowKey="#{group.id}" style="margin-bottom:0">
-      
+
       <f:facet name="header">
         <h:outputText value="#{msg.list_group}" />
       </f:facet>
       <p:column selectionMode="multiple" style="width:5% !important;text-align:center" />
+
 
       <p:column style="width:15% !important;">
         <f:facet name="header">
@@ -50,10 +51,11 @@
     </p:dataTable>
 
     <p:message for="checkboxListGroup" id="tableMsg" />
+
     <br />
     <br />
     <center>
-      <p:commandButton id="btnClone" value="#{msg.btn_save}" update="pnlClone tableMsg :formConfirmClone:confirmClone"
+      <p:commandButton id="btnClone" value="#{msg.btn_save}" update=":formConfirmClone:confirmClone pnlClone tableMsg :formConfirmClone:confirmClone"
         process="@form" styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.loadClone}" />
     </center>
 

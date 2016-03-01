@@ -752,4 +752,24 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /**
+   * </p> Find notification by group gen. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idGroup the id group
+   * @param idGeneral the id general
+   * @return el response dto
+   * @since CetusControlEJB (29/02/2016)
+   */
+  public ResponseDTO findNotificationByGroupGen ( int idGroup, int idGeneral ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findNotificationByGroupGen( idGroup, idGeneral );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
 }

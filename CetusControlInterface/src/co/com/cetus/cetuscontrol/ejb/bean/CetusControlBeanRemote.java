@@ -121,4 +121,6 @@ public interface CetusControlBeanRemote {
   public ResponseDTO findNotificationGenClientCetus ( int idClientCetus );
   
   public ResponseDTO findNotificationByGroup ( int idGroup );
+  
+  public ResponseDTO findNotificationByGroupGen ( int idGroup, int idGeneral );
 }

@@ -12,7 +12,8 @@ import java.util.Date;
 @Table ( name = "NOTIFICATION_SETTINGS" )
 @NamedQueries ( {
                   @NamedQuery ( name = "NotificationSetting.findAll", query = "SELECT n FROM NotificationSetting n" ),
-                  @NamedQuery ( name = "NotificationSetting.findNotificationByGroup", query = "SELECT n FROM NotificationSetting n WHERE n.idGroup = :idGroup" )
+                  @NamedQuery ( name = "NotificationSetting.findNotificationByGroup", query = "SELECT n FROM NotificationSetting n WHERE n.idGroup = :idGroup" ),
+                  @NamedQuery ( name = "NotificationSetting.findNotifGenGroup", query = "SELECT n FROM NotificationSetting n WHERE n.idGroup = :idGroup AND n.notificationGeneral.id = :idGeneral" )
 })
 
 public class NotificationSetting implements Serializable {

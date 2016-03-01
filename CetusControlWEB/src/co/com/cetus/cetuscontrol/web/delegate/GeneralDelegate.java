@@ -580,4 +580,14 @@ public class GeneralDelegate {
     }
     return responseDTO;
   }
+  
+  public ResponseDTO findNotificationByGroupGen ( int idGroup, int idGeneral ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findNotificationByGroupGen( idGroup, idGeneral );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
 }
