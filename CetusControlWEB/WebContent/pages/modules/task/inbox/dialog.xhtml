@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <!-- Dialogo para ver detalle del registro de la tarea seleccionada-->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{myTaskMBean.showViewDetail}" widgetVar="dialogViewVar" closeOnEscape="true">
+    <p:ajax listener="#{myTaskMBean.closeDialogView()}" event="close" />
+    <ui:include src="/pages/modules/task/inbox/view.xhtml" />
+  </p:dialog>
+
+
+  <!-- Dialogo para ver detalle del registro de prioridad seleccionada-->
+  <p:dialog id="dialogViewPriority" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
+    visible="#{myTaskMBean.showViewDetail}" widgetVar="dialogViewPriorityVar" closeOnEscape="true">
+    <p:ajax listener="#{myTaskMBean.closeDialogView()}" event="close" />
+    <h:form id="formListPriority">
+      <ui:include src="/pages/modules/task/inbox/listSelected.xhtml" />
+    </h:form>
+  </p:dialog>
+
+
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+</ui:composition>

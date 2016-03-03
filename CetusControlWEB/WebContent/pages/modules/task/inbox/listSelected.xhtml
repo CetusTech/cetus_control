@@ -4,56 +4,55 @@
 
 
 
-  <p:dataTable value="#{myTaskMBean.reportTaskSelected}" rows="#{msg.rows_paginator}" id="tableLisPriority" paginator="true" style="height:300px;" 
-      rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
-      currentPageReportTemplate="({currentPage} de {totalPages})"
-      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-      paginatorPosition="bottom" rowKey="#{objetcPri.id}" 
-      emptyMessage="#{msg.list_empty}" var="objetcPri">
+  <p:dataTable value="#{myTaskMBean.reportTaskSelected}" rows="#{msg.rows_paginator}" id="tableLisPriority"
+    paginator="true" style="height:300px;" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}"
+    rowIndexVar="index" currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetcPri.id}" emptyMessage="#{msg.list_empty}" var="objetcPri">
 
-      <p:column>
-        <f:facet name="header">
-          <h:outputText value="#{msg.code}" />
-        </f:facet>
-        <h:outputText value="#{objetcPri.code}" />
-      </p:column>
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.code}" />
+      </f:facet>
+      <h:outputText value="#{objetcPri.code}" />
+    </p:column>
 
-      <p:column>
-        <f:facet name="header">
-          <h:outputText value="#{msg.description}" />
-        </f:facet>
-        <h:outputText value="#{objetcPri.description}" />
-      </p:column>
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.description}" />
+      </f:facet>
+      <h:outputText value="#{objetcPri.description}" />
+    </p:column>
 
-      <p:column>
-        <f:facet name="header">
-          <h:outputText value="#{msg.myTask_my_assing_date}" />
-        </f:facet>
-        <h:outputText value="#{objetcPri.assingDate}" />
-      </p:column>
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.myTask_my_assing_date}" />
+      </f:facet>
+      <h:outputText value="#{objetcPri.assingDate}" />
+    </p:column>
 
-      <p:column>
-        <f:facet name="header">
-          <h:outputText value="#{msg.status}" />
-        </f:facet>
-        <h:outputText value="#{objetcPri.status.description}" style="background-color: ##{objetcPri.status.color}" />
-      </p:column>
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.myTask_task_initDate}" />
+      </f:facet>
+      <h:outputText value="#{objetcPri.dateInit}" />
+    </p:column>
 
-      <p:column>
-        <f:facet name="header">
-          <h:outputText value="#{msg.myTask_my_group}" />
-        </f:facet>
-        <h:outputText value="#{objetcPri.personGroup.groupT.description}" />
-      </p:column>
-      
-      <p:column>
-        <f:facet name="header">
-          <h:outputText value="#{msg.priority}" />
-        </f:facet>
-        <h:outputText value="#{objetcPri.priority.description}" />
-      </p:column>
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.myTask_task_endate}" />
+      </f:facet>
+      <h:outputText value="#{objetcPri.deliveryDate}" />
+    </p:column>
 
-    </p:dataTable>
+    <p:column>
+      <f:facet name="header">
+        <h:outputText value="#{msg.priority}" />
+      </f:facet>
+      <h:outputText value="#{objetcPri.priority.description}" />
+    </p:column>
+
+  </p:dataTable>
 
 
 </ui:composition>

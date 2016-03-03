@@ -87,3 +87,12 @@ a {
 	text-align: center !important;
 	color: red;
 }
+
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 600px;
+}
+
+.ui-dashboard-column {
+	width: 620px;
+}

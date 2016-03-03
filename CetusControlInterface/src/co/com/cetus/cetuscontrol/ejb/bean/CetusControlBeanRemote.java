@@ -1,5 +1,6 @@
 package co.com.cetus.cetuscontrol.ejb.bean;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -122,5 +123,10 @@ public interface CetusControlBeanRemote {
   
   public ResponseDTO findNotificationByGroup ( int idGroup );
   
+  public ResponseDTO existsJorndInDay ( long pIdCetus, String pDay );
+  
   public ResponseDTO findNotificationByGroupGen ( int idGroup, int idGeneral );
+  
+  public ResponseDTO isTimeValid ( long pIdCetus, String pDay, Date pTime );
+  
 }

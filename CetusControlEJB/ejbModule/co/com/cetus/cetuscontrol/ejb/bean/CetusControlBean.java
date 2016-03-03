@@ -2,6 +2,7 @@ package co.com.cetus.cetuscontrol.ejb.bean;
 
 import static co.com.cetus.common.util.UtilCommon.createMessageFAILURE;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,7 +12,9 @@ import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.ejb.process.CetusControlProcess;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.common.dto.ResponseDTO;
+import co.com.cetus.common.util.UtilCommon;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class CetusControlBean.
  *
@@ -21,9 +24,16 @@ import co.com.cetus.common.dto.ResponseDTO;
 @Stateless
 public class CetusControlBean implements CetusControlBeanRemote {
   
+  /** The cetus control process. */
   @EJB
   CetusControlProcess cetusControlProcess;
   
+  /**
+   * </p> Instancia un nuevo cetus control bean. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlEJB (1/03/2016)
+   */
   public CetusControlBean () {
   }
   
@@ -31,7 +41,6 @@ public class CetusControlBean implements CetusControlBeanRemote {
    * </p> Metodo para crear registros en una entidad mediante el Objeto enviado. </p>
    *
    * @author Jose David Salcedo M. - Cetus Technology
-   * @param <T> the generic type
    * @param pDTO the p dto
    * @return el response dto
    * @since CetusControlEJB (18/02/2015)
@@ -51,8 +60,7 @@ public class CetusControlBean implements CetusControlBeanRemote {
    * </p> Metodo para actualizar la informacion de un registro en base de datos mediante el objeto enviado. </p>
    *
    * @author Jose David Salcedo M. - Cetus Technology
-   * @param <T> the generic type
-   * @param pDTO the p dto
+   * @param dto the dto
    * @return el response dto
    * @since CetusControlEJB (18/02/2015)
    */
@@ -71,7 +79,6 @@ public class CetusControlBean implements CetusControlBeanRemote {
    * </p> Metodo para eliminar la informacion de un registro en base de datos mediante el objeto enviado. </p>
    *
    * @author Jose David Salcedo M. - Cetus Technology
-   * @param <T> the generic type
    * @param dto the dto
    * @return el response dto
    * @since CetusControlEJB (18/02/2015)
@@ -205,13 +212,13 @@ public class CetusControlBean implements CetusControlBeanRemote {
   }
   
   /**
-  * </p> Metodo para buscar el usuario que se encuentra logueado en la aplicacion </p>
-  *
-  * @author Jose David Salcedo M. - Cetus Technology
-  * @param userCetus the user cetus
-  * @return el response dto
-  * @since CetusCSBLiquidationEJB (16/12/2014)
-  */
+   * </p> Metodo para buscar el usuario que se encuentra logueado en la aplicacion </p>.
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param userCetus the user cetus
+   * @return el response dto
+   * @since CetusCSBLiquidationEJB (16/12/2014)
+   */
   public ResponseDTO searchUserLogged ( String userCetus ) {
     ResponseDTO response = null;
     try {
@@ -223,6 +230,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findClientByClientCetus(int)
+   */
   public ResponseDTO findClientByClientCetus ( int pIdClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -234,6 +244,14 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /**
+   * </p> Find person by client cetus. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param pIdClientCetus the p id client cetus
+   * @return el response dto
+   * @since CetusControlEJB (1/03/2016)
+   */
   public ResponseDTO findPersonByClientCetus ( int pIdClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -245,6 +263,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findRolByApplication(int)
+   */
   public ResponseDTO findRolByApplication ( int idApp ) {
     ResponseDTO response = null;
     try {
@@ -256,6 +277,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findStatus(int)
+   */
   public ResponseDTO findStatus ( int idclientCetus ) {
     ResponseDTO response = null;
     try {
@@ -267,6 +291,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskType(int)
+   */
   public ResponseDTO findTaskType ( int idclientCetus ) {
     ResponseDTO response = null;
     try {
@@ -316,6 +343,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#createUserCetus(co.com.cetus.cetuscontrol.dto.UserPortalDTO, java.util.List)
+   */
   @Override
   public ResponseDTO createUserCetus ( UserPortalDTO pUserPortalDTO, List< String > selectedOptionsRol ) {
     ResponseDTO response = null;
@@ -328,6 +358,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#deleteUserCetus(co.com.cetus.cetuscontrol.dto.UserPortalDTO)
+   */
   @Override
   public ResponseDTO deleteUserCetus ( UserPortalDTO request ) {
     ResponseDTO response = null;
@@ -340,6 +373,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findExcepWorkdayByClientCetus(int)
+   */
   public ResponseDTO findExcepWorkdayByClientCetus ( int idClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -351,6 +387,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#generateCodeClient()
+   */
   @Override
   public ResponseDTO generateCodeClient () {
     ResponseDTO response = null;
@@ -363,6 +402,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findEmailsFromPerson(int)
+   */
   public ResponseDTO findEmailsFromPerson ( int idclientCetus ) {
     ResponseDTO response = null;
     try {
@@ -374,6 +416,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findAreaByClientCetus(int)
+   */
   public ResponseDTO findAreaByClientCetus ( int idClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -385,6 +430,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#generateCodePerson()
+   */
   @Override
   public ResponseDTO generateCodePerson () {
     ResponseDTO response = null;
@@ -397,6 +445,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findUserByPerson(int)
+   */
   public ResponseDTO findUserByPerson ( int idPerson ) {
     ResponseDTO response = null;
     try {
@@ -408,6 +459,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findRolByLogin(java.lang.String)
+   */
   public ResponseDTO findRolByLogin ( String request ) {
     ResponseDTO response = null;
     try {
@@ -419,6 +473,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#updateUserCetus(co.com.cetus.cetuscontrol.dto.UserPortalDTO, java.util.List)
+   */
   public ResponseDTO updateUserCetus ( UserPortalDTO pUserPortalDTO, List< String > selectedOptionsRol ) {
     ResponseDTO response = null;
     try {
@@ -430,6 +487,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findGroupByClientCetus(int)
+   */
   public ResponseDTO findGroupByClientCetus ( int pIdClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -441,6 +501,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findPersonByClient(int)
+   */
   public ResponseDTO findPersonByClient ( int pIdClient ) {
     ResponseDTO response = null;
     try {
@@ -452,6 +515,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findAllGroupTypeByClientCetus(int)
+   */
   public ResponseDTO findAllGroupTypeByClientCetus ( int pIdClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -464,6 +530,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findGroupByClient(int)
+   */
   public ResponseDTO findGroupByClient ( int pIdClient ) {
     ResponseDTO response = null;
     try {
@@ -475,6 +544,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findGroupByPerson(int)
+   */
   public ResponseDTO findGroupByPerson ( int pIdPerson ) {
     ResponseDTO response = null;
     try {
@@ -486,6 +558,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByClient(int)
+   */
   public ResponseDTO findTaskByClient ( int pIdClient ) {
     ResponseDTO response = null;
     try {
@@ -497,6 +572,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findGroupType(int)
+   */
   public ResponseDTO findGroupType ( int idclientCetus ) {
     ResponseDTO response = null;
     try {
@@ -546,6 +624,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findPersonGroupByPerson(int)
+   */
   public ResponseDTO findPersonGroupByPerson ( int pIdPerson ) {
     ResponseDTO response = null;
     try {
@@ -557,6 +638,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPersonGroup(int, int)
+   */
   public ResponseDTO findTaskByPersonGroup ( int pIdGroup, int pIdPerson ) {
     ResponseDTO response = null;
     try {
@@ -568,6 +652,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#generateCodeTask()
+   */
   public ResponseDTO generateCodeTask () {
     ResponseDTO response = null;
     try {
@@ -579,6 +666,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#getTemplateTaskMassive(int, int)
+   */
   public ResponseDTO getTemplateTaskMassive ( int idClientCetus, int idClient ) {
     ResponseDTO response = null;
     try {
@@ -590,6 +680,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findPersonGroup(int, java.lang.String)
+   */
   public ResponseDTO findPersonGroup ( int idGroup, String personIdentity ) {
     ResponseDTO response = null;
     try {
@@ -601,6 +694,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPerson(int)
+   */
   public ResponseDTO findTaskByPerson ( int pIdPerson ) {
     ResponseDTO response = null;
     try {
@@ -612,6 +708,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#getPercentageCurrent(int)
+   */
   public double getPercentageCurrent ( int idPerson ) {
     Double response = null;
     try {
@@ -622,6 +721,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findProgressTaskByPerson(int, int)
+   */
   public ResponseDTO findProgressTaskByPerson ( int pIdPerson, int pidClientCetus ) {
     ResponseDTO response = null;
     try {
@@ -633,6 +735,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPersonPriority(int, java.lang.String)
+   */
   public ResponseDTO findTaskByPersonPriority ( int pIdPerson, String descripPriority ) {
     ResponseDTO response = null;
     try {
@@ -644,6 +749,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#generateLengthTask(int)
+   */
   public ResponseDTO generateLengthTask ( int idTask ) {
     ResponseDTO response = null;
     try {
@@ -655,6 +763,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPersonCompleted(int, int)
+   */
   @Override
   public ResponseDTO findTaskByPersonCompleted ( int pIdPerson, int pidClientCetus ) {
     ResponseDTO response = null;
@@ -667,6 +778,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPersonRun(int, int)
+   */
   @Override
   public ResponseDTO findTaskByPersonRun ( int pIdPerson, int pidClientCetus ) {
     ResponseDTO response = null;
@@ -679,6 +793,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPersonExpired(int, int)
+   */
   @Override
   public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pidClientCetus ) {
     ResponseDTO response = null;
@@ -691,6 +808,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findTaskByPersonNexOvercome(int, int)
+   */
   @Override
   public ResponseDTO findTaskByPersonNexOvercome ( int pIdPerson, int pidClientCetus ) {
     ResponseDTO response = null;
@@ -703,6 +823,9 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#findAttachmentFilesByTaskId(long)
+   */
   public ResponseDTO findAttachmentFilesByTaskId ( long pIdTask ) {
     ResponseDTO response = null;
     try {
@@ -752,6 +875,20 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#existsJorndInDay(long, java.lang.String)
+   */
+  public ResponseDTO existsJorndInDay ( long pIdCetus, String pDay ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.existsJorndInDay( pIdCetus, pDay );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      response = UtilCommon.createMessageFAILURE();
+    }
+    return response;
+  }
+  
   /**
    * </p> Find notification by group gen. </p>
    *
@@ -772,4 +909,17 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
   }
   
+  /* (non-Javadoc)
+   * @see co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote#isTimeValid(long, java.lang.String, java.util.Date)
+   */
+  public ResponseDTO isTimeValid ( long pIdCetus, String pDay, Date pTime ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.isTimeValid( pIdCetus, pDay, pTime );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
 }

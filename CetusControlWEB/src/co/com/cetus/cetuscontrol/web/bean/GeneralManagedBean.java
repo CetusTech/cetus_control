@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -580,6 +581,12 @@ public abstract class GeneralManagedBean implements Serializable {
     return sessionId;
   }
   
+  public static int getDayOfTheWeek ( Date d ) {
+    GregorianCalendar cal = new GregorianCalendar();
+    cal.setTime( d );
+    return cal.get( Calendar.DAY_OF_WEEK );
+  }
+  
   /**
    * </p> Gets the simplified value. </p>
    *
@@ -604,5 +611,4 @@ public abstract class GeneralManagedBean implements Serializable {
     }
     return simplifyValue;
   }
-  
 }

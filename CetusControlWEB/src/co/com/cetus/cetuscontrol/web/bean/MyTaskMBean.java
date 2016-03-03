@@ -52,31 +52,31 @@ public class MyTaskMBean implements Serializable {
    * 
    */
   private static final long serialVersionUID   = 1L;
-  
+                                               
   /** The list register. */
   private List< TaskDTO >   listRegister       = null;
-  
+                                               
   /** The selected object. */
   private TaskDTO           selectedObject     = null;
-  
+                                               
   private BarChartModel     barModel;
-  
+                            
   private DashboardModel    model;
-  
+                            
   private PieChartModel     pieModel;
-  
+                            
   protected GeneralDelegate generalDelegate    = GeneralDelegate.getInstance();
-  
-  Map< String, String >     progressTask       = new HashMap< String, String >();
-  
+                                               
+  Map< String, Integer >    progressTask       = new HashMap< String, Integer >();
+                                               
   private List< TaskDTO >   reportTaskSelected = null;
-  
+                                               
   private long              prioritySelected   = 0;
-  
+                                               
   private boolean           showViewDetail     = false;
-  
-  ChartSeries               prioridades        = new ChartSeries();
-  
+                                               
+  List< PriorityDTO >       priorityList;
+                            
   /**
    * 
    */
@@ -124,11 +124,11 @@ public class MyTaskMBean implements Serializable {
                                                                                                          .getId() );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         //Respuesta del servicio 
-        this.progressTask = ( HashMap< String, String > ) response.getObjectResponse();
+        this.progressTask = ( HashMap< String, Integer > ) response.getObjectResponse();
       } else {
         //si no encontro registro para listar 
         if ( UtilCommon.validateResponseNoResult( response ) ) {
-          this.progressTask = new HashMap< String, String >();
+          this.progressTask = new HashMap< String, Integer >();
         }
       }
       
@@ -153,35 +153,48 @@ public class MyTaskMBean implements Serializable {
     }
   }
   
+  @SuppressWarnings ( "unchecked" )
   private void createBarModel () {
-    barModel = initBarModel();
-    
-    barModel.setTitle( ConstantWEB.MYTASK_MY_PRIORITY_DIGRAM_TITLE );
+    barModel = new BarChartModel();
+    //barModel.setTitle( ConstantWEB.MYTASK_MY_PRIORITY_DIGRAM_TITLE );
     barModel.setLegendPosition( "ne" );
+    barModel.setSeriesColors( ConstantWEB.MYTASK_TASK_BAR_SERIESCOLORS );
     
     Axis xAxis = barModel.getAxis( AxisType.X );
-    xAxis.setLabel( ConstantWEB.MYTASK_MY_PRIORITY_H_LABEL );
+    //xAxis.setLabel( ConstantWEB.MYTASK_MY_PRIORITY_H_LABEL );
     
     Axis yAxis = barModel.getAxis( AxisType.Y );
     yAxis.setLabel( ConstantWEB.MYTASK_MY_PRIORITY_V_LABEL );
     yAxis.setMin( 0 );
     yAxis.setMax( 10 );
-  }
-  
-  private BarChartModel initBarModel () {
-    BarChartModel model = new BarChartModel();
-    prioridades.setLabel( ConstantWEB.MYTASK_MY_PRIORITY_DIGRAM_DETAIL );
-    for ( TaskDTO taskDTO: listRegister ) {
-      long idPriorityTask = taskDTO.getPriority().getId();
-      long sum = 0;
-      for ( TaskDTO taskDTO2: listRegister ) {
-        if ( taskDTO2.getPriority().getId() == idPriorityTask ) sum++;
-      }
-      prioridades.set( taskDTO.getPriority().getDescription(), sum );
-    }
-    model.addSeries( prioridades );
     
-    return model;
+    ResponseDTO response = null;
+    try {
+      response = generalDelegate.findPriorityByClientCetus( getUserDTO().getPerson().getClient().getClientCetus().getId() );
+      if ( UtilCommon.validateResponseSuccess( response ) ) {
+        this.priorityList = ( List< PriorityDTO > ) response.getObjectResponse();
+      } else {
+        if ( UtilCommon.validateResponseNoResult( response ) ) {
+          this.priorityList = new ArrayList< PriorityDTO >();
+        }
+      }
+    } catch ( Exception e ) {
+      addMessageError( null, e.getMessage(), "" );
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    
+    ChartSeries prioridad = new ChartSeries();
+    for ( PriorityDTO priorityDTO: priorityList ) {
+      long sum = 0;
+      prioridad = new ChartSeries();
+      prioridad.setLabel( priorityDTO.getDescription() );
+      for ( TaskDTO taskDTO2: listRegister ) {
+        if ( taskDTO2.getPriority().getId() == priorityDTO.getId() ) sum++;
+      }
+      prioridad.set( ConstantWEB.MYTASK_MY_PRIORITY_H_LABEL, sum );
+      barModel.addSeries( prioridad );
+    }
+    
   }
   
   private void createPieModels () {
@@ -189,14 +202,22 @@ public class MyTaskMBean implements Serializable {
   }
   
   private void createPieModel () {
-    pieModel = new PieChartModel();
-    for ( Map.Entry< String, String > entry: progressTask.entrySet() ) {
-      String key = entry.getKey();
-      String value = entry.getValue();
-      pieModel.set( key, new Long( value ) );
+    try {
+      pieModel = new PieChartModel();
+      pieModel.setFill( true );
+      pieModel.setShowDataLabels( true );
+      //pieModel.setTitle( ConstantWEB.MYTASK_MY_PROGRESS_DIGRAM_TITLE );
+      pieModel.setLegendPosition( "w" );
+      pieModel.setMouseoverHighlight( true );
+      pieModel.setSeriesColors( ConstantWEB.MYTASK_TASK_PIE_SERIESCOLORS );
+      
+      for ( Map.Entry< String, Integer > entry: progressTask.entrySet() ) {
+        pieModel.set( entry.getKey(), entry.getValue() );
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
     }
-    pieModel.setTitle( ConstantWEB.MYTASK_MY_PROGRESS_DIGRAM_TITLE );
-    pieModel.setLegendPosition( "w" );
+    
   }
   
   public void handleReorder ( DashboardReorderEvent event ) {
@@ -205,7 +226,7 @@ public class MyTaskMBean implements Serializable {
     message.setSummary( "Reordered: " + event.getWidgetId() );
     message.setDetail( "Item index: " + event.getItemIndex() + ", Column index: " + event.getColumnIndex() + ", Sender index: "
                        + event.getSenderColumnIndex() );
-    
+                       
     addMessage( message );
   }
   
@@ -218,7 +239,7 @@ public class MyTaskMBean implements Serializable {
   public void handleToggle ( ToggleEvent event ) {
     FacesMessage message = new FacesMessage( FacesMessage.SEVERITY_INFO, event.getComponent().getId() + " toggled", "Status:"
                                                                                                                     + event.getVisibility().name() );
-    
+                                                                                                                    
     addMessage( message );
   }
   
@@ -267,20 +288,19 @@ public class MyTaskMBean implements Serializable {
   @SuppressWarnings ( "unchecked" )
   public void itemBarSelect ( ItemSelectEvent event ) {
     showViewDetail = true;
-    int itemIndex = event.getItemIndex();
+    int itemIndex = event.getSeriesIndex();
     int count = 0;
     String key = null;
     ResponseDTO response = null;
-    @SuppressWarnings ( { "rawtypes" } )
-    Map< String, String > hmap = ( Map ) prioridades.getData();
-    for ( Map.Entry< String, String > entry: hmap.entrySet() ) {
-      key = entry.getKey();
+    List< ChartSeries > chartSeries = barModel.getSeries();
+    for ( ChartSeries chartSerie: chartSeries ) {
       if ( count == itemIndex ) {
-        count = 0;
+        key = chartSerie.getLabel();
         break;
       }
       count++;
     }
+    
     /**Consultar tareas por prioridad seleccionada:**/
     response = generalDelegate.findTaskByPersonPriority( getUserDTO().getPerson().getId(), key );
     if ( UtilCommon.validateResponseSuccess( response ) ) {
@@ -305,20 +325,19 @@ public class MyTaskMBean implements Serializable {
     ResponseDTO response = new ResponseDTO();
     try {
       @SuppressWarnings ( { "rawtypes" } )
-      Map< String, String > hmap = ( Map ) pieModel.getData();
-      for ( Map.Entry< String, String > entry: hmap.entrySet() ) {
+      Map< String, Integer > hmap = ( Map ) pieModel.getData();
+      for ( Map.Entry< String, Integer > entry: hmap.entrySet() ) {
         key = entry.getKey();
         if ( count == itemIndex ) {
-          if ( key == ConstantWEB.MESSAGE_DES_RUN ) { // En curso
-            response = generalDelegate.findTaskByPersonRun( getUserDTO().getPerson().getId(), getUserDTO().getPerson().getClient().getClientCetus()
-                                                                                                          .getId() );
-          } else if ( key == ConstantWEB.MESSAGE_DES_EXPIRED ) { // Vencidas
+          if ( key.equals( ConstantWEB.MESSAGE_DES_RUN ) ) { // En curso
+            response = generalDelegate.findTaskByPersonRun( getUserDTO().getPerson().getId(), getUserDTO().getPerson().getClient().getId() );
+          } else if ( key.equals( ConstantWEB.MESSAGE_DES_EXPIRED ) ) { // Vencidas
             response = generalDelegate.findTaskByPersonExpired( getUserDTO().getPerson().getId(), getUserDTO().getPerson().getClient()
                                                                                                               .getClientCetus().getId() );
-          } else if ( key == ConstantWEB.MESSAGE_DES_NEXT_OVERCOME ) { // Proximas a vencer
+          } else if ( key.equals( ConstantWEB.MESSAGE_DES_NEXT_OVERCOME ) ) { // Proximas a vencer
             response = generalDelegate.findTaskByPersonNexOvercome( getUserDTO().getPerson().getId(), getUserDTO().getPerson().getClient()
                                                                                                                   .getClientCetus().getId() );
-          } else if ( key == ConstantWEB.MESSAGE_DES_FINISH ) { // Completadas
+          } else if ( key.equals( ConstantWEB.MESSAGE_DES_FINISH ) ) { // Completadas
             response = generalDelegate.findTaskByPersonCompleted( getUserDTO().getPerson().getId(), getUserDTO().getPerson().getClient()
                                                                                                                 .getClientCetus().getId() );
           }
@@ -384,11 +403,11 @@ public class MyTaskMBean implements Serializable {
     this.model = model;
   }
   
-  public Map< String, String > getProgressTask () {
+  public Map< String, Integer > getProgressTask () {
     return progressTask;
   }
   
-  public void setProgressTask ( Map< String, String > progressTask ) {
+  public void setProgressTask ( Map< String, Integer > progressTask ) {
     this.progressTask = progressTask;
   }
   

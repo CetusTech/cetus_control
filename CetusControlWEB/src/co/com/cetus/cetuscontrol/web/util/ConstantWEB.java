@@ -130,11 +130,15 @@ public class ConstantWEB {
   public final static String     MESSAGE_DES_EXPIRED                = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DES_EXPIRED" );
   public final static String     MESSAGE_ERROR_DELETE               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "alert_select_row_record" );
   public final static String     MESSAGE_DATE_END_VALIDATION        = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_date_validation_before" );
+  public final static String     MSG_DATE_NOT_JORND                 = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_date_not_jornd" );
+  public final static String     MSG_TIME_NOT_JORND                 = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_time_not_jornd" );
                                                                     
   public final static String     PATH_FILE_TASK                     = properties.getProperty( "PATH_FILE_TASK" );
                                                                     
   public final static String     ERROR_ACTIVATE_NOTIFICATION        = UtilWEB.getProperty( NAME_BUNDLE_WEB, "ERROR_ACTIVATE_NOTIFICATION" );
   public final static String     RESPONSIBLE_TASK                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "RESPONSIBLE_TASK" );
   public final static String     ERROR_GROUP_CLONE                  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "ERROR_GROUP_CLONE" );
+  public final static String     MYTASK_TASK_BAR_SERIESCOLORS       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "myTask_task_bar_seriesColors" );
+  public final static String     MYTASK_TASK_PIE_SERIESCOLORS       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "myTask_task_pie_seriesColors" );
                                                                     
 }

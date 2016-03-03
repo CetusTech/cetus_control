@@ -15,7 +15,9 @@ import java.util.Date;
   @NamedQuery(name="Workday.findAll", query="SELECT w FROM Workday w"),
   @NamedQuery(name="Workday.findWorkDayByClientCetus", query="SELECT w FROM Workday w WHERE w.clientCetus.id = :idClientCetus order by w.colDay, w.jornada"),
   @NamedQuery(name="Workday.findJornadaMax", query="SELECT MAX(w.endTime) FROM Workday w WHERE w.clientCetus.id = :idClientCetus AND w.colDay = :day "),
+  @NamedQuery(name="Workday.existsJorndInDay", query="SELECT w FROM Workday w WHERE w.clientCetus.id = :idClientCetus AND w.colDay = :day "),  
   @NamedQuery(name="Workday.findJornadaMin", query="SELECT MIN(w.startTime) FROM Workday w WHERE w.clientCetus.id = :idClientCetus AND w.colDay = :day ")
+  
 } )
 public class Workday implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -135,6 +137,6 @@ public class Workday implements Serializable {
 
 	public void setClientCetus(ClientCetus clientCetus) {
 		this.clientCetus = clientCetus;
-	}
-
+  }
+  
 }

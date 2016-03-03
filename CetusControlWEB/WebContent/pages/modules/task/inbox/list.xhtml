@@ -2,10 +2,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
-
-
-  <p:dataTable value="#{myTaskMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true" style="height:300px;" 
-      rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+  <p:dataTable value="#{myTaskMBean.listRegister}" rows="4" id="table" paginator="true" style="height:300px;" 
+      rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" 
       currentPageReportTemplate="({currentPage} de {totalPages})"
       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
       paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{myTaskMBean.selectedObject}"
@@ -13,37 +11,35 @@
 
       <p:ajax event="rowSelect" listener="#{myTaskMBean.onRowSelect}" update="table, dialogView" />
 
-      <p:column sortBy="#{objetc.code}" filterBy="#{objetc.code}" filterMatchMode="contains">
+      <p:column sortBy="#{objetc.code}">
         <f:facet name="header">
           <h:outputText value="#{msg.code}" />
         </f:facet>
         <h:outputText value="#{objetc.code}" />
       </p:column>
 
-      <p:column sortBy="#{objetc.description}" filterBy="#{objetc.description}" filterMatchMode="contains">
+      <p:column sortBy="#{objetc.description}">
         <f:facet name="header">
           <h:outputText value="#{msg.description}" />
         </f:facet>
         <h:outputText value="#{objetc.description}" />
       </p:column>
 
-      <p:column sortBy="#{objetc.assingDate}" filterBy="#{objetc.assingDate}" filterMatchMode="contains">
+      <p:column sortBy="#{objetc.assingDate}">
         <f:facet name="header">
           <h:outputText value="#{msg.myTask_my_assing_date}" />
         </f:facet>
         <h:outputText value="#{objetc.assingDate}" />
       </p:column>
 
-      <p:column sortBy="#{objetc.status.description}" filterBy="#{objetc.status.description}"
-        filterMatchMode="contains">
+      <p:column sortBy="#{msg.status}">
         <f:facet name="header">
           <h:outputText value="#{msg.status}" />
         </f:facet>
         <h:outputText value="#{objetc.status.description}" style="background-color: ##{objetc.status.color}" />
       </p:column>
 
-      <p:column sortBy="#{objetc.personGroup.groupT.description}"
-        filterBy="#{objetc.personGroup.groupT.description}" filterMatchMode="contains">
+      <p:column sortBy="#{msg.myTask_my_group}">
         <f:facet name="header">
           <h:outputText value="#{msg.myTask_my_group}" />
         </f:facet>

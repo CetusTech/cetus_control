@@ -7,10 +7,14 @@ import static co.com.cetus.common.util.UtilCommon.createMessageWRONG_PARAMETERS;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1782,67 +1786,57 @@ public class CetusControlProcess {
   public ResponseDTO findProgressTaskByPerson ( int pIdPerson, int pidClientCetus ) {
     ResponseDTO responseDTO = null;
     Map< String, Integer > progressTask = new HashMap< String, Integer >();
-    
+    Query query = null;
     try {
       /**Completadas:**/
       int valorItem;
-      valorItem = ( int ) em.createQuery(
-                                          " SELECT"
-                                          + " COUNT(t.id)"
-                                          + " FROM Task t"
-                                          + " JOIN t.status s"
-                                          + " JOIN t.personGroup pg"
-                                          + " JOIN pg.person p"
-                                          + " WHERE p.id = :idPerson AND s.description = :statusDes" )
-                            .setParameter( "idPerson", pIdPerson )
-                            .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
-                            .getSingleResult();
-                            
+      valorItem = ( ( Long ) em.createQuery(
+                                             " SELECT"
+                                             + " COUNT(t.id)"
+                                             + " FROM Task t"
+                                             + " JOIN t.status s"
+                                             + " JOIN t.personGroup pg"
+                                             + " JOIN pg.person p"
+                                             + " WHERE p.id = :idPerson AND s.description = :statusDes" )
+                               .setParameter( "idPerson", pIdPerson )
+                               .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
+                               .getSingleResult() ).intValue();
+                               
       progressTask.put( ConstantEJB.DES_FINISH, valorItem );
       
       /**Proximas a vencer:**/
-      valorItem = ( int ) em.createQuery(
-                                          " SELECT"
-                                          + " COUNT(t.id)"
-                                          + " FROM Task t"
-                                          + " JOIN t.personGroup pg"
-                                          + " JOIN pg.person p"
-                                          + " JOIN p.client c"
-                                          + " JOIN c.clientCetus cc"
-                                          + " JOIN cc.parameterGenerals pgral"
-                                          + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND t.deliveryDate - ( pgral.timeBeforeExpiration / 1440 ) >= sysdate"
-                                          + " AND sysdate + ( pgral.timeBeforeExpiration / 1440 ) <= t.deliveryDate" )
-                            .setParameter( "idClientCetus", pidClientCetus ).setParameter( "idPerson", pIdPerson ).getSingleResult();
-                            
+      query = em.createNativeQuery( "SELECT count(t.id) FROM Task t inner JOIN person_group  pg on pg.id = t.ID_GROUP_PERSON inner JOIN person p on p.id = pg.ID_PERSON inner JOIN client c on c.id = p.ID_CLIENT inner JOIN client_cetus cs on cs.id = c.ID_CLIENT_CETUS inner JOIN parameter_general pgral on pgral.ID_CLIENT_CETUS = cs.id WHERE p.id = ? AND cs.id = ? AND  ADDTIME(now(),SEC_TO_TIME(pgral.TIME_BEFORE_EXPIRATION*60)) >= t.DELIVERY_DATE and t.id_status not in (3,4) and now() <= t.DELIVERY_DATE" );
+      query.setParameter( 1, pIdPerson );
+      query.setParameter( 2, pidClientCetus );
+      valorItem = ( ( BigInteger ) query.getSingleResult() ).intValue();
+      
       progressTask.put( ConstantEJB.DES_NEXT_OVERCOME, valorItem );
       
       /**En Curso:**/
-      valorItem = ( int ) em.createQuery(
-                                          " SELECT"
-                                          + " COUNT(t.id)"
-                                          + " FROM Task t"
-                                          + " JOIN t.status s"
-                                          + " JOIN t.personGroup pg"
-                                          + " JOIN pg.person p"
-                                          + " WHERE p.id = :idPerson AND s.description <> :statusDes" )
-                            .setParameter( "idPerson", pIdPerson )
-                            .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
-                            .getSingleResult();
-                            
+      valorItem = ( ( Long ) em.createQuery(
+                                             " SELECT"
+                                             + " COUNT(t.id)"
+                                             + " FROM Task t"
+                                             + " JOIN t.status s"
+                                             + " JOIN t.personGroup pg"
+                                             + " JOIN pg.person p"
+                                             + " WHERE p.id = :idPerson AND t.status.id in (2)" )
+                               .setParameter( "idPerson", pIdPerson )
+                               .getSingleResult() ).intValue();
+                               
       progressTask.put( ConstantEJB.DES_RUN, valorItem );
       
       /**Vencidas:**/
-      valorItem = ( int ) em.createQuery(
-                                          " SELECT"
-                                          + " COUNT(t.id)"
-                                          + " FROM Task t"
-                                          + " JOIN t.status s"
-                                          + " JOIN t.personGroup pg"
-                                          + " JOIN pg.person p"
-                                          + " WHERE p.id = :idPerson AND s.description <> :statusDes AND sysdate > t.deliveryDate " )
-                            .setParameter( "idPerson", pIdPerson ).setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
-                            .getSingleResult();
-                            
+      valorItem = ( ( Long ) em.createQuery(
+                                             " SELECT"
+                                             + " COUNT(t.id)"
+                                             + " FROM Task t"
+                                             + " JOIN t.status s"
+                                             + " JOIN t.personGroup pg"
+                                             + " JOIN pg.person p"
+                                             + " WHERE p.id = :idPerson AND t.status.id in (2) AND now() > t.deliveryDate " )
+                               .setParameter( "idPerson", pIdPerson ).getSingleResult() ).intValue();
+                               
       progressTask.put( ConstantEJB.DES_EXPIRED, valorItem );
       responseDTO = createMessageSUCCESS();
       responseDTO.setObjectResponse( progressTask );
@@ -1861,18 +1855,19 @@ public class CetusControlProcess {
     List< Task > list = null;
     List< TaskDTO > listDto = null;
     TaskDTO dto = null;
+    Query query = null;
     try {
-      list = ( ArrayList< Task > ) em.createQuery(
-                                                   " SELECT"
-                                                   + " t"
-                                                   + " FROM Task t"
-                                                   + " JOIN t.status s"
-                                                   + " JOIN t.personGroup pg"
-                                                   + " JOIN pg.person p"
-                                                   + " WHERE p.id = :idPerson AND s.description = :statusDes" )
-                                     .setParameter( "idPerson", pIdPerson )
-                                     .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL ).getResultList();
-                                     
+      query = em.createQuery(
+                              " SELECT"
+                              + " t"
+                              + " FROM Task t"
+                              + " JOIN t.status s"
+                              + " JOIN t.personGroup pg"
+                              + " JOIN pg.person p"
+                              + " WHERE p.id = :idPerson AND t.status.id = 3" );
+      query.setParameter( "idPerson", pIdPerson );
+      list = ( ArrayList< Task > ) query.getResultList();
+      
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -1899,20 +1894,23 @@ public class CetusControlProcess {
     List< Task > list = null;
     List< TaskDTO > listDto = null;
     TaskDTO dto = null;
+    Query query = null;
     try {
-      list = ( ArrayList< Task > ) em.createQuery(
-                                                   " SELECT"
-                                                   + " t"
-                                                   + " FROM Task t"
-                                                   + " JOIN t.personGroup pg"
-                                                   + " JOIN pg.person p"
-                                                   + " JOIN p.client c"
-                                                   + " JOIN c.clientCetus cc"
-                                                   + " JOIN cc.parameterGenerals pgral"
-                                                   + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND t.deliveryDate - ( pgral.timeBeforeExpiration / 1440 ) >= sysdate"
-                                                   + " AND sysdate + ( pgral.timeBeforeExpiration / 1440 ) <= t.deliveryDate" )
-                                     .setParameter( "idClientCetus", pidClientCetus ).setParameter( "idPerson", pIdPerson ).getResultList();
-                                     
+      query = em.createQuery(
+                              " SELECT"
+                              + " t"
+                              + " FROM Task t"
+                              + " JOIN t.personGroup pg"
+                              + " JOIN pg.person p"
+                              + " JOIN p.client c"
+                              + " JOIN c.clientCetus cc"
+                              + " JOIN cc.parameterGenerals pgral"
+                              + " WHERE p.id = :idPerson AND pgral.clientCetus.id = :idClientCetus AND ADDTIME(now(),SEC_TO_TIME(pgral.timeBeforeExpiration*60)) >= t.deliveryDate and t.status.id not in (4,3) " );
+                              
+      query.setParameter( "idClientCetus", pidClientCetus );
+      query.setParameter( "idPerson", pIdPerson );
+      list = ( ArrayList< Task > ) query.getResultList();
+      
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -1934,23 +1932,25 @@ public class CetusControlProcess {
   }
   
   @SuppressWarnings ( "unchecked" )
-  public ResponseDTO findTaskByPersonRun ( int pIdPerson, int pidClientCetus ) {
+  public ResponseDTO findTaskByPersonRun ( int pIdPerson, int pIdClient ) {
     ResponseDTO responseDTO = null;
     List< Task > list = null;
     List< TaskDTO > listDto = null;
     TaskDTO dto = null;
+    Query query = null;
     try {
-      list = ( ArrayList< Task > ) em.createQuery(
-                                                   " SELECT"
-                                                   + " t"
-                                                   + " FROM Task t"
-                                                   + " JOIN t.status s"
-                                                   + " JOIN t.personGroup pg"
-                                                   + " JOIN pg.person p"
-                                                   + " WHERE p.id = :idPerson AND s.description <> :statusDes" )
-                                     .setParameter( "idPerson", pIdPerson )
-                                     .setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL ).getResultList();
-                                     
+      
+      query = em.createQuery( " SELECT"
+                              + " t"
+                              + " FROM Task t"
+                              + " JOIN t.status s"
+                              + " JOIN t.personGroup pg"
+                              + " JOIN pg.person p"
+                              + " WHERE p.id = :idPerson and p.client.id = :idClient AND t.status.id in (2)" );
+      query.setParameter( "idPerson", pIdPerson );
+      query.setParameter( "idClient", pIdClient );
+      list = ( ArrayList< Task > ) query.getResultList();
+      
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -1971,23 +1971,25 @@ public class CetusControlProcess {
   }
   
   @SuppressWarnings ( "unchecked" )
-  public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pidClientCetus ) {
+  public ResponseDTO findTaskByPersonExpired ( int pIdPerson, int pIdClient ) {
     ResponseDTO responseDTO = null;
     List< Task > list = null;
     List< TaskDTO > listDto = null;
     TaskDTO dto = null;
+    Query query = null;
     try {
-      list = ( ArrayList< Task > ) em.createQuery(
-                                                   " SELECT"
-                                                   + " COUNT(t.id)"
-                                                   + " FROM Task t"
-                                                   + " JOIN t.status s"
-                                                   + " JOIN t.personGroup pg"
-                                                   + " JOIN pg.person p"
-                                                   + " WHERE p.id = :idPerson AND s.description <> :statusDes AND sysdate > t.deliveryDate " )
-                                     .setParameter( "idPerson", pIdPerson ).setParameter( "statusDes", ConstantEJB.TASK_STATUS_FINAL )
-                                     .getResultList();
-                                     
+      
+      query = em.createQuery( " SELECT"
+                              + " COUNT(t.id)"
+                              + " FROM Task t"
+                              + " JOIN t.status s"
+                              + " JOIN t.personGroup pg"
+                              + " JOIN pg.person p"
+                              + " WHERE p.id = :idPerson and p.client.id = :idClient AND t.status.id not in (4,3) AND now() > t.deliveryDate " );
+      query.setParameter( "idPerson", pIdPerson );
+      query.setParameter( "idClient", pIdClient );
+      list = ( ArrayList< Task > ) query.getResultList();
+      
       listDto = new ArrayList< TaskDTO >();
       
       for ( Object entity: list ) {
@@ -2191,6 +2193,37 @@ public class CetusControlProcess {
   }
   
   /**
+   * </p> Exists jornd in day. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param pIdCetus the p id cetus
+   * @param pDay the p day
+   * @return el response dto
+   * @since CetusControlEJB (29/02/2016)
+   */
+  public ResponseDTO existsJorndInDay ( long pIdCetus, String pDay ) {
+    ResponseDTO responseDTO = null;
+    TypedQuery< Workday > query = null;
+    try {
+      responseDTO = new ResponseDTO();
+      query = em.createNamedQuery( "Workday.existsJorndInDay", Workday.class );
+      query.setParameter( "idClientCetus", Long.valueOf( pIdCetus ).intValue() );
+      query.setParameter( "day", pDay );
+      
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( true );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
+  /**
    * </p> Find notification by group gen. </p>
    *
    * @author Jose David Salcedo M. - Cetus Technology
@@ -2224,4 +2257,39 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
+  public ResponseDTO isTimeValid ( long pIdCetus, String pDay, Date pTime ) {
+    ResponseDTO responseDTO = null;
+    Query query = null;
+    DateFormat formatter = null;
+    Date h1 = null, h2 = null;
+    try {
+      formatter = new SimpleDateFormat( "HH:mm" );
+      pTime = formatter.parse( formatter.format( pTime ) );
+      responseDTO = new ResponseDTO();
+      query = em.createNativeQuery( "SELECT min(TIME(CONCAT(TRUNCATE(START_TIME/100,0) ,':', MOD(END_TIME,100)))),max(TIME(CONCAT(TRUNCATE(END_TIME/100,0) ,':', MOD(END_TIME,100)))) FROM workday  where COL_DAY=? and ID_CLIENT_CETUS=?" );
+      query.setParameter( 1, pDay );
+      query.setParameter( 2, Long.valueOf( pIdCetus ).intValue() );
+      Object[] results = ( Object[] ) query.getSingleResult();
+      if ( results.length > 0 ) {
+        h1 = ( Date ) formatter.parse( ( String ) results[0] );
+        
+        h2 = ( Date ) formatter.parse( ( String ) results[1] );
+        if ( pTime != null ) {
+          responseDTO = createMessageSUCCESS();
+          if ( pTime.getTime() >= h1.getTime() && pTime.getTime() <= h2.getTime() ) {
+            responseDTO.setObjectResponse( true );
+          } else {
+            responseDTO.setObjectResponse( false );
+          }
+        }
+        
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
 }

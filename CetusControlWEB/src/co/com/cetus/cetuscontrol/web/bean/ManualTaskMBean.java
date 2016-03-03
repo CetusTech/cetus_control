@@ -41,6 +41,7 @@ import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
 import co.com.cetus.cetuscontrol.dto.TraceTaskDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
+import co.com.cetus.cetuscontrol.web.util.EWeekDay;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.mail.SendMail;
 import co.com.cetus.common.util.UtilCommon;
@@ -715,22 +716,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
             }
             addObjectSession( listRegister, "listRegister" );
             
-            //Enviar EMAIL temporalmente          
-            String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-            String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-            String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-            String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-            String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-            String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-            String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_SUPENDED" );
-            String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_SUSPENDED" );
-            
-            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-            //              sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-            //                                       replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-            //              sendMail.start();
-            //            }
-            
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA SUSPENDIDA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
@@ -768,6 +753,38 @@ public class ManualTaskMBean extends GeneralManagedBean {
       context.execute( "PF('dialogViewVar').hide();" );
     }
     
+  }
+  
+  public boolean isDayValid ( String pDay ) {
+    ResponseDTO response = null;
+    boolean flag = false;
+    try {
+      //consultar si el día que esta ingresando es un dia laboral
+      response = generalDelegate.existsJorndInDay( userPortalDTO.getPerson().getClient().getClientCetus().getId(), pDay );
+      if ( UtilCommon.validateResponseSuccess( response ) ) {
+        flag = ( boolean ) response.getObjectResponse();
+      }
+    } catch ( Exception e ) {
+      addMessageError( null, e.getMessage(), e.getMessage() );
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return flag;
+  }
+  
+  public boolean isTimeValid ( String pDay, Date pTime ) {
+    ResponseDTO response = null;
+    boolean flag = false;
+    try {
+      //consultar si el día que esta ingresando es un dia laboral
+      response = generalDelegate.isTimeValid( userPortalDTO.getPerson().getClient().getClientCetus().getId(), pDay, pTime );
+      if ( UtilCommon.validateResponseSuccess( response ) ) {
+        flag = ( boolean ) response.getObjectResponse();
+      }
+    } catch ( Exception e ) {
+      addMessageError( null, e.getMessage(), e.getMessage() );
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return flag;
   }
   
   /**
@@ -1389,7 +1406,20 @@ public class ManualTaskMBean extends GeneralManagedBean {
         if ( !initTask.before( endTask ) ) {
           throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
                                                           ConstantWEB.MESSAGE_DATE_END_VALIDATION ) );
+        } else {
+          
+          if ( !isDayValid( EWeekDay.getValue( getDayOfTheWeek( endTask ) ) ) ) {
+            //No es valido Generar Excepcion
+            throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
+                                                            ConstantWEB.MSG_DATE_NOT_JORND ) );
+          }
+          if ( !isTimeValid( EWeekDay.getValue( getDayOfTheWeek( endTask ) ), endTask ) ) {
+            //No es valido Generar Excepcion
+            throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
+                                                            ConstantWEB.MSG_TIME_NOT_JORND ) );
+          }
         }
+        
       }
     }
   }
@@ -1405,6 +1435,19 @@ public class ManualTaskMBean extends GeneralManagedBean {
         if ( !assignTask.before( endTask ) ) {
           throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
                                                           ConstantWEB.MESSAGE_DATE_END_VALIDATION ) );
+        } else {
+          
+          if ( !isDayValid( EWeekDay.getValue( getDayOfTheWeek( endTask ) ) ) ) {
+            //No es valido Generar Excepcion
+            throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
+                                                            ConstantWEB.MSG_DATE_NOT_JORND ) );
+          }
+          
+          if ( !isTimeValid( EWeekDay.getValue( getDayOfTheWeek( endTask ) ), endTask ) ) {
+            //No es valido Generar Excepcion
+            throw new ValidatorException( new FacesMessage( FacesMessage.SEVERITY_ERROR, ConstantWEB.MESSAGE_ERROR,
+                                                            ConstantWEB.MSG_TIME_NOT_JORND ) );
+          }
         }
       }
     }

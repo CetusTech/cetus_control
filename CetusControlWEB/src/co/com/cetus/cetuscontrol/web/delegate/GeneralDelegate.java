@@ -1,5 +1,6 @@
 package co.com.cetus.cetuscontrol.web.delegate;
 
+import java.util.Date;
 import java.util.List;
 
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
@@ -581,6 +582,16 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
+  public ResponseDTO existsJorndInDay ( long pIdCetus, String pDay ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.existsJorndInDay( pIdCetus, pDay );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
   public ResponseDTO findNotificationByGroupGen ( int idGroup, int idGeneral ) {
     ResponseDTO responseDTO = null;
     try {
@@ -590,4 +601,15 @@ public class GeneralDelegate {
     }
     return responseDTO;
   }
+  
+  public ResponseDTO isTimeValid ( long pIdCetus, String pDay, Date pTime ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.isTimeValid( pIdCetus, pDay,pTime );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
 }
