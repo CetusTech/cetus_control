@@ -1980,7 +1980,7 @@ public class CetusControlProcess {
     try {
       
       query = em.createQuery( " SELECT"
-                              + " COUNT(t.id)"
+                              + " t"
                               + " FROM Task t"
                               + " JOIN t.status s"
                               + " JOIN t.personGroup pg"

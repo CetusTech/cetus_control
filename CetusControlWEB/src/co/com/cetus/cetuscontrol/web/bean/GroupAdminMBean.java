@@ -63,7 +63,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
   private long                 idClient;
   private int                  idPerson;
   private long                 idClientUpdate;
-  private long                  idPersonUpdate;
+  private long                 idPersonUpdate;
   private ClientDTO            clientDTO               = null;
   private PersonDTO            personDTO               = null;
   private boolean              statusDateEnd           = true;
@@ -223,7 +223,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
     ResponseDTO response = null;
     try {
       cleanObjectSession( "listPersonItem" );
-      response = this.generalDelegate.findPersonByClient( (int)idClientUpdate );
+      response = this.generalDelegate.findPersonByClient( ( int ) idClientUpdate );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         //Respuesta del servicio 
         this.listPerson = ( List< PersonDTO > ) response.getObjectResponse();
@@ -334,7 +334,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
         if ( GroupTDTO != null ) {
           selectedObject.setId( GroupTDTO.getId() );
           selectedObject.setPerson( new PersonDTO() );
-          selectedObject.getPerson().setId( (int)idPersonUpdate );
+          selectedObject.getPerson().setId( ( int ) idPersonUpdate );
           // selectedObject.setClientCetus( GroupTDTO.getClientCetus() );
           selectedObject.setCreationDate( GroupTDTO.getCreationDate() );
           selectedObject.setCreationUser( GroupTDTO.getCreationUser() );
@@ -398,7 +398,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
         if ( selectedObject.getPerson() != null && selectedObject.getPerson().getClient() != null ) {
           idClientUpdate = selectedObject.getPerson().getClient().getId();
           if ( idClientUpdate > 0 ) {
-            response = this.generalDelegate.findPersonByClient( (int)idClientUpdate );
+            response = this.generalDelegate.findPersonByClient( ( int ) idClientUpdate );
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               listPerson = ( List< PersonDTO > ) response.getObjectResponse();
               if ( listPerson != null ) {
@@ -567,7 +567,7 @@ public class GroupAdminMBean extends GeneralManagedBean {
     this.listPersonItem = listPersonItem;
   }
   
-  public long getIdPerson () {
+  public int getIdPerson () {
     return idPerson;
   }
   

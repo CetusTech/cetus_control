@@ -7,13 +7,23 @@
   <h:outputStylesheet library="css" name="estilo.css" />
   <h:outputStylesheet library="css" name="style_theme.css" />
   <h:outputScript library="js" name="common.js" />
+  <style>
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 600px;
+}
+
+.ui-dashboard-column {
+	width: 620px;
+}
+</style>
 </h:head>
 <h:body>
   <h:form id="fromContenido">
     <p:growl id="msgs" showDetail="true" />
     <p:dashboard id="board" model="#{myTaskMBean.model}">
       <p:ajax event="reorder" listener="#{myTaskMBean.handleReorder}" />
-      
+
       <p:panel id="task" header="#{msg.myTask_list_task}" toggleable="true">
         <ui:include src="/pages/modules/task/inbox/list.xhtml" />
       </p:panel>
