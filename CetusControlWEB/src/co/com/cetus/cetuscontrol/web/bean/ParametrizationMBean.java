@@ -330,7 +330,7 @@ public class ParametrizationMBean extends GeneralManagedBean {
       parameterGeneralDTO = ( ParameterGeneralDTO ) getObjectSession( "parameterGeneralDTO" );
       if ( parameterGeneralDTO != null ) {
         parameterGeneralDTO.setClientCetus( new ClientCetusDTO() );
-        parameterGeneralDTO.getClientCetus().setId( userPortalDTO.getPerson().getClient().getId() );
+        parameterGeneralDTO.getClientCetus().setId( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
         
         ConstantWEB.WEB_LOG.info( "Se procede a guardar los parametros generales para el cliente cetus" );
         if ( parameterGeneralDTO.getId() > 0 ) {
