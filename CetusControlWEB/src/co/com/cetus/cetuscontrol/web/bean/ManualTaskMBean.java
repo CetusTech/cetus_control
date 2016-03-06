@@ -1771,9 +1771,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
       response = generalDelegate.generateReportViewTask( selectedObject.getId(), getPatterDate() );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         byteArrayInputStream = new ByteArrayInputStream( ( byte[] ) response.getObjectResponse() );
-        fileTemplate = new DefaultStreamedContent( byteArrayInputStream, "application/pdf", "reporteprueba.pdf" );
+        fileTemplate = new DefaultStreamedContent( byteArrayInputStream, "application/pdf", ConstantWEB.NAME_FILE_PDG_REPORT );
       } else {
-        addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MESSAGE_ERROR_CREATE_TEMPLATE_TM );
+        addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_ERROR_GEN_REPORT_TASK );
       }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );

@@ -6,10 +6,16 @@
 
 
   <h:form>
-    <h:commandLink value="Descargar Reporte #{msg.here}" actionListener="#{manualTaskMBean.generateReportViewTask}"
-      id="btn" onclick="PrimeFaces.monitorDownload(start, stop);">
-      <p:fileDownload value="#{manualTaskMBean.fileTemplate}" />
-    </h:commandLink>
+    <p:toolbar styleClass="body_toolbar_nivel_3" id="bars2">
+      <p:toolbarGroup align="left" id="group">
+        <h:commandLink actionListener="#{manualTaskMBean.generateReportViewTask}" id="btn" title="#{msg.download}"
+          onclick="PrimeFaces.monitorDownload(start, stop);">
+          <p:fileDownload value="#{manualTaskMBean.fileTemplate}" />
+          <p:graphicImage name="pdf.png" width="24" height="24" library="images" title="#{msg.download}" />
+        </h:commandLink>
+      </p:toolbarGroup>
+    </p:toolbar>
+
   </h:form>
 
   <p:accordionPanel>

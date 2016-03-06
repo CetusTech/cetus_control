@@ -140,5 +140,7 @@ public class ConstantWEB {
   public final static String     ERROR_GROUP_CLONE                  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "ERROR_GROUP_CLONE" );
   public final static String     MYTASK_TASK_BAR_SERIESCOLORS       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "myTask_task_bar_seriesColors" );
   public final static String     MYTASK_TASK_PIE_SERIESCOLORS       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "myTask_task_pie_seriesColors" );
+  public final static String     NAME_FILE_PDG_REPORT               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "name_file_pdg_report" );
+  public final static String     MSG_ERROR_GEN_REPORT_TASK          = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_error_gen_report_task" );
                                                                     
 }

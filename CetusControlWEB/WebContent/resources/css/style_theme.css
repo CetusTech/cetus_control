@@ -172,6 +172,15 @@
 	margin-top: -10px !important;
 	position: absolute !important;
 }
+
+.img-pdf {
+	background-image: url('pdf.png.xhtml?ln=images') !important;
+	height: 24px;
+	width: 24px;
+	margin-left: -5px !important;
+	margin-top: -10px !important;
+	position: absolute !important;
+}
 /**********************************************************************************************************************/
 
 /*Clase para los botones de la barra de toolbar*/
