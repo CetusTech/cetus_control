@@ -1,5 +1,6 @@
 package co.com.cetus.cetuscontrol.web.bean;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,6 +29,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
@@ -45,6 +47,9 @@ import co.com.cetus.cetuscontrol.web.util.EWeekDay;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.mail.SendMail;
 import co.com.cetus.common.util.UtilCommon;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -189,6 +194,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
                                                          
   private List< String >         listStatusFilter;
                                  
+  private StreamedContent        fileTemplate            = null;
+                                                         
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
    *
@@ -1756,6 +1763,24 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  public void generateReportViewTask () {
+    ResponseDTO response = null;
+    ByteArrayInputStream byteArrayInputStream = null;
+    try {
+      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+      response = generalDelegate.generateReportViewTask( selectedObject.getId(), getPatterDate() );
+      if ( UtilCommon.validateResponseSuccess( response ) ) {
+        byteArrayInputStream = new ByteArrayInputStream( ( byte[] ) response.getObjectResponse() );
+        fileTemplate = new DefaultStreamedContent( byteArrayInputStream, "application/pdf", "reporteprueba.pdf" );
+      } else {
+        addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MESSAGE_ERROR_CREATE_TEMPLATE_TM );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+      addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
+    }
+  }
+  
   /**
    * </p> On row unselect. </p>
    *
@@ -2533,6 +2558,14 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public void setShowConfirmSuspended ( boolean showConfirmSuspended ) {
     this.showConfirmSuspended = showConfirmSuspended;
+  }
+  
+  public StreamedContent getFileTemplate () {
+    return fileTemplate;
+  }
+  
+  public void setFileTemplate ( StreamedContent fileTemplate ) {
+    this.fileTemplate = fileTemplate;
   }
   
 }

@@ -90,9 +90,13 @@ import co.com.cetus.portal.ejb.service.FindRolsByLoginResponseDTO;
 import co.com.cetus.portal.ejb.service.ResponseWSDTO;
 import co.com.cetus.portal.ejb.service.UpdateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.UserDTO;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -2287,6 +2291,42 @@ public class CetusControlProcess {
         return createMessageNORESULT();
       }
     } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
+  /**
+   * </p> Generate report view task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @param pIdTask the p id task
+   * @param pFormatPattern the p format pattern
+   * @since CetusControlEJB (5/03/2016)
+   */
+  public ResponseDTO generateReportViewTask ( long pIdTask, String pFormatPattern ) {
+    ResponseDTO responseDTO = null;
+    InputStream reportJasper = null;
+    Map< String, Object > parameters = new HashMap< String, Object >();
+    JasperReport report;
+    try {
+      reportJasper = this.getClass().getClassLoader().getResourceAsStream( "resource/view_task_report.jasper" );
+      parameters.put( "ID_TASK", Long.valueOf( pIdTask ).intValue() );
+      parameters.put( "PATTERN_DATE", String.valueOf( pFormatPattern ) );
+      report = ( JasperReport ) JRLoader.loadObject( reportJasper );
+      Session ses = ( Session ) em.getDelegate();
+      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
+      Connection connection = sessionFactory.getConnectionProvider().getConnection();
+      JasperPrint jasperPrint = JasperFillManager.fillReport( report, parameters, connection );
+      JRPdfExporter exporter = new JRPdfExporter();
+      ByteArrayOutputStream fileReport = new ByteArrayOutputStream();
+      exporter.setExporterInput( new SimpleExporterInput( jasperPrint ) );
+      exporter.setExporterOutput( new SimpleOutputStreamExporterOutput( fileReport ) );
+      exporter.exportReport();
+      responseDTO = createMessageSUCCESS();
+      responseDTO.setObjectResponse( fileReport.toByteArray() );
+    } catch ( JRException | SQLException e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
       responseDTO = createMessageFAILURE();
     }

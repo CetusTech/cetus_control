@@ -2,11 +2,25 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
+
+
+
+  <h:form>
+    <h:commandLink value="Descargar Reporte #{msg.here}" actionListener="#{manualTaskMBean.generateReportViewTask}"
+      id="btn" onclick="PrimeFaces.monitorDownload(start, stop);">
+      <p:fileDownload value="#{manualTaskMBean.fileTemplate}" />
+    </h:commandLink>
+  </h:form>
+
   <p:accordionPanel>
     <p:tab title="#{msg.detail}">
       <h:panelGrid columns="2" cellpadding="2" cellspacing="5">
         <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
         <p:outputLabel value="#{manualTaskMBean.selectedObject.code}" />
+
+        <p:outputLabel value="#{msg.person_responsable}" styleClass="resaltar_negro" />
+        <p:outputLabel
+          value="#{manualTaskMBean.selectedObjectPerson.person.names} #{manualTaskMBean.selectedObjectPerson.person.lastNames}" />
 
         <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
         <p:outputLabel value="#{manualTaskMBean.selectedObject.status.description}" />
@@ -108,5 +122,13 @@
   </p:accordionPanel>
 
 
-
+  <script type="text/javascript">
+    function start() {
+        PF('statusDialog').show();
+    }
+     
+    function stop() {
+        PF('statusDialog').hide();
+    }
+  </script>
 </ui:composition>

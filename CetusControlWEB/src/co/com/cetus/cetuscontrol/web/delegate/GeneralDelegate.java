@@ -605,11 +605,20 @@ public class GeneralDelegate {
   public ResponseDTO isTimeValid ( long pIdCetus, String pDay, Date pTime ) {
     ResponseDTO responseDTO = null;
     try {
-      responseDTO = beanRemote.isTimeValid( pIdCetus, pDay,pTime );
+      responseDTO = beanRemote.isTimeValid( pIdCetus, pDay, pTime );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
     return responseDTO;
   }
   
+  public ResponseDTO generateReportViewTask ( long pIdTask, String pFormatPattern ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.generateReportViewTask( pIdTask, pFormatPattern );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
 }

@@ -129,4 +129,6 @@ public interface CetusControlBeanRemote {
   
   public ResponseDTO isTimeValid ( long pIdCetus, String pDay, Date pTime );
   
+  public ResponseDTO generateReportViewTask ( long pIdTask, String pFormatPattern );
+  
 }

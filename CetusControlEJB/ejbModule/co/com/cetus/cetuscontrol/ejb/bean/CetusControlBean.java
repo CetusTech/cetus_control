@@ -922,4 +922,16 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
     return response;
   }
+  
+  public ResponseDTO generateReportViewTask ( long pIdTask, String pFormatPattern ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.generateReportViewTask( pIdTask, pFormatPattern );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+    
+  }
 }
