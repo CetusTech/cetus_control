@@ -12,8 +12,8 @@ import java.util.Date;
 @Table ( name = "NOTIFICATION_SETTINGS" )
 @NamedQueries ( {
                   @NamedQuery ( name = "NotificationSetting.findAll", query = "SELECT n FROM NotificationSetting n" ),
-                  @NamedQuery ( name = "NotificationSetting.findNotificationByGroup", query = "SELECT n FROM NotificationSetting n WHERE n.idGroup = :idGroup" ),
-                  @NamedQuery ( name = "NotificationSetting.findNotifGenGroup", query = "SELECT n FROM NotificationSetting n WHERE n.idGroup = :idGroup AND n.notificationGeneral.id = :idGeneral" )
+                  @NamedQuery ( name = "NotificationSetting.findNotificationByGroup", query = "SELECT n FROM NotificationSetting n WHERE n.group.id = :idGroup" ),
+                  @NamedQuery ( name = "NotificationSetting.findNotifGenGroup", query = "SELECT n FROM NotificationSetting n WHERE n.group.id = :idGroup AND n.notificationGeneral.id = :idGeneral" )
 })
 
 public class NotificationSetting implements Serializable {
@@ -32,8 +32,9 @@ public class NotificationSetting implements Serializable {
                               
   private String              emails;
                               
-  @Column ( name = "ID_GROUP" )
-  private int                 idGroup;
+  @ManyToOne
+  @JoinColumn ( name = "ID_GROUP" )
+  private GroupT              group;
                               
   @Temporal ( TemporalType.TIMESTAMP )
   @Column ( name = "MODIFICATION_DATE" )
@@ -82,12 +83,12 @@ public class NotificationSetting implements Serializable {
     this.emails = emails;
   }
   
-  public int getIdGroup () {
-    return this.idGroup;
+  public GroupT getGroup () {
+    return group;
   }
   
-  public void setIdGroup ( int idGroup ) {
-    this.idGroup = idGroup;
+  public void setGroup ( GroupT group ) {
+    this.group = group;
   }
   
   public Date getModificationDate () {

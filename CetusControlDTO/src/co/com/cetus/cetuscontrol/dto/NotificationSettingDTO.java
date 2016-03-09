@@ -16,7 +16,7 @@ public class NotificationSettingDTO implements Serializable {
   private Date                   createDate;
   private String                 createUser;
   private String                 emails;
-  private int                    idGroup;
+  private GroupTDTO              group;
   private Date                   modificationDate;
   private String                 modificationUser;
   private NotificationGeneralDTO notificationGeneral;
@@ -56,12 +56,12 @@ public class NotificationSettingDTO implements Serializable {
     this.emails = emails;
   }
   
-  public int getIdGroup () {
-    return this.idGroup;
+  public GroupTDTO getGroup () {
+    return group;
   }
   
-  public void setIdGroup ( int idGroup ) {
-    this.idGroup = idGroup;
+  public void setGroup ( GroupTDTO group ) {
+    this.group = group;
   }
   
   public Date getModificationDate () {
@@ -90,8 +90,8 @@ public class NotificationSettingDTO implements Serializable {
   
   @Override
   public String toString () {
-    return "NotificationSettingDTO [id=" + id + ", createDate=" + createDate + ", createUser=" + createUser + ", emails=" + emails + ", idGroup="
-           + idGroup + ", modificationDate=" + modificationDate + ", modificationUser=" + modificationUser + ", notificationGeneral="
+    return "NotificationSettingDTO [id=" + id + ", createDate=" + createDate + ", createUser=" + createUser + ", emails=" + emails + ", group="
+           + group + ", modificationDate=" + modificationDate + ", modificationUser=" + modificationUser + ", notificationGeneral="
            + notificationGeneral + "]";
   }
   

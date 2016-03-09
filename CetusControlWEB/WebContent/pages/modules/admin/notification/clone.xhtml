@@ -17,7 +17,7 @@
       <h:outputText value="#{notificationMBean.selectedObject.id}" />
 
       <h:outputText value="#{msg.group}:" styleClass="resaltar_negro" />
-      <h:outputText value="#{notificationMBean.selectedObject.idGroup}" />
+      <h:outputText value="#{notificationMBean.selectedObject.group.name}" />
 
       <h:outputText value="#{msg.email}:" styleClass="resaltar_negro" />
       <p:dataList value="#{notificationMBean.listEmail}" var="email" type="ordered">
@@ -55,8 +55,9 @@
     <br />
     <br />
     <center>
-      <p:commandButton id="btnClone" value="#{msg.btn_save}" update=":formConfirmClone:confirmClone pnlClone tableMsg :formConfirmClone:confirmClone"
-        process="@form" styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.loadClone}" />
+      <p:commandButton id="btnClone" value="#{msg.btn_save}"
+        update=":formConfirmClone:confirmClone pnlClone tableMsg :formConfirmClone:confirmClone" process="@form"
+        styleClass="button-general" icon="img-save" actionListener="#{notificationMBean.loadClone}" />
     </center>
 
   </h:form>

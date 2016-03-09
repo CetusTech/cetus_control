@@ -51,6 +51,7 @@ public class NotificationMBean extends GeneralManagedBean {
     
     selectedObject = new NotificationSettingDTO();
     selectedObject.setNotificationGeneral( new NotificationGeneralDTO() );
+    selectedObject.setGroup( new GroupTDTO() );
   }
   
   /* (non-Javadoc)
@@ -161,9 +162,10 @@ public class NotificationMBean extends GeneralManagedBean {
             }
             
             notificationSettingDTO = new NotificationSettingDTO();
-            notificationSettingDTO.setNotificationGeneral( new NotificationGeneralDTO() );
-            notificationSettingDTO.getNotificationGeneral().setId( notificationGeneralDTO.getId() );
-            notificationSettingDTO.getNotificationGeneral().setName( notificationGeneralDTO.getName() );
+            notificationSettingDTO.setNotificationGeneral( notificationGeneralDTO );
+            if( notificationGeneralDTO.isMandatory() && notificationGeneralDTO.isDefault() ){
+              notificationSettingDTO.setEmails( ConstantWEB.RESPONSIBLE_TASK );  
+            }            
             this.listRegister.add( notificationSettingDTO );
           }
         }
@@ -195,7 +197,7 @@ public class NotificationMBean extends GeneralManagedBean {
         addObjectSession( selectedObject, "selectedObject" );
         this.showAlertSelectRow = false;
         this.showConfirmMod = true;
-        if ( selectedObject.getId() > 0 ) {
+        if ( selectedObject.getId() > 0 || ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) ) {
           this.activate = true;
         }
         
@@ -373,7 +375,8 @@ public class NotificationMBean extends GeneralManagedBean {
             }
           }
           selectedObject.setEmails( emails );
-          selectedObject.setIdGroup( ( int ) getObjectSession( "idGroup" ) );
+          selectedObject.setGroup( new GroupTDTO() );
+          selectedObject.getGroup().setId( ( int ) getObjectSession( "idGroup" ) );
           addObjectSession( selectedObject, "selectedObject" );
           addObjectSession( activate, "activate" );
           this.showDialogConfirmUpdate = true;
@@ -425,7 +428,7 @@ public class NotificationMBean extends GeneralManagedBean {
         
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           ConstantWEB.WEB_LOG.info( "Registro ejecutado exitosamente..." );
-          this.listNotifications( selectedObject.getIdGroup() );
+          this.listNotifications( selectedObject.getGroup().getId() );
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
         } else {
           ConstantWEB.WEB_LOG.error( "Error creando o actualizando la notificacion..." );
@@ -501,17 +504,17 @@ public class NotificationMBean extends GeneralManagedBean {
     try {
       if ( selectedObject != null ) {
         addObjectSession( selectedObject, "selectedObject" );
-        if ( selectedObject.getId() == 0 ) {
+        if ( selectedObject.getId() > 0 || (selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) ) {
+          this.showViewDetail = true;
+          this.showConfirmClone = true;
+          loadGroupClone( selectedObject.getGroup().getId() );
+          cleanObject();
+          loadEmailPerson( selectedObject.getEmails() );
+        } else {
           this.showAlertSelectRow2 = true;
           this.showAlertSelectRow = false;
           this.showViewDetail = false;
           this.showConfirmClone = false;
-        } else {
-          this.showViewDetail = true;
-          this.showConfirmClone = true;
-          loadGroupClone( selectedObject.getIdGroup() );
-          cleanObject();
-          loadEmailPerson( selectedObject.getEmails() );
         }
         
       } else {
@@ -534,6 +537,7 @@ public class NotificationMBean extends GeneralManagedBean {
   public void loadClone ( ActionEvent event ) {
     NotificationSettingDTO notificationSettingDTO = null;
     List< NotificationSettingDTO > listNotificationSetting = null;
+    List< NotificationSettingDTO > listNotificationSettingDel = null;
     try {
       selectedObject = ( NotificationSettingDTO ) getObjectSession( "selectedObject" );
       ConstantWEB.WEB_LOG.info( "selectedObject::" + selectedObject );
@@ -542,14 +546,24 @@ public class NotificationMBean extends GeneralManagedBean {
         if ( selectedGroupClone != null && selectedGroupClone.size() > 0 ) {
           this.showDialogConfirmClone = true;
           listNotificationSetting = new ArrayList< NotificationSettingDTO >();
+          listNotificationSettingDel = new ArrayList< NotificationSettingDTO >();
           for ( GroupTDTO group: selectedGroupClone ) {
             notificationSettingDTO = new NotificationSettingDTO();
-            notificationSettingDTO.setIdGroup( group.getId() );
-            notificationSettingDTO.setEmails( selectedObject.getEmails() );
+            notificationSettingDTO.setGroup( new GroupTDTO() );
             notificationSettingDTO.setNotificationGeneral( new NotificationGeneralDTO() );
+            notificationSettingDTO.getGroup().setId( group.getId() );
+            notificationSettingDTO.setEmails( selectedObject.getEmails() );
             notificationSettingDTO.getNotificationGeneral().setId( selectedObject.getNotificationGeneral().getId() );
-            listNotificationSetting.add( notificationSettingDTO );
+            
+            if ( selectedObject.getId() > 0 ) {
+              listNotificationSetting.add( notificationSettingDTO );
+            }else if(selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ){
+              listNotificationSettingDel.add( notificationSettingDTO );  
+            }
+            
+            
           }
+          addObjectSession( listNotificationSettingDel, "listNotificationSettingDel" );
           addObjectSession( listNotificationSetting, "listNotificationSetting" );
           addObjectSession( selectedGroupClone, "selectedGroupClone" );
         } else {
@@ -578,7 +592,7 @@ public class NotificationMBean extends GeneralManagedBean {
       list = ( List< NotificationSettingDTO > ) getObjectSession( "listNotificationSetting" );
       if ( list != null ) {
         for ( NotificationSettingDTO notificationSettingDTO: list ) {
-          responseDTO = generalDelegate.findNotificationByGroupGen( notificationSettingDTO.getIdGroup(),
+          responseDTO = generalDelegate.findNotificationByGroupGen( notificationSettingDTO.getGroup().getId(),
                                                                     notificationSettingDTO.getNotificationGeneral().getId() );
           if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
             notification = ( NotificationSettingDTO ) responseDTO.getObjectResponse();
@@ -605,9 +619,9 @@ public class NotificationMBean extends GeneralManagedBean {
           }
         }
         
-        if( list.size() == contSuscesfull ){
+        if ( list.size() == contSuscesfull ) {
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
-        }else{
+        } else {
           addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MESSAGE_ERROR_UPDATE );
         }
         
@@ -618,7 +632,6 @@ public class NotificationMBean extends GeneralManagedBean {
     return null;
   }
   
- 
   /* (non-Javadoc)
    * @see co.com.cetus.cetuscontrol.web.bean.GeneralManagedBean#add()
    */

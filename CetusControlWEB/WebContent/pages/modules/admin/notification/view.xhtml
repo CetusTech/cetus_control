@@ -16,10 +16,11 @@
       <h:outputText value="#{notificationMBean.selectedObject.id}" />
 
       <h:outputText value="#{msg.status}:" styleClass="resaltar_negro" />
-      <h:outputText value="#{notificationMBean.selectedObject.id == 0 ? msg.inactive : msg.active}" />
+      <h:outputText
+        value="#{notificationMBean.selectedObject.id == 0 ? (notificationMBean.selectedObject.notificationGeneral.mandatory and notificationMBean.selectedObject.notificationGeneral.default ) ? msg.active : msg.inactive : msg.active}" />
 
       <h:outputText value="#{msg.group}:" styleClass="resaltar_negro" />
-      <h:outputText value="#{notificationMBean.selectedObject.idGroup}" />
+      <h:outputText value="#{notificationMBean.selectedObject.group.name}" />
 
       <h:outputText value="#{msg.email}:" styleClass="resaltar_negro" />
       <p:dataList value="#{notificationMBean.listEmail}" var="email" type="ordered">

@@ -68,7 +68,7 @@
       <f:facet name="header">
         <h:outputText value="#{msg.status}" />
       </f:facet>
-      <h:outputText value="#{object.id == 0 ? msg.inactive : msg.active}" />
+      <h:outputText value="#{object.id == 0 ? (object.notificationGeneral.mandatory and object.notificationGeneral.default ) ? msg.active: msg.inactive : msg.active}" />
     </p:column>
 
     <p:column styleClass="column_50">
