@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
 @NamedQueries ( {
                   @NamedQuery ( name = "NotificationGeneral.findAll", query = "SELECT n FROM NotificationGeneral n" ),
                   @NamedQuery ( name = "NotificationGeneral.findByClientCetus", query = "SELECT n FROM NotificationGeneral n "
-                      + "where (n.clientCetus.id = :idClientDefault AND n.isDefault = '1') OR n.clientCetus.id = :idClientCetus ORDER BY n.id" )
+                                                                                        + "where (n.clientCetus.id = :idClientDefault AND n.isDefault = '1') OR n.clientCetus.id = :idClientCetus ORDER BY n.id" )
 })
 public class NotificationGeneral implements Serializable {
   private static final long           serialVersionUID = 1L;
@@ -62,6 +62,9 @@ public class NotificationGeneral implements Serializable {
                                       
   @Column ( name = "IS_DEFAULT" )
   private boolean                     isDefault;
+                                      
+  @Column ( name = "SUBJECT_EMAIL" )
+  private String                      subjectEmail;
                                       
   //bi-directional many-to-one association to NotificationSetting
   @OneToMany ( mappedBy = "notificationGeneral" )
@@ -170,6 +173,14 @@ public class NotificationGeneral implements Serializable {
     notificationSetting.setNotificationGeneral( null );
     
     return notificationSetting;
+  }
+  
+  public String getSubjectEmail () {
+    return subjectEmail;
+  }
+  
+  public void setSubjectEmail ( String subjectEmail ) {
+    this.subjectEmail = subjectEmail;
   }
   
 }

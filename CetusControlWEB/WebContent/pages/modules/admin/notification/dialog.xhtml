@@ -12,8 +12,8 @@
 
 
   <!-- Dialogo para ver detalle del registro -->
-  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
-    visible="#{notificationMBean.showViewDetail}" widgetVar="dialogViewVar">
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="true" styleClass="column_60"
+    header="#{msg.detalle_record}" visible="#{notificationMBean.showViewDetail}" widgetVar="dialogViewVar">
     <ui:include src="/pages/modules/admin/notification/view.xhtml" />
   </p:dialog>
 
@@ -33,7 +33,7 @@
     </h:panelGrid>
   </p:dialog>
 
-  <p:dialog id="dialogMod" resizable="false" modal="true" styleClass="column_50" appendToBody="true"
+  <p:dialog id="dialogMod" resizable="false" modal="true" styleClass="column_60" appendToBody="true"
     header="#{msg.notification_update}" visible="#{notificationMBean.showConfirmMod}" widgetVar="dialogModVar"
     closeOnEscape="true">
     <ui:include src="/pages/modules/admin/notification/update.xhtml" />

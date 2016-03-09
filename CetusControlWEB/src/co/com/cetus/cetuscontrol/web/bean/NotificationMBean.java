@@ -133,6 +133,7 @@ public class NotificationMBean extends GeneralManagedBean {
     List< NotificationGeneralDTO > list = null;
     NotificationSettingDTO notificationSettingDTO = null;
     List< NotificationSettingDTO > listNS = null;
+    List< GroupTDTO > listGroup = null;
     try {
       
       response = generalDelegate.findNotificationGenClientCetus( getUserDTO().getPerson().getClient().getClientCetus().getId() );
@@ -140,6 +141,7 @@ public class NotificationMBean extends GeneralManagedBean {
         //Respuesta del servicio
         list = ( List< NotificationGeneralDTO > ) response.getObjectResponse();
         if ( list != null && !list.isEmpty() ) {
+          listGroup = ( List< GroupTDTO > ) getObjectSession( "listGroupT" );
           
           response = generalDelegate.findNotificationByGroup( idGroup );
           if ( UtilCommon.validateResponseSuccess( response ) ) {
@@ -163,9 +165,18 @@ public class NotificationMBean extends GeneralManagedBean {
             
             notificationSettingDTO = new NotificationSettingDTO();
             notificationSettingDTO.setNotificationGeneral( notificationGeneralDTO );
-            if( notificationGeneralDTO.isMandatory() && notificationGeneralDTO.isDefault() ){
-              notificationSettingDTO.setEmails( ConstantWEB.RESPONSIBLE_TASK );  
-            }            
+            if ( notificationGeneralDTO.isMandatory() && notificationGeneralDTO.isDefault() ) {
+              notificationSettingDTO.setEmails( ConstantWEB.RESPONSIBLE_TASK );
+              
+              if ( listGroup != null ) {
+                for ( GroupTDTO groupTDTO: listGroup ) {
+                  if ( groupTDTO.getId() == idGroup ) {
+                    notificationSettingDTO.setGroup( groupTDTO );
+                    break;
+                  }
+                }
+              }
+            }
             this.listRegister.add( notificationSettingDTO );
           }
         }
@@ -197,7 +208,8 @@ public class NotificationMBean extends GeneralManagedBean {
         addObjectSession( selectedObject, "selectedObject" );
         this.showAlertSelectRow = false;
         this.showConfirmMod = true;
-        if ( selectedObject.getId() > 0 || ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) ) {
+        if ( selectedObject.getId() > 0
+             || ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) ) {
           this.activate = true;
         }
         
@@ -362,6 +374,11 @@ public class NotificationMBean extends GeneralManagedBean {
     try {
       selectedObject = ( NotificationSettingDTO ) getObjectSession( "selectedObject" );
       if ( selectedObject != null ) {
+        
+        if( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) {
+          activate = true;
+        }
+        
         if ( ( selectedObject.getId() == 0 && activate ) || selectedObject.getId() > 0 ) {
           
           listEmail = ( List< PersonDTO > ) getObjectSession( "listEmail" );
@@ -409,17 +426,34 @@ public class NotificationMBean extends GeneralManagedBean {
       if ( selectedObject != null ) {
         ConstantWEB.WEB_LOG.info( "Notificacion a insertar o actualizar o eliminar selectedObject :: " + selectedObject.toString() );
         if ( selectedObject.getId() == 0 ) {
-          ConstantWEB.WEB_LOG.info( "La notificacion sera creada..." );
-          selectedObject.setCreateDate( getCurrentDateTime() );
-          selectedObject.setCreateUser( getUserInSession() );
-          responseDTO = generalDelegate.create( selectedObject );
-          ConstantWEB.WEB_LOG.info( "Respuesta despues de crear la notificacion ::> " + responseDTO.toString() );
+          
+          if ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault()
+               && ( selectedObject.getEmails().split( ";" ) ).length == 1 ) {
+            ConstantWEB.WEB_LOG.warn( "La notificacion no sera creada, es mandatoria, por defecto y solo se notificara al responsable" );
+          } else {
+            ConstantWEB.WEB_LOG.info( "La notificacion sera creada..." );
+            selectedObject.setCreateDate( getCurrentDateTime() );
+            selectedObject.setCreateUser( getUserInSession() );
+            responseDTO = generalDelegate.create( selectedObject );
+            ConstantWEB.WEB_LOG.info( "Respuesta despues de crear la notificacion ::> " + responseDTO.toString() );
+          }
+          
+          
         } else if ( selectedObject.getId() > 1 && activate ) {
-          ConstantWEB.WEB_LOG.info( "La notificacion sera actualizada..." );
-          selectedObject.setModificationUser( getUserInSession() );
-          selectedObject.setModificationDate( getCurrentDateTime() );
-          responseDTO = generalDelegate.edit( selectedObject );
-          ConstantWEB.WEB_LOG.info( "Respuesta despues de actualizar la notificacion ::> " + responseDTO.toString() );
+          
+          if ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault()
+              && ( selectedObject.getEmails().split( ";" ) ).length == 1 ) {
+            ConstantWEB.WEB_LOG.warn( "La notificacion sera eliminada, es mandatoria, por defecto y solo se notificara al responsable" );
+            responseDTO = generalDelegate.remove( selectedObject );
+            ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar la notificacion ::> " + responseDTO.toString() );
+          } else {
+            ConstantWEB.WEB_LOG.info( "La notificacion sera actualizada..." );
+            selectedObject.setModificationUser( getUserInSession() );
+            selectedObject.setModificationDate( getCurrentDateTime() );
+            responseDTO = generalDelegate.edit( selectedObject );
+            ConstantWEB.WEB_LOG.info( "Respuesta despues de actualizar la notificacion ::> " + responseDTO.toString() );
+          }
+          
         } else {
           ConstantWEB.WEB_LOG.info( "La notificacion sera eliminada..." );
           responseDTO = generalDelegate.remove( selectedObject );
@@ -504,7 +538,8 @@ public class NotificationMBean extends GeneralManagedBean {
     try {
       if ( selectedObject != null ) {
         addObjectSession( selectedObject, "selectedObject" );
-        if ( selectedObject.getId() > 0 || (selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) ) {
+        if ( selectedObject.getId() > 0
+             || ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) ) {
           this.showViewDetail = true;
           this.showConfirmClone = true;
           loadGroupClone( selectedObject.getGroup().getId() );
@@ -557,10 +592,9 @@ public class NotificationMBean extends GeneralManagedBean {
             
             if ( selectedObject.getId() > 0 ) {
               listNotificationSetting.add( notificationSettingDTO );
-            }else if(selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ){
-              listNotificationSettingDel.add( notificationSettingDTO );  
+            } else if ( selectedObject.getNotificationGeneral().isMandatory() && selectedObject.getNotificationGeneral().isDefault() ) {
+              listNotificationSettingDel.add( notificationSettingDTO );
             }
-            
             
           }
           addObjectSession( listNotificationSettingDel, "listNotificationSettingDel" );
@@ -588,43 +622,70 @@ public class NotificationMBean extends GeneralManagedBean {
     ResponseDTO responseDTO = null;
     NotificationSettingDTO notification = null;
     int contSuscesfull = 0;
+    List< NotificationSettingDTO > listDel = null;
     try {
-      list = ( List< NotificationSettingDTO > ) getObjectSession( "listNotificationSetting" );
-      if ( list != null ) {
-        for ( NotificationSettingDTO notificationSettingDTO: list ) {
+      listDel = ( List< NotificationSettingDTO > ) getObjectSession( "listNotificationSettingDel" );
+      if ( listDel != null && listDel.size() > 0 ) {
+        for ( NotificationSettingDTO notificationSettingDTO: listDel ) {
           responseDTO = generalDelegate.findNotificationByGroupGen( notificationSettingDTO.getGroup().getId(),
                                                                     notificationSettingDTO.getNotificationGeneral().getId() );
           if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
             notification = ( NotificationSettingDTO ) responseDTO.getObjectResponse();
-            notification.setEmails( notificationSettingDTO.getEmails() );
-            notification.setModificationDate( getCurrentDateTime() );
-            notification.setModificationUser( getUserInSession() );
             
-            ConstantWEB.WEB_LOG.info( "Antes de editar clonar la notificacion :: " + notification.toString() );
-            responseDTO = generalDelegate.edit( notification );
-            ConstantWEB.WEB_LOG.info( "Despues de editar clonar la notificacion :: " + responseDTO.toString() );
+            ConstantWEB.WEB_LOG.info( "Antes de eliminar la notificacion :: " + notification.toString() );
+            responseDTO = generalDelegate.remove( notification );
+            ConstantWEB.WEB_LOG.info( "Despues de editar la notificacion :: " + responseDTO.toString() );
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
               contSuscesfull++;
             }
-            
-          } else if ( UtilCommon.validateResponseNoResult( responseDTO ) ) {
-            notificationSettingDTO.setCreateDate( getCurrentDateTime() );
-            notificationSettingDTO.setCreateUser( getUserInSession() );
-            ConstantWEB.WEB_LOG.info( "Antes de crear clonar la notificacion :: " + notificationSettingDTO.toString() );
-            responseDTO = generalDelegate.create( notificationSettingDTO );
-            ConstantWEB.WEB_LOG.info( "Despues de crear clonar la notificacion :: " + responseDTO.toString() );
-            if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-              contSuscesfull++;
-            }
+          } else {
+            contSuscesfull++;
           }
         }
         
-        if ( list.size() == contSuscesfull ) {
+        if ( listDel.size() == contSuscesfull ) {
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
         } else {
           addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MESSAGE_ERROR_UPDATE );
         }
         
+      } else {
+        list = ( List< NotificationSettingDTO > ) getObjectSession( "listNotificationSetting" );
+        if ( list != null ) {
+          for ( NotificationSettingDTO notificationSettingDTO: list ) {
+            responseDTO = generalDelegate.findNotificationByGroupGen( notificationSettingDTO.getGroup().getId(),
+                                                                      notificationSettingDTO.getNotificationGeneral().getId() );
+            if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+              notification = ( NotificationSettingDTO ) responseDTO.getObjectResponse();
+              notification.setEmails( notificationSettingDTO.getEmails() );
+              notification.setModificationDate( getCurrentDateTime() );
+              notification.setModificationUser( getUserInSession() );
+              
+              ConstantWEB.WEB_LOG.info( "Antes de editar clonar la notificacion :: " + notification.toString() );
+              responseDTO = generalDelegate.edit( notification );
+              ConstantWEB.WEB_LOG.info( "Despues de editar clonar la notificacion :: " + responseDTO.toString() );
+              if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+                contSuscesfull++;
+              }
+              
+            } else if ( UtilCommon.validateResponseNoResult( responseDTO ) ) {
+              notificationSettingDTO.setCreateDate( getCurrentDateTime() );
+              notificationSettingDTO.setCreateUser( getUserInSession() );
+              ConstantWEB.WEB_LOG.info( "Antes de crear clonar la notificacion :: " + notificationSettingDTO.toString() );
+              responseDTO = generalDelegate.create( notificationSettingDTO );
+              ConstantWEB.WEB_LOG.info( "Despues de crear clonar la notificacion :: " + responseDTO.toString() );
+              if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+                contSuscesfull++;
+              }
+            }
+          }
+          
+          if ( list.size() == contSuscesfull ) {
+            addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
+          } else {
+            addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MESSAGE_ERROR_UPDATE );
+          }
+        }
       }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );

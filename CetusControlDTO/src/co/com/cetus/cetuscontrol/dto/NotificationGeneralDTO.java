@@ -23,6 +23,7 @@ public class NotificationGeneralDTO implements Serializable {
   private String                         tableColumn;
   private String                         tableName;
   private String                         templateName;
+  private String                         subjectEmail;
   private List< NotificationSettingDTO > notificationSettings;
                                          
   public NotificationGeneralDTO () {
@@ -130,11 +131,19 @@ public class NotificationGeneralDTO implements Serializable {
     return notificationSetting;
   }
   
+  public String getSubjectEmail () {
+    return subjectEmail;
+  }
+  
+  public void setSubjectEmail ( String subjectEmail ) {
+    this.subjectEmail = subjectEmail;
+  }
+  
   @Override
   public String toString () {
     return "NotificationGeneralDTO [id=" + id + ", creationDate=" + creationDate + ", description=" + description + ", clientCetus=" + clientCetus
            + ", mandatory=" + mandatory + ", isDefault=" + isDefault + ", name=" + name + ", tableColumn=" + tableColumn + ", tableName=" + tableName
-           + ", templateName=" + templateName + ", notificationSettings=" + notificationSettings + "]";
+           + ", templateName=" + templateName + ", subjectEmail=" + subjectEmail + ", notificationSettings=" + notificationSettings + "]";
   }
   
 }

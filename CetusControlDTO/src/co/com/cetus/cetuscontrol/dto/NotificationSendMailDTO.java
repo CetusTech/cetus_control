@@ -20,6 +20,7 @@ public class NotificationSendMailDTO implements Serializable {
   private String            parameters;
   private String            processed;
   private String            templateName;
+  private String            subjectEmail;
                             
   public NotificationSendMailDTO () {
   }
@@ -86,6 +87,21 @@ public class NotificationSendMailDTO implements Serializable {
   
   public void setTemplateName ( String templateName ) {
     this.templateName = templateName;
+  }
+  
+  public String getSubjectEmail () {
+    return subjectEmail;
+  }
+  
+  public void setSubjectEmail ( String subjectEmail ) {
+    this.subjectEmail = subjectEmail;
+  }
+  
+  @Override
+  public String toString () {
+    return "NotificationSendMailDTO [id=" + id + ", createDate=" + createDate + ", createUser=" + createUser + ", emails=" + emails
+           + ", idNotificationSetting=" + idNotificationSetting + ", parameters=" + parameters + ", processed=" + processed + ", templateName="
+           + templateName + ", subjectEmail=" + subjectEmail + "]";
   }
   
 }
