@@ -13,7 +13,10 @@ import java.util.Date;
 @NamedQueries ( {
                   @NamedQuery ( name = "NotificationSetting.findAll", query = "SELECT n FROM NotificationSetting n" ),
                   @NamedQuery ( name = "NotificationSetting.findNotificationByGroup", query = "SELECT n FROM NotificationSetting n WHERE n.group.id = :idGroup" ),
-                  @NamedQuery ( name = "NotificationSetting.findNotifGenGroup", query = "SELECT n FROM NotificationSetting n WHERE n.group.id = :idGroup AND n.notificationGeneral.id = :idGeneral" )
+                  @NamedQuery ( name = "NotificationSetting.findNotifGenGroup", query = "SELECT n FROM NotificationSetting n WHERE n.group.id = :idGroup AND n.notificationGeneral.id = :idGeneral" ),
+                  @NamedQuery ( name = "NotificationSetting.findNotificationEmailsBef", query = "SELECT n.emails FROM NotificationSetting n WHERE n.group.id = :idGroup AND n.notificationGeneral.tableName = 'TASK' AND n.notificationGeneral.tableColumn = 'BEFORE_EXPIRATION' " ),
+                  @NamedQuery ( name = "NotificationSetting.findNotificationEmailsExp", query = "SELECT n.emails FROM NotificationSetting n WHERE n.group.id = :idGroup AND n.notificationGeneral.tableName = 'TASK' AND n.notificationGeneral.tableColumn = 'EXPIRATION' " )
+                  
 })
 
 public class NotificationSetting implements Serializable {

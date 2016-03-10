@@ -9,6 +9,7 @@ import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
 import co.com.cetus.cetuscontrol.jpa.entity.Task;
 import co.com.cetus.common.util.ConstantCommon;
+import co.com.cetus.common.util.DateUtility;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.messageservice.ejb.service.ResponseWSDTO;
 import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
@@ -23,14 +24,14 @@ public class ThreadExpirationTasks extends Thread {
   
   /** The timer process. */
   private TimerProcess       timerProcess;
-  
+                             
   /** The list task. */
   private List< Object[] >   listTask           = null;
-  
+                                                
   private SendMailRequestDTO sendMailRequestDTO = null;
-  
+                                                
   private String             wsdlMessageService = null;
-  
+                                                
   /**
    * </p> Instancia un nuevo thread expiration tasks. </p>
    *
@@ -57,6 +58,7 @@ public class ThreadExpirationTasks extends Thread {
     ResponseWSDTO responseWSDTO = null;
     boolean respNotification = false;
     NotificationTask notificationTask = null;
+    String emails = null;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "////////////// INICIA LA EJECUCION DEL HILO [" + this.getName() + "] //////////////" );
       if ( listTask != null && listTask.size() > 0 ) {
@@ -70,10 +72,20 @@ public class ThreadExpirationTasks extends Thread {
                                                    + Arrays.toString( task ) );
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Se procede a enviar una alerta (tarea vencida) para la tarea "
                                                    + String.valueOf( task[0] ) );
+                                                   
+          emails = timerProcess.findNotificationsEmailsBef( Integer.parseInt( String.valueOf( task[5] ) ) );
+          if ( emails != null ) {
+            if ( emails.startsWith( ConstantEJB.RESPONSIBLE_TASK ) ) {
+              emails = emails.substring( emails.indexOf( ";" ) + 1 );
+            }
+            sendMailRequestDTO.setCopyToRecipients( emails.split( ";" ) );
+          }
           
           sendMailRequestDTO.setRecipients( new String[]{ String.valueOf( task[2] ) } );
-          sendMailRequestDTO.setParametersTemplateHTML( new String[]{ String.valueOf( task[0] ), String.valueOf( task[1] ) } );
-          
+          sendMailRequestDTO.setParametersTemplateHTML( new String[]{ String.valueOf( task[4] ), String.valueOf( task[1] ),
+                                                                      DateUtility.formatDatePattern( ( Date ) task[3],
+                                                                                                     ConstantEJB.DATE_PATTERN_NOTIFICATION ) } );
+                                                                                                     
           responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
           
           if ( responseWSDTO != null ) {

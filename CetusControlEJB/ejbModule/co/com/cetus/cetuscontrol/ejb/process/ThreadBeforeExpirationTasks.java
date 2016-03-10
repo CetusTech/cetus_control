@@ -9,6 +9,7 @@ import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
 import co.com.cetus.cetuscontrol.jpa.entity.Task;
 import co.com.cetus.common.util.ConstantCommon;
+import co.com.cetus.common.util.DateUtility;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.messageservice.ejb.service.ResponseWSDTO;
 import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
@@ -22,13 +23,13 @@ import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 public class ThreadBeforeExpirationTasks extends Thread {
   
   private TimerProcess       timerProcess;
-  
+                             
   private List< Integer >    listTask           = null;
-  
+                                                
   private SendMailRequestDTO sendMailRequestDTO = null;
-  
+                                                
   private String             wsdlMessageService = null;
-  
+                                                
   /**
    * </p> Instancia un nuevo thread before expiration tasks. </p>
    *
@@ -57,6 +58,7 @@ public class ThreadBeforeExpirationTasks extends Thread {
     String[] infoNotification = null;
     ResponseWSDTO responseWSDTO = null;
     boolean respCreate = false;
+    String emails = null;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "////////////// INICIA LA EJECUCION DEL HILO [" + this.getName() + "] //////////////" );
       if ( listTask != null && listTask.size() > 0 ) {
@@ -73,10 +75,20 @@ public class ThreadBeforeExpirationTasks extends Thread {
           if ( infoNotification != null && infoNotification.length > 0 ) {
             ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Informacion para la notificacion de la tarea : "
                                                      + Arrays.toString( infoNotification ) );
+                                                     
+            emails = timerProcess.findNotificationsEmailsBef( Integer.parseInt( infoNotification[3] ) );
+            if ( emails != null ) {
+              if ( emails.startsWith( ConstantEJB.RESPONSIBLE_TASK ) ) {
+                emails = emails.substring( emails.indexOf( ";" ) + 1 );
+              }
+              sendMailRequestDTO.setCopyToRecipients( emails.split( ";" ) );
+            }
             
             sendMailRequestDTO.setRecipients( new String[]{ infoNotification[2] } );
-            sendMailRequestDTO.setParametersTemplateHTML( new String[]{ infoNotification[0], infoNotification[1] } );
-            
+            sendMailRequestDTO.setParametersTemplateHTML( new String[]{ infoNotification[0], infoNotification[1],
+                                                                        DateUtility.formatDatePattern( new Date( Long.parseLong( infoNotification[3] ) ),
+                                                                                                       ConstantEJB.DATE_PATTERN_NOTIFICATION ) } );
+                                                                                                       
             responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
             
             if ( responseWSDTO != null ) {
@@ -95,7 +107,7 @@ public class ThreadBeforeExpirationTasks extends Thread {
                 
                 ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Respuesta de la creacion del registro de notificacion : "
                                                          + respCreate );
-                
+                                                         
               }
             }
           }

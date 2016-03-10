@@ -231,10 +231,11 @@ public class TimerProcess {
     Object[] resp = null;
     String[] response = new String[4];
     try {
-      query = em.createQuery( "SELECT t.id, t.description, p.email, t.deliveryDate " +
+      query = em.createQuery( "SELECT t.code, t.description, p.email, t.deliveryDate, g.id " +
                               "FROM Task t " +
                               " JOIN t.personGroup pg " +
                               " JOIN pg.person p " +
+                              " JOIN pg.groupT g " +
                               "WHERE t.id = :idTask", Object[].class );
       query.setParameter( "idTask", idTask );
       
@@ -244,6 +245,7 @@ public class TimerProcess {
         response[1] = String.valueOf( resp[1] );
         response[2] = String.valueOf( resp[2] );
         response[3] = String.valueOf( ((Date)resp[3]).getTime() );
+        response[4] = String.valueOf( resp[4] );
       }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
@@ -304,12 +306,12 @@ public class TimerProcess {
     TypedQuery< Object[] > query = null;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", dateMax=" + status );
-      query = em.createNamedQuery( "SELECT T.ID, T.DESCRIPTION, P.EMAIL, T.DELIVERY_DATE "
+      query = em.createNamedQuery( "SELECT T.ID, T.DESCRIPTION, P.EMAIL, T.DELIVERY_DATE, T.CODE, PG.ID_GROUP "
                                   +"FROM TASK T, "
                                   +"   PERSON_GROUP PG, "
                                   +"   PERSON P, "
                                   +"   CLIENT C, "
-                                  +"     CLIENT_CETUS CC, "
+                                  +"   CLIENT_CETUS CC, "
                                   +"   PARAMETER_GENERAL PEG "
                                   +"WHERE T.ID_GROUP_PERSON = PG.ID "
                                   +"AND PG.ID_PERSON = P.ID "
@@ -376,6 +378,54 @@ public class TimerProcess {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
     return time;
+  }
+  
+  /**
+   * </p> Find notifications emails. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idGroup the id group
+   * @return el string
+   * @since CetusControlEJB (9/03/2016)
+   */
+  public String findNotificationsEmailsBef ( int idGroup ) {
+    String emails = null;
+    TypedQuery< String > query = null;
+    try {
+      query = em.createNamedQuery( "NotificationSetting.findNotificationEmailsBef", String.class );
+      query.setParameter( "idGroup", idGroup );
+      
+      if ( query.getResultList() != null && query.getResultList().size() > 0 ) {
+        emails = query.getSingleResult();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return emails;
+  }
+  
+  /**
+   * </p> Find notifications emails exp. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idGroup the id group
+   * @return el string
+   * @since CetusControlEJB (9/03/2016)
+   */
+  public String findNotificationsEmailsExp ( int idGroup ) {
+    String emails = null;
+    TypedQuery< String > query = null;
+    try {
+      query = em.createNamedQuery( "NotificationSetting.findNotificationEmailsExp", String.class );
+      query.setParameter( "idGroup", idGroup );
+      
+      if ( query.getResultList() != null && query.getResultList().size() > 0 ) {
+        emails = query.getSingleResult();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return emails;
   }
   
 }
