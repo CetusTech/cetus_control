@@ -27,7 +27,7 @@
       </p:inputText>
       <p:message for="dayMonthAdd" id="dayMonthAddMsg" />
 
-      <p:outputLabel value="#{msg.maximum_tasks_progress}:" for="maximumTasksProgressAdd" />
+      <p:outputLabel value="#{msg.maximum_tasks_progress}:" />
       <pe:inputNumber id="maximumTasksProgressAdd" required="true" size="5"
         value="#{parametrizationMBean.parameterGeneralDTO.colNumber1}" requiredMessage="#{msg.field_required}"
         maxlength="2" minValue="0" title="#{msg.title_time_before_expiration}" maxValue="99" emptyValue="zero"
@@ -42,7 +42,7 @@
   <p:panel header="#{msg.parameter_notification}" id="pnlParameterNotifications" styleClass="column_50">
     <h:panelGrid columns="4">
 
-      <p:outputLabel value="#{msg.time_before_expiration}:" for="timeBeforeExpirationAdd" />
+      <p:outputLabel value="#{msg.time_before_expiration}:" />
       <pe:inputNumber id="timeBeforeExpirationAdd" required="true" size="5"
         value="#{parametrizationMBean.parameterGeneralDTO.timeBeforeExpiration}" requiredMessage="#{msg.field_required}"
         maxlength="4" minValue="0" title="#{msg.title_time_before_expiration}" maxValue="9999" emptyValue="zero"
@@ -52,7 +52,7 @@
       <p:message for="timeBeforeExpirationAdd" id="timeBeforeExpirationAddMsg" />
 
 
-      <p:outputLabel value="#{msg.time_after_expiration}:" for="timeAfterExpirationAdd" />
+      <p:outputLabel value="#{msg.time_after_expiration}:"  />
       <pe:inputNumber id="timeAfterExpirationAdd" title="#{msg.title_time_after_expiration}" required="true" size="5"
         value="#{parametrizationMBean.parameterGeneralDTO.timeAfterExpiration}" requiredMessage="#{msg.field_required}"
         maxlength="4" minValue="0" maxValue="9999" emptyValue="zero" decimalPlaces="0" />
@@ -61,7 +61,7 @@
       <p:message for="timeAfterExpirationAdd" id="timeAfterExpirationAddMsg" />
 
 
-      <p:outputLabel value="#{msg.maximum_alerts_overdue_task}:" for="maximumAlertsOverdueTaskAdd" />
+      <p:outputLabel value="#{msg.maximum_alerts_overdue_task}:"  />
       <pe:inputNumber id="maximumAlertsOverdueTaskAdd" title="#{msg.title_time_after_expiration}" required="true" size="5"
         value="#{parametrizationMBean.parameterGeneralDTO.colNumber2}" requiredMessage="#{msg.field_required}"
         maxlength="1" minValue="0" maxValue="9" emptyValue="zero" decimalPlaces="0" />

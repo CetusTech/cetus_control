@@ -17,7 +17,7 @@
       <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" required="true" mode="popup"
         onchange="PF('assingDateAdd').hide()" showButtonPanel="true"
         pt:placeholder="#{manualTaskMBean.patterDate}" locale="#{manualTaskMBean.locale}"
-        pattern="#{manualTaskMBean.patterDate}" mask="true" />
+        pattern="#{manualTaskMBean.patterDate}" mask="false" />
 
       <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
 

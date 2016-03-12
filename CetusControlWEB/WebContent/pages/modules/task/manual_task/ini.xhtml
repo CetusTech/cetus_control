@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 <f:loadBundle var="msg" basename="message_es" />
@@ -13,14 +14,14 @@
   <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
   <h:form id="fromContenido">
     <p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
-    <p:panelGrid columns="2" columnClasses="column_40,column_60">
+    <h:panelGrid columns="2" columnClasses="column_25,column_75">
       <p:panel id="panelGroup" header="#{msg.my_groups}">
         <ui:include src="/pages/modules/task/manual_task/listGroup.xhtml" />
       </p:panel>
       <p:panel id="panel" header="#{msg.my_tasks}">
         <ui:include src="/pages/modules/task/manual_task/list.xhtml" />
       </p:panel>
-    </p:panelGrid>
+    </h:panelGrid>
 
   </h:form>
   <ui:include src="/pages/modules/task/manual_task/dialog.xhtml" />

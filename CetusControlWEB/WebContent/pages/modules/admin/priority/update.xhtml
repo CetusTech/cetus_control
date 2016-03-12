@@ -13,7 +13,7 @@
       </p:inputText>
       <p:message for="descriptionUpdate" id="descriptionUpdateMsg" />
 
-      <p:outputLabel value="#{msg.value}" for="valueUpdate" />
+      <p:outputLabel value="#{msg.value}" />
       <pe:inputNumber id="valueUpdate" required="true" size="20" value="#{priorityMBean.selectedObject.value}"
         requiredMessage="#{msg.field_required}" maxlength="1" minValue="0" maxValue="9" decimalPlaces="0" />
 

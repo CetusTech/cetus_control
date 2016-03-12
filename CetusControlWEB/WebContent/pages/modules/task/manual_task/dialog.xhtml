@@ -57,8 +57,8 @@
       </center>
     </p:confirmDialog>
   </h:form>
-  
-   <h:form id="formConfirmSuspended">
+
+  <h:form id="formConfirmSuspended">
     <p:confirmDialog message="#{msg.confirm_suspended_task}" id="confirmSuspended"
       header="#{msg.header_confirm_suspended_task}" appendToBody="true" widgetVar="confirmSuspended" severity="alert"
       visible="#{manualTaskMBean.showConfirmSuspended}">
@@ -89,8 +89,8 @@
 
   <!-- Dialogo para ver detalle del registro -->
   <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="false" header="#{msg.detalle_record}"
-    maximizable="false" styleClass="column_90" visible="#{manualTaskMBean.showViewDetail}"
-    rendered="#{!manualTaskMBean.showAlertSelectRow}" widgetVar="dialogViewVar" closeOnEscape="true">
+    closable="true" maximizable="false" styleClass="column_90" visible="#{manualTaskMBean.showViewDetail}"
+    position="top" rendered="#{!manualTaskMBean.showAlertSelectRow}" widgetVar="dialogViewVar" closeOnEscape="true">
     <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" update=":fromContenido:panel" />
     <ui:include src="/pages/modules/task/manual_task/update.xhtml" />
   </p:dialog>

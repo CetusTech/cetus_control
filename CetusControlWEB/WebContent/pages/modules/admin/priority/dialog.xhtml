@@ -42,8 +42,9 @@
 
 
   <h:form id="formConfirmMod">
-    <p:confirmDialog message="#{msg.confirm_update_priority}" id="confirmMod" header="#{msg.header_confirm_update_priority}"
-      appendToBody="true" widgetVar="confirmMod" severity="alert" visible="#{priorityMBean.showDialogConfirmUpdate}">
+    <p:confirmDialog message="#{msg.confirm_update_priority}" id="confirmMod"
+      header="#{msg.header_confirm_update_priority}" appendToBody="true" widgetVar="confirmMod" severity="alert"
+      visible="#{priorityMBean.showDialogConfirmUpdate}">
       <center>
         <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":fromContenido:panel"
           styleClass="button-general" icon="img-ok" oncomplete="PF('confirmMod').hide(), PF('dialogModVar').hide()"

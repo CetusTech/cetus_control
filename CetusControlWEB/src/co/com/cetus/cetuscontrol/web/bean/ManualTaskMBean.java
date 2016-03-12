@@ -7,10 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -47,9 +50,6 @@ import co.com.cetus.cetuscontrol.web.util.EWeekDay;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.mail.SendMail;
 import co.com.cetus.common.util.UtilCommon;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -63,139 +63,148 @@ import net.sf.jasperreports.engine.util.JRLoader;
 public class ManualTaskMBean extends GeneralManagedBean {
   
   /** The Constant serialVersionUID. */
-  private static final long      serialVersionUID        = -3255236201554716426L;
-                                                         
+  private static final long         serialVersionUID        = -3255236201554716426L;
+                                                            
   /** The list files task. */
-  ArrayList< UploadedFile >      listFilesTask           = null;
-                                                         
+  ArrayList< UploadedFile >         listFilesTask           = null;
+                                                            
   /** The user portal dto. */
-  private UserPortalDTO          userPortalDTO           = null;
-                                                         
+  private UserPortalDTO             userPortalDTO           = null;
+                                                            
   /** The list register. */
-  private List< TaskDTO >        listRegister            = null;
-  private List< AttachDTO >      listAttachFiles         = null;
-                                                         
+  private List< TaskDTO >           listRegister            = null;
+  private List< AttachDTO >         listAttachFiles         = null;
+                                                            
   /** The list register group. */
-  private List< PersonGroupDTO > listRegisterGroup       = null;
-                                                         
+  private List< PersonGroupDTO >    listRegisterGroup       = null;
+                                                            
   /** The list area. */
-  private List< AreaDTO >        listArea                = null;
-                                                         
+  private List< AreaDTO >           listArea                = null;
+                                                            
   /** The list priority. */
-  private List< PriorityDTO >    listPriority            = null;
-                                                         
+  private List< PriorityDTO >       listPriority            = null;
+                                                            
   /** The list task type. */
-  private List< TaskTypeDTO >    listTaskType            = null;
-                                                         
+  private List< TaskTypeDTO >       listTaskType            = null;
+                                                            
   /** The list person. */
-  private List< PersonDTO >      listPerson              = null;
-                                                         
+  private List< PersonDTO >         listPerson              = null;
+                                                            
   /** The list person g. */
-  private List< PersonGroupDTO > listPersonG             = null;
-                                                         
+  private List< PersonGroupDTO >    listPersonG             = null;
+                                                            
   /** The list status. */
-  private List< StatusDTO >      listStatus              = null;
-                                                         
+  private List< StatusDTO >         listStatus              = null;
+                                                            
   /** The list area item. */
-  private List< SelectItem >     listAreaItem            = null;
-                                                         
+  private List< SelectItem >        listAreaItem            = null;
+                                                            
   /** The list priority item. */
-  private List< SelectItem >     listPriorityItem        = null;
-                                                         
+  private List< SelectItem >        listPriorityItem        = null;
+                                                            
   /** The list task type item. */
-  private List< SelectItem >     listTaskTypeItem        = null;
-                                                         
+  private List< SelectItem >        listTaskTypeItem        = null;
+                                                            
   /** The list status item. */
-  private List< SelectItem >     listStatusItem          = null;
-                                                         
+  private List< SelectItem >        listStatusItem          = null;
+                                                            
   /** The add object. */
-  private TaskDTO                addObject               = null;
-                                                         
+  private TaskDTO                   addObject               = null;
+                                                            
   /** The selected object. */
-  private TaskDTO                selectedObject          = null;
-                                                         
+  private TaskDTO                   selectedObject          = null;
+                                                            
   /** The selected object person. */
-  private PersonGroupDTO         selectedObjectPerson    = null;
-                                                         
+  private PersonGroupDTO            selectedObjectPerson    = null;
+                                                            
   /** The show confirm add. */
-  private boolean                showConfirmAdd          = false;
-                                                         
+  private boolean                   showConfirmAdd          = false;
+                                                            
   /** The show confirm mod. */
-  private boolean                showConfirmMod          = false;
-                                                         
+  private boolean                   showConfirmMod          = false;
+                                                            
   /** The show dialog confirm update. */
-  private boolean                showDialogConfirmUpdate = false;
-                                                         
+  private boolean                   showDialogConfirmUpdate = false;
+                                                            
   /** The show confirm delete. */
-  private boolean                showConfirmDelete       = false;
-                                                         
+  private boolean                   showConfirmDelete       = false;
+                                                            
   /** The show alert select row. */
-  private boolean                showAlertSelectRow      = false;
-                                                         
+  private boolean                   showAlertSelectRow      = false;
+                                                            
   /** The show view detail. */
-  private boolean                showViewDetail          = false;
-                                                         
+  private boolean                   showViewDetail          = false;
+                                                            
   /** The show add dialog. */
-  private boolean                showAddDialog           = false;
-                                                         
-  private boolean                showConfirmCancel       = false;
-                                                         
-  private boolean                showConfirmCompleted    = false;
-  private boolean                showConfirmSuspended    = false;
-                                                         
+  private boolean                   showAddDialog           = false;
+                                                            
+  private boolean                   showConfirmCancel       = false;
+                                                            
+  private boolean                   showConfirmCompleted    = false;
+  private boolean                   showConfirmSuspended    = false;
+                                                            
   /** The show menu. */
-  private boolean                showMenu                = false;
-                                                         
+  private boolean                   showMenu                = false;
+                                                            
   /** The approved. */
-  private boolean                approved                = false;
-                                                         
+  private boolean                   approved                = false;
+                                                            
   /** The group tdto selected. */
-  private PersonGroupDTO         groupTDTOSelected       = null;
-                                                         
+  private PersonGroupDTO            groupTDTOSelected       = null;
+                                                            
   /** The visible buttons. */
-  private boolean                visibleButtons          = false;
-                                                         
+  private boolean                   visibleButtons          = false;
+                                                            
   /** The code. */
-  private String                 code                    = null;
-                                                         
+  private String                    code                    = null;
+                                                            
   /** The send mail. */
-  private SendMail               sendMail                = null;
-                                                         
+  private SendMail                  sendMail                = null;
+                                                            
   /** The note task. */
-  private String                 noteTask                = null;
-                                                         
+  private String                    noteTask                = null;
+                                                            
   /** The status. */
-  private int                    status;
-                                 
+  private int                       status;
+                                    
   /** The percentage. */
-  private double                 percentage;
-                                 
+  private double                    percentage;
+                                    
   /** The percentage selected. */
-  private double                 percentageSelected;
-                                 
+  private double                    percentageSelected;
+                                    
   /** The percentage current. */
-  private double                 percentageCurrent;
-                                 
+  private double                    percentageCurrent;
+                                    
   /** The delivery date. */
-  private Date                   deliveryDate            = null;
-                                                         
+  private Date                      deliveryDate            = null;
+                                                            
   /** The id usuario. */
-  private String                 idUsuario;
-                                 
+  private String                    idUsuario;
+                                    
   /** The destination. */
-  private String                 destination             = ConstantWEB.PATH_FILE_TASK;
-                                                         
+  private String                    destination             = ConstantWEB.PATH_FILE_TASK;
+                                                            
   /** The separador. */
-  private String                 separador               = System.getProperty( "file.separator" );
-                                                         
-  private AttachDTO              attachDTOSelected       = null;
-                                                         
-  private int                    indexTab                = 0;
-                                                         
-  private List< String >         listStatusFilter;
-                                 
-  private StreamedContent        fileTemplate            = null;
-                                                         
+  private String                    separador               = System.getProperty( "file.separator" );
+                                                            
+  private AttachDTO                 attachDTOSelected       = null;
+                                                            
+  private int                       indexTab                = 0;
+                                                            
+  private List< String >            listStatusFilter;
+                                    
+  private StreamedContent           fileTemplate            = null;
+                                                            
+  private List< String >            VALID_COLUMN_KEYS       = Arrays.asList( "id", "código", "descripción", "estado", "fecha de entrega", "duración",
+                                                                             "solicitante", "funcional" );
+                                                                             
+  private String[]                  columnTemplate          = { "código", "descripción", "estado", "fecha de entrega" };
+                                                            
+  private List< ColumnModel >       columns;
+                                    
+  private HashMap< String, String > mapColumnsHeader;
+                                    
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
    *
@@ -217,6 +226,44 @@ public class ManualTaskMBean extends GeneralManagedBean {
     selectedObject.setTaskType( new TaskTypeDTO() );
   }
   
+  /**
+   * </p> Creates the dynamic columns. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (11/03/2016)
+   */
+  public void createDynamicColumns () {
+    String[] columnKeys = columnTemplate;
+    columns = new ArrayList< ColumnModel >();
+    
+    for ( String columnKey: columnKeys ) {
+      String key = columnKey.trim();
+      if ( VALID_COLUMN_KEYS.contains( key ) ) {
+        columns.add( new ColumnModel( key.toUpperCase(), mapColumnsHeader.get( key ) ) );
+      }
+    }
+    addObjectSession( columns, "columns" );
+  }
+  
+  static public class ColumnModel implements Serializable {
+    
+    private String header;
+    private String property;
+                   
+    public ColumnModel ( String header, String property ) {
+      this.header = header;
+      this.property = property;
+    }
+    
+    public String getHeader () {
+      return header;
+    }
+    
+    public String getProperty () {
+      return property;
+    }
+  }
+  
   /* (non-Javadoc)
    * @see co.com.cetus.cetuscontrol.web.bean.GeneralManagedBean#initElement()
    */
@@ -229,10 +276,15 @@ public class ManualTaskMBean extends GeneralManagedBean {
       listArea( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       listPriority( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       listStatus( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
+      if ( getObjectSession( "columnTemplate" ) == null ) {
+        addObjectSession( columnTemplate, "columnTemplate" );
+      }
+      initColumns();
       listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       getPercentageNow();
       //Obtener el ID del usuario que esa logueado con el fin de usarlo para almacenamiento de documentos asociados a la tarea
       idUsuario = String.valueOf( getUserDTO().getPerson().getClient().getClientCetus().getId() );
+      
     } else {
       try {
         getResponse().sendRedirect( getRequest().getContextPath() + ConstantWEB.URL_PAGE_USER_NOVALID );
@@ -240,6 +292,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
         ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       }
     }
+  }
+  
+  private void initColumns () {
+    
+    // TODO Auto-generated method stub
+    mapColumnsHeader = new HashMap< >();
+    mapColumnsHeader.put( "id", "id" );
+    mapColumnsHeader.put( "código", "code" );
+    mapColumnsHeader.put( "descripción", "description" );
+    mapColumnsHeader.put( "duración", "VDuration" );
+    mapColumnsHeader.put( "solicitante", "requestor" );
+    mapColumnsHeader.put( "funcional", "userFunctional" );
+    
+    mapColumnsHeader.put( "estado", "statusDes" );
+    mapColumnsHeader.put( "fecha de entrega", "deliveryDate" );
+    
   }
   
   /**
@@ -1663,6 +1731,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
           listRegister = new ArrayList< TaskDTO >();
         }
         addObjectSession( listRegister, "listRegister" );
+        createDynamicColumns();
       }
       addObjectSession( groupTDTOSelected, "groupTDTOSelected" );
       //FacesContext.getCurrentInstance().addMessage( null, msg );
@@ -2566,6 +2635,32 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public void setFileTemplate ( StreamedContent fileTemplate ) {
     this.fileTemplate = fileTemplate;
+  }
+  
+  public String[] getColumnTemplate () {
+    return columnTemplate;
+  }
+  
+  public void setColumnTemplate ( String[] columnTemplate ) {
+    this.columnTemplate = columnTemplate;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public List< ColumnModel > getColumns () {
+    columns = ( List< ColumnModel > ) ( getObjectSession( "columns" ) != null ? getObjectSession( "columns" ) : null );
+    return columns;
+  }
+  
+  public void setColumns ( List< ColumnModel > columns ) {
+    this.columns = columns;
+  }
+  
+  public List< String > getVALID_COLUMN_KEYS () {
+    return VALID_COLUMN_KEYS;
+  }
+  
+  public void setVALID_COLUMN_KEYS ( List< String > vALID_COLUMN_KEYS ) {
+    VALID_COLUMN_KEYS = vALID_COLUMN_KEYS;
   }
   
 }

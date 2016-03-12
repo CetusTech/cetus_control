@@ -3,7 +3,7 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
   <p:contextMenu for="table">
-    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowGroup" process="@this"
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowGroup" process="@form"
       rendered="#{!manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
       icon="ui-icon-search" />
   </p:contextMenu>
@@ -27,48 +27,36 @@
         update=":dialogViewDisabled :alertSelectRowTask" actionListener="#{manualTaskMBean.validateSelectedRecord}">
         <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
       </p:commandLink>
+      <p:selectCheckboxMenu id="menu" value="#{manualTaskMBean.columnTemplate}" label="Columnas" filter="false"
+        widgetVar="menuT" onHide="true" style="position: fixed;" filterMatchMode="startsWith" panelStyle="width:250px">
+        <f:selectItems value="#{manualTaskMBean.VALID_COLUMN_KEYS}" />
 
+        <p:ajax listener="#{manualTaskMBean.createDynamicColumns}" update="table" />
+        <p:ajax event="toggleSelect" listener="#{manualTaskMBean.createDynamicColumns}" update="table" process="@form" />
+
+      </p:selectCheckboxMenu>
 
     </p:toolbarGroup>
   </p:toolbar>
 
 
   <p:dataTable value="#{manualTaskMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
-    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
-    currentPageReportTemplate="({currentPage} de {totalPages})"
+    rowStyleClass="#{index mod 2 == 0 ? objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : null  : objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : 'row-color-2'}"
+    rowIndexVar="index" currentPageReportTemplate="({currentPage} de {totalPages})" widgetVar="tableTask"
     rowsPerPageTemplate="1,#{manualTaskMBean.listRegister.size()}"
     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
     paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{manualTaskMBean.selectedObject}"
     selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
 
     <p:ajax event="rowSelect" process="@form" listener="#{manualTaskMBean.onRowSelectTask}"
-      update=":fromContenido :fromContenido:bars" />
+      update=":fromContenido:panel :fromContenido:bars" />
 
-    <p:column sortBy="#{objetc.code}">
+    <p:columns value="#{manualTaskMBean.columns}" var="column" columnIndexVar="colIndex" filterMatchMode="contains"
+      sortBy="#{objetc[column.property]}">
       <f:facet name="header">
-        <h:outputText value="#{msg.code}" />
+        <h:outputText value="#{column.header}" />
       </f:facet>
-      <h:outputText value="#{objetc.code}" />
-    </p:column>
-
-    <p:column sortBy="#{objetc.description}">
-      <f:facet name="header">
-        <h:outputText value="#{msg.description}" />
-      </f:facet>
-      <h:outputText value="#{objetc.description}" />
-    </p:column>
-    <p:column sortBy="#{objetc.status.description}">
-      <f:facet name="filter">
-        <p:selectCheckboxMenu label="Colors" onchange="PF('carsTable').filter()" panelStyle="width:125px"
-          scrollHeight="150">
-          <f:selectItems value="#{dtFilterView.colors}" />
-        </p:selectCheckboxMenu>
-      </f:facet>
-      <f:facet name="header">
-        <h:outputText value="#{msg.status}" />
-      </f:facet>
-      <h:outputText value="#{objetc.status.description}" />
-    </p:column>
-
+      <h:outputText value="#{objetc[column.property]}" />
+    </p:columns>
   </p:dataTable>
 </ui:composition>

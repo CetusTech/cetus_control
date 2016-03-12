@@ -23,6 +23,11 @@ a {
 	vertical-align: top;
 }
 
+.column_25 {
+	width: 25% !important;
+	vertical-align: top;
+}
+
 .column_30 {
 	width: 30% !important;
 	vertical-align: top;
@@ -45,6 +50,11 @@ a {
 
 .column_70 {
 	width: 70% !important;
+	vertical-align: top;
+}
+
+.column_75 {
+	width: 75% !important;
 	vertical-align: top;
 }
 
@@ -86,4 +96,34 @@ a {
 .error-500 {
 	text-align: center !important;
 	color: red;
+}
+
+.start_task_color {
+	font-weight: bold;
+	color: #0AD146;
+	font-size: 11px;
+}
+
+.completed_task_color {
+	font-weight: bold;
+	color: #163495;
+	font-size: 11px;
+}
+
+.assign_task_color {
+	font-weight: bold;
+	color: #FCCE63;
+	font-size: 11px;
+}
+
+.suspended_task_color {
+	font-weight: bold;
+	color: #45E2EE;
+	font-size: 11px;
+}
+
+.cancelled_task_color {
+	font-weight: bold;
+	color: #990000;
+	font-size: 11px;
 }

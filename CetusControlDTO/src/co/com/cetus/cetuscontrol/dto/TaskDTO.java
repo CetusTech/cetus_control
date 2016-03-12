@@ -10,67 +10,67 @@ import java.util.List;
  */
 public class TaskDTO implements Serializable {
   private static final long           serialVersionUID = 1L;
-  
+                                                       
   private int                         id;
-  
+                                      
   private int                         approved;
-  
+                                      
   private Date                        assingDate;
-  
+                                      
   private String                      code;
-  
+                                      
   private Date                        creationDate;
-  
+                                      
   private String                      creationUser;
-  
+                                      
   private Date                        dateEnd;
-  
+                                      
   private Date                        dateInit;
-  
+                                      
   private Date                        dateInitCurrent;
-  
+                                      
   private Date                        deliveryDate;
-  
+                                      
   private String                      description;
-  
+                                      
   private Date                        modificationDate;
-  
+                                      
   private String                      modificationUser;
-  
+                                      
   private String                      observation;
-  
+                                      
   private String                      observationRequestor;
-  
+                                      
   private double                      percentage;
-  
+                                      
   private String                      requestor;
-  
+                                      
   private String                      suspended;
-  
+                                      
   private String                      userFunctional;
-  
+                                      
   private int                         vDuration;
-  
+                                      
   private String                      vLength;
-  
+                                      
   private int                         vOrder;
-  
+                                      
   private List< AttachDTO >           attaches;
-  
+                                      
   private AreaDTO                     area;
-  
+                                      
   private List< NotificationTaskDTO > notificationTasks;
-  
+                                      
   private PersonGroupDTO              personGroup;
-  
+                                      
   private PriorityDTO                 priority;
-  
+                                      
   private StatusDTO                   status;
-  
+                                      
   private TaskTypeDTO                 taskType;
-  
+                                      
   private List< TraceTaskDTO >        traceTasks;
-  
+                                      
   public TaskDTO () {
   }
   
@@ -306,6 +306,10 @@ public class TaskDTO implements Serializable {
   
   public StatusDTO getStatus () {
     return this.status;
+  }
+  
+  public String getStatusDes () {
+    return this.status.getDescription();
   }
   
   public void setStatus ( StatusDTO status ) {
