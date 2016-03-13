@@ -18,7 +18,7 @@ public class NotificationSendMailDTO implements Serializable {
   private String            emails;
   private int               idNotificationSetting;
   private String            parameters;
-  private String            processed;
+  private boolean           processed;
   private String            templateName;
   private String            subjectEmail;
                             
@@ -73,11 +73,11 @@ public class NotificationSendMailDTO implements Serializable {
     this.parameters = parameters;
   }
   
-  public String getProcessed () {
-    return this.processed;
+  public boolean isProcessed () {
+    return processed;
   }
   
-  public void setProcessed ( String processed ) {
+  public void setProcessed ( boolean processed ) {
     this.processed = processed;
   }
   

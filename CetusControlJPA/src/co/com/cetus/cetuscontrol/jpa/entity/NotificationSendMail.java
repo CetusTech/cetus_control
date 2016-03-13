@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Table ( name = "NOTIFICATION_SEND_MAIL" )
-@NamedQuery ( name = "NotificationSendMail.findAll", query = "SELECT n FROM NotificationSendMail n" )
+@NamedQuery ( name = "NotificationSendMail.findAllToProcess", query = "SELECT n FROM NotificationSendMail n WHERE n.processed = 1 " )
 public class NotificationSendMail implements Serializable {
   private static final long serialVersionUID = 1L;
                                              
@@ -32,7 +32,7 @@ public class NotificationSendMail implements Serializable {
                             
   private String            parameters;
                             
-  private String            processed;
+  private boolean           processed;
                             
   @Column ( name = "TEMPLATE_NAME" )
   private String            templateName;
@@ -91,11 +91,11 @@ public class NotificationSendMail implements Serializable {
     this.parameters = parameters;
   }
   
-  public String getProcessed () {
-    return this.processed;
+  public boolean isProcessed () {
+    return processed;
   }
   
-  public void setProcessed ( String processed ) {
+  public void setProcessed ( boolean processed ) {
     this.processed = processed;
   }
   
