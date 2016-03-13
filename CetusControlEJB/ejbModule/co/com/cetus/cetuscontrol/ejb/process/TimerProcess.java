@@ -12,10 +12,12 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.jpa.entity.ClientCetus;
+import co.com.cetus.cetuscontrol.jpa.entity.NotificationSendMail;
 import co.com.cetus.cetuscontrol.jpa.entity.NotificationTask;
 
 /**
@@ -32,10 +34,10 @@ public class TimerProcess {
   /** The general process. */
   @EJB
   private GeneralProcess generalProcess;
-  
+                         
   @PersistenceContext ( unitName = "CetusControlJPA" )
   private EntityManager  em;
-  
+                         
   public TimerProcess () {
   }
   
@@ -167,13 +169,11 @@ public class TimerProcess {
                               + "AND t.status.id = :status "
                               + "AND t.id NOT IN (SELECT nt.task.id FROM NotificationTask nt "
                               + "                 WHERE DATE_FORMAT(t.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(nt.taskDeliveryDate, '%Y-%m-%d %H:%i') "
-                              + "                 AND nt.event = :event AND nt.task.id = t.id ) "
-                              , Integer.class );
+                              + "                 AND nt.event = :event AND nt.task.id = t.id ) ", Integer.class );
       query.setParameter( "idClientCetus", idClientCetus );
       query.setParameter( "dateMax", dateMax );
       query.setParameter( "event", ConstantEJB.EVENT_BEFORE_EXPIRATION );
       query.setParameter( "status", status );
-      
       
       list = query.getResultList();
       
@@ -199,15 +199,15 @@ public class TimerProcess {
     try {
       
       query = em.createQuery( "SELECT n.sent FROM NotificationTask n "
-                            + "WHERE n.task.id = :idTask "
-                            + "AND n.event = :event "
-                            + "AND DATE_FORMAT(n.task.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(:deliveryDate, '%Y-%m-%d %H:%i')"
-          , NotificationTask.class );
-      
+                              + "WHERE n.task.id = :idTask "
+                              + "AND n.event = :event "
+                              + "AND DATE_FORMAT(n.task.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(:deliveryDate, '%Y-%m-%d %H:%i')",
+                              NotificationTask.class );
+                              
       query = em.createNamedQuery( "NotificationTask.findNotificationSent", NotificationTask.class );
       query.setParameter( "idTask", idTask );
       query.setParameter( "event", event );
-      query.setParameter( "deliveryDate", event );      
+      query.setParameter( "deliveryDate", event );
       
       notificationTask = query.getSingleResult();
     } catch ( NoResultException nr ) {
@@ -244,7 +244,7 @@ public class TimerProcess {
         response[0] = String.valueOf( resp[0] );
         response[1] = String.valueOf( resp[1] );
         response[2] = String.valueOf( resp[2] );
-        response[3] = String.valueOf( ((Date)resp[3]).getTime() );
+        response[3] = String.valueOf( ( ( Date ) resp[3] ).getTime() );
         response[4] = String.valueOf( resp[4] );
       }
     } catch ( Exception e ) {
@@ -252,7 +252,7 @@ public class TimerProcess {
     }
     return response;
   }
-
+  
   /**
    * </p> Creates the notification task. </p>
    *
@@ -261,11 +261,11 @@ public class TimerProcess {
    * @return true, si el proceso fue exitoso
    * @since CetusControlEJB (1/12/2015)
    */
-  public boolean createNotificationTask( NotificationTask notificationTask ){
+  public boolean createNotificationTask ( NotificationTask notificationTask ) {
     boolean result = false;
     try {
       notificationTask = generalProcess.create( notificationTask );
-      if( notificationTask != null && notificationTask.getId() > 0 ){
+      if ( notificationTask != null && notificationTask.getId() > 0 ) {
         result = true;
       }
     } catch ( Exception e ) {
@@ -273,7 +273,7 @@ public class TimerProcess {
     }
     return result;
   }
-
+  
   /**
    * </p> Update notification task. </p>
    *
@@ -282,7 +282,7 @@ public class TimerProcess {
    * @return true, si el proceso fue exitoso
    * @since CetusControlEJB (3/12/2015)
    */
-  public boolean updateNotificationTask( NotificationTask notificationTask ){
+  public boolean updateNotificationTask ( NotificationTask notificationTask ) {
     boolean result = false;
     try {
       result = generalProcess.edit( notificationTask );
@@ -291,7 +291,7 @@ public class TimerProcess {
     }
     return result;
   }
-
+  
   /**
    * </p> Find task expiration. </p>
    *
@@ -307,45 +307,44 @@ public class TimerProcess {
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", dateMax=" + status );
       query = em.createNamedQuery( "SELECT T.ID, T.DESCRIPTION, P.EMAIL, T.DELIVERY_DATE, T.CODE, PG.ID_GROUP "
-                                  +"FROM TASK T, "
-                                  +"   PERSON_GROUP PG, "
-                                  +"   PERSON P, "
-                                  +"   CLIENT C, "
-                                  +"   CLIENT_CETUS CC, "
-                                  +"   PARAMETER_GENERAL PEG "
-                                  +"WHERE T.ID_GROUP_PERSON = PG.ID "
-                                  +"AND PG.ID_PERSON = P.ID "
-                                  +"AND P.ID_CLIENT = C.ID "
-                                  +"AND C.ID_CLIENT_CETUS = CC.ID "
-                                  +"AND CC.ID = PEG.ID_CLIENT_CETUS "
-                                  +"AND CC.ID = ? "
-                                  +"AND T.ID_STATUS = ? "
-                                  +"AND ( ( T.ID NOT IN (SELECT NT.ID_TASK  "
-                                  +"             FROM NOTIFICATION_TASK NT "
-                                  +"             WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
-                                  +"             AND NT.EVENT = 'EXPIRATION_TASK' "
-                                  +"             AND T.ID = NT.ID_TASK "
-                                  +"            ) "
-                                  +"    AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
-                                  +"      BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION ) MINUTE) , '%Y-%m-%d %H:%i') "
-                                  +"      AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * 2) MINUTE) , '%Y-%m-%d %H:%i') "
-                                  +"     ) "
-                                  +"  OR "
-                                  +"  T.ID IN (SELECT NT.ID_TASK "
-                                  +"       FROM NOTIFICATION_TASK NT "
-                                  +"       WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
-                                  +"       AND NT.EVENT = 'EXPIRATION_TASK' "
-                                  +"       AND T.ID = NT.ID_TASK  "
-                                  +"       AND NT.SENT < PEG.COL_NUMBER_2 "
-                                  +"       AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
-                                  +"        BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 1)) MINUTE) , '%Y-%m-%d %H:%i') "
-                                  +"        AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 2)) MINUTE) , '%Y-%m-%d %H:%i') "
-                                  +"      ) "
-                                  +"  ) ", Object[].class );
-      
+                                   + "FROM TASK T, "
+                                   + "   PERSON_GROUP PG, "
+                                   + "   PERSON P, "
+                                   + "   CLIENT C, "
+                                   + "   CLIENT_CETUS CC, "
+                                   + "   PARAMETER_GENERAL PEG "
+                                   + "WHERE T.ID_GROUP_PERSON = PG.ID "
+                                   + "AND PG.ID_PERSON = P.ID "
+                                   + "AND P.ID_CLIENT = C.ID "
+                                   + "AND C.ID_CLIENT_CETUS = CC.ID "
+                                   + "AND CC.ID = PEG.ID_CLIENT_CETUS "
+                                   + "AND CC.ID = ? "
+                                   + "AND T.ID_STATUS = ? "
+                                   + "AND ( ( T.ID NOT IN (SELECT NT.ID_TASK  "
+                                   + "             FROM NOTIFICATION_TASK NT "
+                                   + "             WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
+                                   + "             AND NT.EVENT = 'EXPIRATION_TASK' "
+                                   + "             AND T.ID = NT.ID_TASK "
+                                   + "            ) "
+                                   + "    AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
+                                   + "      BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION ) MINUTE) , '%Y-%m-%d %H:%i') "
+                                   + "      AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * 2) MINUTE) , '%Y-%m-%d %H:%i') "
+                                   + "     ) "
+                                   + "  OR "
+                                   + "  T.ID IN (SELECT NT.ID_TASK "
+                                   + "       FROM NOTIFICATION_TASK NT "
+                                   + "       WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
+                                   + "       AND NT.EVENT = 'EXPIRATION_TASK' "
+                                   + "       AND T.ID = NT.ID_TASK  "
+                                   + "       AND NT.SENT < PEG.COL_NUMBER_2 "
+                                   + "       AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
+                                   + "        BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 1)) MINUTE) , '%Y-%m-%d %H:%i') "
+                                   + "        AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 2)) MINUTE) , '%Y-%m-%d %H:%i') "
+                                   + "      ) "
+                                   + "  ) ", Object[].class );
+                                   
       query.setParameter( 1, idClientCetus );
       query.setParameter( 2, status );
-      
       
       list = query.getResultList();
       
@@ -354,7 +353,7 @@ public class TimerProcess {
     }
     return list;
   }
-
+  
   /**
    * </p> Find time after expiration. </p>
    *
@@ -426,6 +425,72 @@ public class TimerProcess {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
     return emails;
+  }
+  
+  /**
+   * </p> Delete notification send mail. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param notificationSendMail the notification send mail
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlEJB (11/03/2016)
+   */
+  public boolean deleteNotificationSendMail ( NotificationSendMail notificationSendMail ) {
+    boolean result = false;
+    try {
+      generalProcess.remove( notificationSendMail );
+      result = true;
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return result;
+  }
+  
+  /**
+   * </p> Update notification send mail. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param notificationSendMail the notification send mail
+   * @return true, si el proceso fue exitoso
+   * @since CetusControlEJB (11/03/2016)
+   */
+  public boolean updateNotificationSendMail ( NotificationSendMail notificationSendMail ) {
+    boolean result = false;
+    try {
+      generalProcess.edit( notificationSendMail );
+      result = true;
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return result;
+  }
+  
+  /**
+   * </p> Find notification send mail. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param limit the limit
+   * @return el list
+   * @since CetusControlEJB (11/03/2016)
+   */
+  public List< NotificationSendMail > findNotificationSendMail ( int limit ) {
+    List< NotificationSendMail > list = null;
+    Query query = null;
+    TypedQuery< NotificationSendMail > queryList = null;
+    try {
+      query = em.createNativeQuery( "UPDATE NOTIFICATION_SEND_MAIL SET PROCESSED = 1 WHERE PROCESSED = 0 ORDER BY CREATE_DATE LIMIT ?" );
+      query.setParameter( 1, limit );
+      int result = query.executeUpdate();
+      if ( result > 0 ) {
+        queryList = em.createNamedQuery( "NotificationSendMail.findAllToProcess", NotificationSendMail.class );
+        if ( queryList != null && queryList.getResultList() != null && queryList.getResultList().size() > 0 ) {
+          list = queryList.getResultList();
+        }
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+    return list;
   }
   
 }

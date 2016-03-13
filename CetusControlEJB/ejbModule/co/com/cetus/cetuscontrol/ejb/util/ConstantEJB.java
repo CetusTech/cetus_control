@@ -84,6 +84,14 @@ public class ConstantEJB {
   public static int                       ID_CLIENT_CETUS_MASTER             = 1;
   public static String                    DATE_PATTERN_NOTIFICATION          = "dd-MM-yyyy HH:mm";
   
+  public static String                    REGISTER_NOTIFICATION_NUMBER       = "REGISTER_NOTIFICATION_NUMBER";
+  public static String                    NOTIFICATION_HOUR_START_TIMER      = "NOTIFICATION_HOUR_START_TIMER";
+  public static String                    NOTIFICATION_HOUR_END_TIMER        = "NOTIFICATION_HOUR_END_TIMER";
+  public static String                    THREAD_NOTIFICATION_PROCESS        = "THREAD_NOTIFICATION_PROCESS";
+  public static String                    MINUTE_FOR_EXECUTE_TIMER_NOTIF     = "MINUTE_FOR_EXECUTE_TIMER_NOTIF";
+  public static String                    NAME_TIMER_NOTIFICATION_PROCESS    = "TimerNotificationProcess";
+  
+  
   
   
   public static HashMap< String, String > parameter                          = null;
