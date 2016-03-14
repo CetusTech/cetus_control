@@ -3,12 +3,13 @@
   xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
   <h:form prependId="false" id="formUpdate" style="width: 100%">
-    <h:panelGrid style="width: 100%">
-      <p:column style="width: 100%">
+    <h:panelGrid>
+      <p:column>
         <p:tabView id="viewtab" activeIndex="#{manualTaskMBean.indexTab}" style="width: 90% !important;">
           <p:tab title="#{msg.information}" id="info">
 
             <h:inputHidden id="percentageUpdate" value="#{manualTaskMBean.percentageCurrent}" />
+
             <h:panelGrid id="pnlUpdate" columns="6" style="width:100% important" cellspacing="2" cellpadding="2">
               <p:outputLabel value="#{msg.person_responsable}" for="personAssign" styleClass="resaltar_negro" />
               <p:outputLabel id="personAssign" styleClass="resaltar_rojo"
@@ -19,6 +20,7 @@
               <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
               <p:outputLabel id="codeUpdate" value="#{manualTaskMBean.code}" styleClass="resaltar_rojo" />
               <p:message for="codeUpdate" id="codeUpdateMsg" display="icon" />
+
 
               <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
               <p:inputText id="descriptionUpdate" required="true" onchange="conMayusculas(this);" size="40"
@@ -49,15 +51,27 @@
               </p:inputTextarea>
               <p:message for="obsUpdate" id="obsUpdateMsg" display="icon" />
 
-              <p:outputLabel id="output" value="#{msg.percentage} #{manualTaskMBean.percentageCurrent}"
-                styleClass="resaltar_negro" rendered="#{manualTaskMBean.status == 2 }"
+              <p:outputLabel id="output2" value="#{msg.percentage}"
+                rendered="#{manualTaskMBean.status != 5 and manualTaskMBean.status != 1}" styleClass="resaltar_negro"
                 style="margin-right: 10px;color: #336699;" />
+
+              <p:outputLabel value=" #{manualTaskMBean.percentageCurrent}%"
+                rendered="#{manualTaskMBean.status != 5 and manualTaskMBean.status != 1 }" />
+
+
+              <p:outputLabel id="output" value="#{msg.percentage} #{manualTaskMBean.percentageCurrent}"
+                rendered="#{manualTaskMBean.status == 5 or manualTaskMBean.status == 1 }" styleClass="resaltar_negro"
+                style="margin-right: 10px;color: #336699;" />
+
+
+
               <p:slider for="percentageUpdate" display="output" style="width:100px"
-                rendered="#{manualTaskMBean.status == 2 }" minValue="0"
-                maxValue="#{(manualTaskMBean.percentageSelected + manualTaskMBean.percentageCurrent) == 0 ? 100: (manualTaskMBean.percentageSelected + manualTaskMBean.percentageCurrent)}"
-                displayTemplate="#{msg.percentage} {value}" />
-              <p:message for="percentageUpdate" id="percentageUpdateMsg" display="icon"
-                rendered="#{manualTaskMBean.status == 2 }" />
+                rendered="#{manualTaskMBean.status == 5 or manualTaskMBean.status == 1 }" minValue="0"
+                maxValue="#{(manualTaskMBean.percentageSelected + manualTaskMBean.percentageCurrent) >= 0 ? 100: (manualTaskMBean.percentageSelected + manualTaskMBean.percentageCurrent)}"
+                displayTemplate="#{msg.percentage} {value}%" />
+              <p:message for="percentageUpdate" id="percentageUpdateMsg" display="icon" />
+
+
 
 
               <p:outputLabel value="#{msg.myTask_task_initDate}" for="msgDateInit" styleClass="resaltar_negro" />

@@ -88,9 +88,10 @@
   </h:form>
 
   <!-- Dialogo para ver detalle del registro -->
-  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="false" header="#{msg.detalle_record}"
-    closable="true" maximizable="false" styleClass="column_90" visible="#{manualTaskMBean.showViewDetail}"
-    position="top" rendered="#{!manualTaskMBean.showAlertSelectRow}" widgetVar="dialogViewVar" closeOnEscape="true">
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="false"
+    header="#{msg.detalle_record} [#{manualTaskMBean.selectedObject.status.description}]" closable="true"
+    maximizable="false" styleClass="column_90" visible="#{manualTaskMBean.showViewDetail}" position="top"
+    rendered="#{!manualTaskMBean.showAlertSelectRow}" widgetVar="dialogViewVar" closeOnEscape="true">
     <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" update=":fromContenido:panel" />
     <ui:include src="/pages/modules/task/manual_task/update.xhtml" />
   </p:dialog>
@@ -181,8 +182,9 @@
 
 
 
-  <p:dialog id="dialogViewDisabled" resizable="false" modal="true" appendToBody="true" header="#{msg.detalle_record}"
-    width="60%" visible="#{manualTaskMBean.showViewDetail}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
+  <p:dialog id="dialogViewDisabled" resizable="false" modal="true" appendToBody="true"
+    header="#{msg.detalle_record} [#{manualTaskMBean.selectedObject.status.description}]" width="60%"
+    visible="#{manualTaskMBean.showViewDetail}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
     <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task/viewEnabled.xhtml" />
   </p:dialog>
