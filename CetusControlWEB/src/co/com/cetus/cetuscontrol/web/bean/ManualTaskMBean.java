@@ -375,6 +375,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
           addObjectSession( percentageCurrent, "percentageCurrent" );
           addObjectSession( ( 100 - percentageCurrent ), "percentageSelected" );
           selectedObject.setCode( taskDTO.getCode() );
+          selectedObject.setSuspended( taskDTO.getSuspended() );
+          selectedObject.setDateInitCurrent( taskDTO.getDateInitCurrent() );
+          selectedObject.setVLength( taskDTO.getVLength() );
           code = taskDTO.getCode();
           addObjectSession( code, "code" );
           addObjectSession( noteTask, "noteTask" );

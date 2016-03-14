@@ -146,8 +146,8 @@
 
               <p:outputLabel value="#{msg.note}" for="noteUpdate" rendered="#{manualTaskMBean.status != 4}"
                 styleClass="resaltar_negro" />
-              <p:inputTextarea id="noteUpdate" required="true" requiredMessage="#{msg.field_required}"
-                rendered="#{manualTaskMBean.status != 4}"
+              <p:inputTextarea id="noteUpdate" required="#{manualTaskMBean.status == 5? false: true}"
+                requiredMessage="#{msg.field_required}" rendered="#{manualTaskMBean.status != 4}"
                 disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
                 value="#{manualTaskMBean.noteTask}" maxlength="50" cols="30" rows="2">
                 <f:validateLength minimum="0" maximum="50" for="obsUpdateMsg" />
