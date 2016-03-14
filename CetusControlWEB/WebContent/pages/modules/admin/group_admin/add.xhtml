@@ -82,7 +82,7 @@
         <p:outputLabel value="#{msg.endDate}" for="endDateAdd" />
         <p:outputPanel id="pnlCal">
           <p:calendar id="endDateAdd" value="#{groupAdminMBean.addObject.endDate}" mode="popup" showButtonPanel="true"
-            required="true" disabled="#{groupAdminMBean.statusDateEnd}" navigator="true" pt:placeholder="dd-MM-yyyy"
+            required="true" disabled="#{groupAdminMBean.statusDateEnd}" pt:placeholder="dd-MM-yyyy"
             locale="#{groupAdminMBean.locale}" pattern="dd-MM-yyyy" showOn="button">
             <p:ajax event="dateSelect" process="@this" listener="#{groupAdminMBean.handleDateSelect}" update=":pnlMsg" />
           </p:calendar>

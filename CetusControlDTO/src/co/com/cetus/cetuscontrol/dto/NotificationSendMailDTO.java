@@ -14,7 +14,6 @@ public class NotificationSendMailDTO implements Serializable {
                                              
   private int               id;
   private Date              createDate;
-  private String            createUser;
   private String            emails;
   private int               idNotificationSetting;
   private String            parameters;
@@ -41,13 +40,6 @@ public class NotificationSendMailDTO implements Serializable {
     this.createDate = createDate;
   }
   
-  public String getCreateUser () {
-    return this.createUser;
-  }
-  
-  public void setCreateUser ( String createUser ) {
-    this.createUser = createUser;
-  }
   
   public String getEmails () {
     return this.emails;
@@ -99,7 +91,7 @@ public class NotificationSendMailDTO implements Serializable {
   
   @Override
   public String toString () {
-    return "NotificationSendMailDTO [id=" + id + ", createDate=" + createDate + ", createUser=" + createUser + ", emails=" + emails
+    return "NotificationSendMailDTO [id=" + id + ", createDate=" + createDate + ", emails=" + emails
            + ", idNotificationSetting=" + idNotificationSetting + ", parameters=" + parameters + ", processed=" + processed + ", templateName="
            + templateName + ", subjectEmail=" + subjectEmail + "]";
   }

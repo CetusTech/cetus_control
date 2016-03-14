@@ -407,12 +407,12 @@ public class TimerControllerForWarning {
         if ( calMin.before( currentCal ) && calMax.after( currentCal ) ) {
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] rangeHours = " + rangeHours + ", minutesForExecute = "
                                                    + minutesForExecute );
-          timerBeforeExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
+          timerExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
         } else if ( calMin.after( currentCal ) ) {
           rangeHours = ( min / 100 ) + "-" + ( max / 100 );
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] rangeHours = " + rangeHours + ", minutesForExecute = "
                                                    + minutesForExecute );
-          timerBeforeExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
+          timerExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
         } else {
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] El timer " + nameTimer + " ya termino la ejecucion en este dia" );
         }

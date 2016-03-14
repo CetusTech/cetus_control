@@ -31,13 +31,13 @@ public class TimerBeforeExpirationTasks {
   /** The timer service. */
   @Resource
   TimerService         timerService;
-  
+                       
   @EJB
   private TimerProcess timerProcess;
-  
+                       
   @EJB
   CetusControlProcess  cetusControlProcess;
-  
+                       
   /**
    * </p> Instancia un nuevo timer before expiration tasks. </p>
    *
@@ -112,7 +112,7 @@ public class TimerBeforeExpirationTasks {
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
                                                + " ---------------" );
-      
+                                                     
       idClientCetus = nameTimer.substring( ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS.length() );
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
       timeBefore = timerProcess.findTimeBeforeExpiration( Integer.parseInt( idClientCetus ) );

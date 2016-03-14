@@ -103,7 +103,7 @@ public class TimerExpirationTasks {
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "--------------- INICIA LA EJECUCION DEL TIMER " + timer.getInfo() + ", " + new Date()
                                                + " ---------------" );
-      
+           
       idClientCetus = nameTimer.substring( ConstantEJB.NAME_TIMER_EXPIRATION_TASKS.length() );
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] idClientCetus=" + idClientCetus );
       

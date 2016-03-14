@@ -22,9 +22,6 @@ public class NotificationSendMail implements Serializable {
   @Column ( name = "CREATE_DATE" )
   private Date              createDate;
                             
-  @Column ( name = "CREATE_USER" )
-  private String            createUser;
-                            
   private String            emails;
                             
   @Column ( name = "ID_NOTIFICATION_SETTING" )
@@ -57,14 +54,6 @@ public class NotificationSendMail implements Serializable {
   
   public void setCreateDate ( Date createDate ) {
     this.createDate = createDate;
-  }
-  
-  public String getCreateUser () {
-    return this.createUser;
-  }
-  
-  public void setCreateUser ( String createUser ) {
-    this.createUser = createUser;
   }
   
   public String getEmails () {

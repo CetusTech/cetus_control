@@ -21,7 +21,7 @@
 
 
   <h:form id="formConfirmAdd">
-    <p:confirmDialog message="#{msg.status_confirm_add}" id="confirmAdd" header="#{msg.status_header_confirm_add}"
+    <p:confirmDialog message="#{msg.confirm_add_group}" id="confirmAdd" header="#{msg.header_confirm_add_group}"
       appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{groupAdminMBean.showConfirmAdd}">
       <center>
         <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":formContenido:panel"
@@ -45,7 +45,7 @@
 
 
   <h:form id="formConfirmMod">
-    <p:confirmDialog message="#{msg.status_confirm_upd}" id="confirmMod" header="#{msg.status_header_confirm_upd}"
+    <p:confirmDialog message="#{msg.confirm_update_group}" id="confirmMod" header="#{msg.header_confirm_update_group}"
       appendToBody="true" widgetVar="confirmMod" severity="alert" visible="#{groupAdminMBean.showDialogConfirmUpdate}">
       <center>
         <p:commandButton id="btnConfMod" value="#{msg.btn_acept}" update=":formContenido:panel"
@@ -76,7 +76,7 @@
   <!-- Dialogo para eliminar el registro -->
   <h:form id="formConfirmDelete">
     <h:panelGroup id="pnlConfirmDelete">
-      <p:confirmDialog message="#{msg.status_confirm_del}" id="confirmDelete" header="#{msg.status_header_confirm_del}"
+      <p:confirmDialog message="#{msg.confirm_delete_group}" id="confirmDelete" header="#{msg.header_confirm_delete_group}"
         appendToBody="true" widgetVar="confirmDeleteVar" severity="alert" visible="#{groupAdminMBean.showConfirmDelete}">
         <center>
           <p:commandButton id="btnConfDelete" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteVar').hide()"

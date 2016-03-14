@@ -198,13 +198,12 @@ public class TimerProcess {
     NotificationTask notificationTask = null;
     try {
       
-      query = em.createQuery( "SELECT n.sent FROM NotificationTask n "
+      query = em.createQuery( "SELECT n FROM NotificationTask n "
                               + "WHERE n.task.id = :idTask "
                               + "AND n.event = :event "
                               + "AND DATE_FORMAT(n.task.deliveryDate, '%Y-%m-%d %H:%i') = DATE_FORMAT(:deliveryDate, '%Y-%m-%d %H:%i')",
                               NotificationTask.class );
                               
-      query = em.createNamedQuery( "NotificationTask.findNotificationSent", NotificationTask.class );
       query.setParameter( "idTask", idTask );
       query.setParameter( "event", event );
       query.setParameter( "deliveryDate", event );
@@ -239,7 +238,7 @@ public class TimerProcess {
                               "WHERE t.id = :idTask", Object[].class );
       query.setParameter( "idTask", idTask );
       
-      resp = ( Object[] ) query.getSingleResult();
+      resp = query.getSingleResult();
       if ( resp != null && resp.length > 0 ) {
         response[0] = String.valueOf( resp[0] );
         response[1] = String.valueOf( resp[1] );
@@ -301,52 +300,55 @@ public class TimerProcess {
    * @return el list
    * @since CetusControlEJB (20/01/2016)
    */
+  @SuppressWarnings ( "unchecked" )
   public List< Object[] > findTaskExpiration ( int idClientCetus, int status ) {
     List< Object[] > list = null;
-    TypedQuery< Object[] > query = null;
+    Query query = null;
     try {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", dateMax=" + status );
-      query = em.createNamedQuery( "SELECT T.ID, T.DESCRIPTION, P.EMAIL, T.DELIVERY_DATE, T.CODE, PG.ID_GROUP "
-                                   + "FROM TASK T, "
-                                   + "   PERSON_GROUP PG, "
-                                   + "   PERSON P, "
-                                   + "   CLIENT C, "
-                                   + "   CLIENT_CETUS CC, "
-                                   + "   PARAMETER_GENERAL PEG "
-                                   + "WHERE T.ID_GROUP_PERSON = PG.ID "
-                                   + "AND PG.ID_PERSON = P.ID "
-                                   + "AND P.ID_CLIENT = C.ID "
-                                   + "AND C.ID_CLIENT_CETUS = CC.ID "
-                                   + "AND CC.ID = PEG.ID_CLIENT_CETUS "
-                                   + "AND CC.ID = ? "
-                                   + "AND T.ID_STATUS = ? "
-                                   + "AND ( ( T.ID NOT IN (SELECT NT.ID_TASK  "
-                                   + "             FROM NOTIFICATION_TASK NT "
-                                   + "             WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
-                                   + "             AND NT.EVENT = 'EXPIRATION_TASK' "
-                                   + "             AND T.ID = NT.ID_TASK "
-                                   + "            ) "
-                                   + "    AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
-                                   + "      BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION ) MINUTE) , '%Y-%m-%d %H:%i') "
-                                   + "      AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * 2) MINUTE) , '%Y-%m-%d %H:%i') "
-                                   + "     ) "
-                                   + "  OR "
-                                   + "  T.ID IN (SELECT NT.ID_TASK "
-                                   + "       FROM NOTIFICATION_TASK NT "
-                                   + "       WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
-                                   + "       AND NT.EVENT = 'EXPIRATION_TASK' "
-                                   + "       AND T.ID = NT.ID_TASK  "
-                                   + "       AND NT.SENT < PEG.COL_NUMBER_2 "
-                                   + "       AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
-                                   + "        BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 1)) MINUTE) , '%Y-%m-%d %H:%i') "
-                                   + "        AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 2)) MINUTE) , '%Y-%m-%d %H:%i') "
-                                   + "      ) "
-                                   + "  ) ", Object[].class );
-                                   
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", status=" + status );
+      query = em.createNativeQuery( "SELECT T.ID, T.DESCRIPTION, P.EMAIL, T.DELIVERY_DATE, T.CODE, PG.ID_GROUP "
+                                    + "FROM TASK T, "
+                                    + "   PERSON_GROUP PG, "
+                                    + "   PERSON P, "
+                                    + "   CLIENT C, "
+                                    + "   CLIENT_CETUS CC, "
+                                    + "   PARAMETER_GENERAL PEG "
+                                    + "WHERE T.ID_GROUP_PERSON = PG.ID "
+                                    + "AND PG.ID_PERSON = P.ID "
+                                    + "AND P.ID_CLIENT = C.ID "
+                                    + "AND C.ID_CLIENT_CETUS = CC.ID "
+                                    + "AND CC.ID = PEG.ID_CLIENT_CETUS "
+                                    + "AND CC.ID = ? "
+                                    + "AND T.ID_STATUS = ? "
+                                    + "AND ( ( T.ID NOT IN (SELECT NT.ID_TASK  "
+                                    + "             FROM NOTIFICATION_TASK NT "
+                                    + "             WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
+                                    + "             AND NT.EVENT = 'EXPIRATION_TASK' "
+                                    + "             AND T.ID = NT.ID_TASK "
+                                    + "            ) "
+                                    + "    AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
+                                    + "      BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION ) MINUTE) , '%Y-%m-%d %H:%i') "
+                                    + "      AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * 2) MINUTE) , '%Y-%m-%d %H:%i') "
+                                    + "     ) "
+                                    + "  OR "
+                                    + "  T.ID IN (SELECT NT.ID_TASK "
+                                    + "       FROM NOTIFICATION_TASK NT "
+                                    + "       WHERE DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') = DATE_FORMAT(NT.TASK_DELIVERY_DATE, '%Y-%m-%d %H:%i') "
+                                    + "       AND NT.EVENT = 'EXPIRATION_TASK' "
+                                    + "       AND T.ID = NT.ID_TASK  "
+                                    + "       AND NT.SENT < PEG.COL_NUMBER_2 "
+                                    + "       AND DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') "
+                                    + "        BETWEEN DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 1)) MINUTE) , '%Y-%m-%d %H:%i') "
+                                    + "        AND DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * (NT.SENT + 2)) MINUTE) , '%Y-%m-%d %H:%i') "
+                                    + "      ) "
+                                    + "  ) " );
+                                    
       query.setParameter( 1, idClientCetus );
       query.setParameter( 2, status );
       
-      list = query.getResultList();
+      if ( query.getResultList() != null && query.getResultList().size() > 0 ) {
+        list = ( List< Object[] > ) query.getResultList();
+      }
       
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
