@@ -33,7 +33,6 @@ import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 
 import org.hibernate.Session;
-import org.hibernate.internal.SessionFactoryImpl;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
 import co.com.cetus.cetuscontrol.dto.AttachDTO;
@@ -79,6 +78,7 @@ import co.com.cetus.common.exception.ProcessException;
 import co.com.cetus.common.exception.ValidatorException;
 import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.Converter;
+import co.com.cetus.common.util.DBConnection;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.portal.ejb.service.CreateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.CreateUserResponseDTO;
@@ -91,8 +91,6 @@ import co.com.cetus.portal.ejb.service.ResponseWSDTO;
 import co.com.cetus.portal.ejb.service.UpdateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.UserDTO;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -897,9 +895,8 @@ public class CetusControlProcess {
     CallableStatement cst = null;
     Connection conn = null;
     try {
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      conn = sessionFactory.getConnectionProvider().getConnection();
+      
+      conn = getConnection();
       if ( conn != null ) {
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GENERATE_CODE_CLIENT (?)}" );
@@ -1039,9 +1036,8 @@ public class CetusControlProcess {
     CallableStatement cst = null;
     Connection conn = null;
     try {
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      conn = sessionFactory.getConnectionProvider().getConnection();
+      conn = getConnection();
+      
       if ( conn != null ) {
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GENERATE_CODE_PERSON (?)}" );
@@ -1599,9 +1595,8 @@ public class CetusControlProcess {
     CallableStatement cst = null;
     Connection conn = null;
     try {
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      conn = sessionFactory.getConnectionProvider().getConnection();
+      conn = getConnection();
+      
       if ( conn != null ) {
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GENERATE_CODE_TASK(?)}" );
@@ -1653,9 +1648,11 @@ public class CetusControlProcess {
       
       JasperReport report = ( JasperReport ) JRLoader.loadObject( reportJasper );
       
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      Connection connection = sessionFactory.getConnectionProvider().getConnection();
+      Session session = ( Session ) em.getDelegate();
+      DBConnection dbConnection = new DBConnection();
+      session.doWork( dbConnection );
+      
+      Connection connection = getConnection();
       
       JasperPrint jasperPrint = JasperFillManager.fillReport( report, parameters, connection );
       
@@ -2041,9 +2038,8 @@ public class CetusControlProcess {
       //      responseDTO = UtilCommon.createMessageSUCCESS();
       //      responseDTO.setObjectResponse( "100" );
       
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      conn = sessionFactory.getConnectionProvider().getConnection();
+      conn = getConnection();
+      
       if ( conn != null ) {
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
@@ -2315,9 +2311,9 @@ public class CetusControlProcess {
       parameters.put( "ID_TASK", Long.valueOf( pIdTask ).intValue() );
       parameters.put( "PATTERN_DATE", String.valueOf( pFormatPattern ) );
       report = ( JasperReport ) JRLoader.loadObject( reportJasper );
-      Session ses = ( Session ) em.getDelegate();
-      SessionFactoryImpl sessionFactory = ( SessionFactoryImpl ) ses.getSessionFactory();
-      Connection connection = sessionFactory.getConnectionProvider().getConnection();
+      
+      Connection connection = getConnection();
+      
       JasperPrint jasperPrint = JasperFillManager.fillReport( report, parameters, connection );
       JRPdfExporter exporter = new JRPdfExporter();
       ByteArrayOutputStream fileReport = new ByteArrayOutputStream();
@@ -2326,10 +2322,32 @@ public class CetusControlProcess {
       exporter.exportReport();
       responseDTO = createMessageSUCCESS();
       responseDTO.setObjectResponse( fileReport.toByteArray() );
-    } catch ( JRException | SQLException e ) {
+    } catch ( JRException e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
       responseDTO = createMessageFAILURE();
     }
     return responseDTO;
   }
+  
+  /**
+   * </p> Gets the connection. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @return el connection
+   * @since CetusControlEJB (16/03/2016)
+   */
+  private Connection getConnection () {
+    Connection connection = null;
+    try {
+      Session session = ( Session ) em.getDelegate();
+      DBConnection dbConnection = new DBConnection();
+      session.doWork( dbConnection );
+      
+      connection = dbConnection.getConnection();
+    } catch ( Exception e ) {
+      throw e;
+    }
+    return connection;
+  }
+  
 }
