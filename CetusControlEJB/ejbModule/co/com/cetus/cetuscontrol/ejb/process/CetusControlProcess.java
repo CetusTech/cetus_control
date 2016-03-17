@@ -33,6 +33,7 @@ import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 
 import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionImplementor;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
 import co.com.cetus.cetuscontrol.dto.AttachDTO;
@@ -78,7 +79,6 @@ import co.com.cetus.common.exception.ProcessException;
 import co.com.cetus.common.exception.ValidatorException;
 import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.Converter;
-import co.com.cetus.common.util.DBConnection;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.portal.ejb.service.CreateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.CreateUserResponseDTO;
@@ -895,8 +895,9 @@ public class CetusControlProcess {
     CallableStatement cst = null;
     Connection conn = null;
     try {
-      
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "antes de conexion" );
       conn = getConnection();
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "despues de conexion : " + conn );
       if ( conn != null ) {
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GENERATE_CODE_CLIENT (?)}" );
@@ -1648,10 +1649,6 @@ public class CetusControlProcess {
       
       JasperReport report = ( JasperReport ) JRLoader.loadObject( reportJasper );
       
-      Session session = ( Session ) em.getDelegate();
-      DBConnection dbConnection = new DBConnection();
-      session.doWork( dbConnection );
-      
       Connection connection = getConnection();
       
       JasperPrint jasperPrint = JasperFillManager.fillReport( report, parameters, connection );
@@ -2340,10 +2337,7 @@ public class CetusControlProcess {
     Connection connection = null;
     try {
       Session session = ( Session ) em.getDelegate();
-      DBConnection dbConnection = new DBConnection();
-      session.doWork( dbConnection );
-      
-      connection = dbConnection.getConnection();
+      connection = ( ( SessionImplementor ) session ).connection();
     } catch ( Exception e ) {
       throw e;
     }
