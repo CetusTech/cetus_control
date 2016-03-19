@@ -61,6 +61,7 @@ public class ThreadNotificationProcess extends Thread {
   @Override
   public void run () {
     String[] arrEmails = null;
+    String[] parameters = null;
     ResponseWSDTO responseWSDTO = null;
     boolean response = false;
     String subject = null;
@@ -77,15 +78,25 @@ public class ThreadNotificationProcess extends Thread {
         for ( NotificationSendMail notificationSendMail: listNotification ) {
           
           subject = cetusControlProcess.getValueParameter( notificationSendMail.getSubjectEmail() );
-          email = notificationSendMail.getEmails().substring( 0, notificationSendMail.getEmails().indexOf( ";" ) );
-          emails = notificationSendMail.getEmails().substring( notificationSendMail.getEmails().indexOf( ";" ) + 1 );
-          arrEmails = emails.split( ";" );
-          
-          sendMailRequestDTO.setSubject( subject );
+          if ( notificationSendMail.getEmails() != null ) {
+            if ( notificationSendMail.getEmails().contains( ";" ) ) {
+              email = notificationSendMail.getEmails().substring( 0, notificationSendMail.getEmails().indexOf( ";" ) );
+              emails = notificationSendMail.getEmails().substring( notificationSendMail.getEmails().indexOf( ";" ) + 1 );
+            } else {
+              email = notificationSendMail.getEmails();
+              emails = null;
+            }
+          }
+          parameters = notificationSendMail.getParameters() != null ? notificationSendMail.getParameters().split( "\\|" ) : null;
+          sendMailRequestDTO.setSubject( subject.concat( "[" + parameters[0] + "]" ) );
           sendMailRequestDTO.setRecipients( new String[]{ email } );
-          sendMailRequestDTO.setCopyToRecipients( arrEmails );
+          if ( emails != null ) {
+            arrEmails = emails.split( ";" );
+            sendMailRequestDTO.setCopyToRecipients( arrEmails );
+          }
           sendMailRequestDTO.setNameTemplateHTML( notificationSendMail.getTemplateName() );
-          sendMailRequestDTO.setParametersTemplateHTML( notificationSendMail.getParameters().split( "\\|" ) );
+          
+          sendMailRequestDTO.setParametersTemplateHTML( parameters );
           
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Se procede a enviar la notificacion :: "
                                                    + sendMailRequestDTO.toString() );

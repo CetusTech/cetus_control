@@ -515,7 +515,7 @@ public class TimerControllerForWarning {
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "rangeHours = " + rangeHours + ", minutesForExecute = " + minutesForExecute );
         timerNotificationProcess.startTimer( ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS, rangeHours, minutesForExecute );
       } else if ( calMin.after( currentCal ) ) {
-        rangeHours = ( min / 100 ) + "-" + ( max / 100 );
+        rangeHours = ( min ) + "-" + ( max );
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "rangeHours = " + rangeHours + ", minutesForExecute = " + minutesForExecute );
         timerNotificationProcess.startTimer( ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS, rangeHours, minutesForExecute );
       } else {
