@@ -10,7 +10,7 @@
       <p:inputText id="descriptionAdd" required="true" size="40" value="#{manualTaskMBean.addObject.description}"
         style="width: 70%'" pt:type="string" pt:placeholder="#{msg.input_name_task}" pt:autofocus="autofocus"
         onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}"
-        maxlength="40" />
+        maxlength="100" />
       <p:message for="descriptionAdd" id="descriptionAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.assingDate}" for="assingDateAdd" styleClass="resaltar_negro" />
@@ -22,14 +22,14 @@
       <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.observation}" for="obsResAdd" styleClass="resaltar_negro" />
-      <p:inputTextarea id="obsResAdd" value="#{manualTaskMBean.addObject.observation}" maxlength="100" cols="35"
+      <p:inputTextarea id="obsResAdd" value="#{manualTaskMBean.addObject.observation}" maxlength="190" cols="50"
         style="width: 70%" rows="4">
-        <f:validateLength minimum="0" maximum="100" for="obsAddMsg" />
+        <f:validateLength minimum="0" maximum="190" for="obsAddMsg" />
       </p:inputTextarea>
       <p:message for="obsResAdd" id="obsResAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.observation_res}" for="obsAdd" styleClass="resaltar_negro" />
-      <p:inputTextarea id="obsAdd" value="#{manualTaskMBean.addObject.observationRequestor}" maxlength="100" cols="35"
+      <p:inputTextarea id="obsAdd" value="#{manualTaskMBean.addObject.observationRequestor}" maxlength="100" cols="50"
         style="width: 70%" rows="4">
         <f:validateLength minimum="0" maximum="100" for="obsAddMsg" />
       </p:inputTextarea>

@@ -25,7 +25,7 @@
               <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
               <p:inputText id="descriptionUpdate" required="true" onchange="conMayusculas(this);" size="40"
                 style="width: 90% !important;" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
-                onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="40"
+                onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="100"
                 value="#{manualTaskMBean.selectedObject.description}">
               </p:inputText>
               <p:message for="descriptionUpdate" id="descriptionUpdateMsg" display="icon" />
@@ -37,16 +37,16 @@
               <p:message for="assingDateUpdate" id="assingDateUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.observation}" for="obsResUpdate" styleClass="resaltar_negro" />
-              <p:inputTextarea id="obsResUpdate" value="#{manualTaskMBean.selectedObject.observation}" maxlength="100"
-                cols="35" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" rows="4">
-                <f:validateLength minimum="0" maximum="100" for="obsUpdateMsg" />
+              <p:inputTextarea id="obsResUpdate" value="#{manualTaskMBean.selectedObject.observation}" maxlength="190"
+                cols="50" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" rows="4">
+                <f:validateLength minimum="0" maximum="190" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="obsResUpdate" id="obsResUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.observation_res}" for="obsUpdate" styleClass="resaltar_negro" />
               <p:inputTextarea id="obsUpdate" value="#{manualTaskMBean.selectedObject.observationRequestor}"
                 style="width: 90% !important;" maxlength="100" readonly="false" title="#{msg.read_only}"
-                disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" cols="35" rows="4">
+                disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" cols="50" rows="4">
                 <f:validateLength minimum="0" maximum="100" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="obsUpdate" id="obsUpdateMsg" display="icon" />

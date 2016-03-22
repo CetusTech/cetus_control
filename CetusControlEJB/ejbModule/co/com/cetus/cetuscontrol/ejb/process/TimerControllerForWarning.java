@@ -1,5 +1,7 @@
 package co.com.cetus.cetuscontrol.ejb.process;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 
@@ -82,6 +84,9 @@ public class TimerControllerForWarning {
         
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_EXPIRATION_TASKS );
         timerExpirationTasks.stopAllTimer();
+        
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS );
+        timerNotificationProcess.stopAllTimer();
         
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "************************************ Creando TimerControllerForWarning-0 ************************************" );
         timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*" )
@@ -166,6 +171,7 @@ public class TimerControllerForWarning {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     } finally {
       startTimerControllerPrincipal();
+      sendRequestAccountOpenshift();
     }
     ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "********************* Fin ejecucion TimerController *********************" );
   }
@@ -187,7 +193,7 @@ public class TimerControllerForWarning {
             ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Creando Timer de control TimerControllerForWarningPrincipal..." );
             String executeTime = cetusControlProcess.getValueParameter( ConstantEJB.TIME_HOUR_EXECUTE_TIMER_CONTROLLER );
             timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*/" + executeTime ),
-                                              new TimerConfig( "TimerControllerForWarningPrincipal", true ) );
+                                              new TimerConfig( "TimerControllerForWarning-1", true ) );
           }
         }
       }
@@ -521,6 +527,34 @@ public class TimerControllerForWarning {
       } else {
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer " + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS + " ya termino la ejecucion en este dia" );
       }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Send request account openshift. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlEJB (22/03/2016)
+   */
+  private void sendRequestAccountOpenshift () {
+    try {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "INICIA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
+      
+      String url = "http://cetusprep-cetustech.rhcloud.com/";
+      
+      URL obj = new URL( url );
+      HttpURLConnection con = ( HttpURLConnection ) obj.openConnection();
+
+      con.setRequestMethod( "GET" );
+      
+      int responseCode = con.getResponseCode();
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "\nSending 'GET' request to URL : " + url );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Response Code : " + responseCode );
+
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "FINALIZA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
+      
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }

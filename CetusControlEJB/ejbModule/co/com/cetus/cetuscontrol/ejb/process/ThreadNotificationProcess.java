@@ -88,7 +88,7 @@ public class ThreadNotificationProcess extends Thread {
             }
           }
           parameters = notificationSendMail.getParameters() != null ? notificationSendMail.getParameters().split( "\\|" ) : null;
-          sendMailRequestDTO.setSubject( subject.concat( "[" + parameters[0] + "]" ) );
+          sendMailRequestDTO.setSubject( subject.concat( " [" + parameters[0] + "]" ) );
           sendMailRequestDTO.setRecipients( new String[]{ email } );
           if ( emails != null ) {
             arrEmails = emails.split( ";" );
