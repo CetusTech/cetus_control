@@ -290,7 +290,13 @@ public class TimerControllerForWarning {
                                                    + minutesForExecute );
           timerBeforeExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
         } else if ( calMin.after( currentCal ) ) {
-          rangeHours = ( min / 100 ) + "-" + ( max / 100 );
+          
+          min = (min/100) - (timeBeforeExpiration/60); 
+          if( timeBeforeExpiration % 60 > 0 ){
+            min--;
+          }
+          
+          rangeHours = min + "-" + ( max / 100 );
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[nameTimer = " + nameTimer + "] rangeHours = " + rangeHours + ", minutesForExecute = "
                                                    + minutesForExecute );
           timerBeforeExpirationTasks.startTimer( nameTimer, rangeHours, minutesForExecute );
@@ -540,7 +546,7 @@ public class TimerControllerForWarning {
    */
   private void sendRequestAccountOpenshift () {
     try {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "INICIA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "\n\nINICIA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
       
       String url = "http://cetusprep-cetustech.rhcloud.com/";
       
@@ -550,10 +556,10 @@ public class TimerControllerForWarning {
       con.setRequestMethod( "GET" );
       
       int responseCode = con.getResponseCode();
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "\nSending 'GET' request to URL : " + url );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Sending 'GET' request to URL : " + url );
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Response Code : " + responseCode );
 
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "FINALIZA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "FINALIZA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT\n\n" );
       
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );

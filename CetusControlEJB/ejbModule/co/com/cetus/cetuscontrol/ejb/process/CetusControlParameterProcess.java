@@ -97,20 +97,20 @@ public class CetusControlParameterProcess {
         }
       }
       //Consultar Parametros de CETUS VORTAL
-      findParameterRequestDTO.setUser( ConstantEJB.USER_WS_CETUS );
-      findParameterRequestDTO.setPassword( ConstantEJB.PASSWORD_WS_CETUS );
-      findParameterRequestDTO.setIdApplication( ConstantEJB.ID_APPLICATION_CETUS_VORTAL );
-      findParameterRequestDTO.setNameComponent( ConstantEJB.CETUS_VORTAL_EJB_COMPONENT );
-      
-      findResponseDTO = cetusVortalDelegate.findParameter( findParameterRequestDTO );
-      responseWSDTO = findResponseDTO.getResponseWSDTO();
-      if ( responseWSDTO != null && responseWSDTO.getCode().equals( ConstantCommon.WSResponse.CODE_ONE ) ) {
-        list = findResponseDTO.getParameters();
-        for ( co.com.cetus.portal.ejb.service.ParameterDTO parameter: list ) {
-          parameterDTO = new ParameterDTO( parameter.getName(), parameter.getValue() );
-          listParameter.add( parameterDTO );
-        }
-      }
+//      findParameterRequestDTO.setUser( ConstantEJB.USER_WS_CETUS );
+//      findParameterRequestDTO.setPassword( ConstantEJB.PASSWORD_WS_CETUS );
+//      findParameterRequestDTO.setIdApplication( ConstantEJB.ID_APPLICATION_CETUS_VORTAL );
+//      findParameterRequestDTO.setNameComponent( ConstantEJB.CETUS_VORTAL_EJB_COMPONENT );
+//      
+//      findResponseDTO = cetusVortalDelegate.findParameter( findParameterRequestDTO );
+//      responseWSDTO = findResponseDTO.getResponseWSDTO();
+//      if ( responseWSDTO != null && responseWSDTO.getCode().equals( ConstantCommon.WSResponse.CODE_ONE ) ) {
+//        list = findResponseDTO.getParameters();
+//        for ( co.com.cetus.portal.ejb.service.ParameterDTO parameter: list ) {
+//          parameterDTO = new ParameterDTO( parameter.getName(), parameter.getValue() );
+//          listParameter.add( parameterDTO );
+//        }
+//      }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }
