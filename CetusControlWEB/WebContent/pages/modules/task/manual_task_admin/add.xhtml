@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false" enctype="multipart/form-data">
+    <h:panelGrid id="panelAdd" columns="6" cellspacing="2" cellpadding="2">
+      <p:outputLabel value="#{msg.description}" for="descriptionAdd" styleClass="resaltar_negro" />
+      <p:inputText id="descriptionAdd" required="true" size="40" value="#{adminTaskBean.addObject.description}"
+        style="width: 70%'" pt:type="string" pt:placeholder="#{msg.input_name_task}" pt:autofocus="autofocus"
+        onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}"
+        maxlength="100" />
+      <p:message for="descriptionAdd" id="descriptionAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.assingDate}" for="assingDateAdd" styleClass="resaltar_negro" />
+      <p:calendar id="assingDateAdd" value="#{adminTaskBean.addObject.assingDate}" required="true" mode="popup"
+        onchange="PF('assingDateAdd').hide()" showButtonPanel="true"
+        pt:placeholder="#{adminTaskBean.patterDate}" locale="#{adminTaskBean.locale}"
+        pattern="#{adminTaskBean.patterDate}" mask="false" />
+
+      <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.observation}" for="obsResAdd" styleClass="resaltar_negro" />
+      <p:inputTextarea id="obsResAdd" value="#{adminTaskBean.addObject.observation}" maxlength="190" cols="50"
+        style="width: 70%" rows="4">
+        <f:validateLength minimum="0" maximum="190" for="obsAddMsg" />
+      </p:inputTextarea>
+      <p:message for="obsResAdd" id="obsResAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.observation_res}" for="obsAdd" styleClass="resaltar_negro" />
+      <p:inputTextarea id="obsAdd" value="#{adminTaskBean.addObject.observationRequestor}" maxlength="100" cols="50"
+        style="width: 70%" rows="4">
+        <f:validateLength minimum="0" maximum="100" for="obsAddMsg" />
+      </p:inputTextarea>
+      <p:message for="obsAdd" id="obsAddMsg" display="icon" />
+
+
+      <p:outputLabel value="#{msg.duration}" for="durationAdd" styleClass="resaltar_negro" />
+      <p:inputText id="durationAdd" required="true" size="3" value="#{adminTaskBean.addObject.VDuration}"
+        pt:type="int" pt:autofocus="autofocus" requiredMessage="#{msg.field_required}" maxlength="3">
+        <f:validateLongRange minimum="1" maximum="999" />
+      </p:inputText>
+      <p:message for="durationAdd" id="durationAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.approved}" for="aproAdd" styleClass="resaltar_negro" />
+      <p:selectBooleanCheckbox value="#{adminTaskBean.approved}" id="aproAdd" />
+      <p:message for="aproAdd" id="aproAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.requestor}" for="requestorAdd" styleClass="resaltar_negro" />
+      <p:inputText id="requestorAdd" required="false" size="20" value="#{adminTaskBean.addObject.requestor}"
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        maxlength="20" />
+
+      <p:message for="requestorAdd" id="requestorAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.userFun}" for="userAdd" styleClass="resaltar_negro" />
+      <p:inputText id="userAdd" required="false" size="20" value="#{adminTaskBean.addObject.userFunctional}"
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        maxlength="20" />
+      <p:message for="userAdd" id="userAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.area}" for="areaSelected" styleClass="resaltar_negro" />
+      <p:selectOneMenu value="#{adminTaskBean.addObject.area.id}" id="areaSelected" required="true">
+        <f:selectItem itemLabel="#{msg.selected_area}" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{adminTaskBean.listAreaItem}" />
+      </p:selectOneMenu>
+      <p:message for="areaSelected" id="areaAddMsg" display="icon" />
+
+
+      <p:outputLabel value="#{msg.taskType}" for="taskTypeSelected" styleClass="resaltar_negro" />
+      <p:selectOneMenu value="#{adminTaskBean.addObject.taskType.id}" id="taskTypeSelected" required="true">
+        <f:selectItem itemLabel="#{msg.selected_type}" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{adminTaskBean.listTaskTypeItem}" />
+      </p:selectOneMenu>
+      <p:message for="taskTypeSelected" id="taskTypeAddMsg" display="icon" />
+
+      <p:outputLabel value="#{msg.priority}" for="prioritySelected" styleClass="resaltar_negro" />
+      <p:selectOneMenu value="#{adminTaskBean.addObject.priority.id}" id="prioritySelected" required="true">
+        <f:selectItem itemLabel="#{msg.selected_priority}" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{adminTaskBean.listPriorityItem}" />
+      </p:selectOneMenu>
+      <p:message for="prioritySelected" id="priorityAddMsg" display="icon" />
+
+      <f:facet name="footer">
+        <h:panelGrid columns="1" style="width: 100%" id="pnlListFiles">
+          <p:dataTable value="#{adminTaskBean.listFilesTask}" var="objFile" type="ordered" id="listFiles" rows="4"
+            rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}"
+            rowsPerPageTemplate="1,#{adminTaskBean.listFilesTask.size()}" rowIndexVar="index" paginator="false"
+            paginatorPosition="bottom" emptyMessage="#{msg.msg_empty_list_file}">
+            <f:facet name="header">
+              <h:outputText value="#{msg.list_files}" />
+            </f:facet>
+            <p:column headerText="#{msg.name}" styleClass="column_80">
+              <h:outputText value="#{objFile.fileName}" />
+            </p:column>
+          </p:dataTable>
+
+          <p:fileUpload fileUploadListener="#{adminTaskBean.handleFileUpload}" mode="advanced" dragDropSupport="true"
+            label="#{msg.selected_file}" invalidSizeMessage="#{msg.file_limit_size}"
+            invalidFileMessage="#{msg.file_invalid}" id="fileUp" auto="true" update="listFiles messages"
+            sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|txt|xls|docx|jpe?g|png)$/" />
+          <p:growl id="messages" showDetail="true" for="fileUp" />
+        </h:panelGrid>
+        <center>
+          <p:commandButton value="#{msg.btn_save}" update=":formAdd :formConfirmAdd:confirmAdd :pnlListFiles"
+            process="@form" styleClass="button-general" icon="img-save" actionListener="#{adminTaskBean.load}" />
+        </center>
+      </f:facet>
+
+    </h:panelGrid>
+
+  </h:form>
+</ui:composition>

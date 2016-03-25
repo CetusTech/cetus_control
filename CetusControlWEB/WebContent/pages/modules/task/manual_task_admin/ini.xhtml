@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="msg" basename="message_es" />
+<h:head>
+  <title>#{msg.title_application}</title>
+  <h:outputStylesheet library="css" name="estilo.css" />
+  <h:outputStylesheet library="css" name="style_theme.css" />
+  <h:outputScript library="js" name="common.js" />
+  <h:outputScript library="js" name="calendar.js" />
+</h:head>
+<h:body>
+  <h:form id="fromContenido">
+    <p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
+    <p:panel header="Administrar Tareas de Equipos" id="panel">
+      <p:panelGrid style="width:100%">
+        <p:row>
+          <p:column>
+            <ui:include src="/pages/modules/task/manual_task_admin/listGroup.xhtml" />
+          </p:column>
+          <p:column>
+            <p:outputPanel id="pnlPerGrop">
+              <ui:include src="/pages/modules/task/manual_task_admin/listPersonGroup.xhtml" />
+            </p:outputPanel>
+          </p:column>
+        </p:row>
+        <p:row style="width:100%">
+          <p:column colspan="2" style="width:100%">
+            <p:outputPanel id="panelTask">
+              <ui:include src="/pages/modules/task/manual_task_admin/list.xhtml" />
+            </p:outputPanel>
+          </p:column>
+        </p:row>
+      </p:panelGrid>
+    </p:panel>
+  </h:form>
+  <ui:include src="/pages/modules/task/manual_task_admin/dialog.xhtml" />
+</h:body>
+</html>
+

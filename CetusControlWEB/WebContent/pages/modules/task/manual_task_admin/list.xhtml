@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:contextMenu for="table">
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowTask" process="@form"
+      rendered="#{!adminTaskBean.showMenu}" actionListener="#{adminTaskBean.validateSelectedRecord}"
+      icon="ui-icon-search" />
+    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogViewDisabled :alertSelectRowTask" process="@form"
+      rendered="#{adminTaskBean.showMenu}" actionListener="#{adminTaskBean.validateSelectedRecord}"
+      icon="ui-icon-search" />
+  </p:contextMenu>
+
+
+  <p:toolbar styleClass="body_toolbar_nivel_3" id="bars">
+    <p:toolbarGroup align="left" id="group">
+      <p:separator styleClass="separator-toolbar" />
+      <p:commandLink id="addButton" process="@form" title="#{msg.btn_new}" update=":dialogAdd :alertSelectRowGroup"
+        actionListener="#{adminTaskBean.validateSelectedRecordGroupSelected}">
+        <p:graphicImage name="document_add_32.png" width="24" height="24" library="images" />
+      </p:commandLink>
+
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowTask"
+        rendered="#{!adminTaskBean.showMenu}" process="@form" actionListener="#{adminTaskBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
+      </p:commandLink>
+
+      <p:commandLink id="viewDetailCompleted" title="#{msg.btn_view_detail}" rendered="#{adminTaskBean.showMenu}"
+        update=":dialogViewDisabled :alertSelectRowTask" actionListener="#{adminTaskBean.validateSelectedRecord}">
+        <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
+      </p:commandLink>
+      <p:selectCheckboxMenu id="menu" value="#{adminTaskBean.columnTemplate}" label="Columnas" filter="false"
+        widgetVar="menuT" onHide="true" style="position: fixed;" filterMatchMode="startsWith" panelStyle="width:250px">
+        <f:selectItems value="#{adminTaskBean.VALID_COLUMN_KEYS}" />
+
+        <p:ajax listener="#{adminTaskBean.createDynamicColumns}" update="table" />
+        <p:ajax event="toggleSelect" listener="#{adminTaskBean.createDynamicColumns}" update="table" process="@form" />
+
+      </p:selectCheckboxMenu>
+
+    </p:toolbarGroup>
+  </p:toolbar>
+
+
+  <p:dataTable value="#{adminTaskBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : null  : objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : 'row-color-2'}"
+    rowIndexVar="index" currentPageReportTemplate="({currentPage} de {totalPages})" widgetVar="tableTask"
+    rowsPerPageTemplate="1,#{adminTaskBean.listRegister.size()}"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{adminTaskBean.selectedObject}" selectionMode="single"
+    emptyMessage="#{msg.list_empty}" var="objetc">
+
+    <p:ajax event="rowSelect" process="@form" listener="#{adminTaskBean.onRowSelectTask}"
+      update=":fromContenido:panelTask :fromContenido:bars" />
+
+    <p:columns value="#{adminTaskBean.columns}" var="column" columnIndexVar="colIndex" filterMatchMode="contains"
+      sortBy="#{objetc[column.property]}">
+      <f:facet name="header">
+        <h:outputText value="#{column.header}" />
+      </f:facet>
+      <h:outputText value="#{objetc[column.property]}" />
+    </p:columns>
+  </p:dataTable>
+</ui:composition>

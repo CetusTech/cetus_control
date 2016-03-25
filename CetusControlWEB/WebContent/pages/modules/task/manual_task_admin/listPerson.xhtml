@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+  <h:form>
+    <h:panelGrid width="100%">
+
+      <p:dataTable value="#{manualTaskMBean.listPersonG}" rows="#{msg.rows_paginator}" id="tablePerson" paginator="true"
+        styleClass="column_100" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+        currentPageReportTemplate="({currentPage} de {totalPages})"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{manualTaskMBean.selectedObjectPerson}"
+        selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
+
+        <p:ajax event="rowSelect" process="@form" listener="#{manualTaskMBean.onRowSelectPerson}" update=":dialogView" />
+
+        <p:column sortBy="#{objetc.person.names}">
+          <f:facet name="header">
+            <h:outputText value="#{msg.name}" />
+          </f:facet>
+          <h:outputText value="#{objetc.person.names}" />
+        </p:column>
+        <p:column sortBy="#{objetc.person.lastNames}">
+          <f:facet name="header">
+            <h:outputText value="#{msg.last_name}" />
+          </f:facet>
+          <h:outputText value="#{objetc.person.lastNames}" />
+        </p:column>
+
+      </p:dataTable>
+    </h:panelGrid>
+  </h:form>
+</ui:composition>

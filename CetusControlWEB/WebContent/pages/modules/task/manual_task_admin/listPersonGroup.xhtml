@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:dataTable value="#{adminTaskBean.listPersonG}" rows="#{msg.rows_paginator}" id="tablePerson" paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{adminTaskBean.personDTOSelected}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
+    <p:ajax event="rowSelect" process="@form" listener="#{adminTaskBean.onRowSelectPersonGroup}"
+      update=":fromContenido:panelTask" />
+    <p:column sortBy="#{objetc.person.names}">
+      <f:facet name="header">
+        <h:outputText value="#{msg.names}" />
+      </f:facet>
+      <h:outputText value="#{objetc.person.names}" />
+    </p:column>
+  </p:dataTable>
+</ui:composition>
