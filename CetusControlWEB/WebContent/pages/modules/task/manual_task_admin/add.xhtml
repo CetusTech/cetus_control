@@ -22,16 +22,16 @@
       <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.observation}" for="obsResAdd" styleClass="resaltar_negro" />
-      <p:inputTextarea id="obsResAdd" value="#{adminTaskBean.addObject.observation}" maxlength="190" cols="50"
-        style="width: 70%" rows="4">
+      <p:inputTextarea id="obsResAdd" value="#{adminTaskBean.addObject.observation}" maxlength="190" cols="40"
+        style="width: 80%" rows="5">
         <f:validateLength minimum="0" maximum="190" for="obsAddMsg" />
       </p:inputTextarea>
       <p:message for="obsResAdd" id="obsResAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.observation_res}" for="obsAdd" styleClass="resaltar_negro" />
-      <p:inputTextarea id="obsAdd" value="#{adminTaskBean.addObject.observationRequestor}" maxlength="100" cols="50"
-        style="width: 70%" rows="4">
-        <f:validateLength minimum="0" maximum="100" for="obsAddMsg" />
+      <p:inputTextarea id="obsAdd" value="#{adminTaskBean.addObject.observationRequestor}" maxlength="190" cols="40"
+        style="width: 80%" rows="5">
+        <f:validateLength minimum="0" maximum="190" for="obsAddMsg" />
       </p:inputTextarea>
       <p:message for="obsAdd" id="obsAddMsg" display="icon" />
 
