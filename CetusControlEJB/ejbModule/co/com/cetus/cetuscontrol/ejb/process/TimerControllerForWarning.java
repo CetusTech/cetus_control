@@ -69,6 +69,9 @@ public class TimerControllerForWarning {
   @PostConstruct
   private void startTimer () {
     try {
+      
+      loadVariableMysql();
+      
       if ( ConstantEJB.ENABLED_TIMER_CONTROLLER ) {
         if ( timerService.getTimers() != null ) {
           for ( Timer timer: timerService.getTimers() ) {
@@ -561,6 +564,21 @@ public class TimerControllerForWarning {
 
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "FINALIZA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT\n\n" );
       
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Load variable mysql. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlEJB (26/03/2016)
+   */
+  private void loadVariableMysql(){
+    try {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Subiendo las valiables de mysql..." );
+      timerProcess.loadVariableMysql();
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     }

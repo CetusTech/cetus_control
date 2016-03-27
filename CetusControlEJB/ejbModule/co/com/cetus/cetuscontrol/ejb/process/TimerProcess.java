@@ -495,4 +495,26 @@ public class TimerProcess {
     return list;
   }
   
+  /**
+   * </p> Load variable mysql. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlEJB (26/03/2016)
+   */
+  public void loadVariableMysql () {
+    Query query = null;
+    try {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Ejecutando variable lc_time_names" );
+      query = em.createNativeQuery( "SET @@global.lc_time_names = 'es_CO'" );
+      query.executeUpdate();
+      
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Ejecutando variable time_zone" );
+      query = em.createNativeQuery( "SET @@global.time_zone='-05:00'" );
+      query.executeUpdate();
+      
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
 }
