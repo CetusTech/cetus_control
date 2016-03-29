@@ -76,30 +76,30 @@ public class TimerControllerForWarning {
         if ( timerService.getTimers() != null ) {
           for ( Timer timer: timerService.getTimers() ) {
             if ( timer.getInfo().equals( "TimerControllerForWarning-0" ) || timer.getInfo().equals( "TimerControllerForWarning-1" ) ) {
-              ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "************************************ Eliminando " + timer.getInfo()
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "************************************ Eliminando " + timer.getInfo()
                                                        + " ************************************" );
               timer.cancel();
             }
           }
         }
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS );
         timerBeforeExpirationTasks.stopAllTimer();
         
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_EXPIRATION_TASKS );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_EXPIRATION_TASKS );
         timerExpirationTasks.stopAllTimer();
         
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS );
         timerNotificationProcess.stopAllTimer();
         
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "************************************ Creando TimerControllerForWarning-0 ************************************" );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "************************************ Creando TimerControllerForWarning-0 ************************************" );
         timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*" )
                                                                   .minute( "*/" + ConstantEJB.TIME_EXECUTE_TIMER_CONTROLLER_0 ),
                                           new TimerConfig( "TimerControllerForWarning-0", true ) );
       } else {
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "TimerControllerForWarning no habilitado " );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "TimerControllerForWarning no habilitado " );
       }
     } catch ( Exception e ) {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Error iniciando TimerControllerForWarning " + e.getMessage() );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( "Error iniciando TimerControllerForWarning " + e.getMessage(), e );
     }
   }
   
@@ -190,10 +190,10 @@ public class TimerControllerForWarning {
       if ( timerService.getTimers() != null ) {
         for ( Timer timer0: timerService.getTimers() ) {
           if ( timer0.getInfo().equals( "TimerControllerForWarning-0" ) ) {
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Eliminando Timer TimerControllerForWarning-0..." );
+            ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando Timer TimerControllerForWarning-0..." );
             timer0.cancel();
             
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Creando Timer de control TimerControllerForWarningPrincipal..." );
+            ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Creando Timer de control TimerControllerForWarning-1..." );
             String executeTime = cetusControlProcess.getValueParameter( ConstantEJB.TIME_HOUR_EXECUTE_TIMER_CONTROLLER );
             timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*/" + executeTime ),
                                               new TimerConfig( "TimerControllerForWarning-1", true ) );
@@ -549,7 +549,7 @@ public class TimerControllerForWarning {
    */
   private void sendRequestAccountOpenshift () {
     try {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "\n\nINICIA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "INICIA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
       
       String url = "http://cetusprep-cetustech.rhcloud.com/";
       
@@ -559,10 +559,10 @@ public class TimerControllerForWarning {
       con.setRequestMethod( "GET" );
       
       int responseCode = con.getResponseCode();
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Sending 'GET' request to URL : " + url );
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Response Code : " + responseCode );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Sending 'GET' request to URL : " + url );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Response Code : " + responseCode );
 
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "FINALIZA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT\n\n" );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "FINALIZA ENVIO DEL REQUEST A LA CUENTA EN OPENSHIFT" );
       
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
@@ -577,7 +577,7 @@ public class TimerControllerForWarning {
    */
   private void loadVariableMysql(){
     try {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Subiendo las valiables de mysql..." );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Subiendo las valiables de mysql..." );
       timerProcess.loadVariableMysql();
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );

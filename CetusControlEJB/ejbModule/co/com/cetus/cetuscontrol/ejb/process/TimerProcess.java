@@ -504,11 +504,11 @@ public class TimerProcess {
   public void loadVariableMysql () {
     Query query = null;
     try {
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Ejecutando variable lc_time_names" );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Ejecutando variable lc_time_names" );
       query = em.createNativeQuery( "SET @@global.lc_time_names = 'es_CO'" );
       query.executeUpdate();
       
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Ejecutando variable time_zone" );
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Ejecutando variable time_zone" );
       query = em.createNativeQuery( "SET @@global.time_zone='-05:00'" );
       query.executeUpdate();
       

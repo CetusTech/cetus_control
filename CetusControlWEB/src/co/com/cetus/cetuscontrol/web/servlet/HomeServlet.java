@@ -73,6 +73,10 @@ public class HomeServlet extends HttpServlet {
         
         if ( !UtilCommon.stringNullOrEmpty( app ) && !UtilCommon.stringNullOrEmpty( user ) && !UtilCommon.stringNullOrEmpty( url ) ) {
           
+          String ipClient = UtilCommon.getIpRequester( request );
+          ConstantWEB.WEB_LOG.info( "user=" + user + ", url="+ url +", ipClient=" + ipClient );
+          
+          
           //Buscar si el usuario que solicita una vista de Cetus Control Tiene privilegios
           responseDTO = generalDelegate.searchUserLogged( user );
           
@@ -94,8 +98,8 @@ public class HomeServlet extends HttpServlet {
               session.setAttribute( ConstantWEB.DESC_USER_DTO, userDTO );
               session.setAttribute( ConstantWEB.DESC_PARAMETER_GENERAL_DTO, parameterGeneralDTO );
               session.setAttribute( ConstantWEB.DESC_ACRONYM, acronym );
-              session.setAttribute( ConstantWEB.DESC_IP_REQUEST, request.getRemoteAddr() );
-              session.setAttribute( ConstantWEB.DESC_HOST_REQUEST, request.getRemoteHost() );
+              session.setAttribute( ConstantWEB.DESC_IP_REQUEST, ipClient );
+//              session.setAttribute( ConstantWEB.DESC_HOST_REQUEST, request.getRemoteHost() );
               session.setAttribute( ConstantWEB.DESC_APP, app );//Subir a session el id de la aplicacion 
               response.sendRedirect( request.getContextPath() + url );
             } else {
