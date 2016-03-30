@@ -63,7 +63,7 @@ public class TimerNotificationProcess {
     try {
       timerService.createCalendarTimer( new ScheduleExpression().hour( rangeHours ).minute( minutesForExecute ),
                                         new TimerConfig( nameTimer, true ) );
-      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Se creo exitosamente el timer [" + nameTimer + "], rangeHours=" + rangeHours + ", minutesForExecute="
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Se creo exitosamente el timer [" + nameTimer + "], rangeHours=" + rangeHours + ", minutesForExecute="
                                                + minutesForExecute );
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
@@ -83,7 +83,7 @@ public class TimerNotificationProcess {
       if ( timerService.getTimers() != null ) {
         for ( Timer timer: timerService.getTimers() ) {
           if ( timer.getInfo().equals( nameTimer ) ) {
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Deteniendo el timer [" + nameTimer + "]" );
+            ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Deteniendo el timer [" + nameTimer + "]" );
             timer.cancel();
           }
         }
@@ -184,7 +184,7 @@ public class TimerNotificationProcess {
         for ( Timer timer: timerService.getTimers() ) {
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Validando timer " + timer.getInfo() );
           if ( timer.getInfo().equals( nameTimer ) ) {
-            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer " + nameTimer + ", esta ejecutandose...." );
+            ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "El timer " + nameTimer + ", esta ejecutandose...." );
             exists = true;
             break;
           }
@@ -206,7 +206,7 @@ public class TimerNotificationProcess {
     try {
       if ( timerService.getTimers() != null ) {
         for ( Timer timer: timerService.getTimers() ) {
-          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Deteniendo el timer [" + timer.getInfo() + "]" );
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Deteniendo el timer [" + timer.getInfo() + "]" );
           timer.cancel();
         }
       }

@@ -28,7 +28,7 @@ import co.com.cetus.cetuscontrol.jpa.entity.ClientCetus;
  * @version CetusControlEJB (26/07/2015)
  */
 @Singleton
-@DependsOn ( "TimerProcess" )
+@DependsOn ( {"TimerProcess", "TimerBeforeExpirationTasks", "TimerExpirationTasks", "TimerNotificationProcess"} )
 @Startup
 public class TimerControllerForWarning {
   
@@ -82,14 +82,6 @@ public class TimerControllerForWarning {
             }
           }
         }
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS );
-        timerBeforeExpirationTasks.stopAllTimer();
-        
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_EXPIRATION_TASKS );
-        timerExpirationTasks.stopAllTimer();
-        
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS );
-        timerNotificationProcess.stopAllTimer();
         
         ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "************************************ Creando TimerControllerForWarning-0 ************************************" );
         timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*" )
@@ -116,6 +108,9 @@ public class TimerControllerForWarning {
     String nameTimerBefore = null;
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "********************* Ejecutando proceso del timer TimerController *********************" );
+      
+      startTimerControllerPrincipal();
+      
       list = timerProcess.findClientCetusEnabledTimer();
       if ( list != null && list.size() > 0 ) {
         for ( ClientCetus clientCetus: list ) {
@@ -173,7 +168,6 @@ public class TimerControllerForWarning {
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
     } finally {
-      startTimerControllerPrincipal();
       sendRequestAccountOpenshift();
     }
     ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "********************* Fin ejecucion TimerController *********************" );
@@ -197,6 +191,22 @@ public class TimerControllerForWarning {
             String executeTime = cetusControlProcess.getValueParameter( ConstantEJB.TIME_HOUR_EXECUTE_TIMER_CONTROLLER );
             timerService.createCalendarTimer( new ScheduleExpression().timezone( ConstantEJB.TIME_ZONE ).hour( "*/" + executeTime ),
                                               new TimerConfig( "TimerControllerForWarning-1", true ) );
+            
+            
+            try {
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_BEFORE_EXPIRATION_TASKS );
+              timerBeforeExpirationTasks.stopAllTimer();
+              
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_EXPIRATION_TASKS );
+              timerExpirationTasks.stopAllTimer();
+              
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "Eliminando todos los timer con prefijo: " + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS );
+              timerNotificationProcess.stopAllTimer();
+              
+            } catch ( Exception e ) {
+              ConstantEJB.CETUS_CONTROL_EJB_LOG.error( "Error eliminando los timer " + e.getMessage(), e );
+            }
+            
           }
         }
       }
