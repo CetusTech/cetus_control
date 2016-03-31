@@ -14,6 +14,10 @@ import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.web.delegate.GeneralDelegate;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
 import co.com.cetus.common.dto.ResponseDTO;
+import co.com.cetus.common.encriptor.Encriptor;
+import co.com.cetus.common.encriptor.EncriptorFactory;
+import co.com.cetus.common.encriptor.EncriptorType;
+import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.UtilCommon;
 
 @WebServlet ( name = "HomeServlet", urlPatterns = { "/Home" } )
@@ -47,22 +51,46 @@ public class HomeServlet extends HttpServlet {
   }
   
   private void processRequest ( HttpServletRequest request, HttpServletResponse response ) {
-    String app = null, user = null, url = null, acronym = null;
+    String app = null, user = null, url = null, acronym = null, token = null, parameter = null;;
     ResponseDTO responseDTO = null;
     UserPortalDTO userDTO = null;
     ParameterGeneralDTO parameterGeneralDTO = null;
+    String[] params = null;
     try {
       ConstantWEB.WEB_LOG.debug( "########## VALIDAR PETICION DE INGRESO A CETUS CONTROL" );
       if ( request != null ) {
-        //Aplicacion de donde llega la peticion
-        app = request.getParameter( "app" );
-        //Usuario que se encuentra loqueado en el sistema
-        user = request.getParameter( "user" );
-        //Url de la vista a mostrar
-        url = request.getParameter( "url" );
-        //Acronimo de la funcionalidad
-        acronym = request.getParameter( "acronym" );
         
+        parameter = request.getParameter( "parameters" );
+        token = request.getParameter( "token" );
+      
+        ConstantWEB.WEB_LOG.debug( "parameters = " + parameter );
+        ConstantWEB.WEB_LOG.debug( "token = " + token );
+        
+        if( !UtilCommon.stringNullOrEmpty( parameter ) && !UtilCommon.stringNullOrEmpty( token ) ){
+                    
+          Encriptor encriptor = EncriptorFactory.createEncriptor( EncriptorType.AES128 ); 
+          token = encriptor.getValueDecrypted( token, null );
+          parameter = encriptor.getValueDecrypted( parameter, token );
+        }else {
+          throw new Exception("El token o los parametros son nulos");
+        }
+        ConstantWEB.WEB_LOG.debug( "Parametros recibidos = " + parameter );
+        
+        params = parameter.split( "\\" + ConstantCommon.PARAMETRES_SEPARATOR );
+        if( params != null && params.length == 4 ){
+          //Aplicacion de donde llega la peticion
+          app = params[0];
+          //Usuario que se encuentra loqueado en el sistema
+          user = params[1];
+          //Acronimo de la funcionalidad
+          acronym = params[2];
+        //Url de la vista a mostrar
+          url = params[3];
+        }else{
+          throw new Exception("El numero de los parametros no son correctos");
+        }
+        
+                
         HttpSession theSession = request.getSession( false );
         
         if ( theSession != null ) {
