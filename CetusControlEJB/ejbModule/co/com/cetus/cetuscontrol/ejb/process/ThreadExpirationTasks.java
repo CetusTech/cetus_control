@@ -73,7 +73,7 @@ public class ThreadExpirationTasks extends Thread {
           ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Se procede a enviar una alerta (tarea vencida) para la tarea "
                                                    + String.valueOf( task[0] ) );
                                                    
-          emails = timerProcess.findNotificationsEmailsBef( Integer.parseInt( String.valueOf( task[5] ) ) );
+          emails = timerProcess.findNotificationsEmailsExp( Integer.parseInt( String.valueOf( task[5] ) ) );
           if ( emails != null ) {
             if ( emails.startsWith( ConstantEJB.RESPONSIBLE_TASK ) ) {
               emails = emails.substring( emails.indexOf( ";" ) + 1 );
@@ -85,7 +85,9 @@ public class ThreadExpirationTasks extends Thread {
           sendMailRequestDTO.setParametersTemplateHTML( new String[]{ String.valueOf( task[4] ), String.valueOf( task[1] ),
                                                                       DateUtility.formatDatePattern( ( Date ) task[3],
                                                                                                      ConstantEJB.DATE_PATTERN_NOTIFICATION ) } );
-                                                                                                     
+                                          
+          sendMailRequestDTO.setSubject( sendMailRequestDTO.getSubject() + " [" + String.valueOf( task[4] ) +"]" );
+          
           responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
           
           if ( responseWSDTO != null ) {

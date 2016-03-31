@@ -76,7 +76,7 @@ public class ThreadBeforeExpirationTasks extends Thread {
             ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] Informacion para la notificacion de la tarea : "
                                                      + Arrays.toString( infoNotification ) );
                                                      
-            emails = timerProcess.findNotificationsEmailsBef( Integer.parseInt( infoNotification[3] ) );
+            emails = timerProcess.findNotificationsEmailsBef( Integer.parseInt( infoNotification[4] ) );
             if ( emails != null ) {
               if ( emails.startsWith( ConstantEJB.RESPONSIBLE_TASK ) ) {
                 emails = emails.substring( emails.indexOf( ";" ) + 1 );
@@ -89,6 +89,8 @@ public class ThreadBeforeExpirationTasks extends Thread {
                                                                         DateUtility.formatDatePattern( new Date( Long.parseLong( infoNotification[3] ) ),
                                                                                                        ConstantEJB.DATE_PATTERN_NOTIFICATION ) } );
                                                                                                        
+            sendMailRequestDTO.setSubject( sendMailRequestDTO.getSubject() + " [" + String.valueOf( infoNotification[0] ) +"]" );
+            
             responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
             
             if ( responseWSDTO != null ) {
@@ -101,7 +103,7 @@ public class ThreadBeforeExpirationTasks extends Thread {
                 notificationTask.setEvent( ConstantEJB.EVENT_BEFORE_EXPIRATION );
                 notificationTask.setSent( 1 );
                 notificationTask.setTask( new Task() );
-                notificationTask.getTask().setId( Integer.parseInt( infoNotification[0] ) );
+                notificationTask.getTask().setId( idTask );
                 notificationTask.setTaskDeliveryDate( new Date( Long.parseLong( infoNotification[3] ) ) );
                 respCreate = timerProcess.createNotificationTask( notificationTask );
                 

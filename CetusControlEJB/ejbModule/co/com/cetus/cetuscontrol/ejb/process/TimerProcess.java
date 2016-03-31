@@ -228,7 +228,7 @@ public class TimerProcess {
   public String[] getInformationForNotification ( int idTask ) {
     TypedQuery< Object[] > query = null;
     Object[] resp = null;
-    String[] response = new String[4];
+    String[] response = new String[5];
     try {
       query = em.createQuery( "SELECT t.code, t.description, p.email, t.deliveryDate, g.id " +
                               "FROM Task t " +
