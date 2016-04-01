@@ -62,6 +62,8 @@ public class ConstantEJB {
   public static String                    NAME_TIMER_EXPIRATION_TASKS        = UtilEJB.getProperty( NAME_BUNDLE_NEGOCIO,
                                                                                                     "NAME_TIMER_EXPIRATION_TASKS" );
   
+  
+  public static String                    MINUTE_FOR_EXECUTE_TIMER_EXPIRATION   = "MINUTE_FOR_EXECUTE_TIMER_EXPIRATION";
   public static String                    TEMPLATE_EMAIL_BEFORE_EXPIRATION   = "TEMPLATE_EMAIL_BEFORE_EXPIRATION";
 
   public static String                    SUBJECT_BEFORE_EXPIRATION          = "SUBJECT_BEFORE_EXPIRATION";

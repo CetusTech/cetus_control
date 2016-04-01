@@ -1,6 +1,7 @@
 package co.com.cetus.cetuscontrol.ejb.process;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -111,6 +112,10 @@ public class TimerExpirationTasks {
                                                   Integer.parseInt( cetusControlProcess.getValueParameter( ConstantEJB.TASK_STATUS_IN_PROGRESS ) ) );
       
       if ( listTask != null && listTask.size() > 0 ) {
+        
+        for ( Object[] task: listTask ) {
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + timer.getInfo() + "] info task = " + Arrays.toString( task ) );
+        }
         
         numThread = Integer.parseInt( cetusControlProcess.getValueParameter( ConstantEJB.THREAD_EXPIRATION_TASK ) );
         numSubList = listTask.size() / numThread;

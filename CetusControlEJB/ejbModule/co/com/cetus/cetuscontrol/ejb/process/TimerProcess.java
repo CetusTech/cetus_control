@@ -197,7 +197,7 @@ public class TimerProcess {
     TypedQuery< NotificationTask > query = null;
     NotificationTask notificationTask = null;
     try {
-      
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "idTask=" + idTask + ", event=" + event + ", deliveryDate=" + deliveryDate  );
       query = em.createQuery( "SELECT n FROM NotificationTask n "
                               + "WHERE n.task.id = :idTask "
                               + "AND n.event = :event "
@@ -307,6 +307,10 @@ public class TimerProcess {
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClientCetus=" + idClientCetus + ", status=" + status );
       query = em.createNativeQuery( "SELECT T.ID, T.DESCRIPTION, P.EMAIL, T.DELIVERY_DATE, T.CODE, PG.ID_GROUP "
+                                    +" , DATE_FORMAT(T.DELIVERY_DATE, '%Y-%m-%d %H:%i') as a, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') as b"
+                                    +" , PEG.TIME_AFTER_EXPIRATION, DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION ) MINUTE) , '%Y-%m-%d %H:%i') as c"
+                                    +" , DATE_FORMAT( DATE_ADD(T.DELIVERY_DATE, INTERVAL (PEG.TIME_AFTER_EXPIRATION * 2) MINUTE) , '%Y-%m-%d %H:%i') as d"
+                                    +" , PEG.COL_NUMBER_2 "
                                     + "FROM TASK T, "
                                     + "   PERSON_GROUP PG, "
                                     + "   PERSON P, "
