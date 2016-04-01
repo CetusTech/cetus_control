@@ -150,9 +150,10 @@ public class TimerControllerForWarning {
         }
         
         // Inicio Control TimerNotificationProcess
+        nameTimerBefore = ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS;
         ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Validando el TimerNotificationProcess..." );
-        if ( timerNotificationProcess.existsTimerRunning( ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS ) ) {
-          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer [" + ConstantEJB.NAME_TIMER_NOTIFICATION_PROCESS
+        if ( timerNotificationProcess.existsTimerRunning( nameTimerBefore ) ) {
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "El timer [" + nameTimerBefore
                                                    + "] esta en ejecucion, se procede a validar si se puede detener " );
           if ( validateTimerStopNotification() ) {
             ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Se procede a detener el timer [" + nameTimerBefore + "]" );
@@ -243,6 +244,8 @@ public class TimerControllerForWarning {
         
         if ( currentCal.compareTo( cal ) > 0 ) {
           result = true;
+        }else{
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[idClientCetus = " + idClientCetus + "] El timer no se puede detener... " );
         }
       }
     } catch ( Exception e ) {
@@ -364,7 +367,11 @@ public class TimerControllerForWarning {
           
           if ( currentCal.compareTo( cal ) > 0 ) {
             result = true;
+          }else{
+            ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[idClientCetus = " + idClientCetus + "] El timer no se puede detener... " );
           }
+        }else{
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[idClientCetus = " + idClientCetus + "] El timer no se puede detener... " );
         }
       }
     } catch ( Exception e ) {

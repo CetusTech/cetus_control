@@ -62,7 +62,6 @@ public class ThreadExpirationTasks extends Thread {
     try {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "////////////// INICIA LA EJECUCION DEL HILO [" + this.getName() + "] //////////////" );
       if ( listTask != null && listTask.size() > 0 ) {
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "[" + this.getName() + "] listTask= " + listTask );
         
         CetusMessageServiceDelegate messageServiceDelegate = new CetusMessageServiceDelegate( wsdlMessageService );
         
