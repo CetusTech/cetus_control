@@ -9,7 +9,7 @@
       <p:outputLabel value="#{msg.description}" for="descriptionAdd" styleClass="resaltar_negro" />
       <p:inputText id="descriptionAdd" required="true" size="40" value="#{manualTaskMBean.addObject.description}"
         style="width: 70%'" pt:type="string" pt:placeholder="#{msg.input_name_task}" pt:autofocus="autofocus"
-        onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}"
+        onchange="conMayusculas(this);"  requiredMessage="#{msg.field_required}"
         maxlength="100" />
       <p:message for="descriptionAdd" id="descriptionAddMsg" display="icon" />
 
@@ -49,14 +49,14 @@
 
       <p:outputLabel value="#{msg.requestor}" for="requestorAdd" styleClass="resaltar_negro" />
       <p:inputText id="requestorAdd" required="false" size="20" value="#{manualTaskMBean.addObject.requestor}"
-        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" 
         maxlength="20" />
 
       <p:message for="requestorAdd" id="requestorAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.userFun}" for="userAdd" styleClass="resaltar_negro" />
       <p:inputText id="userAdd" required="false" size="20" value="#{manualTaskMBean.addObject.userFunctional}"
-        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" 
         maxlength="20" />
       <p:message for="userAdd" id="userAddMsg" display="icon" />
 

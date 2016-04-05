@@ -5,7 +5,7 @@
   <h:form id="formAdd" prependId="false">
     <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
       <p:outputLabel value="#{msg.description}" for="descriptionAdd" />
-      <p:inputText id="descriptionAdd" required="true" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+      <p:inputText id="descriptionAdd" required="true" onchange="conMayusculas(this);" 
         size="40" value="#{areaMBean.addObject.description}" requiredMessage="#{msg.field_required}" maxlength="50" />
       <p:message for="descriptionAdd" id="descriptionAddMsg" />
     </h:panelGrid>

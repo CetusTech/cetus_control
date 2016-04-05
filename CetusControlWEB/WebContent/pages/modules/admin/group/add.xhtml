@@ -13,7 +13,7 @@
         <p:outputLabel value="#{msg.name}" for="nameAdd" />
         <p:inputText id="nameAdd" required="true" size="40" value="#{groupMBean.addObject.name}" pt:type="string"
           pt:placeholder="#{msg.input_name}" pt:autofocus="autofocus" onchange="conMayusculas(this);"
-          onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="40" />
+           requiredMessage="#{msg.field_required}" maxlength="40" />
         <p:message for="nameAdd" id="nameAddMsg" display="icon" />
 
         <p:outputLabel value="#{msg.group_type}" for="groupTypeSelected" />

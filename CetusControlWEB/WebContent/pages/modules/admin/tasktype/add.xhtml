@@ -5,7 +5,7 @@
   <h:form id="formAdd" prependId="false">
     <h:panelGrid id="panelAdd" columns="2" cellspacing="4" cellpadding="4">
       <p:outputLabel value="#{msg.taskType_descripcion}" for="taskTypeAdd" />
-      <p:inputText id="taskTypeAdd" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+      <p:inputText id="taskTypeAdd" onchange="conMayusculas(this);" 
         value="#{taskTypeMBean.addObject.description}" required="true" size="44" requiredMessage="#{msg.field_required}"
         maxlength="44">
       </p:inputText>

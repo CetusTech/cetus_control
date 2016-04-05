@@ -8,7 +8,7 @@
       <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
 
         <p:outputLabel value="#{msg.taskType_descripcion}" for="desUpdate" styleClass="resaltar_negro" />
-        <p:inputText id="desUpdate" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" required="true"
+        <p:inputText id="desUpdate" onchange="conMayusculas(this);"  required="true"
           size="40" value="#{taskTypeMBean.selectedObject.description}" requiredMessage="#{msg.field_required}"
           maxlength="40" />
         <p:message for="desUpdate" id="desUpdMsg" />

@@ -5,14 +5,14 @@
   <h:form id="formAdd" prependId="false">
     <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
       <p:outputLabel value="#{msg.groupType_descripcion}" for="groupTypeAdd" />
-      <p:inputText id="groupTypeAdd" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+      <p:inputText id="groupTypeAdd" onchange="conMayusculas(this);" 
         value="#{groupTypeMBean.addObject.description}" required="true" size="44" requiredMessage="#{msg.field_required}"
         maxlength="44">
       </p:inputText>
       <p:message for="groupTypeAdd" id="groupTypeAddMsg" />
       
       <p:outputLabel value="#{msg.groupType_acronnym}" for="groupTypeAddAcron" />
-      <p:inputText id="groupTypeAddAcron" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);"
+      <p:inputText id="groupTypeAddAcron" onchange="conMayusculas(this);" 
         value="#{groupTypeMBean.addObject.acronym}" required="true" size="10" requiredMessage="#{msg.field_required}"
         maxlength="4">
       </p:inputText>

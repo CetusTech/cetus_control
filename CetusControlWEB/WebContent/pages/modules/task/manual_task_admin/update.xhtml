@@ -25,7 +25,7 @@
               <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
               <p:inputText id="descriptionUpdate" required="true" onchange="conMayusculas(this);" size="40"
                 style="width: 90% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}"
-                onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="100"
+                 requiredMessage="#{msg.field_required}" maxlength="100"
                 value="#{adminTaskBean.selectedObject.description}">
               </p:inputText>
               <p:message for="descriptionUpdate" id="descriptionUpdateMsg" display="icon" />
@@ -112,14 +112,14 @@
               <p:inputText id="requestorUpdate" required="false" size="20"
                 value="#{adminTaskBean.selectedObject.requestor}"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" pt:type="string"
-                pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" maxlength="20" />
+                pt:autofocus="autofocus" onchange="conMayusculas(this);"  maxlength="20" />
               <p:message for="requestorUpdate" id="requestorUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.userFun}" for="userUpdate" styleClass="resaltar_negro" />
               <p:inputText id="userUpdate" required="false" size="20"
                 value="#{adminTaskBean.selectedObject.userFunctional}"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" pt:type="string"
-                pt:autofocus="autofocus" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" maxlength="20" />
+                pt:autofocus="autofocus" onchange="conMayusculas(this);"  maxlength="20" />
               <p:message for="userUpdate" id="userUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.area}" for="areaSelectedUpdate" styleClass="resaltar_negro" />

@@ -8,13 +8,13 @@
       <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
 
         <p:outputLabel value="#{msg.groupType_descripcion}" for="desUpdate" styleClass="resaltar_negro" />
-        <p:inputText id="desUpdate" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" required="true"
+        <p:inputText id="desUpdate" onchange="conMayusculas(this);"  required="true"
           size="40" value="#{groupTypeMBean.selectedObject.description}" requiredMessage="#{msg.field_required}"
           maxlength="40" />
         <p:message for="desUpdate" id="desUpdMsg" />
         
         <p:outputLabel value="#{msg.groupType_acronnym}" for="acroUpdate" styleClass="resaltar_negro" />
-        <p:inputText id="acroUpdate" onchange="conMayusculas(this);" onkeyup="conMayusculas(this);" required="true"
+        <p:inputText id="acroUpdate" onchange="conMayusculas(this);"  required="true"
           size="20" value="#{groupTypeMBean.selectedObject.acronym}" requiredMessage="#{msg.field_required}"
           maxlength="4" />
         <p:message for="acroUpdate" id="acroUpdMsg" />

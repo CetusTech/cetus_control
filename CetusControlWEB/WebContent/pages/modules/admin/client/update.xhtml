@@ -7,7 +7,7 @@
       <h:panelGrid id="pnlUpdate" columns="3" style="width:100%" cellspacing="4" cellpadding="4">
         <h:outputText value="#{msg.name}" styleClass="resaltar_negro" />
         <p:inputText id="nameUpdate" required="true" style="width:100%" size="44" onchange="conMayusculas(this);"
-          onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="44"
+           requiredMessage="#{msg.field_required}" maxlength="44"
           value="#{clientMBean.selectedObject.name}" disabled="false">
           <f:validateLength minimum="3" maximum="30" />
         </p:inputText>

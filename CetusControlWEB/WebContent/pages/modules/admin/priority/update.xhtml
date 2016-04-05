@@ -8,7 +8,7 @@
 
       <h:outputText value="#{msg.description}" styleClass="resaltar_negro" />
       <p:inputText id="descriptionUpdate" required="true" style="width:100%" size="40" onchange="conMayusculas(this);"
-        onkeyup="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="50"
+         requiredMessage="#{msg.field_required}" maxlength="50"
         value="#{priorityMBean.selectedObject.description}">
       </p:inputText>
       <p:message for="descriptionUpdate" id="descriptionUpdateMsg" />
