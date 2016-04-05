@@ -5,7 +5,7 @@
   <h:form prependId="false" id="formUpdate" style="width: 100%">
     <h:panelGrid>
       <p:column>
-        <p:tabView id="viewtab" activeIndex="#{adminTaskBean.indexTab}" style="width: 90% !important;">
+        <p:tabView id="viewtab" activeIndex="#{adminTaskBean.indexTab}" style="width: 100% !important;">
           <p:tab title="#{msg.information}" id="info">
 
             <h:inputHidden id="percentageUpdate" value="#{adminTaskBean.percentageCurrent}" />
@@ -24,7 +24,7 @@
 
               <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
               <p:inputText id="descriptionUpdate" required="true" onchange="conMayusculas(this);" size="40"
-                style="width: 90% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}"
+                style="width: 95% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}"
                  requiredMessage="#{msg.field_required}" maxlength="100"
                 value="#{adminTaskBean.selectedObject.description}">
               </p:inputText>
@@ -37,17 +37,17 @@
               <p:message for="assingDateUpdate" id="assingDateUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.observation}" for="obsResUpdate" styleClass="resaltar_negro" />
-              <p:inputTextarea id="obsResUpdate" value="#{adminTaskBean.selectedObject.observation}" maxlength="190"
-                cols="40" style="width: 80% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" rows="5">
-                <f:validateLength minimum="0" maximum="190" for="obsUpdateMsg" />
+              <p:inputTextarea id="obsResUpdate" value="#{adminTaskBean.selectedObject.observation}" maxlength="990"
+                cols="40" style="width: 95% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" rows="8">
+                <f:validateLength minimum="0" maximum="990" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="obsResUpdate" id="obsResUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.observation_res}" for="obsUpdate" styleClass="resaltar_negro" />
               <p:inputTextarea id="obsUpdate" value="#{adminTaskBean.selectedObject.observationRequestor}"
-                style="width: 80% !important;" maxlength="190" readonly="false" title="#{msg.read_only}"
-                disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" cols="40" rows="5">
-                <f:validateLength minimum="0" maximum="190" for="obsUpdateMsg" />
+                style="width: 95% !important;" maxlength="990" readonly="false" title="#{msg.read_only}"
+                disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" cols="40" rows="8">
+                <f:validateLength minimum="0" maximum="990" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="obsUpdate" id="obsUpdateMsg" display="icon" />
 
@@ -163,8 +163,8 @@
               <p:inputTextarea id="noteUpdate" required="#{adminTaskBean.status == 5? false: true}"
                 requiredMessage="#{msg.field_required}" rendered="#{adminTaskBean.status != 4}"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}"
-                value="#{adminTaskBean.noteTask}" maxlength="50" cols="30" rows="2">
-                <f:validateLength minimum="0" maximum="50" for="obsUpdateMsg" />
+                value="#{adminTaskBean.noteTask}" maxlength="190" cols="40" rows="3" style="width: 95% !important;">
+                <f:validateLength minimum="0" maximum="190" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="noteUpdate" id="noteUpdateMsg" display="icon" rendered="#{adminTaskBean.status != 4}" />
             </h:panelGrid>
