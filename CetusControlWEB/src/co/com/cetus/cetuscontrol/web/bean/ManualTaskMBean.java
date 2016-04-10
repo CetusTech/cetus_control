@@ -42,128 +42,129 @@ import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
 import co.com.cetus.cetuscontrol.dto.PriorityDTO;
 import co.com.cetus.cetuscontrol.dto.StatusDTO;
 import co.com.cetus.cetuscontrol.dto.TaskDTO;
+import co.com.cetus.cetuscontrol.dto.TaskHistoryDTO;
 import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
 import co.com.cetus.cetuscontrol.dto.TraceTaskDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
 import co.com.cetus.cetuscontrol.web.util.EWeekDay;
 import co.com.cetus.common.dto.ResponseDTO;
-import co.com.cetus.common.mail.SendMail;
+import co.com.cetus.common.util.DateUtility;
 import co.com.cetus.common.util.UtilCommon;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ManualTaskMBean.
  *
  * @author Andres Herrera - Cetus Technology
  * @version CetusControlWEB (2/02/2016)
  */
+/**
+ * @author Jose.Salcedo
+ *
+ */
 @ManagedBean
 @RequestScoped
 public class ManualTaskMBean extends GeneralManagedBean {
   
   /** The Constant serialVersionUID. */
-  private static final long         serialVersionUID        = -3255236201554716426L;
-                                                            
+  private static final long         serialVersionUID           = -3255236201554716426L;
+                                                               
   /** The list files task. */
-  ArrayList< UploadedFile >         listFilesTask           = null;
-                                                            
+  ArrayList< UploadedFile >         listFilesTask              = null;
+                                                               
   /** The user portal dto. */
-  private UserPortalDTO             userPortalDTO           = null;
-                                                            
+  private UserPortalDTO             userPortalDTO              = null;
+                                                               
   /** The list register. */
-  private List< TaskDTO >           listRegister            = null;
-  private List< AttachDTO >         listAttachFiles         = null;
-                                                            
+  private List< TaskDTO >           listRegister               = null;
+  private List< AttachDTO >         listAttachFiles            = null;
+                                                               
   /** The list register group. */
-  private List< PersonGroupDTO >    listRegisterGroup       = null;
-                                                            
+  private List< PersonGroupDTO >    listRegisterGroup          = null;
+                                                               
   /** The list area. */
-  private List< AreaDTO >           listArea                = null;
-                                                            
+  private List< AreaDTO >           listArea                   = null;
+                                                               
   /** The list priority. */
-  private List< PriorityDTO >       listPriority            = null;
-                                                            
+  private List< PriorityDTO >       listPriority               = null;
+                                                               
   /** The list task type. */
-  private List< TaskTypeDTO >       listTaskType            = null;
-                                                            
+  private List< TaskTypeDTO >       listTaskType               = null;
+                                                               
   /** The list person. */
-  private List< PersonDTO >         listPerson              = null;
-                                                            
+  private List< PersonDTO >         listPerson                 = null;
+                                                               
   /** The list person g. */
-  private List< PersonGroupDTO >    listPersonG             = null;
-                                                            
+  private List< PersonGroupDTO >    listPersonG                = null;
+                                                               
   /** The list status. */
-  private List< StatusDTO >         listStatus              = null;
-                                                            
+  private List< StatusDTO >         listStatus                 = null;
+                                                               
   /** The list area item. */
-  private List< SelectItem >        listAreaItem            = null;
-                                                            
+  private List< SelectItem >        listAreaItem               = null;
+                                                               
   /** The list priority item. */
-  private List< SelectItem >        listPriorityItem        = null;
-                                                            
+  private List< SelectItem >        listPriorityItem           = null;
+                                                               
   /** The list task type item. */
-  private List< SelectItem >        listTaskTypeItem        = null;
-                                                            
+  private List< SelectItem >        listTaskTypeItem           = null;
+                                                               
   /** The list status item. */
-  private List< SelectItem >        listStatusItem          = null;
-                                                            
+  private List< SelectItem >        listStatusItem             = null;
+                                                               
   /** The add object. */
-  private TaskDTO                   addObject               = null;
-                                                            
+  private TaskDTO                   addObject                  = null;
+                                                               
   /** The selected object. */
-  private TaskDTO                   selectedObject          = null;
-                                                            
+  private TaskDTO                   selectedObject             = null;
+                                                               
   /** The selected object person. */
-  private PersonGroupDTO            selectedObjectPerson    = null;
-                                                            
+  private PersonGroupDTO            selectedObjectPerson       = null;
+                                                               
   /** The show confirm add. */
-  private boolean                   showConfirmAdd          = false;
-                                                            
+  private boolean                   showConfirmAdd             = false;
+                                                               
   /** The show confirm mod. */
-  private boolean                   showConfirmMod          = false;
-                                                            
+  private boolean                   showConfirmMod             = false;
+                                                               
   /** The show dialog confirm update. */
-  private boolean                   showDialogConfirmUpdate = false;
-                                                            
+  private boolean                   showDialogConfirmUpdate    = false;
+                                                               
   /** The show confirm delete. */
-  private boolean                   showConfirmDelete       = false;
-                                                            
+  private boolean                   showConfirmDelete          = false;
+                                                               
   /** The show alert select row. */
-  private boolean                   showAlertSelectRow      = false;
-                                                            
+  private boolean                   showAlertSelectRow         = false;
+                                                               
   /** The show view detail. */
-  private boolean                   showViewDetail          = false;
-                                                            
+  private boolean                   showViewDetail             = false;
+                                                               
   /** The show add dialog. */
-  private boolean                   showAddDialog           = false;
-                                                            
-  private boolean                   showConfirmCancel       = false;
-                                                            
-  private boolean                   showConfirmCompleted    = false;
-  private boolean                   showConfirmSuspended    = false;
-                                                            
+  private boolean                   showAddDialog              = false;
+                                                               
+  private boolean                   showConfirmCancel          = false;
+                                                               
+  private boolean                   showConfirmCompleted       = false;
+  private boolean                   showConfirmSuspended       = false;
+                                                               
   /** The show menu. */
-  private boolean                   showMenu                = false;
-                                                            
+  private boolean                   showMenu                   = false;
+                                                               
   /** The approved. */
-  private boolean                   approved                = false;
-                                                            
+  private boolean                   approved                   = false;
+                                                               
   /** The group tdto selected. */
-  private PersonGroupDTO            groupTDTOSelected       = null;
-                                                            
+  private PersonGroupDTO            groupTDTOSelected          = null;
+                                                               
   /** The visible buttons. */
-  private boolean                   visibleButtons          = false;
-                                                            
+  private boolean                   visibleButtons             = false;
+                                                               
   /** The code. */
-  private String                    code                    = null;
-                                                            
-  /** The send mail. */
-  private SendMail                  sendMail                = null;
-                                                            
+  private String                    code                       = null;
+                                                               
   /** The note task. */
-  private String                    noteTask                = null;
-                                                            
+  private String                    noteTask                   = null;
+                                                               
   /** The status. */
   private int                       status;
                                     
@@ -177,34 +178,47 @@ public class ManualTaskMBean extends GeneralManagedBean {
   private double                    percentageCurrent;
                                     
   /** The delivery date. */
-  private Date                      deliveryDate            = null;
-                                                            
+  private Date                      deliveryDate               = null;
+                                                               
   /** The id usuario. */
   private String                    idUsuario;
                                     
   /** The destination. */
-  private String                    destination             = ConstantWEB.PATH_FILE_TASK;
-                                                            
+  private String                    destination                = ConstantWEB.PATH_FILE_TASK;
+                                                               
   /** The separador. */
-  private String                    separador               = System.getProperty( "file.separator" );
-                                                            
-  private AttachDTO                 attachDTOSelected       = null;
-                                                            
-  private int                       indexTab                = 0;
-                                                            
+  private String                    separador                  = System.getProperty( "file.separator" );
+                                                               
+  private AttachDTO                 attachDTOSelected          = null;
+                                                               
+  private int                       indexTab                   = 0;
+                                                               
   private List< String >            listStatusFilter;
                                     
-  private StreamedContent           fileTemplate            = null;
-                                                            
-  private List< String >            VALID_COLUMN_KEYS       = Arrays.asList( "id", "código", "descripción", "estado", "fecha de entrega", "duración",
-                                                                             "solicitante", "funcional" );
-                                                                             
-  private String[]                  columnTemplate          = { "código", "descripción", "estado", "fecha de entrega" };
-                                                            
+  private StreamedContent           fileTemplate               = null;
+                                                               
+  private List< String >            VALID_COLUMN_KEYS          = Arrays.asList( "id", "código", "descripción", "estado", "fecha de entrega",
+                                                                                "duración",
+                                                                                "solicitante", "funcional" );
+                                                                                
+  private String[]                  columnTemplate             = { "código", "descripción", "estado", "fecha de entrega" };
+                                                               
   private List< ColumnModel >       columns;
                                     
   private HashMap< String, String > mapColumnsHeader;
                                     
+  private List< TaskDTO >           listTaskHystory            = null;
+                                                               
+  private List< String >            listColumnLabelTaskHistory = null;
+                                                               
+  private HashMap< String, String > mapColumnsHeaderHistory    = null;
+                                                               
+  private String[]                  columnSelectedHistory      = null;
+                                                               
+  private List< ColumnModel >       columnsHistory;
+                                    
+  private TaskDTO                   selectedObjectHistory      = null;
+                                                               
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
    *
@@ -224,6 +238,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
     selectedObject.setPriority( new PriorityDTO() );
     selectedObject.setStatus( new StatusDTO() );
     selectedObject.setTaskType( new TaskTypeDTO() );
+    
+    selectedObjectHistory = new TaskDTO();
+    selectedObjectHistory.setArea( new AreaDTO() );
+    selectedObjectHistory.setPriority( new PriorityDTO() );
+    selectedObjectHistory.setStatus( new StatusDTO() );
+    selectedObjectHistory.setTaskType( new TaskTypeDTO() );
   }
   
   /**
@@ -454,6 +474,21 @@ public class ManualTaskMBean extends GeneralManagedBean {
             selectedObject.setDateInit( currentDate );//Fecha de Inicio de la Tarea      
             responseDTO = generalDelegate.edit( selectedObject );
             
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+              responseDTO = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //LIstar Tareas
             responseDTO = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
                                                                                                                                    .getId() );
@@ -464,22 +499,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
               listRegister = new ArrayList< TaskDTO >();
             }
             addObjectSession( listRegister, "listRegister" );
-            
-            //Enviar EMAIL temporalmente          
-            String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-            String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-            String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-            String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-            String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-            String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-            String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_STARTED" );
-            String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_STARTED" );
-            
-            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-            //              sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-            //                                       replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-            //              sendMail.start();
-            //            }
             
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
               ConstantWEB.WEB_LOG.info( "########## SE DA INICIO A LA TAREA  " + selectedObject.getCode() );
@@ -548,6 +567,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
           response = generalDelegate.edit( selectedObject );
           
           if ( UtilCommon.validateResponseSuccess( response ) ) {
+            
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+              response = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //Listar Tareas
             response = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
                                                                                                                                 .getId() );
@@ -559,24 +594,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
             
             //Lista de tareas actualizadas
             addObjectSession( listRegister, "listRegister" );
-            //Enviar EMAIL temporalmente          
-            String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-            String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-            String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-            String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-            String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-            String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-            String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_COMPLETED" );
-            String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_COMPLETED" );
             
-            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-            //              if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
-            //                sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-            //                                         replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-            //                                         
-            //                sendMail.start();
-            //              }
-            //            }
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA COMPLETADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
@@ -688,6 +706,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
           response = generalDelegate.edit( selectedObject );
           
           if ( UtilCommon.validateResponseSuccess( response ) ) {
+            
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+              response = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //LIstar Tareas
             response = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
                                                                                                                                 .getId() );
@@ -698,24 +732,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
               listRegister = new ArrayList< TaskDTO >();
             }
             addObjectSession( listRegister, "listRegister" );
-            //Enviar EMAIL temporalmente          
-            //            String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-            //            String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-            //            String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-            //            String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-            //            String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-            //            String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-            //            String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( "HTML_EMAIL_TASK_CANCEL" );
-            //            String resParamSubjectTaskAdd = generalDelegate.getValueParameter( "SUBJECT_TASK_CANCEL" );
             
-            //            if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-            //              if ( resParamSubjectTaskAdd != null && resParamHtmlMsgTaskAdd != null ) {
-            //                sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-            //                                         replaceContentEmail( resParamHtmlMsgTaskAdd, selectedObject ), to, null );
-            //                                         
-            //                sendMail.start();
-            //              }
-            //            }
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA CANCELADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
@@ -783,6 +800,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
           selectedObject.setDateInit( null );
           response = generalDelegate.edit( selectedObject );
           if ( UtilCommon.validateResponseSuccess( response ) ) {
+            
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+              response = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //LIstar Tareas
             response = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
                                                                                                                                 .getId() );
@@ -1156,33 +1189,33 @@ public class ManualTaskMBean extends GeneralManagedBean {
    */
   @Override
   public String remove () {
-    ResponseDTO responseDTO = null;
-    String code = "0";
-    try {
-      this.showConfirmDelete = false;
-      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
-      if ( selectedObject != null ) {
-        ConstantWEB.WEB_LOG.info( "Se procede a eliminar el area ::> " + selectedObject.toString() );
-        responseDTO = generalDelegate.remove( selectedObject );
-        ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar el area ::> " + responseDTO.toString() );
-        
-        if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-          ConstantWEB.WEB_LOG.info( "Area eliminada exitosamente..." );
-          this.initElement();
-          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_DELETE );
-        } else {
-          ConstantWEB.WEB_LOG.error( "Error eliminado el area..." );
-          //Obetener codigo de error de oracle
-          if ( !responseDTO.getMessage().isEmpty() && responseDTO.getMessage().contains( "ORA" ) ) {
-            code = responseDTO.getMessage().substring( responseDTO.getMessage().lastIndexOf( "ORA" ), responseDTO.getMessage().lastIndexOf( ":" ) );
-          }
-          addMessageError( null, ConstantWEB.MESSAGE_ERROR, code + ":" + ConstantWEB.MESSAGE_ERROR_DELETE_DETAIL );
-        }
-      }
-    } catch ( Exception e ) {
-      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-      addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
-    }
+    //    ResponseDTO responseDTO = null;
+    //    String code = "0";
+    //    try {
+    //      this.showConfirmDelete = false;
+    //      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+    //      if ( selectedObject != null ) {
+    //        ConstantWEB.WEB_LOG.info( "Se procede a eliminar el area ::> " + selectedObject.toString() );
+    //        responseDTO = generalDelegate.remove( selectedObject );
+    //        ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar el area ::> " + responseDTO.toString() );
+    //        
+    //        if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+    //          ConstantWEB.WEB_LOG.info( "Area eliminada exitosamente..." );
+    //          this.initElement();
+    //          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_DELETE );
+    //        } else {
+    //          ConstantWEB.WEB_LOG.error( "Error eliminado el area..." );
+    //          //Obetener codigo de error de oracle
+    //          if ( !responseDTO.getMessage().isEmpty() && responseDTO.getMessage().contains( "ORA" ) ) {
+    //            code = responseDTO.getMessage().substring( responseDTO.getMessage().lastIndexOf( "ORA" ), responseDTO.getMessage().lastIndexOf( ":" ) );
+    //          }
+    //          addMessageError( null, ConstantWEB.MESSAGE_ERROR, code + ":" + ConstantWEB.MESSAGE_ERROR_DELETE_DETAIL );
+    //        }
+    //      }
+    //    } catch ( Exception e ) {
+    //      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    //      addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
+    //    }
     return null;
   }
   
@@ -1219,6 +1252,22 @@ public class ManualTaskMBean extends GeneralManagedBean {
         
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           ConstantWEB.WEB_LOG.info( "Tarea actualizada exitosamente..." );
+          
+          try {
+            ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+            TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+            taskHistoryDTO.setIdTtask( selectedObject.getId() );
+            taskHistoryDTO.setCreationDate( currentDate );
+            taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+            responseDTO = generalDelegate.create( taskHistoryDTO );
+            
+            ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+            
+          } catch ( Exception e ) {
+            ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+            addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+          }
+          
           this.initElement();
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
           
@@ -1349,7 +1398,23 @@ public class ManualTaskMBean extends GeneralManagedBean {
         
         //Tarea creada Exitosamente
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-          ConstantWEB.WEB_LOG.debug( "############# TAREA CREADA EXITOSAMENTE " + tmpTask.getCode() );
+          ConstantWEB.WEB_LOG.info( "############# TAREA CREADA EXITOSAMENTE " + tmpTask.getCode() );
+          
+          try {
+            ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + tmpTask.getCode() );
+            TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+            taskHistoryDTO.setIdTtask( addObject.getId() );
+            taskHistoryDTO.setCreationDate( currentDate );
+            taskHistoryDTO.setTaskObject( getTaskDTOToGson( addObject.getId() ) );
+            responseDTO = generalDelegate.create( taskHistoryDTO );
+            
+            ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+            
+          } catch ( Exception e ) {
+            ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+            addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+          }
+          
           this.initElement();
           //Tiene archivos cargados en memoria 
           if ( getObjectSession( "listFilesTask" ) != null ) {
@@ -1531,24 +1596,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
-  private void sendMailTmp ( String pParamMsg, String pParamSubject, TaskDTO pObj ) {
-    //Enviar EMAIL temporalmente          
-    String to[] = { getUserDTO().getPerson().getEmail() };// Se debe validar donde se estan almacenando los correos asociados al usuario que esta logueado
-    String resParamHost = generalDelegate.getValueParameter( "SMTP_HOST" );
-    String resParamPort = generalDelegate.getValueParameter( "SMPT_PORT" );
-    String resParamFrom = generalDelegate.getValueParameter( "SMTP_FROM" );
-    String resParamPass = generalDelegate.getValueParameter( "SMTP_PASS" );
-    String resParamUserName = generalDelegate.getValueParameter( "SMTP_USERNAME" );
-    String resParamHtmlMsgTaskAdd = generalDelegate.getValueParameter( pParamMsg );
-    String resParamSubjectTaskAdd = generalDelegate.getValueParameter( pParamSubject );
-    
-    if ( resParamHost != null && resParamFrom != null && resParamPass != null && resParamPort != null && resParamUserName != null ) {
-      sendMail = new SendMail( resParamUserName, resParamHost, resParamPort, resParamFrom, resParamPass, resParamSubjectTaskAdd,
-                               replaceContentEmail( resParamHtmlMsgTaskAdd, pObj ), to, null );
-      sendMail.start();
-    }
-  }
-  
   /**
    *   
    * @author Andres Herrera - Cetus Technology
@@ -1676,6 +1723,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
         this.showViewDetail = true;
         this.showConfirmMod = true;
         this.showConfirmDelete = true;
+        cleanObjectSession( "listTaskHystory" );
+        findTaskHistory( selectedObject.getId() );
       } else {
         this.showAlertSelectRow = true;
         this.showViewDetail = false;
@@ -1853,6 +1902,157 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
+  private String getTaskDTOToGson ( int idTask ) {
+    String taskDTOGson = null;
+    TaskDTO taskAux = new TaskDTO();
+    ResponseDTO responseDTO = null;
+    TaskDTO taskDTO = null;
+    try {
+      
+      responseDTO = generalDelegate.find( "TaskDTO", idTask );
+      if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+        taskAux = ( TaskDTO ) responseDTO.getObjectResponse();
+      }
+      taskDTO = taskAux.clone();
+      
+      taskAux.setArea( new AreaDTO() );
+      taskAux.getArea().setId( taskDTO.getArea().getId() );
+      taskAux.getArea().setDescription( taskDTO.getArea().getDescription() );
+      
+      taskAux.setPersonGroup( new PersonGroupDTO() );
+      taskAux.getPersonGroup().setPerson( new PersonDTO() );
+      taskAux.getPersonGroup().getPerson().setId( taskDTO.getPersonGroup().getPerson().getId() );
+      taskAux.getPersonGroup().getPerson().setNames( taskDTO.getPersonGroup().getPerson().getNames() );
+      taskAux.getPersonGroup().getPerson().setLastNames( taskDTO.getPersonGroup().getPerson().getLastNames() );
+      
+      taskAux.setPriority( new PriorityDTO() );
+      taskAux.getPriority().setId( taskDTO.getPriority().getId() );
+      taskAux.getPriority().setDescription( taskDTO.getPriority().getDescription() );
+      
+      taskAux.setStatus( new StatusDTO() );
+      taskAux.getStatus().setId( taskDTO.getStatus().getId() );
+      taskAux.getStatus().setDescription( taskDTO.getStatus().getDescription() );
+      
+      taskAux.setTaskType( new TaskTypeDTO() );
+      taskAux.getTaskType().setId( taskDTO.getTaskType().getId() );
+      taskAux.getTaskType().setDescription( taskDTO.getTaskType().getDescription() );
+      
+      taskDTOGson = UtilCommon.toGson( taskAux );
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return taskDTOGson;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  private void findTaskHistory ( int idTask ) {
+    List< TaskHistoryDTO > list = new ArrayList< TaskHistoryDTO >();
+    ResponseDTO responseDTO = null;
+    TaskDTO taskDTO = null;
+    try {
+      listTaskHystory = new ArrayList< TaskDTO >();
+      loadColumnTaskHystory();
+      responseDTO = generalDelegate.findTaskHistory( idTask );
+      
+      if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+        list = ( List< TaskHistoryDTO > ) responseDTO.getObjectResponse();
+        for ( TaskHistoryDTO taskHistoryDTO: list ) {
+          taskDTO = ( TaskDTO ) UtilCommon.fromGson( TaskDTO.class, taskHistoryDTO.getTaskObject() );
+          listTaskHystory.add( taskDTO );
+        }
+      }
+      
+      addObjectSession( listTaskHystory, "listTaskHystory" );
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Load column task hystory. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (8/04/2016)
+   */
+  private void loadColumnTaskHystory () {
+    try {
+      mapColumnsHeaderHistory = new HashMap< String, String >();
+      String[] colLabel = ConstantWEB.COLUMN_LABEL_TASK_HISTORY;
+      String[] column = ConstantWEB.COLUMN_TASK_HISTORY;
+      for ( int i = 0; i < colLabel.length; i++ ) {
+        mapColumnsHeaderHistory.put( colLabel[i], column[i] );
+      }
+      
+      listColumnLabelTaskHistory = Arrays.asList( colLabel );
+      columnSelectedHistory = ConstantWEB.COLUMN_SELECTED_TASK_HISTORY;
+      
+      addObjectSession( listColumnLabelTaskHistory, "listColumnLabelTaskHistory" );
+      addObjectSession( mapColumnsHeaderHistory, "mapColumnsHeaderHistory" );
+      addObjectSession( columnSelectedHistory, "columnSelectedHistory" );
+      
+      createDynamicColumnsHistory();
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Creates the dynamic columns history. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (8/04/2016)
+   */
+  @SuppressWarnings ( "unchecked" )
+  public void createDynamicColumnsHistory () {
+    try {
+      columnsHistory = new ArrayList< ColumnModel >();
+      mapColumnsHeaderHistory = ( HashMap< String, String > ) getObjectSession( "mapColumnsHeaderHistory" );
+      for ( String columnKey: columnSelectedHistory ) {
+        if ( mapColumnsHeaderHistory.containsKey( columnKey ) ) {
+          columnsHistory.add( new ColumnModel( columnKey, mapColumnsHeaderHistory.get( columnKey ) ) );
+        }
+      }
+      addObjectSession( columnsHistory, "columnsHistory" );
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Gets the value column. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param value the value
+   * @return el string
+   * @since CetusControlWEB (9/04/2016)
+   */
+  public String getValueColumn ( Object value ) {
+    String result = "";
+    try {
+      if ( value instanceof Date ) {
+        result = DateUtility.formatDatePattern( ( Date ) value, getPatterDate() );
+      } else {
+        result = String.valueOf( value != null ? value : "" );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return result;
+  }
+  
+  public void onRowSelectTaskHistory ( SelectEvent event ) {
+    try {
+      selectedObjectHistory = ( ( TaskDTO ) event.getObject() );
+      if ( selectedObjectHistory != null ) {
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
   /**
    * </p> On row unselect. </p>
    *
@@ -2664,6 +2864,65 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   public void setVALID_COLUMN_KEYS ( List< String > vALID_COLUMN_KEYS ) {
     VALID_COLUMN_KEYS = vALID_COLUMN_KEYS;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public List< TaskDTO > getListTaskHystory () {
+    listTaskHystory = ( List< TaskDTO > ) getObjectSession( "listTaskHystory" );
+    if ( listTaskHystory == null ) {
+      listTaskHystory = new ArrayList< TaskDTO >();
+    }
+    return listTaskHystory;
+  }
+  
+  public void setListTaskHystory ( List< TaskDTO > listTaskHystory ) {
+    this.listTaskHystory = listTaskHystory;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public List< String > getListColumnLabelTaskHistory () {
+    listColumnLabelTaskHistory = ( List< String > ) getObjectSession( "listColumnLabelTaskHistory" );
+    if ( listColumnLabelTaskHistory == null ) {
+      listColumnLabelTaskHistory = new ArrayList< String >();
+    }
+    return listColumnLabelTaskHistory;
+  }
+  
+  public void setListColumnLabelTaskHistory ( List< String > listColumnLabelTaskHistory ) {
+    this.listColumnLabelTaskHistory = listColumnLabelTaskHistory;
+  }
+  
+  public String[] getColumnSelectedHistory () {
+    columnSelectedHistory = ( String[] ) getObjectSession( "columnSelectedHistory" );
+    if ( columnSelectedHistory == null ) {
+      columnSelectedHistory = new String[1];
+    }
+    return columnSelectedHistory;
+  }
+  
+  public void setColumnSelectedHistory ( String[] columnSelectedHistory ) {
+    this.columnSelectedHistory = columnSelectedHistory;
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public List< ColumnModel > getColumnsHistory () {
+    columnsHistory = ( List< ColumnModel > ) getObjectSession( "columnsHistory" );
+    if ( columnsHistory == null ) {
+      columnsHistory = new ArrayList< ColumnModel >();
+    }
+    return columnsHistory;
+  }
+  
+  public void setColumnsHistory ( List< ColumnModel > columnsHistory ) {
+    this.columnsHistory = columnsHistory;
+  }
+  
+  public TaskDTO getSelectedObjectHistory () {
+    return selectedObjectHistory;
+  }
+  
+  public void setSelectedObjectHistory ( TaskDTO selectedObjectHistory ) {
+    this.selectedObjectHistory = selectedObjectHistory;
   }
   
 }

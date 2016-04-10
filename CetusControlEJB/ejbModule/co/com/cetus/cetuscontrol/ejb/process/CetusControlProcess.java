@@ -49,6 +49,7 @@ import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
 import co.com.cetus.cetuscontrol.dto.PriorityDTO;
 import co.com.cetus.cetuscontrol.dto.StatusDTO;
 import co.com.cetus.cetuscontrol.dto.TaskDTO;
+import co.com.cetus.cetuscontrol.dto.TaskHistoryDTO;
 import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.dto.WorkdayDTO;
@@ -70,6 +71,7 @@ import co.com.cetus.cetuscontrol.jpa.entity.PersonGroup;
 import co.com.cetus.cetuscontrol.jpa.entity.Priority;
 import co.com.cetus.cetuscontrol.jpa.entity.Status;
 import co.com.cetus.cetuscontrol.jpa.entity.Task;
+import co.com.cetus.cetuscontrol.jpa.entity.TaskHistory;
 import co.com.cetus.cetuscontrol.jpa.entity.TaskType;
 import co.com.cetus.cetuscontrol.jpa.entity.UserPortal;
 import co.com.cetus.cetuscontrol.jpa.entity.Workday;
@@ -2342,6 +2344,46 @@ public class CetusControlProcess {
       throw e;
     }
     return connection;
+  }
+
+  /**
+   * </p> Find task history. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idTask the id task
+   * @return el response dto
+   * @since CetusControlEJB (8/04/2016)
+   */
+  public ResponseDTO findTaskHistory ( int idTask ) {
+    ResponseDTO responseDTO = null;
+    TaskHistoryDTO taskHistoryDTO = null;
+    TypedQuery< TaskHistory > query = null;
+    List<TaskHistoryDTO> list = null;
+    try {
+      query = em.createNamedQuery( "TaskHistory.findTAskHistory", TaskHistory.class );
+      query.setParameter( "idTask", idTask );
+      
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        list = new ArrayList< TaskHistoryDTO >();
+        for ( Object taskHistory: query.getResultList() ) {
+          taskHistoryDTO = new TaskHistoryDTO();
+          responseDTO = createMessageSUCCESS();
+          converter.convertEntityToDto( taskHistory, taskHistoryDTO, false );
+    
+          list.add( taskHistoryDTO );
+        }
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( list );
+        
+      } else {
+        return createMessageNORESULT();
+      }
+      
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
   }
   
 }

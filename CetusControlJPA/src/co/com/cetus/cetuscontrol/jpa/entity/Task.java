@@ -152,6 +152,7 @@ public class Task implements Serializable {
   //bi-directional many-to-one association to TraceTask
   @OneToMany ( mappedBy = "task" )
   private List< TraceTask >        traceTasks;
+
   
   public Task () {
   }
@@ -423,5 +424,7 @@ public class Task implements Serializable {
     
     return traceTask;
   }
+
+  
   
 }

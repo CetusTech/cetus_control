@@ -6,7 +6,7 @@
     <h:panelGrid>
       <p:column>
         <p:tabView id="viewtab" activeIndex="#{manualTaskMBean.indexTab}" style="width: 100% !important;">
-          <p:tab title="#{msg.information}" id="info">
+          <p:tab title="#{msg.information}" id="info" style="width: 100% !important;">
 
             <h:inputHidden id="percentageUpdate" value="#{manualTaskMBean.percentageCurrent}" />
 
@@ -25,7 +25,7 @@
               <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
               <p:inputText id="descriptionUpdate" required="true" onchange="conMayusculas(this);" size="40"
                 style="width: 95% !important;" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
-                 requiredMessage="#{msg.field_required}" maxlength="100"
+                requiredMessage="#{msg.field_required}" maxlength="100"
                 value="#{manualTaskMBean.selectedObject.description}">
               </p:inputText>
               <p:message for="descriptionUpdate" id="descriptionUpdateMsg" display="icon" />
@@ -38,7 +38,8 @@
 
               <p:outputLabel value="#{msg.observation}" for="obsResUpdate" styleClass="resaltar_negro" />
               <p:inputTextarea id="obsResUpdate" value="#{manualTaskMBean.selectedObject.observation}" maxlength="990"
-                cols="40" style="width: 95%" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" rows="8">
+                cols="40" style="width: 95%" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
+                rows="8">
                 <f:validateLength minimum="0" maximum="990" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="obsResUpdate" id="obsResUpdateMsg" display="icon" />
@@ -112,14 +113,14 @@
               <p:inputText id="requestorUpdate" required="false" size="20"
                 value="#{manualTaskMBean.selectedObject.requestor}"
                 disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" pt:type="string"
-                pt:autofocus="autofocus" onchange="conMayusculas(this);"  maxlength="20" />
+                pt:autofocus="autofocus" onchange="conMayusculas(this);" maxlength="20" />
               <p:message for="requestorUpdate" id="requestorUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.userFun}" for="userUpdate" styleClass="resaltar_negro" />
               <p:inputText id="userUpdate" required="false" size="20"
                 value="#{manualTaskMBean.selectedObject.userFunctional}"
                 disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" pt:type="string"
-                pt:autofocus="autofocus" onchange="conMayusculas(this);"  maxlength="20" />
+                pt:autofocus="autofocus" onchange="conMayusculas(this);" maxlength="20" />
               <p:message for="userUpdate" id="userUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.area}" for="areaSelectedUpdate" styleClass="resaltar_negro" />
@@ -216,6 +217,46 @@
             </h:panelGrid>
 
 
+          </p:tab>
+
+          <p:tab title="#{msg.task_history}" id="taskHistory">
+            <h:panelGrid id="pnlHistpry" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
+              <p:growl id="msgHistory" for="iconOnly" />
+              <p:toolbar styleClass="body_toolbar_nivel_3" id="bars">
+                <p:toolbarGroup align="left" id="group">
+
+                  <p:selectCheckboxMenu id="columnHistory" value="#{manualTaskMBean.columnSelectedHistory}"
+                    label="Columnas" filter="false" widgetVar="colHistory" onHide="true" filterMatchMode="startsWith"
+                    panelStyle="width:250px">
+                    <f:selectItems value="#{manualTaskMBean.listColumnLabelTaskHistory}" />
+
+                    <p:ajax listener="#{manualTaskMBean.createDynamicColumnsHistory}" update="tableHistory" />
+                    <p:ajax event="toggleSelect" listener="#{manualTaskMBean.createDynamicColumnsHistory}"
+                      update="tableHistory" process="@this" />
+
+                  </p:selectCheckboxMenu>
+
+                </p:toolbarGroup>
+              </p:toolbar>
+
+              <p:dataTable value="#{manualTaskMBean.listTaskHystory}" rows="#{msg.rows_paginator}" id="tableHistory"
+                paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+                currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" scrollWidth="200%" liveScroll="true"
+                rowsPerPageTemplate="10,#{manualTaskMBean.listTaskHystory.size()}"
+                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
+
+
+                <p:columns value="#{manualTaskMBean.columnsHistory}" var="column" columnIndexVar="colIndex"
+                  filterMatchMode="contains" sortBy="#{object[column.property]}">
+                  <f:facet name="header">
+                    <h:outputText value="#{column.header}" />
+                  </f:facet>
+                  <h:outputText value="#{manualTaskMBean.getValueColumn(object[column.property])}" />
+                </p:columns>
+              </p:dataTable>
+
+            </h:panelGrid>
           </p:tab>
         </p:tabView>
       </p:column>

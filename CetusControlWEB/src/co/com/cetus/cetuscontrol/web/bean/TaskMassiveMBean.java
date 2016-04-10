@@ -30,6 +30,7 @@ import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
 import co.com.cetus.cetuscontrol.dto.PriorityDTO;
 import co.com.cetus.cetuscontrol.dto.StatusDTO;
 import co.com.cetus.cetuscontrol.dto.TaskDTO;
+import co.com.cetus.cetuscontrol.dto.TaskHistoryDTO;
 import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
@@ -685,6 +686,22 @@ public class TaskMassiveMBean extends GeneralManagedBean {
             
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
               writeFile( "Tarea creada exitosamente..." );
+              
+              try {
+                writeFile( "Creando registro en la taskHistory " + taskDTO.getCode() );
+                TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+                taskHistoryDTO.setIdTtask( taskDTO.getId() );
+                taskHistoryDTO.setCreationDate( currentDate );
+                taskHistoryDTO.setTaskObject( UtilCommon.toGson( taskDTO ) );
+                responseDTO = generalDelegate.create( taskHistoryDTO );
+                
+                writeFile( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+                
+              } catch ( Exception e ) {
+                ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+                addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+              }
+              
               result = true;
             } else {
               writeFile( "Error creando la tarea. " + responseDTO.getMessage() );

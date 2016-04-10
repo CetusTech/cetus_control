@@ -934,4 +934,16 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
     
   }
+  
+  public ResponseDTO findTaskHistory ( int idTask ){
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskHistory( idTask );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+    
+  }
 }

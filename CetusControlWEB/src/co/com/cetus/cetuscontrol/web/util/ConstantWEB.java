@@ -142,5 +142,9 @@ public class ConstantWEB {
   public final static String     MYTASK_TASK_PIE_SERIESCOLORS       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "myTask_task_pie_seriesColors" );
   public final static String     NAME_FILE_PDG_REPORT               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "name_file_pdg_report" );
   public final static String     MSG_ERROR_GEN_REPORT_TASK          = UtilWEB.getProperty( NAME_BUNDLE_WEB, "msg_error_gen_report_task" );
-                                                                    
+  public final static String     MESSAGE_ERROR_CREATE_TASK_HISTORY  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CREATE_TASK_HISTORY" );
+  public final static String[]   COLUMN_LABEL_TASK_HISTORY          = UtilWEB.getProperty( NAME_BUNDLE_WEB, "COLUMN_LABEL_TASK_HISTORY" ).split( "," );
+  public final static String[]   COLUMN_TASK_HISTORY                = UtilWEB.getProperty( NAME_BUNDLE_WEB, "COLUMN_TASK_HISTORY" ).split( "," );
+  public final static String[]   COLUMN_SELECTED_TASK_HISTORY       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "COLUMN_SELECTED_TASK_HISTORY" ).split( "," );
+  
 }

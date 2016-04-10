@@ -70,6 +70,7 @@ public class TaskDTO implements Serializable {
   private TaskTypeDTO                 taskType;
                                       
   private List< TraceTaskDTO >        traceTasks;
+  
                                       
   public TaskDTO () {
   }
@@ -345,5 +346,58 @@ public class TaskDTO implements Serializable {
     
     return traceTask;
   }
+
+  public String getAreaDesc () {
+    return area != null ? area.getDescription() : "";
+  }
   
+  public String getTypeTaskDesc () {
+    return taskType != null ? taskType.getDescription() : "";
+  }
+  
+  public String getPriorityDesc () {
+    return priority != null ? priority.getDescription() : "";
+  }
+  
+  public String getResponsible () {
+    return personGroup != null ? personGroup.getPerson() != null ? personGroup.getPerson().getNames() + " " + personGroup.getPerson().getLastNames() : "" : "";
+  }
+  
+  public String getPercentageDesc () {
+    return percentage + " %";
+  }
+  
+  public TaskDTO clone(){
+    TaskDTO taskClone = new TaskDTO();
+    taskClone.setId( id );
+    taskClone.setApproved( approved );
+    taskClone.setAssingDate( assingDate );
+    taskClone.setCode( code );
+    taskClone.setCreationDate( creationDate );
+    taskClone.setCreationUser( creationUser );
+    taskClone.setDateEnd( dateEnd );
+    taskClone.setDateInit( dateInit );
+    taskClone.setDateInitCurrent( dateInitCurrent );
+    taskClone.setDeliveryDate( deliveryDate );
+    taskClone.setDescription( description );
+    taskClone.setModificationDate( modificationDate );
+    taskClone.setModificationUser( modificationUser );
+    taskClone.setObservation( observation );
+    taskClone.setObservationRequestor( observationRequestor );
+    taskClone.setPercentage( percentage );
+    taskClone.setRequestor( observationRequestor );
+    taskClone.setSuspended( suspended );
+    taskClone.setUserFunctional( userFunctional );
+    taskClone.setVDuration( vDuration );
+    taskClone.setVLength( vLength );
+    taskClone.setVOrder( vOrder );
+    taskClone.setArea( area );
+    taskClone.setPersonGroup( personGroup );
+    taskClone.setPriority( priority );
+    taskClone.setStatus( status );
+    taskClone.setTaskType( taskType );
+    
+    return taskClone;
+    
+  }
 }

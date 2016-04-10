@@ -43,6 +43,7 @@ import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
 import co.com.cetus.cetuscontrol.dto.PriorityDTO;
 import co.com.cetus.cetuscontrol.dto.StatusDTO;
 import co.com.cetus.cetuscontrol.dto.TaskDTO;
+import co.com.cetus.cetuscontrol.dto.TaskHistoryDTO;
 import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
 import co.com.cetus.cetuscontrol.dto.TraceTaskDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
@@ -453,6 +454,21 @@ public class AdminTaskBean extends GeneralManagedBean {
             selectedObject.setDateInit( currentDate );//Fecha de Inicio de la Tarea      
             responseDTO = generalDelegate.edit( selectedObject );
             
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              responseDTO = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //LIstar Tareas
             personDTOSelected = ( PersonGroupDTO ) getObjectSession( "personDTOSelected" );
             responseDTO = generalDelegate.findTaskByPersonGroup( personDTOSelected.getGroupT().getId(), personDTOSelected.getPerson().getId() );
@@ -531,6 +547,22 @@ public class AdminTaskBean extends GeneralManagedBean {
           response = generalDelegate.edit( selectedObject );
           
           if ( UtilCommon.validateResponseSuccess( response ) ) {
+            
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              response = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //Listar Tareas
             personDTOSelected = ( PersonGroupDTO ) getObjectSession( "personDTOSelected" );
             response = generalDelegate.findTaskByPersonGroup( personDTOSelected.getGroupT().getId(), personDTOSelected.getPerson().getId() );
@@ -655,6 +687,21 @@ public class AdminTaskBean extends GeneralManagedBean {
           response = generalDelegate.edit( selectedObject );
           
           if ( UtilCommon.validateResponseSuccess( response ) ) {
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              response = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //LIstar Tareas
             personDTOSelected = ( PersonGroupDTO ) getObjectSession( "personDTOSelected" );
             response = generalDelegate.findTaskByPersonGroup( personDTOSelected.getGroupT().getId(), personDTOSelected.getPerson().getId() );
@@ -733,6 +780,21 @@ public class AdminTaskBean extends GeneralManagedBean {
           selectedObject.setDateInit( null );
           response = generalDelegate.edit( selectedObject );
           if ( UtilCommon.validateResponseSuccess( response ) ) {
+            try {
+              ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+              TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+              taskHistoryDTO.setIdTtask( selectedObject.getId() );
+              taskHistoryDTO.setCreationDate( currentDate );
+              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              response = generalDelegate.create( taskHistoryDTO );
+              
+              ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+              
+            } catch ( Exception e ) {
+              ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+              addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
             //LIstar Tareas
             personDTOSelected = ( PersonGroupDTO ) getObjectSession( "personDTOSelected" );
             response = generalDelegate.findTaskByPersonGroup( personDTOSelected.getGroupT().getId(), personDTOSelected.getPerson().getId() );
@@ -1106,33 +1168,33 @@ public class AdminTaskBean extends GeneralManagedBean {
    */
   @Override
   public String remove () {
-    ResponseDTO responseDTO = null;
-    String code = "0";
-    try {
-      this.showConfirmDelete = false;
-      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
-      if ( selectedObject != null ) {
-        ConstantWEB.WEB_LOG.info( "Se procede a eliminar el area ::> " + selectedObject.toString() );
-        responseDTO = generalDelegate.remove( selectedObject );
-        ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar el area ::> " + responseDTO.toString() );
-        
-        if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-          ConstantWEB.WEB_LOG.info( "Area eliminada exitosamente..." );
-          this.initElement();
-          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_DELETE );
-        } else {
-          ConstantWEB.WEB_LOG.error( "Error eliminado el area..." );
-          //Obetener codigo de error de oracle
-          if ( !responseDTO.getMessage().isEmpty() && responseDTO.getMessage().contains( "ORA" ) ) {
-            code = responseDTO.getMessage().substring( responseDTO.getMessage().lastIndexOf( "ORA" ), responseDTO.getMessage().lastIndexOf( ":" ) );
-          }
-          addMessageError( null, ConstantWEB.MESSAGE_ERROR, code + ":" + ConstantWEB.MESSAGE_ERROR_DELETE_DETAIL );
-        }
-      }
-    } catch ( Exception e ) {
-      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-      addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
-    }
+//    ResponseDTO responseDTO = null;
+//    String code = "0";
+//    try {
+//      this.showConfirmDelete = false;
+//      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+//      if ( selectedObject != null ) {
+//        ConstantWEB.WEB_LOG.info( "Se procede a eliminar el area ::> " + selectedObject.toString() );
+//        responseDTO = generalDelegate.remove( selectedObject );
+//        ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar el area ::> " + responseDTO.toString() );
+//        
+//        if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+//          ConstantWEB.WEB_LOG.info( "Area eliminada exitosamente..." );
+//          this.initElement();
+//          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_DELETE );
+//        } else {
+//          ConstantWEB.WEB_LOG.error( "Error eliminado el area..." );
+//          //Obetener codigo de error de oracle
+//          if ( !responseDTO.getMessage().isEmpty() && responseDTO.getMessage().contains( "ORA" ) ) {
+//            code = responseDTO.getMessage().substring( responseDTO.getMessage().lastIndexOf( "ORA" ), responseDTO.getMessage().lastIndexOf( ":" ) );
+//          }
+//          addMessageError( null, ConstantWEB.MESSAGE_ERROR, code + ":" + ConstantWEB.MESSAGE_ERROR_DELETE_DETAIL );
+//        }
+//      }
+//    } catch ( Exception e ) {
+//      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+//      addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
+//    }
     return null;
   }
   
@@ -1169,6 +1231,22 @@ public class AdminTaskBean extends GeneralManagedBean {
         
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           ConstantWEB.WEB_LOG.info( "Tarea actualizada exitosamente..." );
+          
+          try {
+            ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+            TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+            taskHistoryDTO.setIdTtask( selectedObject.getId() );
+            taskHistoryDTO.setCreationDate( currentDate );
+            taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+            responseDTO = generalDelegate.create( taskHistoryDTO );
+            
+            ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+            
+          } catch ( Exception e ) {
+            ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+            addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+          }
+          
           this.initElement();
           addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_UPDATE );
           
@@ -1301,6 +1379,22 @@ public class AdminTaskBean extends GeneralManagedBean {
         //Tarea creada Exitosamente
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           ConstantWEB.WEB_LOG.debug( "############# TAREA CREADA EXITOSAMENTE " + tmpTask.getCode() );
+          
+          try {
+            ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + addObject.getCode() );
+            TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+            taskHistoryDTO.setIdTtask( addObject.getId() );
+            taskHistoryDTO.setCreationDate( currentDate );
+            taskHistoryDTO.setTaskObject( UtilCommon.toGson( addObject ) );
+            responseDTO = generalDelegate.create( taskHistoryDTO );
+            
+            ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
+            
+          } catch ( Exception e ) {
+            ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+            addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+          }
+          
           this.initElement();
           //Tiene archivos cargados en memoria 
           if ( getObjectSession( "listFilesTask" ) != null ) {
