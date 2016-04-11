@@ -3,7 +3,8 @@
   xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
   <h:form prependId="false" id="formUpdate" style="width: 100%">
-    <h:panelGrid>
+    <h:panelGrid id="colView">
+
       <p:column>
         <p:tabView id="viewtab" activeIndex="#{manualTaskMBean.indexTab}" style="width: 100% !important;">
           <p:tab title="#{msg.information}" id="info" style="width: 100% !important;">
@@ -173,8 +174,7 @@
           </p:tab>
 
           <p:tab title="#{msg.attachment}" id="attachFiles">
-
-            <p:growl id="msgDel" for="iconOnly" />
+            <p:growl id="msgDel" for="msgDel" globalOnly="true" showDetail="true" />
             <h:panelGrid columns="1" style="width:100%" cellspacing="1" cellpadding="1" id="pnlFiles">
               <p:dataTable id="fileTask" var="objFile" value="#{manualTaskMBean.listAttachFiles}"
                 rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" paginator="true"
@@ -185,7 +185,8 @@
                   <h:outputText value="#{msg.list_files}" />
                 </f:facet>
 
-                <p:ajax event="rowSelect" listener="#{manualTaskMBean.onRowSelectAttachment}" update=":viewtab" />
+                <p:ajax event="rowSelect" listener="#{manualTaskMBean.onRowSelectAttachment}" update="viewtab:fileTask"
+                  process="@this" />
 
                 <p:column headerText="#{msg.name}" styleClass="column_80">
                   <h:outputText value="#{objFile.fileName}" />
@@ -197,22 +198,29 @@
                     <p:fileDownload value="#{manualTaskMBean.download}" />
                   </p:commandButton>
                   <p:commandButton actionListener="#{manualTaskMBean.removeAttachInTask}" id="iconOnly"
-                    icon="ui-icon-trash" process="@this" update=":viewtab :viewtab:msgDel" title="#{msg.delete}" />
+                    icon="ui-icon-trash" process="@this" update="viewtab:fileTask viewtab:msgDel" title="#{msg.delete}" />
                 </p:column>
               </p:dataTable>
-              <p:dataList value="#{manualTaskMBean.listFilesTask}" var="obj" type="ordered" id="listFiles"
-                emptyMessage="#{msg.msg_empty_list_file}">
+              <p:dataTable value="#{manualTaskMBean.listFilesTask}" var="obj"
+                rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}"
+                rowsPerPageTemplate="1,#{manualTaskMBean.listFilesTask.size()}" rowIndexVar="index" paginator="false"
+                paginatorPosition="bottom" id="listFiles" emptyMessage="#{msg.msg_empty_list_file}">
                 <f:facet name="header">
                   <h:outputText value="#{msg.list_files_upload}" />
                 </f:facet>
-                <p:column style="width: 100% !important">
+                <p:column headerText="#{msg.name}" style="width: 85% !important">
                   <h:outputText value="#{obj.fileName}" />
                 </p:column>
-              </p:dataList>
+                <p:column headerText="" style="width:15%;text-align: center">
+                  <p:commandButton icon="ui-icon-circle-close" update="listFiles" id="test" process="listFiles">
+                    <f:setPropertyActionListener value="#{obj}" target="#{manualTaskMBean.fileSelected}" for="test" />
+                  </p:commandButton>
+                </p:column>
+              </p:dataTable>
               <p:fileUpload fileUploadListener="#{manualTaskMBean.handleFileUpload}" mode="advanced"
                 dragDropSupport="true" label="#{msg.selected_file}" invalidSizeMessage="#{msg.file_limit_size}"
-                invalidFileMessage="#{msg.file_invalid}" auto="true" update="listFiles messages" sizeLimit="10000000"
-                allowTypes="/(\.|\/)(pdf|doc|txt|xls|docx|jpe?g|png)$/" />
+                invalidFileMessage="#{msg.file_invalid}" auto="true" update="listFiles :viewtab:msgDel"
+                sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|txt|xls|docx|jpe?g|png)$/" />
 
             </h:panelGrid>
 
@@ -241,8 +249,8 @@
 
               <p:dataTable value="#{manualTaskMBean.listTaskHystory}" rows="#{msg.rows_paginator}" id="tableHistory"
                 paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
-                currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" scrollWidth="200%" liveScroll="true"
-                rowsPerPageTemplate="10,#{manualTaskMBean.listTaskHystory.size()}"
+                currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" scrollWidth="200%"
+                liveScroll="true" rowsPerPageTemplate="10,#{manualTaskMBean.listTaskHystory.size()}"
                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                 paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
 

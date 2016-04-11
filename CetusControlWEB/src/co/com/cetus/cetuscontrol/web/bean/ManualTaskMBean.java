@@ -72,6 +72,8 @@ public class ManualTaskMBean extends GeneralManagedBean {
   /** The list files task. */
   ArrayList< UploadedFile >         listFilesTask              = null;
                                                                
+  private UploadedFile              fileSelected               = null;
+                                                               
   /** The user portal dto. */
   private UserPortalDTO             userPortalDTO              = null;
                                                                
@@ -432,6 +434,11 @@ public class ManualTaskMBean extends GeneralManagedBean {
     TaskDTO taskDTO = null;
     int count = 0;
     RequestContext context = null;
+    File directoryTmp = null;
+    File[] contents = null;
+    String path;
+    File userUploads = null;
+    AttachDTO attachDTO = null;
     try {
       context = RequestContext.getCurrentInstance();
       //Se debe establecer la fecha de inicio de la tarea para poder calcular con la duracion la longitud de la misma
@@ -488,7 +495,49 @@ public class ManualTaskMBean extends GeneralManagedBean {
               ConstantWEB.WEB_LOG.error( e.getMessage(), e );
               addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
             }
-            
+            //Tiene archivos cargados en memoria 
+            if ( getObjectSession( "listFilesTask" ) != null ) {
+              listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
+              if ( listFilesTask.size() > 0 ) {
+                //Tiene archivos para agregar! 
+                ConstantWEB.WEB_LOG.debug( "############# TIENE ARCHIVOS PARA CARGAR " + listFilesTask.size() );
+                path = destination + separador + idUsuario;
+                directoryTmp = new File( path );
+                for ( UploadedFile att: listFilesTask ) {
+                  if ( directoryTmp != null ) {
+                    contents = directoryTmp.listFiles();
+                    interno: for ( File file: contents ) {
+                      if ( !file.isDirectory() && file.getName().substring( 0, file.getName().lastIndexOf( "#" ) )
+                                                      .equals( att.getFileName().substring( 0, att.getFileName().lastIndexOf( "." ) ) ) ) {
+                        attachDTO = new AttachDTO();
+                        attachDTO.setTask( selectedObject );
+                        attachDTO.setFileName( att.getFileName() );
+                        userUploads = new File( path, String.valueOf( attachDTO.getTask().getCode() ) );
+                        attachDTO.setPath( userUploads.getPath() );
+                        attachDTO.setCreationDate( currentDate );
+                        attachDTO.setCreationUser( getUserInSession() );
+                        userUploads.mkdir();
+                        //Crear el registro del archivo adjunto a la tarea 
+                        responseDTO = generalDelegate.create( attachDTO );
+                        
+                        //Renombrar el archivo y mover a la carpeta asociada al ID de la tarea
+                        if ( renameAndMoveFileTmp( att.getFileName(), file.getName(), userUploads.getPath() + separador, path ) ) {
+                          //Archivo se movio correctamente
+                          ConstantWEB.WEB_LOG.debug( "############# ARCHIVO MOVIDO CORRECTAMENTE " + att.getFileName() );
+                          
+                        } else {
+                          //Archivo presento problemas al moverlo, se debe validar porque debio ser borrado por ser temporal
+                          ConstantWEB.WEB_LOG.debug( "############# ERROR MOVIENDO EL ARCHIVO " + att.getFileName() );
+                          
+                        }
+                        break interno;
+                      }
+                    }
+                  }
+                }
+              }
+              
+            }
             //LIstar Tareas
             responseDTO = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
                                                                                                                                    .getId() );
@@ -551,6 +600,11 @@ public class ManualTaskMBean extends GeneralManagedBean {
     RequestContext context = null;
     ResponseDTO response = null;
     String duration = null;
+    File directoryTmp = null;
+    File[] contents = null;
+    String path;
+    File userUploads = null;
+    AttachDTO attachDTO = null;
     try {
       context = RequestContext.getCurrentInstance();
       selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
@@ -581,6 +635,50 @@ public class ManualTaskMBean extends GeneralManagedBean {
             } catch ( Exception e ) {
               ConstantWEB.WEB_LOG.error( e.getMessage(), e );
               addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+            }
+            
+            //Tiene archivos cargados en memoria 
+            if ( getObjectSession( "listFilesTask" ) != null ) {
+              listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
+              if ( listFilesTask.size() > 0 ) {
+                //Tiene archivos para agregar! 
+                ConstantWEB.WEB_LOG.debug( "############# TIENE ARCHIVOS PARA CARGAR " + listFilesTask.size() );
+                path = destination + separador + idUsuario;
+                directoryTmp = new File( path );
+                for ( UploadedFile att: listFilesTask ) {
+                  if ( directoryTmp != null ) {
+                    contents = directoryTmp.listFiles();
+                    interno: for ( File file: contents ) {
+                      if ( !file.isDirectory() && file.getName().substring( 0, file.getName().lastIndexOf( "#" ) )
+                                                      .equals( att.getFileName().substring( 0, att.getFileName().lastIndexOf( "." ) ) ) ) {
+                        attachDTO = new AttachDTO();
+                        attachDTO.setTask( selectedObject );
+                        attachDTO.setFileName( att.getFileName() );
+                        userUploads = new File( path, String.valueOf( attachDTO.getTask().getCode() ) );
+                        attachDTO.setPath( userUploads.getPath() );
+                        attachDTO.setCreationDate( currentDate );
+                        attachDTO.setCreationUser( getUserInSession() );
+                        userUploads.mkdir();
+                        //Crear el registro del archivo adjunto a la tarea 
+                        generalDelegate.create( attachDTO );
+                        
+                        //Renombrar el archivo y mover a la carpeta asociada al ID de la tarea
+                        if ( renameAndMoveFileTmp( att.getFileName(), file.getName(), userUploads.getPath() + separador, path ) ) {
+                          //Archivo se movio correctamente
+                          ConstantWEB.WEB_LOG.debug( "############# ARCHIVO MOVIDO CORRECTAMENTE " + att.getFileName() );
+                          
+                        } else {
+                          //Archivo presento problemas al moverlo, se debe validar porque debio ser borrado por ser temporal
+                          ConstantWEB.WEB_LOG.debug( "############# ERROR MOVIENDO EL ARCHIVO " + att.getFileName() );
+                          
+                        }
+                        break interno;
+                      }
+                    }
+                  }
+                }
+              }
+              
             }
             
             //Listar Tareas
@@ -906,22 +1004,51 @@ public class ManualTaskMBean extends GeneralManagedBean {
    * @since CetusControlWEB (2/02/2016)
    */
   public void handleFileUpload ( FileUploadEvent event ) {
+    boolean flag = false;
     try {
       if ( event != null ) {
         if ( getObjectSession( "listFilesTask" ) == null ) {
           listFilesTask = new ArrayList< >();
           listFilesTask.add( event.getFile() );
+          //copiar archivo a la ruta del usuario como archivo temporal
+          copyFileTmp( event.getFile().getFileName(), event.getFile().getInputstream() );
+          addObjectSession( listFilesTask, "listFilesTask" );
+          //addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, event.getFile().getFileName() );
         } else {
-          listFilesTask.add( event.getFile() );
+          
+          for ( UploadedFile file: listFilesTask ) {
+            if ( file.getFileName() != null ) {
+              if ( file.getFileName().equals( event.getFile().getFileName() ) ) {
+                addMessageError( "msgDel", ConstantWEB.MESSAGE_ERROR, "El archivo ya se encuentra agregado" );
+                flag = true;
+                break;
+              }
+            }
+          }
+          if ( !flag ) {
+            listFilesTask.add( event.getFile() );
+            //copiar archivo a la ruta del usuario como archivo temporal
+            copyFileTmp( event.getFile().getFileName(), event.getFile().getInputstream() );
+            addObjectSession( listFilesTask, "listFilesTask" );
+          }
+          
         }
-        //copiar archivo a la ruta del usuario como archivo temporal
-        copyFileTmp( event.getFile().getFileName(), event.getFile().getInputstream() );
-        addObjectSession( listFilesTask, "listFilesTask" );
-        //addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, event.getFile().getFileName() );
+        
       }
     } catch ( IOException e ) {
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getCause().getMessage() );
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public void removeFileSelected ( UploadedFile file ) {
+    if ( file != null ) {
+      listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
+      if ( listFilesTask != null ) {
+        listFilesTask.remove( file );
+        addObjectSession( listFilesTask, "listFilesTask" );
+      }
     }
   }
   
@@ -1532,8 +1659,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
       
     } else {
       indexTab = 1;
-      addMessageWarning( null, MessageFormat.format( ConstantWEB.MESSAGE_ERROR_DELETE, "Archivo" ), null );
+      addMessageWarning( "msgDel", MessageFormat.format( ConstantWEB.MESSAGE_ERROR_DELETE, "Archivo" ), null );
     }
+    addObjectSession( indexTab, "indexTab" );
     selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
     cleanObjectSession( "attachDTOSelected" );
   }
@@ -1855,6 +1983,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       addObjectSession( attachDTOSelected, "attachDTOSelected" );
       indexTab = 1;
       selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+      addObjectSession( indexTab, "indexTab" );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -2053,6 +2182,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
   }
+  
   /**
    * </p> On row unselect. </p>
    *
@@ -2801,6 +2931,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
   }
   
   public int getIndexTab () {
+    indexTab = ( getObjectSession( "indexTab" ) != null ? ( int ) getObjectSession( "indexTab" ) : 0 );
     return indexTab;
   }
   
@@ -2925,4 +3056,17 @@ public class ManualTaskMBean extends GeneralManagedBean {
     this.selectedObjectHistory = selectedObjectHistory;
   }
   
+  public UploadedFile getFileSelected () {
+    return fileSelected;
+  }
+  
+  public void setFileSelected ( UploadedFile fileSelected ) {
+    if ( fileSelected != null ) {
+      listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );
+      if ( listFilesTask != null ) {
+        listFilesTask.remove( fileSelected );
+        addObjectSession( listFilesTask, "listFilesTask" );
+      }
+    }
+  }
 }

@@ -9,15 +9,13 @@
       <p:outputLabel value="#{msg.description}" for="descriptionAdd" styleClass="resaltar_negro" />
       <p:inputText id="descriptionAdd" required="true" size="40" value="#{manualTaskMBean.addObject.description}"
         style="width: 100%'" pt:type="string" pt:placeholder="#{msg.input_name_task}" pt:autofocus="autofocus"
-        onchange="conMayusculas(this);"  requiredMessage="#{msg.field_required}"
-        maxlength="100" />
+        onchange="conMayusculas(this);" requiredMessage="#{msg.field_required}" maxlength="100" />
       <p:message for="descriptionAdd" id="descriptionAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.assingDate}" for="assingDateAdd" styleClass="resaltar_negro" />
       <p:calendar id="assingDateAdd" value="#{manualTaskMBean.addObject.assingDate}" required="true" mode="popup"
-        onchange="PF('assingDateAdd').hide()" showButtonPanel="true"
-        pt:placeholder="#{manualTaskMBean.patterDate}" locale="#{manualTaskMBean.locale}"
-        pattern="#{manualTaskMBean.patterDate}" mask="false" />
+        onchange="PF('assingDateAdd').hide()" showButtonPanel="true" pt:placeholder="#{manualTaskMBean.patterDate}"
+        locale="#{manualTaskMBean.locale}" pattern="#{manualTaskMBean.patterDate}" mask="false" />
 
       <p:message for="assingDateAdd" id="assingDateAddMsg" display="icon" />
 
@@ -49,15 +47,13 @@
 
       <p:outputLabel value="#{msg.requestor}" for="requestorAdd" styleClass="resaltar_negro" />
       <p:inputText id="requestorAdd" required="false" size="20" value="#{manualTaskMBean.addObject.requestor}"
-        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" 
-        maxlength="20" />
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" maxlength="20" />
 
       <p:message for="requestorAdd" id="requestorAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.userFun}" for="userAdd" styleClass="resaltar_negro" />
       <p:inputText id="userAdd" required="false" size="20" value="#{manualTaskMBean.addObject.userFunctional}"
-        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" 
-        maxlength="20" />
+        pt:type="string" pt:autofocus="autofocus" onchange="conMayusculas(this);" maxlength="20" />
       <p:message for="userAdd" id="userAddMsg" display="icon" />
 
       <p:outputLabel value="#{msg.area}" for="areaSelected" styleClass="resaltar_negro" />
@@ -84,6 +80,7 @@
 
       <f:facet name="footer">
         <h:panelGrid columns="1" style="width: 100%" id="pnlListFiles">
+          <p:growl showDetail="true" showSummary="true" for="msgDel" />
           <p:dataTable value="#{manualTaskMBean.listFilesTask}" var="objFile" type="ordered" id="listFiles" rows="4"
             rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}"
             rowsPerPageTemplate="1,#{manualTaskMBean.listFilesTask.size()}" rowIndexVar="index" paginator="false"
@@ -94,13 +91,18 @@
             <p:column headerText="#{msg.name}" styleClass="column_80">
               <h:outputText value="#{objFile.fileName}" />
             </p:column>
+            <p:column style="width:32px;text-align: center">
+              <p:commandButton icon="ui-icon-circle-close" update="listFiles" id="test" process="listFiles">
+                <f:setPropertyActionListener value="#{objFile}" target="#{manualTaskMBean.fileSelected}" for="test" />
+              </p:commandButton>
+            </p:column>
           </p:dataTable>
 
           <p:fileUpload fileUploadListener="#{manualTaskMBean.handleFileUpload}" mode="advanced" dragDropSupport="true"
             label="#{msg.selected_file}" invalidSizeMessage="#{msg.file_limit_size}"
-            invalidFileMessage="#{msg.file_invalid}" id="fileUp" auto="true" update="listFiles messages"
-            sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|txt|xls|docx|jpe?g|png)$/" />
-          <p:growl id="messages" showDetail="true" for="fileUp" />
+            invalidFileMessage="#{msg.file_invalid}" id="fileUp" auto="true" update="pnlListFiles" sizeLimit="10000000"
+            allowTypes="/(\.|\/)(pdf|doc|txt|xls|docx|jpe?g|png)$/" />
+
         </h:panelGrid>
         <center>
           <p:commandButton value="#{msg.btn_save}" update=":formAdd :formConfirmAdd:confirmAdd :pnlListFiles"

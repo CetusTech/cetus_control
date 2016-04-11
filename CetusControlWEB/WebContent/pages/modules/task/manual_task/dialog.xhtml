@@ -13,7 +13,8 @@
   <!-- Dialogo para agregar registro -->
 
   <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_task}" width="98%"
-    maximizable="true" visible="#{manualTaskMBean.showAddDialog}" widgetVar="dialogAddVar" closeOnEscape="true">
+    position="top" maximizable="true" visible="#{manualTaskMBean.showAddDialog}" widgetVar="dialogAddVar"
+    closeOnEscape="true">
     <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task/add.xhtml" />
   </p:dialog>
