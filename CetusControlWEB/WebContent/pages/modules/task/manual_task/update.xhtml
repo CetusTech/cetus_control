@@ -249,11 +249,14 @@
 
               <p:dataTable value="#{manualTaskMBean.listTaskHystory}" rows="#{msg.rows_paginator}" id="tableHistory"
                 paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
-                currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" scrollWidth="200%"
-                liveScroll="true" rowsPerPageTemplate="10,#{manualTaskMBean.listTaskHystory.size()}"
+                currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" liveScroll="true"
+                rowsPerPageTemplate="10,#{manualTaskMBean.listTaskHystory.size()}" scrollHeight="300"
                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                 paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
 
+                <p:column styleClass="column_5">
+                  <p:rowToggler />
+                </p:column>
 
                 <p:columns value="#{manualTaskMBean.columnsHistory}" var="column" columnIndexVar="colIndex"
                   filterMatchMode="contains" sortBy="#{object[column.property]}">
@@ -262,6 +265,13 @@
                   </f:facet>
                   <h:outputText value="#{manualTaskMBean.getValueColumn(object[column.property])}" />
                 </p:columns>
+
+                <p:rowExpansion>
+                  <br />
+                  <ui:include src="/pages/modules/task/manual_task/view.xhtml" />
+                  <br />
+                </p:rowExpansion>
+
               </p:dataTable>
 
             </h:panelGrid>
