@@ -95,7 +95,7 @@
       </p:column>
       <p:column colspan="2">
         <p:outputLabel value="#{object.assingDate}">
-          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
         </p:outputLabel>
       </p:column>
       <p:column>
@@ -103,7 +103,7 @@
       </p:column>
       <p:column colspan="2">
         <p:outputLabel value="#{object.deliveryDate}">
-          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
         </p:outputLabel>
       </p:column>
     </p:row>
@@ -114,7 +114,7 @@
       </p:column>
       <p:column colspan="2">
         <p:outputLabel value="#{object.dateInit}">
-          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
         </p:outputLabel>
       </p:column>
 
@@ -123,7 +123,7 @@
       </p:column>
       <p:column colspan="2">
         <p:outputLabel value="#{object.dateEnd}">
-          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
         </p:outputLabel>
       </p:column>
     </p:row>
@@ -192,7 +192,7 @@
       </p:column>
       <p:column colspan="2">
         <h:outputText value="#{object.creationDate}">
-          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
         </h:outputText>
       </p:column>
     </p:row>
@@ -210,7 +210,7 @@
       </p:column>
       <p:column colspan="2">
         <h:outputText value="#{object.modificationDate}">
-          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
         </h:outputText>
       </p:column>
     </p:row>

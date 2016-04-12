@@ -93,9 +93,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
   /** The list task type. */
   private List< TaskTypeDTO >       listTaskType               = null;
                                                                
-  /** The list person. */
-  private List< PersonDTO >         listPerson                 = null;
-                                                               
+                                                              
   /** The list person g. */
   private List< PersonGroupDTO >    listPersonG                = null;
                                                                
@@ -269,6 +267,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
   
   static public class ColumnModel implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private String header;
     private String property;
                    
@@ -1804,37 +1803,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
-  /**
-   * </p> Replace content email. </p>
-   *
-   * @author Andres Herrera - Cetus Technology
-   * @param resParamHtmlMsgTaskAdd the res param html msg task add
-   * @param pTaskDTO the p task dto
-   * @return el string
-   * @since CetusControlWEB (2/02/2016)
-   */
-  private String replaceContentEmail ( String resParamHtmlMsgTaskAdd, TaskDTO pTaskDTO ) {
-    
-    if ( resParamHtmlMsgTaskAdd != null && !resParamHtmlMsgTaskAdd.isEmpty() ) {
-      if ( resParamHtmlMsgTaskAdd.contains( "{0}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{0}", pTaskDTO.getCode() );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{1}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{1}", pTaskDTO.getDescription() );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{2}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{2}", pTaskDTO.getUserFunctional() );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{3}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{3}", String.valueOf( pTaskDTO.getVDuration() ) );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{4}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{4}", userPortalDTO.getPerson().getNames() );
-      }
-      
-    }
-    return resParamHtmlMsgTaskAdd;
-  }
   
   /**
    * </p> Validate selected record. </p>
@@ -1977,7 +1945,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
   }
   
   public void onRowSelectAttachment ( SelectEvent event ) {
-    ResponseDTO response = null;
     try {
       attachDTOSelected = ( ( AttachDTO ) event.getObject() );
       addObjectSession( attachDTOSelected, "attachDTOSelected" );
@@ -2074,6 +2041,13 @@ public class ManualTaskMBean extends GeneralManagedBean {
     return taskDTOGson;
   }
   
+  /**
+   * </p> Find task history. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idTask the id task
+   * @since CetusControlWEB (12/04/2016)
+   */
   @SuppressWarnings ( "unchecked" )
   private void findTaskHistory ( int idTask ) {
     List< TaskHistoryDTO > list = new ArrayList< TaskHistoryDTO >();
@@ -2173,15 +2147,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
     return result;
   }
   
-  public void onRowSelectTaskHistory ( SelectEvent event ) {
-    try {
-      selectedObjectHistory = ( ( TaskDTO ) event.getObject() );
-      if ( selectedObjectHistory != null ) {
-      }
-    } catch ( Exception e ) {
-      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-    }
-  }
   
   /**
    * </p> On row unselect. </p>
@@ -2888,6 +2853,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     this.listFilesTask = listFilesTask;
   }
   
+  @SuppressWarnings ( "unchecked" )
   public List< AttachDTO > getListAttachFiles () {
     listAttachFiles = ( List< AttachDTO > ) ( getObjectSession( "listAttachFiles" ) != null ? getObjectSession( "listAttachFiles" ) : null );
     return listAttachFiles;
@@ -3060,6 +3026,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     return fileSelected;
   }
   
+  @SuppressWarnings ( "unchecked" )
   public void setFileSelected ( UploadedFile fileSelected ) {
     if ( fileSelected != null ) {
       listFilesTask = ( ArrayList< UploadedFile > ) getObjectSession( "listFilesTask" );

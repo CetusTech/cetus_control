@@ -4,50 +4,219 @@
 
 
 
-  <p:panelGrid id="viewAccount" columns="2" styleClass="column_100">
+  <p:panelGrid id="viewAccount" styleClass="column_100"
+    style="border-width: 1px !important; border-style: solid !important;">
     <f:facet name="header">
-      <h:outputText value="#{msg.area}" />
-    </f:facet>
-    <h:outputText value="#{msg.id}:" styleClass="resaltar_negro" />
-    <h:outputText value="#{adminTaskBean.selectedObject.id}" />
 
-    <h:outputText value="#{msg.description}:" styleClass="resaltar_negro" />
-    <h:outputText value="#{adminTaskBean.selectedObject.description}" />
+      <p:row>
+        <p:column colspan="6">
+          <p:outputLabel value="#{msg.task_detail}" />
+        </p:column>
+      </p:row>
+    </f:facet>
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.code}" />
+      </p:column>
+      <p:column>
+        <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.code}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.description}" />
+      </p:column>
+      <p:column>
+        <p:outputLabel value="#{msg.person_responsable}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.status.description}" />
+      </p:column>
+      <p:column>
+        <p:outputLabel value="#{msg.area}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.area.description}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.taskType}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.taskType.description}" />
+      </p:column>
+      <p:column>
+        <p:outputLabel value="#{msg.priority}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.priority.description}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.userFun}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.userFunctional}" />
+      </p:column>
+      <p:column>
+        <p:outputLabel value="#{msg.requestor}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.requestor}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.assingDate}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.assingDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+        </p:outputLabel>
+      </p:column>
+      <p:column>
+        <p:outputLabel value="#{msg.deliveryDate}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.deliveryDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+        </p:outputLabel>
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.initDate}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.dateInit}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+        </p:outputLabel>
+      </p:column>
+
+      <p:column>
+        <p:outputLabel value="#{msg.date_end}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.dateEnd}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+        </p:outputLabel>
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.percentage}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.percentage}">
+          <f:convertNumber pattern="00.##" />
+        </p:outputLabel>
+      </p:column>
+
+      <p:column>
+        <p:outputLabel value="#{msg.duration}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.VDuration}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.time_life}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.VLength}" />
+      </p:column>
+
+      <p:column>
+        <p:outputLabel value="#{msg.approved}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{msg.yeah}" rendered="#{object.approved == 1}" />
+        <p:outputLabel value="#{msg.no}" rendered="#{object.approved == 0}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.observation}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.observation}" />
+      </p:column>
+
+      <p:column>
+        <p:outputLabel value="#{msg.observationRequestor}" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <p:outputLabel value="#{object.observationRequestor}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <h:outputText value="#{object.creationUser}" />
+      </p:column>
+
+      <p:column>
+        <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <h:outputText value="#{object.creationDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+        </h:outputText>
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <h:outputText value="#{msg.update_user}:" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <h:outputText value="#{object.modificationUser}" />
+      </p:column>
+
+      <p:column>
+        <h:outputText value="#{msg.update_date}:" styleClass="resaltar_negro" />
+      </p:column>
+      <p:column colspan="2">
+        <h:outputText value="#{object.modificationDate}">
+          <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+        </h:outputText>
+      </p:column>
+    </p:row>
+
+
 
   </p:panelGrid>
-  <p:panelGrid columns="2" styleClass="column_100">
-    <f:facet name="header">
-      <h:outputText value="#{msg.audit}" />
-    </f:facet>
-
-    <h:outputText value="#{msg.create_user}:" styleClass="resaltar_negro" />
-    <h:outputText value="#{adminTaskBean.selectedObject.creationUser}" />
-
-    <h:outputText value="#{msg.create_date}:" styleClass="resaltar_negro" />
-    <h:outputText value="#{adminTaskBean.selectedObject.creationDate}">
-      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
-    </h:outputText>
-
-    <h:outputText value="#{msg.update_user}:" styleClass="resaltar_negro" />
-    <h:outputText value="#{adminTaskBean.selectedObject.modificationUser}" />
-
-    <h:outputText value="#{msg.update_date}:" styleClass="resaltar_negro" />
-    <h:outputText value="#{adminTaskBean.selectedObject.modificationDate}">
-      <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{parametrizationMBean.patterDate}" />
-    </h:outputText>
-
-
-  </p:panelGrid>
-
-  <br />
-  <h:form>
-    <center>
-      <p:commandButton value="#{msg.btn_print}" id="print" title="#{msg.btn_print}" icon="img-printer" type="button"
-        styleClass="button-general">
-        <p:printer target=":viewAccount" />
-      </p:commandButton>
-    </center>
-  </h:form>
-
 
 </ui:composition>

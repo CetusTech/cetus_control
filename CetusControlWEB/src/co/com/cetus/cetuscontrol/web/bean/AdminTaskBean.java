@@ -50,6 +50,7 @@ import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
 import co.com.cetus.cetuscontrol.web.util.EWeekDay;
 import co.com.cetus.common.dto.ResponseDTO;
+import co.com.cetus.common.util.DateUtility;
 import co.com.cetus.common.util.UtilCommon;
 
 // TODO: Auto-generated Javadoc
@@ -204,6 +205,17 @@ public class AdminTaskBean extends GeneralManagedBean {
   private HashMap< String, String > mapColumnsHeader;
                                     
   private PersonGroupDTO            personDTOSelected       = null;
+  
+  private List< TaskDTO >           listTaskHystory            = null;
+  
+  private List< String >            listColumnLabelTaskHistory = null;
+                                                               
+  private HashMap< String, String > mapColumnsHeaderHistory    = null;
+                                                               
+  private String[]                  columnSelectedHistory      = null;
+                                                               
+  private List< ColumnModel >       columnsHistory;
+                                    
                                                             
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
@@ -246,7 +258,8 @@ public class AdminTaskBean extends GeneralManagedBean {
   }
   
   static public class ColumnModel implements Serializable {
-    
+
+    private static final long serialVersionUID = 1L;
     private String header;
     private String property;
                    
@@ -1656,37 +1669,6 @@ public class AdminTaskBean extends GeneralManagedBean {
     }
   }
   
-  /**
-   * </p> Replace content email. </p>
-   *
-   * @author Andres Herrera - Cetus Technology
-   * @param resParamHtmlMsgTaskAdd the res param html msg task add
-   * @param pTaskDTO the p task dto
-   * @return el string
-   * @since CetusControlWEB (2/02/2016)
-   */
-  private String replaceContentEmail ( String resParamHtmlMsgTaskAdd, TaskDTO pTaskDTO ) {
-    
-    if ( resParamHtmlMsgTaskAdd != null && !resParamHtmlMsgTaskAdd.isEmpty() ) {
-      if ( resParamHtmlMsgTaskAdd.contains( "{0}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{0}", pTaskDTO.getCode() );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{1}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{1}", pTaskDTO.getDescription() );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{2}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{2}", pTaskDTO.getUserFunctional() );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{3}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{3}", String.valueOf( pTaskDTO.getVDuration() ) );
-      }
-      if ( resParamHtmlMsgTaskAdd.contains( "{4}" ) ) {
-        resParamHtmlMsgTaskAdd = resParamHtmlMsgTaskAdd.replace( "{4}", userPortalDTO.getPerson().getNames() );
-      }
-      
-    }
-    return resParamHtmlMsgTaskAdd;
-  }
   
   /**
    * </p> Validate selected record. </p>
@@ -1703,6 +1685,9 @@ public class AdminTaskBean extends GeneralManagedBean {
         this.showViewDetail = true;
         this.showConfirmMod = true;
         this.showConfirmDelete = true;
+        cleanObjectSession( "listTaskHystory" );
+        findTaskHistory( selectedObject.getId() );
+        
       } else {
         this.showAlertSelectRow = true;
         this.showViewDetail = false;
@@ -1827,7 +1812,6 @@ public class AdminTaskBean extends GeneralManagedBean {
   }
   
   public void onRowSelectAttachment ( SelectEvent event ) {
-    ResponseDTO response = null;
     try {
       attachDTOSelected = ( ( AttachDTO ) event.getObject() );
       addObjectSession( attachDTOSelected, "attachDTOSelected" );
@@ -1902,6 +1886,112 @@ public class AdminTaskBean extends GeneralManagedBean {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
     }
+  }
+  
+  /**
+   * </p> Find task history. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idTask the id task
+   * @since CetusControlWEB (12/04/2016)
+   */
+  @SuppressWarnings ( "unchecked" )
+  private void findTaskHistory ( int idTask ) {
+    List< TaskHistoryDTO > list = new ArrayList< TaskHistoryDTO >();
+    ResponseDTO responseDTO = null;
+    TaskDTO taskDTO = null;
+    try {
+      listTaskHystory = new ArrayList< TaskDTO >();
+      loadColumnTaskHystory();
+      responseDTO = generalDelegate.findTaskHistory( idTask );
+      
+      if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+        list = ( List< TaskHistoryDTO > ) responseDTO.getObjectResponse();
+        for ( TaskHistoryDTO taskHistoryDTO: list ) {
+          taskDTO = ( TaskDTO ) UtilCommon.fromGson( TaskDTO.class, taskHistoryDTO.getTaskObject() );
+          listTaskHystory.add( taskDTO );
+        }
+      }
+      
+      addObjectSession( listTaskHystory, "listTaskHystory" );
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Load column task hystory. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (8/04/2016)
+   */
+  private void loadColumnTaskHystory () {
+    try {
+      mapColumnsHeaderHistory = new HashMap< String, String >();
+      String[] colLabel = ConstantWEB.COLUMN_LABEL_TASK_HISTORY;
+      String[] column = ConstantWEB.COLUMN_TASK_HISTORY;
+      for ( int i = 0; i < colLabel.length; i++ ) {
+        mapColumnsHeaderHistory.put( colLabel[i], column[i] );
+      }
+      
+      listColumnLabelTaskHistory = Arrays.asList( colLabel );
+      columnSelectedHistory = ConstantWEB.COLUMN_SELECTED_TASK_HISTORY;
+      
+      addObjectSession( listColumnLabelTaskHistory, "listColumnLabelTaskHistory" );
+      addObjectSession( mapColumnsHeaderHistory, "mapColumnsHeaderHistory" );
+      addObjectSession( columnSelectedHistory, "columnSelectedHistory" );
+      
+      createDynamicColumnsHistory();
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Creates the dynamic columns history. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (8/04/2016)
+   */
+  @SuppressWarnings ( "unchecked" )
+  public void createDynamicColumnsHistory () {
+    try {
+      columnsHistory = new ArrayList< ColumnModel >();
+      mapColumnsHeaderHistory = ( HashMap< String, String > ) getObjectSession( "mapColumnsHeaderHistory" );
+      for ( String columnKey: columnSelectedHistory ) {
+        if ( mapColumnsHeaderHistory.containsKey( columnKey ) ) {
+          columnsHistory.add( new ColumnModel( columnKey, mapColumnsHeaderHistory.get( columnKey ) ) );
+        }
+      }
+      addObjectSession( columnsHistory, "columnsHistory" );
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Gets the value column. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param value the value
+   * @return el string
+   * @since CetusControlWEB (9/04/2016)
+   */
+  public String getValueColumn ( Object value ) {
+    String result = "";
+    try {
+      if ( value instanceof Date ) {
+        result = DateUtility.formatDatePattern( ( Date ) value, getPatterDate() );
+      } else {
+        result = String.valueOf( value != null ? value : "" );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return result;
   }
   
   /**
@@ -2706,6 +2796,57 @@ public class AdminTaskBean extends GeneralManagedBean {
   
   public void setPersonDTOSelected ( PersonGroupDTO personDTOSelected ) {
     this.personDTOSelected = personDTOSelected;
+  }
+
+  public String[] getColumnSelectedHistory () {
+    columnSelectedHistory = ( String[] ) getObjectSession( "columnSelectedHistory" );
+    if ( columnSelectedHistory == null ) {
+      columnSelectedHistory = new String[1];
+    }
+    return columnSelectedHistory;
+  }
+  
+  public void setColumnSelectedHistory ( String[] columnSelectedHistory ) {
+    this.columnSelectedHistory = columnSelectedHistory;
+  }  
+
+  @SuppressWarnings ( "unchecked" )
+  public List< String > getListColumnLabelTaskHistory () {
+    listColumnLabelTaskHistory = ( List< String > ) getObjectSession( "listColumnLabelTaskHistory" );
+    if ( listColumnLabelTaskHistory == null ) {
+      listColumnLabelTaskHistory = new ArrayList< String >();
+    }
+    return listColumnLabelTaskHistory;
+  }
+  
+  public void setListColumnLabelTaskHistory ( List< String > listColumnLabelTaskHistory ) {
+    this.listColumnLabelTaskHistory = listColumnLabelTaskHistory;
+  }
+ 
+  @SuppressWarnings ( "unchecked" )
+  public List< TaskDTO > getListTaskHystory () {
+    listTaskHystory = ( List< TaskDTO > ) getObjectSession( "listTaskHystory" );
+    if ( listTaskHystory == null ) {
+      listTaskHystory = new ArrayList< TaskDTO >();
+    }
+    return listTaskHystory;
+  }
+  
+  public void setListTaskHystory ( List< TaskDTO > listTaskHystory ) {
+    this.listTaskHystory = listTaskHystory;
+  }
+
+  @SuppressWarnings ( "unchecked" )
+  public List< ColumnModel > getColumnsHistory () {
+    columnsHistory = ( List< ColumnModel > ) getObjectSession( "columnsHistory" );
+    if ( columnsHistory == null ) {
+      columnsHistory = new ArrayList< ColumnModel >();
+    }
+    return columnsHistory;
+  }
+  
+  public void setColumnsHistory ( List< ColumnModel > columnsHistory ) {
+    this.columnsHistory = columnsHistory;
   }
   
 }

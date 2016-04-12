@@ -13,24 +13,27 @@
 <h:body>
   <h:form id="fromContenido">
     <p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
-    <h:panelGrid columns="2" columnClasses="top,top" id="panel">
-      <h:column>
-        <p:panel header="Grupos">
-          <ui:include src="/pages/modules/task/manual_task_admin/listGroup.xhtml" />
-        </p:panel>
-      </h:column>
-      <h:column>
-        <p:panel header="Personas" id="pnlPerGrop" menuTitle="asd" style="vertical-align: top">
-          <ui:include src="/pages/modules/task/manual_task_admin/listPersonGroup.xhtml" />
-        </p:panel>
-      </h:column>
-      <p:column colspan="2">
-        <p:panel id="panelTask" header="Tareas">
-          <ui:include src="/pages/modules/task/manual_task_admin/list.xhtml" />
-        </p:panel>
-      </p:column>
-
-    </h:panelGrid>
+    <p:panelGrid style="width:100%; border: white !important;" id="panel">
+      <p:row style="border: white !important;">
+        <p:column>
+          <p:panel header="#{msg.list_group}">
+            <ui:include src="/pages/modules/task/manual_task_admin/listGroup.xhtml" />
+          </p:panel>
+        </p:column>
+        <p:column>
+          <p:panel header="#{msg.group_person}" id="pnlPerGrop" style="vertical-align: top">
+            <ui:include src="/pages/modules/task/manual_task_admin/listPersonGroup.xhtml" />
+          </p:panel>
+        </p:column>
+      </p:row>
+      <p:row style="width:100%; border: white !important;">
+        <p:column colspan="2" style="width:100%">
+          <p:panel id="panelTask" header="#{msg.tasks}">
+            <ui:include src="/pages/modules/task/manual_task_admin/list.xhtml" />
+          </p:panel>
+        </p:column>
+      </p:row>
+    </p:panelGrid>
   </h:form>
   <ui:include src="/pages/modules/task/manual_task_admin/dialog.xhtml" />
 </h:body>

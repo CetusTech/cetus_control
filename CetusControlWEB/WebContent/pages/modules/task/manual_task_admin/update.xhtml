@@ -25,7 +25,7 @@
               <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
               <p:inputText id="descriptionUpdate" required="true" onchange="conMayusculas(this);" size="40"
                 style="width: 95% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}"
-                 requiredMessage="#{msg.field_required}" maxlength="100"
+                requiredMessage="#{msg.field_required}" maxlength="100"
                 value="#{adminTaskBean.selectedObject.description}">
               </p:inputText>
               <p:message for="descriptionUpdate" id="descriptionUpdateMsg" display="icon" />
@@ -38,7 +38,8 @@
 
               <p:outputLabel value="#{msg.observation}" for="obsResUpdate" styleClass="resaltar_negro" />
               <p:inputTextarea id="obsResUpdate" value="#{adminTaskBean.selectedObject.observation}" maxlength="990"
-                cols="40" style="width: 95% !important;" disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" rows="8">
+                cols="40" style="width: 95% !important;"
+                disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" rows="8">
                 <f:validateLength minimum="0" maximum="990" for="obsUpdateMsg" />
               </p:inputTextarea>
               <p:message for="obsResUpdate" id="obsResUpdateMsg" display="icon" />
@@ -84,9 +85,9 @@
               <p:outputLabel value="#{msg.deliveryDate}" for="deliberyDateUpdate"
                 rendered="#{adminTaskBean.status == 2 }" styleClass="resaltar_negro" />
               <p:calendar id="deliberyDateUpdate" value="#{adminTaskBean.selectedObject.deliveryDate}" mode="popup"
-                validator="#{adminTaskBean.validedDateInit }" required="true"
-                rendered="#{adminTaskBean.status == 2 }" onchange="PF('deliberyDateAdd').hide()"
-                showButtonPanel="true" pt:placeholder="#{adminTaskBean.patterDate}" locale="#{adminTaskBean.locale}"
+                validator="#{adminTaskBean.validedDateInit }" required="true" rendered="#{adminTaskBean.status == 2 }"
+                onchange="PF('deliberyDateAdd').hide()" showButtonPanel="true"
+                pt:placeholder="#{adminTaskBean.patterDate}" locale="#{adminTaskBean.locale}"
                 pattern="#{adminTaskBean.patterDate}" showOn="button" />
               <p:message for="deliberyDateUpdate" id="deliberyDateUpdateMsg" display="icon"
                 rendered="#{adminTaskBean.status == 2 }" />
@@ -112,14 +113,14 @@
               <p:inputText id="requestorUpdate" required="false" size="20"
                 value="#{adminTaskBean.selectedObject.requestor}"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" pt:type="string"
-                pt:autofocus="autofocus" onchange="conMayusculas(this);"  maxlength="20" />
+                pt:autofocus="autofocus" onchange="conMayusculas(this);" maxlength="20" />
               <p:message for="requestorUpdate" id="requestorUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.userFun}" for="userUpdate" styleClass="resaltar_negro" />
               <p:inputText id="userUpdate" required="false" size="20"
                 value="#{adminTaskBean.selectedObject.userFunctional}"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}" pt:type="string"
-                pt:autofocus="autofocus" onchange="conMayusculas(this);"  maxlength="20" />
+                pt:autofocus="autofocus" onchange="conMayusculas(this);" maxlength="20" />
               <p:message for="userUpdate" id="userUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.area}" for="areaSelectedUpdate" styleClass="resaltar_negro" />
@@ -217,19 +218,68 @@
 
 
           </p:tab>
+
+          <p:tab title="#{msg.task_history}" id="taskHistory">
+            <h:panelGrid id="pnlHistpry" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
+              <p:growl id="msgHistory" for="iconOnly" />
+              <p:toolbar styleClass="body_toolbar_nivel_3" id="bars">
+                <p:toolbarGroup align="left" id="group">
+
+                  <p:selectCheckboxMenu id="columnHistory" value="#{adminTaskBean.columnSelectedHistory}"
+                    label="Columnas" filter="false" widgetVar="colHistory" onHide="true" filterMatchMode="startsWith"
+                    panelStyle="width:250px">
+                    <f:selectItems value="#{adminTaskBean.listColumnLabelTaskHistory}" />
+
+                    <p:ajax listener="#{adminTaskBean.createDynamicColumnsHistory}" update="tableHistory" />
+                    <p:ajax event="toggleSelect" listener="#{adminTaskBean.createDynamicColumnsHistory}"
+                      update="tableHistory" process="@this" />
+
+                  </p:selectCheckboxMenu>
+
+                </p:toolbarGroup>
+              </p:toolbar>
+
+              <p:dataTable value="#{adminTaskBean.listTaskHystory}" rows="#{msg.rows_paginator}" id="tableHistory"
+                paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+                currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" liveScroll="true"
+                rowsPerPageTemplate="10,#{adminTaskBean.listTaskHystory.size()}" scrollHeight="300"
+                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
+
+                <p:column styleClass="column_5">
+                  <p:rowToggler />
+                </p:column>
+
+                <p:columns value="#{adminTaskBean.columnsHistory}" var="column" columnIndexVar="colIndex"
+                  filterMatchMode="contains" sortBy="#{object[column.property]}">
+                  <f:facet name="header">
+                    <h:outputText value="#{column.header}" />
+                  </f:facet>
+                  <h:outputText value="#{adminTaskBean.getValueColumn(object[column.property])}" />
+                </p:columns>
+
+                <p:rowExpansion>
+                  <br />
+                  <ui:include src="/pages/modules/task/manual_task_admin/view.xhtml" />
+                  <br />
+                </p:rowExpansion>
+
+              </p:dataTable>
+
+            </h:panelGrid>
+          </p:tab>
+
         </p:tabView>
       </p:column>
       <f:facet name="footer">
         <center>
           <p:commandButton id="btnStart" value="#{msg.btn_start}" actionListener="#{adminTaskBean.viewFormInfo()}"
-            update=":viewtab :startedTaskDialog"
-            rendered="#{adminTaskBean.status == 1 or adminTaskBean.status == 5 }" process="@form"
-            styleClass="button-general" icon="img-start" />
+            update=":viewtab :startedTaskDialog" rendered="#{adminTaskBean.status == 1 or adminTaskBean.status == 5 }"
+            process="@form" styleClass="button-general" icon="img-start" />
 
           <p:commandButton id="btnAssign" value="#{msg.btn_reassign}" global="true"
             actionListener="#{adminTaskBean.viewAppletAssign()}" update=":formUpdate :appletAssignDialog"
-            rendered="#{adminTaskBean.status == 5 }" process=":formUpdate" styleClass="button-general"
-            icon="img-assign" />
+            rendered="#{adminTaskBean.status == 5 }" process=":formUpdate" styleClass="button-general" icon="img-assign" />
 
           <p:commandButton id="btnCancel" value="#{msg.btn_cancel}"
             update=":formUpdate :formConfirmCancel:confirmCancel" global="true"

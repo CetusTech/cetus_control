@@ -45,7 +45,7 @@
   <p:dataTable value="#{adminTaskBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
     rowStyleClass="#{index mod 2 == 0 ? objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : null  : objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : 'row-color-2'}"
     rowIndexVar="index" currentPageReportTemplate="({currentPage} de {totalPages})" widgetVar="tableTask"
-    rowsPerPageTemplate="1,#{adminTaskBean.listRegister.size()}"
+    rowsPerPageTemplate="10,#{adminTaskBean.listRegister.size()}"
     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
     paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{adminTaskBean.selectedObject}" selectionMode="single"
     emptyMessage="#{msg.list_empty}" var="objetc">
@@ -58,7 +58,7 @@
       <f:facet name="header">
         <h:outputText value="#{column.header}" />
       </f:facet>
-      <h:outputText value="#{objetc[column.property]}" />
+      <h:outputText value="#{adminTaskBean.getValueColumn(objetc[column.property])}" />
     </p:columns>
   </p:dataTable>
 </ui:composition>
