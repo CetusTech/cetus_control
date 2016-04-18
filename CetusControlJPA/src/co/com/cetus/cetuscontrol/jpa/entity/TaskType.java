@@ -1,11 +1,22 @@
 package co.com.cetus.cetuscontrol.jpa.entity;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -49,6 +60,10 @@ public class TaskType implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_CLIENT_CETUS")
 	private ClientCetus clientCetus;
+	
+  
+  @OneToMany(mappedBy="taskType")
+  private List<AreaTypeTask> areaTypeTask;
 
 	public TaskType() {
 	}
@@ -131,4 +146,14 @@ public class TaskType implements Serializable {
 		this.clientCetus = clientCetus;
 	}
 
+  public List< AreaTypeTask > getAreaTypeTask () {
+    return areaTypeTask;
+  }
+
+  public void setAreaTypeTask ( List< AreaTypeTask > areaTypeTask ) {
+    this.areaTypeTask = areaTypeTask;
+  }
+
+	
+	
 }

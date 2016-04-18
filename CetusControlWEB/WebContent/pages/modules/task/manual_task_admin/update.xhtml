@@ -126,8 +126,9 @@
               <p:outputLabel value="#{msg.area}" for="areaSelectedUpdate" styleClass="resaltar_negro" />
               <p:selectOneMenu value="#{adminTaskBean.selectedObject.area.id}" id="areaSelectedUpdate" required="true"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}">
-                <f:selectItem itemLabel="#{msg.selected_area}" itemValue="" noSelectionOption="true" />
+                <f:selectItem itemLabel="#{msg.selected_area}" itemValue="-1"  />
                 <f:selectItems value="#{adminTaskBean.listAreaItem}" />
+                <p:ajax event="change" update="taskTypeSelectedUpdate" process="@this" listener="#{adminTaskBean.changeAreaUpdate}" />
               </p:selectOneMenu>
               <p:message for="areaSelectedUpdate" id="areaUpdateMsg" display="icon" />
 

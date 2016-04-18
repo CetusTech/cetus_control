@@ -111,9 +111,12 @@ public class NotificationMBean extends GeneralManagedBean {
   
   public void changeGroup () {
     try {
+      addObjectSession( idGroup, "idGroup" );
       if ( idGroup > 0 ) {
-        addObjectSession( idGroup, "idGroup" );
         listNotifications( idGroup );
+      }else{
+        cleanObjectSession( "listRegister" );
+        this.listRegister = new ArrayList< NotificationSettingDTO >();        
       }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );

@@ -36,6 +36,7 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
+import co.com.cetus.cetuscontrol.dto.AreaTypeTaskDTO;
 import co.com.cetus.cetuscontrol.dto.AttachDTO;
 import co.com.cetus.cetuscontrol.dto.PersonDTO;
 import co.com.cetus.cetuscontrol.dto.PersonGroupDTO;
@@ -300,7 +301,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
         addObjectSession( columnTemplate, "columnTemplate" );
       }
       initColumns();
-      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
+//      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       getPercentageNow();
       //Obtener el ID del usuario que esa logueado con el fin de usarlo para almacenamiento de documentos asociados a la tarea
       idUsuario = String.valueOf( getUserDTO().getPerson().getClient().getClientCetus().getId() );
@@ -1156,12 +1157,20 @@ public class ManualTaskMBean extends GeneralManagedBean {
    * @since CetusControlWEB (2/02/2016)
    */
   @SuppressWarnings ( "unchecked" )
-  private void listTaskType ( int idClientCetus ) {
+  private void listTaskType ( int idArea ) {
     ResponseDTO response = null;
+    List< AreaTypeTaskDTO > listAreaTypeTaskDTO = null;
     try {
-      response = generalDelegate.findTaskType( idClientCetus );
+      response = generalDelegate.findTaskTypeByArea( idArea );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
-        this.listTaskType = ( List< TaskTypeDTO > ) response.getObjectResponse();
+        listAreaTypeTaskDTO = ( List< AreaTypeTaskDTO > ) response.getObjectResponse();
+        listTaskType = new ArrayList< TaskTypeDTO >();
+        if ( listAreaTypeTaskDTO != null && listAreaTypeTaskDTO.size() > 0 ) {
+          for ( AreaTypeTaskDTO areaTypeTaskDTO: listAreaTypeTaskDTO ) {
+            listTaskType.add( areaTypeTaskDTO.getTaskType() );
+          }
+        }
+        
         listTaskTypeItem = new ArrayList< SelectItem >();
         for ( TaskTypeDTO objDTO: listTaskType ) {
           listTaskTypeItem.add( new SelectItem( objDTO.getId(), objDTO.getDescription() ) );
@@ -1841,6 +1850,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
         this.showConfirmDelete = true;
         cleanObjectSession( "listTaskHystory" );
         findTaskHistory( selectedObject.getId() );
+        listTaskType( selectedObject.getArea().getId() );
       } else {
         this.showAlertSelectRow = true;
         this.showViewDetail = false;
@@ -2217,6 +2227,46 @@ public class ManualTaskMBean extends GeneralManagedBean {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
     return result;
+  }
+  
+  /**
+   * </p> Change area add. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (18/04/2016)
+   */
+  public void changeAreaAdd () {
+    try {
+      if( addObject != null && addObject.getArea() != null && addObject.getArea().getId() > 0 ){
+        ConstantWEB.WEB_LOG.info( addObject.getArea().getId() );
+        listTaskType( addObject.getArea().getId() );
+      }else{
+        this.listTaskType = new ArrayList< TaskTypeDTO >();
+        addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Change area update. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (18/04/2016)
+   */
+  public void changeAreaUpdate () {
+    try {
+      if( selectedObject != null && selectedObject.getArea() != null && selectedObject.getArea().getId() > 0 ){
+        ConstantWEB.WEB_LOG.info( selectedObject.getArea().getId() );
+        listTaskType( selectedObject.getArea().getId() );
+      }else{
+        this.listTaskType = new ArrayList< TaskTypeDTO >();
+        addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
   }
   
   /**

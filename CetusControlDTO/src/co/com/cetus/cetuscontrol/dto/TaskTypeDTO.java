@@ -27,6 +27,8 @@ public class TaskTypeDTO implements Serializable {
   
   private ClientCetusDTO    clientCetus;
   
+  private List<AreaTypeTaskDTO> areaTypeTask;
+  
   public TaskTypeDTO () {
   }
   
@@ -107,5 +109,15 @@ public class TaskTypeDTO implements Serializable {
   public void setClientCetus ( ClientCetusDTO clientCetus ) {
     this.clientCetus = clientCetus;
   }
+
+  public List< AreaTypeTaskDTO > getAreaTypeTask () {
+    return areaTypeTask;
+  }
+
+  public void setAreaTypeTask ( List< AreaTypeTaskDTO > areaTypeTask ) {
+    this.areaTypeTask = areaTypeTask;
+  }
+ 
+  
   
 }

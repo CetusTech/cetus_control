@@ -36,6 +36,7 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
+import co.com.cetus.cetuscontrol.dto.AreaTypeTaskDTO;
 import co.com.cetus.cetuscontrol.dto.AttachDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
 import co.com.cetus.cetuscontrol.dto.PersonDTO;
@@ -293,7 +294,7 @@ public class AdminTaskBean extends GeneralManagedBean {
         addObjectSession( columnTemplate, "columnTemplate" );
       }
       initColumns();
-      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
+//      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       //getPercentageNow();
       //Obtener el ID del usuario que esa logueado con el fin de usarlo para almacenamiento de documentos asociados a la tarea
       idUsuario = String.valueOf( getUserDTO().getPerson().getClient().getClientCetus().getId() );
@@ -472,7 +473,7 @@ public class AdminTaskBean extends GeneralManagedBean {
               TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
               taskHistoryDTO.setIdTtask( selectedObject.getId() );
               taskHistoryDTO.setCreationDate( currentDate );
-              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
               responseDTO = generalDelegate.create( taskHistoryDTO );
               
               ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
@@ -566,7 +567,7 @@ public class AdminTaskBean extends GeneralManagedBean {
               TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
               taskHistoryDTO.setIdTtask( selectedObject.getId() );
               taskHistoryDTO.setCreationDate( currentDate );
-              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
               response = generalDelegate.create( taskHistoryDTO );
               
               ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
@@ -705,7 +706,7 @@ public class AdminTaskBean extends GeneralManagedBean {
               TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
               taskHistoryDTO.setIdTtask( selectedObject.getId() );
               taskHistoryDTO.setCreationDate( currentDate );
-              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
               response = generalDelegate.create( taskHistoryDTO );
               
               ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
@@ -798,7 +799,7 @@ public class AdminTaskBean extends GeneralManagedBean {
               TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
               taskHistoryDTO.setIdTtask( selectedObject.getId() );
               taskHistoryDTO.setCreationDate( currentDate );
-              taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+              taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
               response = generalDelegate.create( taskHistoryDTO );
               
               ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
@@ -1012,12 +1013,21 @@ public class AdminTaskBean extends GeneralManagedBean {
    * @since CetusControlWEB (2/02/2016)
    */
   @SuppressWarnings ( "unchecked" )
-  private void listTaskType ( int idClientCetus ) {
+  private void listTaskType ( int idArea ) {
     ResponseDTO response = null;
+    List< AreaTypeTaskDTO > listAreaTypeTaskDTO = null;    
     try {
-      response = generalDelegate.findTaskType( idClientCetus );
+      response = generalDelegate.findTaskTypeByArea( idArea );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
-        this.listTaskType = ( List< TaskTypeDTO > ) response.getObjectResponse();
+        
+        listAreaTypeTaskDTO = ( List< AreaTypeTaskDTO > ) response.getObjectResponse();
+        listTaskType = new ArrayList< TaskTypeDTO >();
+        if ( listAreaTypeTaskDTO != null && listAreaTypeTaskDTO.size() > 0 ) {
+          for ( AreaTypeTaskDTO areaTypeTaskDTO: listAreaTypeTaskDTO ) {
+            listTaskType.add( areaTypeTaskDTO.getTaskType() );
+          }
+        }
+        
         listTaskTypeItem = new ArrayList< SelectItem >();
         for ( TaskTypeDTO objDTO: listTaskType ) {
           listTaskTypeItem.add( new SelectItem( objDTO.getId(), objDTO.getDescription() ) );
@@ -1250,7 +1260,7 @@ public class AdminTaskBean extends GeneralManagedBean {
             TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
             taskHistoryDTO.setIdTtask( selectedObject.getId() );
             taskHistoryDTO.setCreationDate( currentDate );
-            taskHistoryDTO.setTaskObject( UtilCommon.toGson( selectedObject ) );
+            taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
             responseDTO = generalDelegate.create( taskHistoryDTO );
             
             ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
@@ -1398,7 +1408,7 @@ public class AdminTaskBean extends GeneralManagedBean {
             TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
             taskHistoryDTO.setIdTtask( addObject.getId() );
             taskHistoryDTO.setCreationDate( currentDate );
-            taskHistoryDTO.setTaskObject( UtilCommon.toGson( addObject ) );
+            taskHistoryDTO.setTaskObject( getTaskDTOToGson( addObject.getId() ) );
             responseDTO = generalDelegate.create( taskHistoryDTO );
             
             ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + responseDTO.toString() );
@@ -1687,7 +1697,7 @@ public class AdminTaskBean extends GeneralManagedBean {
         this.showConfirmDelete = true;
         cleanObjectSession( "listTaskHystory" );
         findTaskHistory( selectedObject.getId() );
-        
+        listTaskType( selectedObject.getArea().getId() );
       } else {
         this.showAlertSelectRow = true;
         this.showViewDetail = false;
@@ -1992,6 +2002,97 @@ public class AdminTaskBean extends GeneralManagedBean {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
     return result;
+  }
+  
+  /**
+   * </p> Gets the task dto to gson. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idTask the id task
+   * @return el string
+   * @since CetusControlWEB (18/04/2016)
+   */
+  private String getTaskDTOToGson ( int idTask ) {
+    String taskDTOGson = null;
+    TaskDTO taskAux = new TaskDTO();
+    ResponseDTO responseDTO = null;
+    TaskDTO taskDTO = null;
+    try {
+      
+      responseDTO = generalDelegate.find( "TaskDTO", idTask );
+      if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+        taskAux = ( TaskDTO ) responseDTO.getObjectResponse();
+      }
+      taskDTO = taskAux.clone();
+      
+      taskAux.setArea( new AreaDTO() );
+      taskAux.getArea().setId( taskDTO.getArea().getId() );
+      taskAux.getArea().setDescription( taskDTO.getArea().getDescription() );
+      
+      taskAux.setPersonGroup( new PersonGroupDTO() );
+      taskAux.getPersonGroup().setPerson( new PersonDTO() );
+      taskAux.getPersonGroup().getPerson().setId( taskDTO.getPersonGroup().getPerson().getId() );
+      taskAux.getPersonGroup().getPerson().setNames( taskDTO.getPersonGroup().getPerson().getNames() );
+      taskAux.getPersonGroup().getPerson().setLastNames( taskDTO.getPersonGroup().getPerson().getLastNames() );
+      
+      taskAux.setPriority( new PriorityDTO() );
+      taskAux.getPriority().setId( taskDTO.getPriority().getId() );
+      taskAux.getPriority().setDescription( taskDTO.getPriority().getDescription() );
+      
+      taskAux.setStatus( new StatusDTO() );
+      taskAux.getStatus().setId( taskDTO.getStatus().getId() );
+      taskAux.getStatus().setDescription( taskDTO.getStatus().getDescription() );
+      
+      taskAux.setTaskType( new TaskTypeDTO() );
+      taskAux.getTaskType().setId( taskDTO.getTaskType().getId() );
+      taskAux.getTaskType().setDescription( taskDTO.getTaskType().getDescription() );
+      
+      taskDTOGson = UtilCommon.toGson( taskAux );
+      
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return taskDTOGson;
+  }
+  
+  /**
+   * </p> Change area add. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (18/04/2016)
+   */
+  public void changeAreaAdd () {
+    try {
+      if( addObject != null && addObject.getArea() != null && addObject.getArea().getId() > 0 ){
+        ConstantWEB.WEB_LOG.info( addObject.getArea().getId() );
+        listTaskType( addObject.getArea().getId() );
+      }else{
+        this.listTaskType = new ArrayList< TaskTypeDTO >();
+        addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Change area update. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @since CetusControlWEB (18/04/2016)
+   */
+  public void changeAreaUpdate () {
+    try {
+      if( selectedObject != null && selectedObject.getArea() != null && selectedObject.getArea().getId() > 0 ){
+        ConstantWEB.WEB_LOG.info( selectedObject.getArea().getId() );
+        listTaskType( selectedObject.getArea().getId() );
+      }else{
+        this.listTaskType = new ArrayList< TaskTypeDTO >();
+        addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
   }
   
   /**

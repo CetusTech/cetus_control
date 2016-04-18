@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+    showHeader="false">
+    <div align="center">
+      <p:graphicImage name="ajax-loader.gif" library="images" />
+    </div>
+  </p:dialog>
+
+
+  <h:form id="formConfirmAdd">
+    <p:confirmDialog message="#{msg.confirm_add_area_task_type}" id="confirmAdd" header="#{msg.header_confirm_add_area_task_type}"
+      appendToBody="true" widgetVar="confirmAdd" severity="alert" visible="#{areaTaskTypeMBean.showConfirmAdd}">
+      <center>
+        <p:commandButton id="btnConfAdd" value="#{msg.btn_acept}" update=":fromContenido:panel"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmAdd').hide()"
+          process="@this" action="#{areaTaskTypeMBean.add}" />
+        <p:commandButton id="btnConfCancel" value="#{msg.btn_cancel}" oncomplete="PF('confirmAdd').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+    </p:confirmDialog>
+  </h:form>
+
+
+ </ui:composition>

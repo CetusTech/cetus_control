@@ -18,7 +18,7 @@
       <p:messages id="msgs" globalOnly="true" autoUpdate="true" showDetail="true" />
       <p:outputLabel value="#{msg.group}:" for="groupSelected" />
       <p:selectOneMenu id="groupSelected" value="#{notificationMBean.idGroup}">
-        <f:selectItem itemValue="" itemLabel="#{msg.selected}" />
+        <f:selectItem itemValue="-1" itemLabel="#{msg.selected}" />
         <f:selectItems value="#{notificationMBean.listGroup}" />
         <p:ajax event="change" update="table" process="@this" listener="#{notificationMBean.changeGroup()}" />
       </p:selectOneMenu>

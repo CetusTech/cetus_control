@@ -49,6 +49,9 @@ public class Area implements Serializable {
   @OneToMany ( mappedBy = "area" )
   private List< Task >      tasks;
   
+  @OneToMany(mappedBy="area")
+  private List<AreaTypeTask> areaTypeTask;
+  
   public Area () {
   }
   
@@ -129,5 +132,15 @@ public class Area implements Serializable {
     
     return task;
   }
+
+  public List< AreaTypeTask > getAreaTypeTask () {
+    return areaTypeTask;
+  }
+
+  public void setAreaTypeTask ( List< AreaTypeTask > areaTypeTask ) {
+    this.areaTypeTask = areaTypeTask;
+  }
+ 
+  
   
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <center>
+
+        <p:outputLabel value="#{msg.area}:" for="areaAdd" />
+        <p:selectOneMenu id="areaAdd" value="#{areaTaskTypeMBean.idArea}" required="true"
+          requiredMessage="#{msg.field_required}">
+          <f:selectItem itemValue="-1" itemLabel="#{msg.selected}" />
+          <f:selectItems value="#{areaTaskTypeMBean.listRegister}" var="obj" itemValue="#{obj.id}"
+            itemLabel="#{obj.description}" />
+          <p:ajax event="change" update="pickListATT" process="@this" listener="#{areaTaskTypeMBean.changeArea}" />
+        </p:selectOneMenu>
+        <p:message for="areaAdd" id="areaAddMsg" />
+
+        <br />
+
+        <p:pickList id="pickListATT" iconOnly="true" addAllLabel="#{msg.add_all}" addLabel="#{msg.add}"
+          removeAllLabel="#{msg.remove_all}" removeLabel="#{msg.delete}" converter="pListTaskTypeConverter"
+          value="#{areaTaskTypeMBean.pickListTaskType}" var="obj" itemLabel="#{obj}" itemValue="#{obj}">
+          <f:facet name="sourceCaption">
+            <h:outputText value="#{msg.task_type_available}" />
+          </f:facet>
+          <f:facet name="targetCaption">
+            <h:outputText value="#{msg.task_type_associated}" />
+          </f:facet>
+
+          <p:column>
+            <h:outputLabel value="#{obj.description}" />
+          </p:column>
+
+        </p:pickList>
+
+
+
+      <p:commandButton value="#{msg.btn_save}" update="panel :formConfirmAdd:confirmAdd" process="@form"
+        styleClass="button-general" icon="img-save" actionListener="#{areaTaskTypeMBean.load}" />
+    </center>
+</ui:composition>

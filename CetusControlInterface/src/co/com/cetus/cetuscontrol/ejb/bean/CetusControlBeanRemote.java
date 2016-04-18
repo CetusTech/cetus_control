@@ -132,5 +132,6 @@ public interface CetusControlBeanRemote {
   public ResponseDTO generateReportViewTask ( long pIdTask, String pFormatPattern );
 
   public ResponseDTO findTaskHistory ( int idTask );  
-  
+
+  public ResponseDTO findTaskTypeByArea ( int idArea );
 }

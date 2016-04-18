@@ -36,6 +36,7 @@ import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 
 import co.com.cetus.cetuscontrol.dto.AreaDTO;
+import co.com.cetus.cetuscontrol.dto.AreaTypeTaskDTO;
 import co.com.cetus.cetuscontrol.dto.AttachDTO;
 import co.com.cetus.cetuscontrol.dto.ClientDTO;
 import co.com.cetus.cetuscontrol.dto.ExceptionWorkdayDTO;
@@ -58,6 +59,7 @@ import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.ejb.util.EstatusUser;
 import co.com.cetus.cetuscontrol.ejb.validator.CetusControlEJBValidator;
 import co.com.cetus.cetuscontrol.jpa.entity.Area;
+import co.com.cetus.cetuscontrol.jpa.entity.AreaTypeTask;
 import co.com.cetus.cetuscontrol.jpa.entity.Attach;
 import co.com.cetus.cetuscontrol.jpa.entity.Client;
 import co.com.cetus.cetuscontrol.jpa.entity.ExceptionWorkday;
@@ -2379,6 +2381,36 @@ public class CetusControlProcess {
         return createMessageNORESULT();
       }
       
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+
+  public ResponseDTO findTaskTypeByArea ( int idArea ) {
+    ResponseDTO responseDTO = null;
+    List< AreaTypeTask > listATT = null;
+    List< AreaTypeTaskDTO > listATTDTO = null;
+    TypedQuery< AreaTypeTask > query = null;
+    AreaTypeTaskDTO areaTypeTaskDTO = null;
+    try {
+      query = em.createNamedQuery( "AreaTypeTask.findTaskTypeByArea", AreaTypeTask.class );
+      query.setParameter( "idArea", idArea );
+      
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        listATTDTO = new ArrayList< AreaTypeTaskDTO >();
+        listATT = query.getResultList();
+        for ( AreaTypeTask areaTypeTask: listATT ) {
+          areaTypeTaskDTO = new AreaTypeTaskDTO();
+          converter.convertEntityToDto( areaTypeTask, areaTypeTaskDTO, false );
+          listATTDTO.add( areaTypeTaskDTO );
+        }
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( listATTDTO );
+      } else {
+        return createMessageNORESULT();
+      }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
       responseDTO = createMessageFAILURE();

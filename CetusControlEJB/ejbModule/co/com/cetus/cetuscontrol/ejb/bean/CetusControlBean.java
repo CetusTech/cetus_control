@@ -946,4 +946,18 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
     
   }
+  
+  public ResponseDTO findTaskTypeByArea ( int idArea ){
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskTypeByArea( idArea );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+    
+  }
+  
+  
 }

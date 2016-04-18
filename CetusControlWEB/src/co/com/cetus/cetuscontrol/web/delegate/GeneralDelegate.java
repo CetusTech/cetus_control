@@ -641,4 +641,15 @@ public class GeneralDelegate {
     }
     return responseDTO;
   }
+  
+  public ResponseDTO findTaskTypeByArea ( int idArea ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findTaskTypeByArea( idArea );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
 }

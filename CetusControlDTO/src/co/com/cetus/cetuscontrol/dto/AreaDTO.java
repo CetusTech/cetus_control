@@ -40,6 +40,8 @@ public class AreaDTO implements Serializable {
   /** The tasks. */
   private List< TaskDTO >   tasks;
   
+  private List<AreaTypeTaskDTO> areaTypeTask;
+  
   /**
    * </p> Instancia un nuevo area dto. </p>
    *
@@ -254,5 +256,13 @@ public class AreaDTO implements Serializable {
     
     return task;
   }
-  
+
+  public List< AreaTypeTaskDTO > getAreaTypeTask () {
+    return areaTypeTask;
+  }
+
+  public void setAreaTypeTask ( List< AreaTypeTaskDTO > areaTypeTask ) {
+    this.areaTypeTask = areaTypeTask;
+  }
+
 }

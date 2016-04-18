@@ -131,4 +131,6 @@ public interface CetusControlBeanRemote {
   
   public ResponseDTO findTaskHistory ( int idTask );
   
+  public ResponseDTO findTaskTypeByArea ( int idArea );
+  
 }
