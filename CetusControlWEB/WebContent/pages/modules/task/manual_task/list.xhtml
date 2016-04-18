@@ -3,12 +3,9 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
   <p:contextMenu for="table">
-    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowTask" process="@form"
-      rendered="#{!manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
-      icon="ui-icon-search" />
-    <p:menuitem value="#{msg.btn_view_detail}" update=":dialogViewDisabled :alertSelectRowTask" process="@form"
-      rendered="#{manualTaskMBean.showMenu}" actionListener="#{manualTaskMBean.validateSelectedRecord}"
-      icon="ui-icon-search" />
+    <p:menuitem value="#{msg.btn_view_detail}"
+      update=":fromContenido :dialogView :alertSelectRowTask :dialogViewDisabled :alertSelectRowTask" process="@form"
+      actionListener="#{manualTaskMBean.validateSelectedRecord}" icon="ui-icon-search" />
   </p:contextMenu>
 
 
@@ -20,16 +17,13 @@
         <p:graphicImage name="document_add_32.png" width="24" height="24" library="images" />
       </p:commandLink>
 
-      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}" update=":dialogView :alertSelectRowTask"
-        rendered="#{!manualTaskMBean.showMenu}" process="@form"
+      <p:commandLink id="viewDetail" title="#{msg.btn_view_detail}"
+        update=":fromContenido :dialogView :alertSelectRowTask :dialogViewDisabled :alertSelectRowTask" process="@form"
         actionListener="#{manualTaskMBean.validateSelectedRecord}">
         <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
       </p:commandLink>
 
-      <p:commandLink id="viewDetailCompleted" title="#{msg.btn_view_detail}" rendered="#{manualTaskMBean.showMenu}"
-        update=":dialogViewDisabled :alertSelectRowTask" actionListener="#{manualTaskMBean.validateSelectedRecord}">
-        <p:graphicImage name="view-icon.png" width="24" height="24" library="images" />
-      </p:commandLink>
+
       <p:selectCheckboxMenu id="menu" value="#{manualTaskMBean.columnTemplate}" label="Columnas" filter="false"
         widgetVar="menuT" onHide="true" style="position: fixed;" filterMatchMode="startsWith" panelStyle="width:250px">
         <f:selectItems value="#{manualTaskMBean.VALID_COLUMN_KEYS}" />
@@ -43,7 +37,8 @@
   </p:toolbar>
 
 
-  <p:dataTable value="#{manualTaskMBean.listRegister}" rows="#{msg.rows_paginator}" id="table" paginator="true"
+  <p:dataTable value="#{manualTaskMBean.listRegister}" dblClickSelect="true" rows="#{msg.rows_paginator}" id="table"
+    paginator="true"
     rowStyleClass="#{index mod 2 == 0 ? objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : null  : objetc.status.id ==2 ? 'start_task_color' : objetc.status.id ==3 ? 'completed_task_color' : objetc.status.id ==1 ? 'assign_task_color' : objetc.status.id ==5 ? 'suspended_task_color' : objetc.status.id ==4 ? 'cancelled_task_color' : 'row-color-2'}"
     rowIndexVar="index" currentPageReportTemplate="({currentPage} de {totalPages})" widgetVar="tableTask"
     rowsPerPageTemplate="10,#{manualTaskMBean.listRegister.size()}"
@@ -51,8 +46,9 @@
     paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{manualTaskMBean.selectedObject}"
     selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
 
-    <p:ajax event="rowSelect" process="@form" listener="#{manualTaskMBean.onRowSelectTask}"
-      update=":fromContenido:panel :fromContenido:bars" />
+    <p:ajax event="rowDblselect" process="@form" listener="#{manualTaskMBean.onRowSelectTask}"
+      update=":dialogView :alertSelectRowTask :dialogViewDisabled :alertSelectRowTask" />
+
 
     <p:columns value="#{manualTaskMBean.columns}" var="column" columnIndexVar="colIndex" filterMatchMode="contains"
       sortBy="#{objetc[column.property]}">

@@ -93,7 +93,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
   /** The list task type. */
   private List< TaskTypeDTO >       listTaskType               = null;
                                                                
-                                                              
   /** The list person g. */
   private List< PersonGroupDTO >    listPersonG                = null;
                                                                
@@ -198,7 +197,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
   private StreamedContent           fileTemplate               = null;
                                                                
   private List< String >            VALID_COLUMN_KEYS          = Arrays.asList( "id", "código", "descripción", "estado", "fecha de entrega",
-                                                                                "duración",
+                                                                                "duración(Horas)",
                                                                                 "solicitante", "funcional" );
                                                                                 
   private String[]                  columnTemplate             = { "código", "descripción", "estado", "fecha de entrega" };
@@ -268,9 +267,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
   static public class ColumnModel implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    private String header;
-    private String property;
-                   
+    private String            header;
+    private String            property;
+                              
     public ColumnModel ( String header, String property ) {
       this.header = header;
       this.property = property;
@@ -322,7 +321,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
     mapColumnsHeader.put( "id", "id" );
     mapColumnsHeader.put( "código", "code" );
     mapColumnsHeader.put( "descripción", "description" );
-    mapColumnsHeader.put( "duración", "VDuration" );
+    mapColumnsHeader.put( "duración(Horas)", "VDuration" );
     mapColumnsHeader.put( "solicitante", "requestor" );
     mapColumnsHeader.put( "funcional", "userFunctional" );
     
@@ -1126,6 +1125,17 @@ public class ManualTaskMBean extends GeneralManagedBean {
       response = generalDelegate.findPersonGroupByPerson( idPerson );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         this.listRegisterGroup = ( List< PersonGroupDTO > ) response.getObjectResponse();
+        groupTDTOSelected = this.listRegisterGroup != null && this.listRegisterGroup.size() > 0 ? this.listRegisterGroup.get( 0 ) : null;
+        //Listar Tareas
+        response = generalDelegate.findTaskByPersonGroup( groupTDTOSelected.getGroupT().getId(), userPortalDTO.getPerson().getId() );
+        if ( UtilCommon.validateResponseSuccess( response ) ) {
+          listRegister = ( ( List< TaskDTO > ) response.getObjectResponse() );
+        } else {
+          listRegister = new ArrayList< TaskDTO >();
+        }
+        addObjectSession( listRegister, "listRegister" );
+        initColumns();
+        createDynamicColumns();
       } else {
         if ( UtilCommon.validateResponseNoResult( response ) ) {
           this.listRegisterGroup = new ArrayList< PersonGroupDTO >();
@@ -1803,7 +1813,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
   }
   
-  
   /**
    * </p> Validate selected record. </p>
    *
@@ -1814,6 +1823,17 @@ public class ManualTaskMBean extends GeneralManagedBean {
   public void validateSelectedRecord ( ActionEvent event ) {
     try {
       if ( selectedObject != null ) {
+        
+        if ( ( selectedObject.getStatus().getId() == ConstantWEB.STATUS_COMPLETED_VAL )
+             || selectedObject.getStatus().getId() == ConstantWEB.STATUS_CANCELED_VAL ) {
+          showMenu = true;
+          showViewDetail = true;
+          addObjectSession( true, "showMenu" );
+        } else {
+          cleanObjectSession( "showMenu" );
+          addObjectSession( false, "showMenu" );
+        }
+        addObjectSession( selectedObject.getStatus().getId(), "status" );
         addObjectSession( selectedObject, "selectedObject" );
         this.showAlertSelectRow = false;
         this.showViewDetail = true;
@@ -1913,9 +1933,61 @@ public class ManualTaskMBean extends GeneralManagedBean {
         if ( ( selectedObject.getStatus().getId() == ConstantWEB.STATUS_COMPLETED_VAL )
              || selectedObject.getStatus().getId() == ConstantWEB.STATUS_CANCELED_VAL ) {
           showMenu = true;
+          showViewDetail = true;
           addObjectSession( true, "showMenu" );
         } else {
           cleanObjectSession( "showMenu" );
+          addObjectSession( false, "showMenu" );
+        }
+        addObjectSession( selectedObject.getPercentage(), "percentageCurrent" );
+        addObjectSession( selectedObject.getCode(), "code" );
+        approved = selectedObject.getApproved() == 1 ? true : false;
+        addObjectSession( approved, "approved" );
+        
+        //validar si tiene archivos adjuntos, consultarlos y traerlos
+        if ( selectedObject.getId() > 0 ) {
+          response = generalDelegate.findAttachmentFilesByTaskId( selectedObject.getId() );
+          if ( UtilCommon.validateResponseSuccess( response ) ) {
+            //Tiene archivos la tarea 
+            listAttachFiles = ( ( List< AttachDTO > ) response.getObjectResponse() );
+          } else {
+            listAttachFiles = new ArrayList< AttachDTO >();
+          }
+          addObjectSession( listAttachFiles, "listAttachFiles" );
+        }
+        
+      }
+      
+      addObjectSession( selectedObject.getStatus().getId(), "status" );
+      addObjectSession( selectedObject, "selectedObject" );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+      addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
+    }
+  }
+  
+  @SuppressWarnings ( "unchecked" )
+  public void onRowSelectTaskDbl ( SelectEvent event ) {
+    ResponseDTO response = null;
+    try {
+      selectedObject = ( ( TaskDTO ) event.getObject() );
+      if ( selectedObject != null ) {
+        if ( selectedObject.getPersonGroup() != null ) {
+          selectedObjectPerson = selectedObject.getPersonGroup();
+          addObjectSession( selectedObjectPerson, "selectedObjectPerson" );
+        }
+        //al 100% se le debe restar lo que ya el responsable tiene asignado
+        addObjectSession( ( 100 - percentage ), "percentageSelected" );
+        visibleButtons = true;
+        showViewDetail = true;
+        if ( ( selectedObject.getStatus().getId() == ConstantWEB.STATUS_COMPLETED_VAL )
+             || selectedObject.getStatus().getId() == ConstantWEB.STATUS_CANCELED_VAL ) {
+          showMenu = true;
+          showViewDetail = true;
+          addObjectSession( true, "showMenu" );
+        } else {
+          cleanObjectSession( "showMenu" );
+          addObjectSession( false, "showMenu" );
         }
         addObjectSession( selectedObject.getPercentage(), "percentageCurrent" );
         addObjectSession( selectedObject.getCode(), "code" );
@@ -2146,7 +2218,6 @@ public class ManualTaskMBean extends GeneralManagedBean {
     }
     return result;
   }
-  
   
   /**
    * </p> On row unselect. </p>

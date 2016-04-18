@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="view_task" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0c5c59d4-9029-4a8f-9c5c-930a2c93b83f">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="122"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -152,7 +152,7 @@ WHERE
 			</staticText>
 			<image>
 				<reportElement x="430" y="0" width="125" height="92" uuid="c2e459ae-c53c-4733-8550-82a79510f08a"/>
-				<imageExpression><![CDATA["D:\\Cetus\\Documentacion\\Empresa\\Corporativo\\Imagenes\\LogosPng\\LogoCetusControl.png"]]></imageExpression>
+				<imageExpression><![CDATA["img\\LogoCetusControl.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
