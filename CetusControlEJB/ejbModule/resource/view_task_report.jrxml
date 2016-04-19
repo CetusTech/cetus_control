@@ -152,7 +152,7 @@ WHERE
 			</staticText>
 			<image>
 				<reportElement x="430" y="0" width="125" height="92" uuid="c2e459ae-c53c-4733-8550-82a79510f08a"/>
-				<imageExpression><![CDATA["img\\LogoCetusControl.png"]]></imageExpression>
+				<imageExpression><![CDATA["img/LogoCetusControl.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>

@@ -293,6 +293,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
   public void initElement () {
     userPortalDTO = getUserDTO();
     if ( userPortalDTO != null ) {
+      //cleanObjectSession( "listRegister" );
       listRegisterGroup( userPortalDTO.getPerson().getId() );
       listArea( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       listPriority( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
@@ -301,7 +302,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
         addObjectSession( columnTemplate, "columnTemplate" );
       }
       initColumns();
-//      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
+      //      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       getPercentageNow();
       //Obtener el ID del usuario que esa logueado con el fin de usarlo para almacenamiento de documentos asociados a la tarea
       idUsuario = String.valueOf( getUserDTO().getPerson().getClient().getClientCetus().getId() );
@@ -1122,21 +1123,29 @@ public class ManualTaskMBean extends GeneralManagedBean {
   @SuppressWarnings ( "unchecked" )
   private void listRegisterGroup ( int idPerson ) {
     ResponseDTO response = null;
+    PersonGroupDTO temporal = null;
     try {
       response = generalDelegate.findPersonGroupByPerson( idPerson );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         this.listRegisterGroup = ( List< PersonGroupDTO > ) response.getObjectResponse();
-        groupTDTOSelected = this.listRegisterGroup != null && this.listRegisterGroup.size() > 0 ? this.listRegisterGroup.get( 0 ) : null;
-        //Listar Tareas
-        response = generalDelegate.findTaskByPersonGroup( groupTDTOSelected.getGroupT().getId(), userPortalDTO.getPerson().getId() );
-        if ( UtilCommon.validateResponseSuccess( response ) ) {
-          listRegister = ( ( List< TaskDTO > ) response.getObjectResponse() );
-        } else {
-          listRegister = new ArrayList< TaskDTO >();
+        temporal = this.listRegisterGroup != null && this.listRegisterGroup.size() > 0 ? this.listRegisterGroup.get( 0 ) : null;
+        listRegister = ( List< TaskDTO > ) getObjectSession( "listRegister" );
+        if ( listRegister == null ) {
+          if ( temporal != null ) {
+            //Listar Tareas
+            response = generalDelegate.findTaskByPersonGroup( temporal.getGroupT().getId(), userPortalDTO.getPerson().getId() );
+            if ( UtilCommon.validateResponseSuccess( response ) ) {
+              listRegister = ( ( List< TaskDTO > ) response.getObjectResponse() );
+            } else {
+              listRegister = new ArrayList< TaskDTO >();
+            }
+            addObjectSession( listRegister, "listRegister" );
+            initColumns();
+            createDynamicColumns();
+            groupTDTOSelected = temporal;
+          }
         }
-        addObjectSession( listRegister, "listRegister" );
-        initColumns();
-        createDynamicColumns();
+        
       } else {
         if ( UtilCommon.validateResponseNoResult( response ) ) {
           this.listRegisterGroup = new ArrayList< PersonGroupDTO >();
@@ -1493,11 +1502,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
           getMessageError( responseDTO );
         }
       }
-    } catch (
-    
-    Exception e )
-    
-    {
+    } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
     }
@@ -1965,11 +1970,15 @@ public class ManualTaskMBean extends GeneralManagedBean {
           }
           addObjectSession( listAttachFiles, "listAttachFiles" );
         }
-        
+        addObjectSession( selectedObject.getStatus().getId(), "status" );
+        addObjectSession( selectedObject, "selectedObject" );
+        cleanObjectSession( "listTaskHystory" );
+        findTaskHistory( selectedObject.getId() );
+        listTaskType( selectedObject.getArea().getId() );
+      } else {
+        this.showAlertSelectRow = true;
       }
       
-      addObjectSession( selectedObject.getStatus().getId(), "status" );
-      addObjectSession( selectedObject, "selectedObject" );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -1977,10 +1986,9 @@ public class ManualTaskMBean extends GeneralManagedBean {
   }
   
   @SuppressWarnings ( "unchecked" )
-  public void onRowSelectTaskDbl ( SelectEvent event ) {
+  public void onRowSelectTaskDbl () {
     ResponseDTO response = null;
     try {
-      selectedObject = ( ( TaskDTO ) event.getObject() );
       if ( selectedObject != null ) {
         if ( selectedObject.getPersonGroup() != null ) {
           selectedObjectPerson = selectedObject.getPersonGroup();
@@ -2015,11 +2023,15 @@ public class ManualTaskMBean extends GeneralManagedBean {
           }
           addObjectSession( listAttachFiles, "listAttachFiles" );
         }
-        
+        addObjectSession( selectedObject.getStatus().getId(), "status" );
+        addObjectSession( selectedObject, "selectedObject" );
+        cleanObjectSession( "listTaskHystory" );
+        findTaskHistory( selectedObject.getId() );
+        listTaskType( selectedObject.getArea().getId() );
+      } else {
+        this.showAlertSelectRow = true;
       }
       
-      addObjectSession( selectedObject.getStatus().getId(), "status" );
-      addObjectSession( selectedObject, "selectedObject" );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -2237,10 +2249,10 @@ public class ManualTaskMBean extends GeneralManagedBean {
    */
   public void changeAreaAdd () {
     try {
-      if( addObject != null && addObject.getArea() != null && addObject.getArea().getId() > 0 ){
+      if ( addObject != null && addObject.getArea() != null && addObject.getArea().getId() > 0 ) {
         ConstantWEB.WEB_LOG.info( addObject.getArea().getId() );
         listTaskType( addObject.getArea().getId() );
-      }else{
+      } else {
         this.listTaskType = new ArrayList< TaskTypeDTO >();
         addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
       }
@@ -2257,10 +2269,10 @@ public class ManualTaskMBean extends GeneralManagedBean {
    */
   public void changeAreaUpdate () {
     try {
-      if( selectedObject != null && selectedObject.getArea() != null && selectedObject.getArea().getId() > 0 ){
+      if ( selectedObject != null && selectedObject.getArea() != null && selectedObject.getArea().getId() > 0 ) {
         ConstantWEB.WEB_LOG.info( selectedObject.getArea().getId() );
         listTaskType( selectedObject.getArea().getId() );
-      }else{
+      } else {
         this.listTaskType = new ArrayList< TaskTypeDTO >();
         addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
       }
