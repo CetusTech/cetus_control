@@ -8,7 +8,7 @@
       <h:outputText value="*" style="color:red;" />
       <h:outputLabel value="#{msg.first_name}" styleClass="resaltar_negro" />
       <p:inputText id="firstNameAdd" value="#{personAdminMBean.addObject.names}" required="true"
-        requiredMessage="#{msg.field_required}" maxlength="44">
+        requiredMessage="#{msg.field_required}" maxlength="44" onchange="conMayusculas(this);">
       </p:inputText>
       <p:message display="icon" for="firstNameAdd" id="firstNameAddMsg" />
 
@@ -16,7 +16,7 @@
       <h:outputText value="*" style="color:red;" />
       <h:outputLabel value="#{msg.last_name}" styleClass="resaltar_negro" />
       <p:inputText id="firstLastNameAdd" value="#{personAdminMBean.addObject.lastNames}" required="true"
-        requiredMessage="#{msg.field_required}" maxlength="44">
+        requiredMessage="#{msg.field_required}" maxlength="44" onchange="conMayusculas(this);">
       </p:inputText>
       <p:message display="icon" for="firstLastNameAdd" id="firstLastNameAddMsg" />
 
