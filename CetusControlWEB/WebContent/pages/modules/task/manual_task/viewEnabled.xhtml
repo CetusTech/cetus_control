@@ -125,6 +125,59 @@
         </h:panelGrid>
       </h:form>
     </p:tab>
+
+    <p:tab title="#{msg.task_history}">
+      <h:form>
+        <h:panelGrid id="pnlHistpry" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
+          <p:growl id="msgHistory" for="iconOnly" />
+          <p:toolbar styleClass="body_toolbar_nivel_3" id="bars">
+            <p:toolbarGroup align="left" id="group">
+
+              <p:selectCheckboxMenu id="columnHistory" value="#{manualTaskMBean.columnSelectedHistory}" label="Columnas"
+                filter="false" widgetVar="colHistory" onHide="true" filterMatchMode="startsWith"
+                panelStyle="width:250px">
+                <f:selectItems value="#{manualTaskMBean.listColumnLabelTaskHistory}" />
+
+                <p:ajax listener="#{manualTaskMBean.createDynamicColumnsHistory}" update="tableHistory" />
+                <p:ajax event="toggleSelect" listener="#{manualTaskMBean.createDynamicColumnsHistory}"
+                  update="tableHistory" process="@this" />
+
+              </p:selectCheckboxMenu>
+
+            </p:toolbarGroup>
+          </p:toolbar>
+
+          <p:dataTable value="#{manualTaskMBean.listTaskHystory}" rows="#{msg.rows_paginator}" id="tableHistory"
+            paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+            currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" liveScroll="true"
+            rowsPerPageTemplate="10,#{manualTaskMBean.listTaskHystory.size()}" scrollHeight="200"
+            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+            paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
+
+            <p:column styleClass="column_5">
+              <p:rowToggler />
+            </p:column>
+
+            <p:columns value="#{manualTaskMBean.columnsHistory}" var="column" columnIndexVar="colIndex"
+              filterMatchMode="contains" sortBy="#{object[column.property]}">
+              <f:facet name="header">
+                <h:outputText value="#{column.header}" />
+              </f:facet>
+              <h:outputText value="#{manualTaskMBean.getValueColumn(object[column.property])}" />
+            </p:columns>
+
+            <p:rowExpansion>
+              <br />
+              <ui:include src="/pages/modules/task/manual_task/view.xhtml" />
+              <br />
+            </p:rowExpansion>
+
+          </p:dataTable>
+
+        </h:panelGrid>
+      </h:form>
+    </p:tab>
+
   </p:accordionPanel>
 
 

@@ -183,7 +183,7 @@
 
 
   <p:dialog id="dialogViewDisabled" resizable="false" modal="true" appendToBody="true"
-    header="#{msg.detalle_record} [#{adminTaskBean.selectedObject.status.description}]" width="60%"
+    header="#{msg.detalle_record} [#{adminTaskBean.selectedObject.status.description}]" width="80%"
     visible="#{adminTaskBean.showViewDetail}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
     <p:ajax listener="#{adminTaskBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task_admin/viewEnabled.xhtml" />

@@ -187,7 +187,7 @@
 
 
   <p:dialog id="dialogViewDisabled" position="top" resizable="false" modal="true" appendToBody="true"
-    header="#{msg.detalle_record} [#{manualTaskMBean.selectedObject.status.description}]" width="60%"
+    header="#{msg.detalle_record} [#{manualTaskMBean.selectedObject.status.description}]" width="80%"
     visible="#{manualTaskMBean.showMenu}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
     <p:ajax listener="#{manualTaskMBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task/viewEnabled.xhtml" />
