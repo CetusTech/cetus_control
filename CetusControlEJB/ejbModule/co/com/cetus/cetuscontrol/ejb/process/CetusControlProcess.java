@@ -2034,22 +2034,19 @@ public class CetusControlProcess {
     Connection conn = null;
     
     try {
-      
-      //Se comenta porque aun no esta funcionando el PL, POR SOLICITUD DE ANDRES
-      //      responseDTO = UtilCommon.createMessageSUCCESS();
-      //      responseDTO.setObjectResponse( "100" );
-      
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### GENERAR TIEMPO DEDICADO PARA LA TAREA " + idTask );
       conn = getConnection();
-      
       if ( conn != null ) {
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### CONEXION ESTABLECIDA  "  );
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
-        
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### PL OK" + idTask );
         if ( cst != null ) {
           cst.setInt( 1, idTask );
           cst.registerOutParameter( 2, java.sql.Types.VARCHAR );
           cst.registerOutParameter( 3, java.sql.Types.VARCHAR );
           cst.executeUpdate();
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### EXECUTION DONE " + idTask );
           result = cst.getString( 2 );
           duration = cst.getString( 3 );
           if ( result != null && result.equals( ConstantEJB.RESULT_SQL_OK ) ) {
@@ -2058,11 +2055,7 @@ public class CetusControlProcess {
           } else {
             responseDTO = UtilCommon.createMessageFAILURE();
           }
-          
-          cst.close();
-        }
-        
-        conn.close();
+        }        
       }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
