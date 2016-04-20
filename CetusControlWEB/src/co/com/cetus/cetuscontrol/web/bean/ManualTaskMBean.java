@@ -1129,8 +1129,12 @@ public class ManualTaskMBean extends GeneralManagedBean {
       if ( UtilCommon.validateResponseSuccess( response ) ) {
         this.listRegisterGroup = ( List< PersonGroupDTO > ) response.getObjectResponse();
         temporal = this.listRegisterGroup != null && this.listRegisterGroup.size() > 0 ? this.listRegisterGroup.get( 0 ) : null;
+        groupTDTOSelected = ( PersonGroupDTO ) getObjectSession( "groupTDTOSelected" );
+        if ( groupTDTOSelected == null ){
+          groupTDTOSelected = temporal;
+        }
         listRegister = ( List< TaskDTO > ) getObjectSession( "listRegister" );
-        if ( listRegister == null ) {
+        if ( listRegister == null && groupTDTOSelected != null && groupTDTOSelected.getId() == temporal.getId() ) {
           if ( temporal != null ) {
             //Listar Tareas
             response = generalDelegate.findTaskByPersonGroup( temporal.getGroupT().getId(), userPortalDTO.getPerson().getId() );
