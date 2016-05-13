@@ -935,7 +935,7 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
-  public ResponseDTO findTaskHistory ( int idTask ){
+  public ResponseDTO findTaskHistory ( int idTask ) {
     ResponseDTO response = null;
     try {
       response = cetusControlProcess.findTaskHistory( idTask );
@@ -947,7 +947,7 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
-  public ResponseDTO findTaskTypeByArea ( int idArea ){
+  public ResponseDTO findTaskTypeByArea ( int idArea ) {
     ResponseDTO response = null;
     try {
       response = cetusControlProcess.findTaskTypeByArea( idArea );
@@ -959,5 +959,30 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
+  @Override
+  public ResponseDTO findAllTraceTaskByTaskId ( int pIdTask ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findAllTraceTaskByTaskId( pIdTask );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+    
+  }
+  
+  @Override
+  public ResponseDTO findStatusById ( int idStatus ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findStatusById( idStatus );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+    
+  }
   
 }

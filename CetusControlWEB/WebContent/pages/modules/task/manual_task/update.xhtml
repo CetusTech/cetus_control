@@ -2,11 +2,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
   xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
-  <h:form prependId="false" id="formUpdate" style="width: 100%">
-    <h:panelGrid id="colView">
-
-      <p:column>
-        <p:tabView id="viewtab" activeIndex="#{manualTaskMBean.indexTab}" style="width: 100% !important;">
+  <h:form prependId="false" id="formUpdate" style="width: 100% !important">
+    <h:panelGrid id="colView" style="width: 100% !important">
+      <p:column style="width: 100% !important">
+        <p:tabView id="viewtab" activeIndex="#{manualTaskMBean.indexTab}" style="width: 100% !important;" dynamic="true">
           <p:tab title="#{msg.information}" id="info" style="width: 100% !important;">
 
             <h:inputHidden id="percentageUpdate" value="#{manualTaskMBean.percentageCurrent}" />
@@ -54,21 +53,21 @@
               <p:message for="obsUpdate" id="obsUpdateMsg" display="icon" />
 
               <p:outputLabel id="output2" value="#{msg.percentage}"
-                rendered="#{manualTaskMBean.status != 5 and manualTaskMBean.status != 1}" styleClass="resaltar_negro"
-                style="margin-right: 10px;color: #336699;" />
+                rendered="#{manualTaskMBean.status.id != 5 and manualTaskMBean.status.id != 1}"
+                styleClass="resaltar_negro" style="margin-right: 10px;color: #336699;" />
 
               <p:outputLabel value=" #{manualTaskMBean.percentageCurrent}%"
-                rendered="#{manualTaskMBean.status != 5 and manualTaskMBean.status != 1 }" />
+                rendered="#{manualTaskMBean.status.id != 5 and manualTaskMBean.status.id != 1 }" />
 
 
               <p:outputLabel id="output" value="#{msg.percentage} #{manualTaskMBean.percentageCurrent}"
-                rendered="#{manualTaskMBean.status == 5 or manualTaskMBean.status == 1 }" styleClass="resaltar_negro"
-                style="margin-right: 10px;color: #336699;" />
+                rendered="#{manualTaskMBean.status.id == 5 or manualTaskMBean.status.id == 1 }"
+                styleClass="resaltar_negro" style="margin-right: 10px;color: #336699;" />
 
 
 
               <p:slider for="percentageUpdate" display="output" style="width:100px"
-                rendered="#{manualTaskMBean.status == 5 or manualTaskMBean.status == 1 }" minValue="0"
+                rendered="#{manualTaskMBean.status.id == 5 or manualTaskMBean.status.id == 1 }" minValue="0"
                 maxValue="#{(manualTaskMBean.percentageSelected + manualTaskMBean.percentageCurrent) >= 0 ? 100: (manualTaskMBean.percentageSelected + manualTaskMBean.percentageCurrent)}"
                 displayTemplate="#{msg.percentage} {value}%" />
               <p:message for="percentageUpdate" id="percentageUpdateMsg" display="icon" />
@@ -84,14 +83,14 @@
 
 
               <p:outputLabel value="#{msg.deliveryDate}" for="deliberyDateUpdate"
-                rendered="#{manualTaskMBean.status == 2 }" styleClass="resaltar_negro" />
+                rendered="#{manualTaskMBean.status.id == 2 }" styleClass="resaltar_negro" />
               <p:calendar id="deliberyDateUpdate" value="#{manualTaskMBean.selectedObject.deliveryDate}" mode="popup"
                 validator="#{manualTaskMBean.validedDateInit }" required="true"
-                rendered="#{manualTaskMBean.status == 2 }" onchange="PF('deliberyDateAdd').hide()"
+                rendered="#{manualTaskMBean.status.id == 2 }" onchange="PF('deliberyDateAdd').hide()"
                 showButtonPanel="true" pt:placeholder="#{manualTaskMBean.patterDate}" locale="#{manualTaskMBean.locale}"
                 pattern="#{manualTaskMBean.patterDate}" showOn="button" />
               <p:message for="deliberyDateUpdate" id="deliberyDateUpdateMsg" display="icon"
-                rendered="#{manualTaskMBean.status == 2 }" />
+                rendered="#{manualTaskMBean.status.id == 2 }" />
 
 
 
@@ -129,7 +128,8 @@
                 disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}">
                 <f:selectItem itemLabel="#{msg.selected_area}" itemValue="-1" />
                 <f:selectItems value="#{manualTaskMBean.listAreaItem}" />
-                <p:ajax event="change" update="taskTypeSelectedUpdate" process="@this" listener="#{manualTaskMBean.changeAreaUpdate}" />
+                <p:ajax event="change" update="taskTypeSelectedUpdate" process="@this"
+                  listener="#{manualTaskMBean.changeAreaUpdate}" />
               </p:selectOneMenu>
               <p:message for="areaSelectedUpdate" id="areaUpdateMsg" display="icon" />
 
@@ -151,28 +151,33 @@
               <p:message for="prioritySelectedUpdate" id="priorityUpdateMsg" display="icon" />
 
               <p:outputLabel value="#{msg.status}" for="statusSelectedUpdate" styleClass="resaltar_negro"
-                rendered="#{manualTaskMBean.status != 1 and manualTaskMBean.status != 4 }" />
+                rendered="#{manualTaskMBean.status.id != 1 and manualTaskMBean.status.id != 4 }" />
               <p:selectOneMenu value="#{manualTaskMBean.selectedObject.status.id}" id="statusSelectedUpdate"
                 required="false" disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
-                rendered="#{manualTaskMBean.status != 1 and manualTaskMBean.status != 4}">
-                <f:selectItem itemLabel="#{msg.selected_status}" itemValue="" noSelectionOption="true" />
+                rendered="#{manualTaskMBean.status.id != 1 and manualTaskMBean.status.id != 4}">
+                <f:selectItem itemLabel="#{msg.selected_status}" itemValue="#{manualTaskMBean.status.id}"
+                  noSelectionOption="true" />
                 <f:selectItems value="#{manualTaskMBean.listStatusItem}" />
               </p:selectOneMenu>
               <p:message for="statusSelectedUpdate" id="statusUpdateMsg" display="icon"
-                rendered="#{manualTaskMBean.status != 1 and manualTaskMBean.status != 4}" />
+                rendered="#{manualTaskMBean.status.id != 1 and manualTaskMBean.status.id != 4}" />
 
-              <p:outputLabel value="#{msg.note}" for="noteUpdate" rendered="#{manualTaskMBean.status != 4}"
+              <p:outputLabel value="#{msg.note}" for="noteUpdate" rendered="#{manualTaskMBean.status.id != 4}"
                 styleClass="resaltar_negro" />
-              <p:inputTextarea id="noteUpdate" required="#{manualTaskMBean.status == 5? false: true}"
-                requiredMessage="#{msg.field_required}" rendered="#{manualTaskMBean.status != 4}"
+              <p:inputTextarea id="noteUpdate" required="#{manualTaskMBean.status.id == 5? false: true}"
+                requiredMessage="#{msg.field_required}" rendered="#{manualTaskMBean.status.id != 4}"
                 disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
                 value="#{manualTaskMBean.noteTask}" maxlength="190" cols="40" rows="3" style="width: 95%">
                 <f:validateLength minimum="0" maximum="190" for="obsUpdateMsg" />
               </p:inputTextarea>
-              <p:message for="noteUpdate" id="noteUpdateMsg" display="icon" rendered="#{manualTaskMBean.status != 4}" />
+              <p:message for="noteUpdate" id="noteUpdateMsg" display="icon" rendered="#{manualTaskMBean.status.id != 4}" />
+
+
+
             </h:panelGrid>
 
           </p:tab>
+
 
           <p:tab title="#{msg.attachment}" id="attachFiles">
             <p:growl id="msgDel" for="msgDel" globalOnly="true" showDetail="true" />
@@ -277,40 +282,76 @@
 
             </h:panelGrid>
           </p:tab>
+
+          <p:tab title="Trace">
+            <h:panelGrid id="pnlTrace" columns="2" style="width:100% !important;" columnClasses="c1,c2" cellspacing="2"
+              cellpadding="2">
+              <h:panelGrid columns="1" style="width:70% !important;">
+                <pe:timeline id="timeline" value="#{basicTimelineController.model}" height="250px"
+                  widgetVar="timelineVar" var="trace" selectable="#{basicTimelineController.selectable}" locale="es"
+                  start="#{manualTaskMBean.selectedObject.creationDate}" zoomable="#{basicTimelineController.zoomable}"
+                  moveable="#{basicTimelineController.moveable}" stackEvents="#{basicTimelineController.stackEvents}"
+                  axisOnTop="#{basicTimelineController.axisOnTop}" eventStyle="#{basicTimelineController.eventStyle}"
+                  showCurrentTime="#{basicTimelineController.showCurrentTime}"
+                  showNavigation="#{basicTimelineController.showNavigation}">
+                  <p:ajax event="select" listener="#{basicTimelineController.onSelect}" update="detalleTrace" />
+                  <h:outputText value="#{trace.status.description}" />
+                </pe:timeline>
+              </h:panelGrid>
+              <p:panel header="Detalle" id="detalleTrace" style="width:100% !important;"
+                visible="#{basicTimelineController.flag}">
+                <h:panelGrid columns="2" cellspacing="4" cellpadding="4">
+
+                  <p:outputLabel value="#{msg.update_user}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.creationUser}" />
+                  <p:outputLabel value="#{msg.status_fechaCreacion}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.creationDate}">
+                    <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+                  </h:outputText>
+                  <p:outputLabel value="#{msg.note}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.note}" />
+                  <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.status.description}" />
+                </h:panelGrid>
+              </p:panel>
+            </h:panelGrid>
+
+          </p:tab>
+
         </p:tabView>
       </p:column>
       <f:facet name="footer">
         <center>
           <p:commandButton id="btnStart" value="#{msg.btn_start}" actionListener="#{manualTaskMBean.viewFormInfo()}"
             update=":viewtab :startedTaskDialog"
-            rendered="#{manualTaskMBean.status == 1 or manualTaskMBean.status == 5 }" process="@form"
+            rendered="#{manualTaskMBean.status.id == 1 or manualTaskMBean.status.id == 5 }" process="@form"
             styleClass="button-general" icon="img-start" />
 
           <p:commandButton id="btnAssign" value="#{msg.btn_reassign}" global="true"
             actionListener="#{manualTaskMBean.viewAppletAssign()}" update=":formUpdate :appletAssignDialog"
-            rendered="#{manualTaskMBean.status == 5 }" process=":formUpdate" styleClass="button-general"
+            rendered="#{manualTaskMBean.status.id == 5 }" process=":formUpdate" styleClass="button-general"
             icon="img-assign" />
 
           <p:commandButton id="btnCancel" value="#{msg.btn_cancel}"
             update=":formUpdate :formConfirmCancel:confirmCancel" global="true"
-            rendered="#{manualTaskMBean.status >= 1 and manualTaskMBean.status != 4 and manualTaskMBean.status != 3 }"
+            rendered="#{manualTaskMBean.status.id >= 1 and manualTaskMBean.status.id != 4 and manualTaskMBean.status.id != 3 }"
             process="@form" styleClass="button-general" icon="img-cancel" actionListener="#{manualTaskMBean.loadCancel}" />
 
           <p:commandButton id="btnSuspend" value="#{msg.btn_suspend}"
             update=":formUpdate :formConfirmSuspended:confirmSuspended"
-            rendered="#{manualTaskMBean.status >= 2 and manualTaskMBean.status != 4 and manualTaskMBean.status != 5 and manualTaskMBean.status != 3  }"
+            rendered="#{manualTaskMBean.status.id >= 2 and manualTaskMBean.status.id != 4 and manualTaskMBean.status.id != 5 and manualTaskMBean.status.id != 3  }"
             process=":formUpdate" styleClass="button-general" icon="img-suspend"
             actionListener="#{manualTaskMBean.loadSuspended}" />
 
           <p:commandButton id="btnComplete" value="#{msg.btn_complete}"
             update=":formUpdate :formConfirmCompleted:confirmCompleted"
             disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}"
-            rendered="#{manualTaskMBean.status >= 2 and manualTaskMBean.status != 4 and manualTaskMBean.status != 5 and manualTaskMBean.status != 3}"
+            rendered="#{manualTaskMBean.status.id >= 2 and manualTaskMBean.status.id != 4 and manualTaskMBean.status.id != 5 and manualTaskMBean.status.id != 3}"
             process=":formUpdate" styleClass="button-general" icon="img-complete"
             actionListener="#{manualTaskMBean.loadCancel}" />
 
           <p:commandButton id="btnUpdate" value="#{msg.btn_save}" update=":formUpdate :formConfirmMod:confirmMod"
-            rendered="#{manualTaskMBean.status != 4 and manualTaskMBean.status != 3}"
+            rendered="#{manualTaskMBean.status.id != 4 and manualTaskMBean.status.id != 3}"
             disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" process="@form"
             styleClass="button-general" icon="img-save" actionListener="#{manualTaskMBean.loadUpdate}" />
         </center>

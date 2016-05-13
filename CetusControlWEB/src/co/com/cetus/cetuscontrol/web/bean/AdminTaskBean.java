@@ -66,104 +66,104 @@ import co.com.cetus.common.util.UtilCommon;
 public class AdminTaskBean extends GeneralManagedBean {
   
   /** The Constant serialVersionUID. */
-  private static final long         serialVersionUID        = -3255236201554716426L;
-                                                            
+  private static final long         serialVersionUID           = -3255236201554716426L;
+                                                               
   /** The list files task. */
-  ArrayList< UploadedFile >         listFilesTask           = null;
-                                                            
+  ArrayList< UploadedFile >         listFilesTask              = null;
+                                                               
   /** The user portal dto. */
-  private UserPortalDTO             userPortalDTO           = null;
-                                                            
+  private UserPortalDTO             userPortalDTO              = null;
+                                                               
   /** The list register. */
-  private List< TaskDTO >           listRegister            = null;
-  private List< AttachDTO >         listAttachFiles         = null;
-                                                            
+  private List< TaskDTO >           listRegister               = null;
+  private List< AttachDTO >         listAttachFiles            = null;
+                                                               
   /** The list register group. */
-  private List< GroupTDTO >         listRegisterGroup       = null;
-                                                            
+  private List< GroupTDTO >         listRegisterGroup          = null;
+                                                               
   /** The list area. */
-  private List< AreaDTO >           listArea                = null;
-                                                            
+  private List< AreaDTO >           listArea                   = null;
+                                                               
   /** The list priority. */
-  private List< PriorityDTO >       listPriority            = null;
-                                                            
+  private List< PriorityDTO >       listPriority               = null;
+                                                               
   /** The list task type. */
-  private List< TaskTypeDTO >       listTaskType            = null;
-                                                            
+  private List< TaskTypeDTO >       listTaskType               = null;
+                                                               
   /** The list person. */
-  private List< PersonDTO >         listPerson              = null;
-                                                            
+  private List< PersonDTO >         listPerson                 = null;
+                                                               
   /** The list person g. */
-  private List< PersonGroupDTO >    listPersonG             = null;
-                                                            
+  private List< PersonGroupDTO >    listPersonG                = null;
+                                                               
   /** The list status. */
-  private List< StatusDTO >         listStatus              = null;
-                                                            
+  private List< StatusDTO >         listStatus                 = null;
+                                                               
   /** The list area item. */
-  private List< SelectItem >        listAreaItem            = null;
-                                                            
+  private List< SelectItem >        listAreaItem               = null;
+                                                               
   /** The list priority item. */
-  private List< SelectItem >        listPriorityItem        = null;
-                                                            
+  private List< SelectItem >        listPriorityItem           = null;
+                                                               
   /** The list task type item. */
-  private List< SelectItem >        listTaskTypeItem        = null;
-                                                            
+  private List< SelectItem >        listTaskTypeItem           = null;
+                                                               
   /** The list status item. */
-  private List< SelectItem >        listStatusItem          = null;
-                                                            
+  private List< SelectItem >        listStatusItem             = null;
+                                                               
   /** The add object. */
-  private TaskDTO                   addObject               = null;
-                                                            
+  private TaskDTO                   addObject                  = null;
+                                                               
   /** The selected object. */
-  private TaskDTO                   selectedObject          = null;
-                                                            
+  private TaskDTO                   selectedObject             = null;
+                                                               
   /** The selected object person. */
-  private PersonGroupDTO            selectedObjectPerson    = null;
-                                                            
+  private PersonGroupDTO            selectedObjectPerson       = null;
+                                                               
   /** The show confirm add. */
-  private boolean                   showConfirmAdd          = false;
-                                                            
+  private boolean                   showConfirmAdd             = false;
+                                                               
   /** The show confirm mod. */
-  private boolean                   showConfirmMod          = false;
-                                                            
+  private boolean                   showConfirmMod             = false;
+                                                               
   /** The show dialog confirm update. */
-  private boolean                   showDialogConfirmUpdate = false;
-                                                            
+  private boolean                   showDialogConfirmUpdate    = false;
+                                                               
   /** The show confirm delete. */
-  private boolean                   showConfirmDelete       = false;
-                                                            
+  private boolean                   showConfirmDelete          = false;
+                                                               
   /** The show alert select row. */
-  private boolean                   showAlertSelectRow      = false;
-                                                            
+  private boolean                   showAlertSelectRow         = false;
+                                                               
   /** The show view detail. */
-  private boolean                   showViewDetail          = false;
-                                                            
+  private boolean                   showViewDetail             = false;
+                                                               
   /** The show add dialog. */
-  private boolean                   showAddDialog           = false;
-                                                            
-  private boolean                   showConfirmCancel       = false;
-                                                            
-  private boolean                   showConfirmCompleted    = false;
-  private boolean                   showConfirmSuspended    = false;
-                                                            
+  private boolean                   showAddDialog              = false;
+                                                               
+  private boolean                   showConfirmCancel          = false;
+                                                               
+  private boolean                   showConfirmCompleted       = false;
+  private boolean                   showConfirmSuspended       = false;
+                                                               
   /** The show menu. */
-  private boolean                   showMenu                = false;
-                                                            
+  private boolean                   showMenu                   = false;
+                                                               
   /** The approved. */
-  private boolean                   approved                = false;
-                                                            
+  private boolean                   approved                   = false;
+                                                               
   /** The group tdto selected. */
-  private GroupTDTO                 groupDTO                = null;
-                                                            
+  private GroupTDTO                 groupDTO                   = null;
+                                                               
   /** The visible buttons. */
-  private boolean                   visibleButtons          = false;
-                                                            
+  private boolean                   visibleButtons             = false;
+                                                               
   /** The code. */
-  private String                    code                    = null;
-                                                            
+  private String                    code                       = null;
+                                                               
   /** The note task. */
-  private String                    noteTask                = null;
-                                                            
+  private String                    noteTask                   = null;
+                                                               
   /** The status. */
   private int                       status;
                                     
@@ -177,38 +177,39 @@ public class AdminTaskBean extends GeneralManagedBean {
   private double                    percentageCurrent;
                                     
   /** The delivery date. */
-  private Date                      deliveryDate            = null;
-                                                            
+  private Date                      deliveryDate               = null;
+                                                               
   /** The id usuario. */
   private String                    idUsuario;
                                     
   /** The destination. */
-  private String                    destination             = ConstantWEB.PATH_FILE_TASK;
-                                                            
+  private String                    destination                = ConstantWEB.PATH_FILE_TASK;
+                                                               
   /** The separador. */
-  private String                    separador               = System.getProperty( "file.separator" );
-                                                            
-  private AttachDTO                 attachDTOSelected       = null;
-                                                            
-  private int                       indexTab                = 0;
-                                                            
+  private String                    separador                  = System.getProperty( "file.separator" );
+                                                               
+  private AttachDTO                 attachDTOSelected          = null;
+                                                               
+  private int                       indexTab                   = 0;
+                                                               
   private List< String >            listStatusFilter;
                                     
-  private StreamedContent           fileTemplate            = null;
-                                                            
-  private List< String >            VALID_COLUMN_KEYS       = Arrays.asList( "id", "código", "descripción", "estado", "fecha de entrega", "duración",
-                                                                             "solicitante", "funcional" );
-                                                                             
-  private String[]                  columnTemplate          = { "código", "descripción", "estado", "fecha de entrega" };
-                                                            
+  private StreamedContent           fileTemplate               = null;
+                                                               
+  private List< String >            VALID_COLUMN_KEYS          = Arrays.asList( "id", "código", "descripción", "estado", "fecha de entrega",
+                                                                                "duración",
+                                                                                "solicitante", "funcional" );
+                                                                                
+  private String[]                  columnTemplate             = { "código", "descripción", "estado", "fecha de entrega" };
+                                                               
   private List< ColumnModel >       columns;
                                     
   private HashMap< String, String > mapColumnsHeader;
                                     
-  private PersonGroupDTO            personDTOSelected       = null;
-  
+  private PersonGroupDTO            personDTOSelected          = null;
+                                                               
   private List< TaskDTO >           listTaskHystory            = null;
-  
+                                                               
   private List< String >            listColumnLabelTaskHistory = null;
                                                                
   private HashMap< String, String > mapColumnsHeaderHistory    = null;
@@ -217,7 +218,6 @@ public class AdminTaskBean extends GeneralManagedBean {
                                                                
   private List< ColumnModel >       columnsHistory;
                                     
-                                                            
   /**
    * </p> Instancia un nuevo manual task m bean. </p>
    *
@@ -259,11 +259,11 @@ public class AdminTaskBean extends GeneralManagedBean {
   }
   
   static public class ColumnModel implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
-    private String header;
-    private String property;
-                   
+    private String            header;
+    private String            property;
+                              
     public ColumnModel ( String header, String property ) {
       this.header = header;
       this.property = property;
@@ -294,7 +294,7 @@ public class AdminTaskBean extends GeneralManagedBean {
         addObjectSession( columnTemplate, "columnTemplate" );
       }
       initColumns();
-//      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
+      //      listTaskType( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
       //getPercentageNow();
       //Obtener el ID del usuario que esa logueado con el fin de usarlo para almacenamiento de documentos asociados a la tarea
       idUsuario = String.valueOf( getUserDTO().getPerson().getClient().getClientCetus().getId() );
@@ -502,7 +502,7 @@ public class AdminTaskBean extends GeneralManagedBean {
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
                 traceTaskDTO.setNote( ( String ) getObjectSession( "noteTask" ) );
-                traceTaskDTO.setIdStatus( ( int ) getObjectSession( "status" ) );
+                traceTaskDTO.setStatus( ( StatusDTO ) getObjectSession( "status" ) );
                 traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
                 traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
                 traceTaskDTO.setCreationDate( currentDate );
@@ -594,7 +594,7 @@ public class AdminTaskBean extends GeneralManagedBean {
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
                 traceTaskDTO.setNote( noteTask );
-                traceTaskDTO.setIdStatus( ( int ) getObjectSession( "status" ) );
+                traceTaskDTO.setStatus( ( StatusDTO ) getObjectSession( "status" ) );
                 traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
                 traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
                 traceTaskDTO.setCreationDate( currentDate );
@@ -735,7 +735,7 @@ public class AdminTaskBean extends GeneralManagedBean {
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
                 traceTaskDTO.setNote( noteTask );
-                traceTaskDTO.setIdStatus( ( int ) getObjectSession( "status" ) );
+                traceTaskDTO.setStatus( ( StatusDTO ) getObjectSession( "status" ) );
                 traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
                 traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
                 traceTaskDTO.setCreationDate( currentDate );
@@ -828,7 +828,7 @@ public class AdminTaskBean extends GeneralManagedBean {
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
                 traceTaskDTO.setNote( noteTask );
-                traceTaskDTO.setIdStatus( ( int ) getObjectSession( "status" ) );
+                traceTaskDTO.setStatus( ( StatusDTO ) getObjectSession( "status" ) );
                 traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
                 traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
                 traceTaskDTO.setCreationDate( currentDate );
@@ -1015,7 +1015,7 @@ public class AdminTaskBean extends GeneralManagedBean {
   @SuppressWarnings ( "unchecked" )
   private void listTaskType ( int idArea ) {
     ResponseDTO response = null;
-    List< AreaTypeTaskDTO > listAreaTypeTaskDTO = null;    
+    List< AreaTypeTaskDTO > listAreaTypeTaskDTO = null;
     try {
       response = generalDelegate.findTaskTypeByArea( idArea );
       if ( UtilCommon.validateResponseSuccess( response ) ) {
@@ -1191,33 +1191,33 @@ public class AdminTaskBean extends GeneralManagedBean {
    */
   @Override
   public String remove () {
-//    ResponseDTO responseDTO = null;
-//    String code = "0";
-//    try {
-//      this.showConfirmDelete = false;
-//      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
-//      if ( selectedObject != null ) {
-//        ConstantWEB.WEB_LOG.info( "Se procede a eliminar el area ::> " + selectedObject.toString() );
-//        responseDTO = generalDelegate.remove( selectedObject );
-//        ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar el area ::> " + responseDTO.toString() );
-//        
-//        if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
-//          ConstantWEB.WEB_LOG.info( "Area eliminada exitosamente..." );
-//          this.initElement();
-//          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_DELETE );
-//        } else {
-//          ConstantWEB.WEB_LOG.error( "Error eliminado el area..." );
-//          //Obetener codigo de error de oracle
-//          if ( !responseDTO.getMessage().isEmpty() && responseDTO.getMessage().contains( "ORA" ) ) {
-//            code = responseDTO.getMessage().substring( responseDTO.getMessage().lastIndexOf( "ORA" ), responseDTO.getMessage().lastIndexOf( ":" ) );
-//          }
-//          addMessageError( null, ConstantWEB.MESSAGE_ERROR, code + ":" + ConstantWEB.MESSAGE_ERROR_DELETE_DETAIL );
-//        }
-//      }
-//    } catch ( Exception e ) {
-//      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
-//      addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
-//    }
+    //    ResponseDTO responseDTO = null;
+    //    String code = "0";
+    //    try {
+    //      this.showConfirmDelete = false;
+    //      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+    //      if ( selectedObject != null ) {
+    //        ConstantWEB.WEB_LOG.info( "Se procede a eliminar el area ::> " + selectedObject.toString() );
+    //        responseDTO = generalDelegate.remove( selectedObject );
+    //        ConstantWEB.WEB_LOG.info( "Respuesta despues de eliminar el area ::> " + responseDTO.toString() );
+    //        
+    //        if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+    //          ConstantWEB.WEB_LOG.info( "Area eliminada exitosamente..." );
+    //          this.initElement();
+    //          addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MESSAGE_SUCCES_DELETE );
+    //        } else {
+    //          ConstantWEB.WEB_LOG.error( "Error eliminado el area..." );
+    //          //Obetener codigo de error de oracle
+    //          if ( !responseDTO.getMessage().isEmpty() && responseDTO.getMessage().contains( "ORA" ) ) {
+    //            code = responseDTO.getMessage().substring( responseDTO.getMessage().lastIndexOf( "ORA" ), responseDTO.getMessage().lastIndexOf( ":" ) );
+    //          }
+    //          addMessageError( null, ConstantWEB.MESSAGE_ERROR, code + ":" + ConstantWEB.MESSAGE_ERROR_DELETE_DETAIL );
+    //        }
+    //      }
+    //    } catch ( Exception e ) {
+    //      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    //      addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_DETAIL_ERROR );
+    //    }
     return null;
   }
   
@@ -1334,7 +1334,8 @@ public class AdminTaskBean extends GeneralManagedBean {
             TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
             traceTaskDTO.setTask( selectedObject );
             traceTaskDTO.setNote( ( String ) getObjectSession( "noteTask" ) );
-            traceTaskDTO.setIdStatus( ( ( StatusDTO ) getObjectSession( "statusOld" ) ).getId() );
+            traceTaskDTO.setStatus( ( ( StatusDTO ) getObjectSession( "statusOld" ) ) );
+            traceTaskDTO.setStatus( ( StatusDTO ) getObjectSession( "status" ) );
             traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
             traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
             traceTaskDTO.setCreationDate( currentDate );
@@ -1679,7 +1680,6 @@ public class AdminTaskBean extends GeneralManagedBean {
     }
   }
   
-  
   /**
    * </p> Validate selected record. </p>
    *
@@ -1813,7 +1813,7 @@ public class AdminTaskBean extends GeneralManagedBean {
         
       }
       
-      addObjectSession( selectedObject.getStatus().getId(), "status" );
+      addObjectSession( selectedObject.getStatus(), "status" );
       addObjectSession( selectedObject, "selectedObject" );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
@@ -2063,10 +2063,10 @@ public class AdminTaskBean extends GeneralManagedBean {
    */
   public void changeAreaAdd () {
     try {
-      if( addObject != null && addObject.getArea() != null && addObject.getArea().getId() > 0 ){
+      if ( addObject != null && addObject.getArea() != null && addObject.getArea().getId() > 0 ) {
         ConstantWEB.WEB_LOG.info( addObject.getArea().getId() );
         listTaskType( addObject.getArea().getId() );
-      }else{
+      } else {
         this.listTaskType = new ArrayList< TaskTypeDTO >();
         addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
       }
@@ -2083,10 +2083,10 @@ public class AdminTaskBean extends GeneralManagedBean {
    */
   public void changeAreaUpdate () {
     try {
-      if( selectedObject != null && selectedObject.getArea() != null && selectedObject.getArea().getId() > 0 ){
+      if ( selectedObject != null && selectedObject.getArea() != null && selectedObject.getArea().getId() > 0 ) {
         ConstantWEB.WEB_LOG.info( selectedObject.getArea().getId() );
         listTaskType( selectedObject.getArea().getId() );
-      }else{
+      } else {
         this.listTaskType = new ArrayList< TaskTypeDTO >();
         addObjectSession( listTaskTypeItem, "listTaskTypeItem" );
       }
@@ -2898,7 +2898,7 @@ public class AdminTaskBean extends GeneralManagedBean {
   public void setPersonDTOSelected ( PersonGroupDTO personDTOSelected ) {
     this.personDTOSelected = personDTOSelected;
   }
-
+  
   public String[] getColumnSelectedHistory () {
     columnSelectedHistory = ( String[] ) getObjectSession( "columnSelectedHistory" );
     if ( columnSelectedHistory == null ) {
@@ -2909,8 +2909,8 @@ public class AdminTaskBean extends GeneralManagedBean {
   
   public void setColumnSelectedHistory ( String[] columnSelectedHistory ) {
     this.columnSelectedHistory = columnSelectedHistory;
-  }  
-
+  }
+  
   @SuppressWarnings ( "unchecked" )
   public List< String > getListColumnLabelTaskHistory () {
     listColumnLabelTaskHistory = ( List< String > ) getObjectSession( "listColumnLabelTaskHistory" );
@@ -2923,7 +2923,7 @@ public class AdminTaskBean extends GeneralManagedBean {
   public void setListColumnLabelTaskHistory ( List< String > listColumnLabelTaskHistory ) {
     this.listColumnLabelTaskHistory = listColumnLabelTaskHistory;
   }
- 
+  
   @SuppressWarnings ( "unchecked" )
   public List< TaskDTO > getListTaskHystory () {
     listTaskHystory = ( List< TaskDTO > ) getObjectSession( "listTaskHystory" );
@@ -2936,7 +2936,7 @@ public class AdminTaskBean extends GeneralManagedBean {
   public void setListTaskHystory ( List< TaskDTO > listTaskHystory ) {
     this.listTaskHystory = listTaskHystory;
   }
-
+  
   @SuppressWarnings ( "unchecked" )
   public List< ColumnModel > getColumnsHistory () {
     columnsHistory = ( List< ColumnModel > ) getObjectSession( "columnsHistory" );

@@ -652,4 +652,23 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
+  public ResponseDTO findAllTraceTaskByTaskId ( int pIdTask ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findAllTraceTaskByTaskId( pIdTask );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
+  public ResponseDTO findStatusById ( int idStatus ) {
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findStatusById( idStatus );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
 }

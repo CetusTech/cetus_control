@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+  xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
 
@@ -176,6 +177,44 @@
 
         </h:panelGrid>
       </h:form>
+    </p:tab>
+
+    <p:tab title="Trace">
+      <h:panelGrid id="pnlTrace" columns="2" style="width:100% !important;" columnClasses="c1,c2" cellspacing="2"
+        cellpadding="2">
+        <h:panelGrid columns="1" style="width:90% !important;">
+          <pe:timeline id="timeline" value="#{basicTimelineController.model}" height="250px" widgetVar="timelineVar"
+            var="trace" selectable="#{basicTimelineController.selectable}" locale="es"
+            start="#{manualTaskMBean.selectedObject.creationDate}" zoomable="#{basicTimelineController.zoomable}"
+            moveable="#{basicTimelineController.moveable}" stackEvents="#{basicTimelineController.stackEvents}"
+            axisOnTop="#{basicTimelineController.axisOnTop}" eventStyle="#{basicTimelineController.eventStyle}"
+            showCurrentTime="#{basicTimelineController.showCurrentTime}"
+            showNavigation="#{basicTimelineController.showNavigation}">
+            <p:ajax event="select" listener="#{basicTimelineController.onSelect}" update="detalleTrace" />
+            <h:outputText value="#{trace.status.description}" />
+          </pe:timeline>
+        </h:panelGrid>
+        <p:panel header="Detalle" id="detalleTrace" style="width:100% !important;"
+          visible="#{basicTimelineController.flag}">
+          <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+
+            <p:outputLabel value="#{msg.update_user}" styleClass="resaltar_negro" />
+            <h:outputText value="#{basicTimelineController.timelineEvent.data.creationUser}" />
+            <p:outputLabel value="#{msg.status_fechaCreacion}" styleClass="resaltar_negro" />
+            <h:outputText value="#{basicTimelineController.timelineEvent.data.creationDate}">
+              <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+            </h:outputText>
+            <p:outputLabel value="#{msg.note}" styleClass="resaltar_negro" />
+            <h:outputText value="#{basicTimelineController.timelineEvent.data.note}" />
+            <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+            <h:outputText value="#{basicTimelineController.timelineEvent.data.status.description}" />
+
+
+
+          </h:panelGrid>
+        </p:panel>
+      </h:panelGrid>
+
     </p:tab>
 
   </p:accordionPanel>

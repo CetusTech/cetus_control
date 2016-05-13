@@ -9,23 +9,23 @@ import java.util.Date;
  */
 public class TraceTaskDTO implements Serializable {
   private static final long serialVersionUID = 1L;
-  
+                                             
   private int               id;
-  
+                            
   private Date              assingDate;
-  
+                            
   private Date              creationDate;
-  
+                            
   private String            creationUser;
-  
+                            
   private int               idPerson;
-  
-  private int               idStatus;
-  
+                            
+  private StatusDTO         status;
+                            
   private String            note;
-  
+                            
   private TaskDTO           task;
-  
+                            
   public TraceTaskDTO () {
   }
   
@@ -69,12 +69,16 @@ public class TraceTaskDTO implements Serializable {
     this.idPerson = idPerson;
   }
   
-  public int getIdStatus () {
-    return this.idStatus;
+  public StatusDTO getStatus () {
+    return status;
   }
   
-  public void setIdStatus ( int idStatus ) {
-    this.idStatus = idStatus;
+  public void setStatus ( StatusDTO status ) {
+    this.status = status;
+  }
+  
+  public static long getSerialversionuid () {
+    return serialVersionUID;
   }
   
   public String getNote () {

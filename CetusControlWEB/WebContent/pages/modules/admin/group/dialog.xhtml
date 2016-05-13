@@ -13,7 +13,7 @@
 
   <!-- Dialogo para agregar registro -->
 
-  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.group}"
+  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.group}" position="top"
     widgetVar="dialogAddVar">
     <ui:include src="/pages/modules/admin/group/add.xhtml" />
   </p:dialog>
@@ -37,7 +37,7 @@
 
   <!-- Dialogo para Modificar registro -->
 
-  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.group}"
+  <p:dialog id="dialogMod" resizable="false" modal="true" appendToBody="true" header="#{msg.group}" position="top"
     visible="#{groupMBean.showConfirmMod}" widgetVar="dialogModVar">
     <ui:include src="/pages/modules/admin/group/update.xhtml" />
   </p:dialog>
@@ -76,8 +76,9 @@
   <!-- Dialogo para eliminar el registro -->
   <h:form id="formConfirmDelete">
     <h:panelGroup id="pnlConfirmDelete">
-      <p:confirmDialog message="#{msg.confirm_delete_group}" id="confirmDelete" header="#{msg.header_confirm_delete_group}"
-        appendToBody="true" widgetVar="confirmDeleteVar" severity="alert" visible="#{groupMBean.showConfirmDelete}">
+      <p:confirmDialog message="#{msg.confirm_delete_group}" id="confirmDelete"
+        header="#{msg.header_confirm_delete_group}" appendToBody="true" widgetVar="confirmDeleteVar" severity="alert"
+        visible="#{groupMBean.showConfirmDelete}">
         <center>
           <p:commandButton id="btnConfDelete" value="#{msg.btn_acept}" oncomplete="PF('confirmDeleteVar').hide()"
             styleClass="button-general" icon="img-ok" update=":formContenido:panel :formContenido:table" process="@this"

@@ -47,7 +47,7 @@
     selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
 
     <p:ajax event="rowDblselect" process="@form" listener="#{manualTaskMBean.onRowSelectTask}"
-      update=":dialogView :alertSelectRowTask :dialogViewDisabled :alertSelectRowTask" />
+      update=":dialogView :alertSelectRowTask :dialogViewDisabled :alertSelectRowTask :fromContenido" />
 
 
     <p:columns value="#{manualTaskMBean.columns}" var="column" columnIndexVar="colIndex" filterMatchMode="contains"

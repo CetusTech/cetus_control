@@ -27,6 +27,7 @@ import javax.persistence.TemporalType;
 @Table(name="STATUS")
 @NamedQueries ( {
   @NamedQuery ( name = "Status.findAll", query = "SELECT s FROM Status s" ),
+  @NamedQuery ( name = "Status.findStatusById", query = "SELECT s FROM Status s where s.id = :idStatus" ),
   @NamedQuery (
                name = "Status.findStatus", query = "SELECT s FROM Status s WHERE s.clientCetus.id is null or s.clientCetus.id =:idclientCetus ORDER BY s.description ASC" ) } )
 //  @NamedQuery (

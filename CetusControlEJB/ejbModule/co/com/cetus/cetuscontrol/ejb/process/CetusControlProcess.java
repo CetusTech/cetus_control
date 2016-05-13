@@ -52,6 +52,7 @@ import co.com.cetus.cetuscontrol.dto.StatusDTO;
 import co.com.cetus.cetuscontrol.dto.TaskDTO;
 import co.com.cetus.cetuscontrol.dto.TaskHistoryDTO;
 import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
+import co.com.cetus.cetuscontrol.dto.TraceTaskDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.dto.WorkdayDTO;
 import co.com.cetus.cetuscontrol.ejb.delegate.CetusVortalDelegate;
@@ -75,6 +76,7 @@ import co.com.cetus.cetuscontrol.jpa.entity.Status;
 import co.com.cetus.cetuscontrol.jpa.entity.Task;
 import co.com.cetus.cetuscontrol.jpa.entity.TaskHistory;
 import co.com.cetus.cetuscontrol.jpa.entity.TaskType;
+import co.com.cetus.cetuscontrol.jpa.entity.TraceTask;
 import co.com.cetus.cetuscontrol.jpa.entity.UserPortal;
 import co.com.cetus.cetuscontrol.jpa.entity.Workday;
 import co.com.cetus.common.dto.ParameterDTO;
@@ -2049,6 +2051,8 @@ public class CetusControlProcess {
           ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### EXECUTION DONE " + idTask );
           result = cst.getString( 2 );
           duration = cst.getString( 3 );
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### RESULTADO PL " + result );
+          ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### DURATION PL " + duration );
           if ( result != null && result.equals( ConstantEJB.RESULT_SQL_OK ) ) {
             responseDTO = UtilCommon.createMessageSUCCESS();
             responseDTO.setObjectResponse( duration );
@@ -2401,6 +2405,63 @@ public class CetusControlProcess {
         }
         responseDTO = createMessageSUCCESS();
         responseDTO.setObjectResponse( listATTDTO );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
+  public ResponseDTO findAllTraceTaskByTaskId ( int pIdTask ) {
+    ResponseDTO responseDTO = null;
+    List< TraceTask > listATT = null;
+    List< TraceTaskDTO > listATTDTO = null;
+    TypedQuery< TraceTask > query = null;
+    TraceTaskDTO dto = null;
+    try {
+      query = em.createNamedQuery( "TraceTask.findAllByTaskId", TraceTask.class );
+      query.setParameter( "idTask", pIdTask );
+      
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        listATTDTO = new ArrayList< TraceTaskDTO >();
+        listATT = query.getResultList();
+        for ( TraceTask obj: listATT ) {
+          dto = new TraceTaskDTO();
+          converter.convertEntityToDto( obj, dto, false );
+          listATTDTO.add( dto );
+        }
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( listATTDTO );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
+  public ResponseDTO findStatusById ( int idStatus ) {
+    ResponseDTO responseDTO = null;
+    Status obj = null;
+    StatusDTO dto = null;
+    TypedQuery< Status > query = null;
+    try {
+      query = em.createNamedQuery( "Status.findStatusById", Status.class );
+      query.setParameter( "idStatus", idStatus );
+      
+      
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        obj = query.getSingleResult();
+        dto = new StatusDTO();
+        converter.convertEntityToDto( obj, dto, false );
+        
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( dto );
       } else {
         return createMessageNORESULT();
       }
