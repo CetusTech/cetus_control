@@ -85,6 +85,7 @@ import co.com.cetus.common.exception.ProcessException;
 import co.com.cetus.common.exception.ValidatorException;
 import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.Converter;
+import co.com.cetus.common.util.EFilterSearch;
 import co.com.cetus.common.util.UtilCommon;
 import co.com.cetus.portal.ejb.service.CreateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.CreateUserResponseDTO;
@@ -2039,7 +2040,7 @@ public class CetusControlProcess {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### GENERAR TIEMPO DEDICADO PARA LA TAREA " + idTask );
       conn = getConnection();
       if ( conn != null ) {
-        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### CONEXION ESTABLECIDA  "  );
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### CONEXION ESTABLECIDA  " );
         // Llamada al procedimiento almacenado
         cst = conn.prepareCall( "{call GEN_LENGTH_TASK (?,?,?)}" );
         ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "### PL OK" + idTask );
@@ -2059,7 +2060,7 @@ public class CetusControlProcess {
           } else {
             responseDTO = UtilCommon.createMessageFAILURE();
           }
-        }        
+        }
       }
     } catch ( Exception e ) {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
@@ -2344,7 +2345,7 @@ public class CetusControlProcess {
     }
     return connection;
   }
-
+  
   /**
    * </p> Find task history. </p>
    *
@@ -2357,7 +2358,7 @@ public class CetusControlProcess {
     ResponseDTO responseDTO = null;
     TaskHistoryDTO taskHistoryDTO = null;
     TypedQuery< TaskHistory > query = null;
-    List<TaskHistoryDTO> list = null;
+    List< TaskHistoryDTO > list = null;
     try {
       query = em.createNamedQuery( "TaskHistory.findTAskHistory", TaskHistory.class );
       query.setParameter( "idTask", idTask );
@@ -2368,7 +2369,7 @@ public class CetusControlProcess {
           taskHistoryDTO = new TaskHistoryDTO();
           responseDTO = createMessageSUCCESS();
           converter.convertEntityToDto( taskHistory, taskHistoryDTO, false );
-    
+          
           list.add( taskHistoryDTO );
         }
         responseDTO = createMessageSUCCESS();
@@ -2384,7 +2385,7 @@ public class CetusControlProcess {
     }
     return responseDTO;
   }
-
+  
   public ResponseDTO findTaskTypeByArea ( int idArea ) {
     ResponseDTO responseDTO = null;
     List< AreaTypeTask > listATT = null;
@@ -2454,7 +2455,6 @@ public class CetusControlProcess {
       query = em.createNamedQuery( "Status.findStatusById", Status.class );
       query.setParameter( "idStatus", idStatus );
       
-      
       if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
         obj = query.getSingleResult();
         dto = new StatusDTO();
@@ -2470,6 +2470,90 @@ public class CetusControlProcess {
       responseDTO = createMessageFAILURE();
     }
     return responseDTO;
+  }
+  
+  /**
+   * </p> Find task by filter. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idClient the id client
+   * @param filter the filter
+   * @param inputFilter the input filter
+   * @return el response dto
+   * @since CetusControlEJB (14/05/2016)
+   */
+  @SuppressWarnings ( "unchecked" )
+  public ResponseDTO findTaskByFilter ( int idClient, String filter, String inputFilter ) {
+    ResponseDTO responseDTO = null;
+    List< Task > list = null;
+    List< TaskDTO > listDto = null;
+    TaskDTO dto = null;
+    Query query = null;
+    StringBuilder sql = new StringBuilder();
+    try {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClient=" + idClient + ", filter=" + filter + ", inputFilter=" + inputFilter );
+      if ( !UtilCommon.isNullOrEmptyString( filter ) && !UtilCommon.isNullOrEmptyString( inputFilter ) ) {
+        sql.append( "SELECT t " );
+        sql.append( "FROM Task t" );
+        sql.append( "JOIN t.personGroup pg " );
+        sql.append( "JOIN pg.person p " );
+        sql.append( "WHERE p.client.id = :idClient " );
+        
+        switch ( EFilterSearch.getFilterSearch( filter ) ) {
+          case FILTER1: // Codigo de la tarea
+            sql.append( "AND UPPER(t.code) LIKE %:inputFilter% " );
+            break;
+          case FILTER2: // Descripcion de la tarea
+            sql.append( "AND UPPER(t.description) LIKE %:inputFilter% " );
+            break;
+          case FILTER3: // Responsable de la tarea
+            sql.append( "AND ( UPPER(p.names) LIKE %:inputFilter% OR UPPER(p.lastNames) LIKE %:inputFilter% ) " );
+            break;
+          case FILTER4:
+            break;
+          case FILTER5:
+            break;
+          case FILTER6:
+            break;
+          case FILTER7:
+            break;
+          case FILTER8:
+            break;
+          case FILTER9:
+            break;
+          case FILTER10:
+            break;
+          default:
+            break;
+        }
+        
+        query = em.createQuery( sql.toString() );
+        query.setParameter( "idClient", idClient );
+        query.setParameter( "idPerson", inputFilter.toUpperCase() );
+        
+        if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+          listDto = new ArrayList< >();
+          list = query.getResultList();
+          for ( Task task: list ) {
+            dto = new TaskDTO();
+            converter.convertEntityToDto( task, dto, false );
+            listDto.add( dto );
+          }
+          responseDTO = createMessageSUCCESS();
+          responseDTO.setObjectResponse( listDto );
+        } else {
+          return createMessageNORESULT();
+        }
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    
+    return responseDTO;
+    
   }
   
 }

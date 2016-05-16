@@ -32,6 +32,8 @@ public class ConstantWEB {
   public final static String     DESC_ACRONYM                        = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DESC_ACRONYM" );
   public final static String     DESC_IP_REQUEST                     = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DESC_IP_REQUEST" );
   public final static String     DESC_HOST_REQUEST                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DESC_HOST_REQUEST" );
+  public final static String     DESC_FILTER_SEARCH                  = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DESC_FILTER_SEARCH" );
+  public final static String     DESC_INPUT_SEARCH                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "DESC_INPUT_SEARCH" );
   public final static String     URL_PAGE_USER_NOVALID               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_PAGE_USER_NOVALID" );
   public final static String     URL_PAGE_ERROR                      = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_PAGE_ERROR" );
   public final static String     REAL_PATH                           = UtilWEB.getProperty( NAME_BUNDLE_WEB, "REAL_PATH" );
@@ -153,5 +155,7 @@ public class ConstantWEB {
   public final static String     MESSAGE_ERROR_DELETE_AREA_TASK_TYPE = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_DELETE_AREA_TASK_TYPE" );
   public final static String     MESSAGE_ERROR_CREATE_AREA_TASK_TYPE = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CREATE_AREA_TASK_TYPE" );
   public final static String     FIELD_REQUIRED                      = UtilWEB.getProperty( NAME_BUNDLE_WEB, "field_required" );
+  
+  public final static String     URL_SEARCH_TASK                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_SEARCH_TASK" );
                                                                      
 }

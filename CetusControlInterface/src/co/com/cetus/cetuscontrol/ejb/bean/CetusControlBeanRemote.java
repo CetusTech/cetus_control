@@ -138,4 +138,6 @@ public interface CetusControlBeanRemote {
   public ResponseDTO findAllTraceTaskByTaskId ( int pIdTask );
   
   public ResponseDTO findStatusById ( int idStatus );
+  
+  public ResponseDTO findTaskByFilter ( int idClient, String filter, String inputFilter );
 }

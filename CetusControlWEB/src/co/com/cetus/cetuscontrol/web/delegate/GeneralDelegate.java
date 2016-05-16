@@ -671,4 +671,15 @@ public class GeneralDelegate {
     }
     return responseDTO;
   }
+  
+  public ResponseDTO findTaskByFilter ( int idClient, String filter, String inputFilter ){
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findTaskByFilter( idClient, filter, inputFilter );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
 }

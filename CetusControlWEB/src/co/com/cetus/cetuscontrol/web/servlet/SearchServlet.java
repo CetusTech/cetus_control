@@ -128,15 +128,22 @@ public class SearchServlet extends HttpServlet {
               } else {
                 ConstantWEB.WEB_LOG.info( "El Cliente Cetus no tiene configurado los parametros generales" );
               }
-                            
-                            HttpSession session = request.getSession( true );
-              //              session.setAttribute( ConstantWEB.DESC_USER_DTO, userDTO );
-              //              session.setAttribute( ConstantWEB.DESC_PARAMETER_GENERAL_DTO, parameterGeneralDTO );
-              //              session.setAttribute( ConstantWEB.DESC_ACRONYM, acronym );
-              //              session.setAttribute( ConstantWEB.DESC_IP_REQUEST, ipClient );
-              //              //              session.setAttribute( ConstantWEB.DESC_HOST_REQUEST, request.getRemoteHost() );
-              //              session.setAttribute( ConstantWEB.DESC_APP, app );//Subir a session el id de la aplicacion 
-              //              response.sendRedirect( request.getContextPath() + url );
+              
+              HttpSession session = request.getSession( true );
+              session.setAttribute( ConstantWEB.DESC_USER_DTO, userDTO );
+              session.setAttribute( ConstantWEB.DESC_PARAMETER_GENERAL_DTO, parameterGeneralDTO );
+              session.setAttribute( ConstantWEB.DESC_ACRONYM, acronym );
+              session.setAttribute( ConstantWEB.DESC_IP_REQUEST, ipClient );
+              session.setAttribute( ConstantWEB.DESC_FILTER_SEARCH, filter );
+              session.setAttribute( ConstantWEB.DESC_INPUT_SEARCH, input );
+              
+              // Opciones de busqueda: 1=busqueda de tareas
+              if ( optionSearch.equals( "1" ) ) {
+                response.sendRedirect( request.getContextPath() + ConstantWEB.URL_SEARCH_TASK );
+              } else {
+                response.sendRedirect( request.getContextPath() + ConstantWEB.URL_PAGE_ERROR );
+              }
+              
             } else {
               response.sendRedirect( request.getContextPath() + ConstantWEB.URL_PAGE_USER_NOVALID );
             }

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="msg" basename="message_es" />
+<h:head>
+  <title>#{msg.title_application}</title>
+  <h:outputStylesheet library="css" name="estilo.css" />
+  <h:outputStylesheet library="css" name="style_theme.css" />
+  <h:outputScript library="js" name="common.js" />
+  <h:outputScript library="js" name="calendar.js" />
+  <h:outputScript library="js" name="local_Es.js" />
+</h:head>
+<h:body>
+  <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+  <h:form id="fromContenido">
+    <p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
+    <p:panel id="panel" header="#{msg.list_tasks}">
+      <ui:include src="/pages/modules/task/search_task/list.xhtml" />
+    </p:panel>
+  </h:form>
+  <ui:include src="/pages/modules/task/search_task/dialog.xhtml" />
+</h:body>
+</html>
+

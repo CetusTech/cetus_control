@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+  <p:dataTable value="#{searchTaskMBean.listTask}" dblClickSelect="true" rows="#{msg.rows_paginator}" id="table"
+    paginator="true"
+    rowStyleClass="#{index mod 2 == 0 ? object.status.id ==2 ? 'start_task_color' : object.status.id ==3 ? 'completed_task_color' : object.status.id ==1 ? 'assign_task_color' : object.status.id ==5 ? 'suspended_task_color' : object.status.id ==4 ? 'cancelled_task_color' : null  : object.status.id ==2 ? 'start_task_color' : object.status.id ==3 ? 'completed_task_color' : object.status.id ==1 ? 'assign_task_color' : object.status.id ==5 ? 'suspended_task_color' : object.status.id ==4 ? 'cancelled_task_color' : 'row-color-2'}"
+    rowIndexVar="index" currentPageReportTemplate="({currentPage} de {totalPages})" widgetVar="tableTask"
+    rowsPerPageTemplate="10,#{searchTaskMBean.listTask.size()}"
+    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    paginatorPosition="bottom" rowKey="#{object.id}" selection="#{searchTaskMBean.selectedObject}"
+    selectionMode="single" emptyMessage="#{msg.list_empty}" var="object">
+
+    <p:ajax event="rowDblselect" process="@form" listener="#{searchTaskMBean.onRowSelectTask}" update="" />
+
+    <p:column sortBy="#{object.code}" filterBy="#{object.code}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.code}" />
+      </f:facet>
+      <h:outputText value="#{object.code}" />
+    </p:column>
+
+    <p:column sortBy="#{object.description}" filterBy="#{object.description}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.description}" />
+      </f:facet>
+      <h:outputText value="#{object.description}" />
+    </p:column>
+
+    <p:column sortBy="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}"
+      filterBy="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <h:outputText value="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}" />
+    </p:column>
+
+    <p:column sortBy="#{object.status.description}" filterBy="#{object.status.description}" filterMatchMode="contains">
+      <f:facet name="header">
+        <h:outputText value="#{msg.status}" />
+      </f:facet>
+      <h:outputText value="#{object.status.description}" />
+    </p:column>
+
+  </p:dataTable>
+</ui:composition>

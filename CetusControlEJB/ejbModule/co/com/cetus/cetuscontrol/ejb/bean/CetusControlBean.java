@@ -984,5 +984,19 @@ public class CetusControlBean implements CetusControlBeanRemote {
     return response;
     
   }
+
+  @Override
+  public ResponseDTO findTaskByFilter ( int idClient, String filter, String inputFilter ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findTaskByFilter( idClient, filter, inputFilter );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+    
+  }
+  
   
 }
