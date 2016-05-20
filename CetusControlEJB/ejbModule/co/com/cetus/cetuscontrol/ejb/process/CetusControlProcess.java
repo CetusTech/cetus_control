@@ -2494,20 +2494,20 @@ public class CetusControlProcess {
       ConstantEJB.CETUS_CONTROL_EJB_LOG.info( "idClient=" + idClient + ", filter=" + filter + ", inputFilter=" + inputFilter );
       if ( !UtilCommon.isNullOrEmptyString( filter ) && !UtilCommon.isNullOrEmptyString( inputFilter ) ) {
         sql.append( "SELECT t " );
-        sql.append( "FROM Task t" );
+        sql.append( "FROM Task t " );
         sql.append( "JOIN t.personGroup pg " );
         sql.append( "JOIN pg.person p " );
         sql.append( "WHERE p.client.id = :idClient " );
         
         switch ( EFilterSearch.getFilterSearch( filter ) ) {
           case FILTER1: // Codigo de la tarea
-            sql.append( "AND UPPER(t.code) LIKE %:inputFilter% " );
+            sql.append( "AND UPPER(t.code) LIKE :inputFilter " );
             break;
           case FILTER2: // Descripcion de la tarea
-            sql.append( "AND UPPER(t.description) LIKE %:inputFilter% " );
+            sql.append( "AND UPPER(t.description) LIKE :inputFilter " );
             break;
           case FILTER3: // Responsable de la tarea
-            sql.append( "AND ( UPPER(p.names) LIKE %:inputFilter% OR UPPER(p.lastNames) LIKE %:inputFilter% ) " );
+            sql.append( "AND ( UPPER(p.names) LIKE :inputFilter OR UPPER(p.lastNames) LIKE :inputFilter ) " );
             break;
           case FILTER4:
             break;
@@ -2529,7 +2529,7 @@ public class CetusControlProcess {
         
         query = em.createQuery( sql.toString() );
         query.setParameter( "idClient", idClient );
-        query.setParameter( "idPerson", inputFilter.toUpperCase() );
+        query.setParameter( "inputFilter", "%" + inputFilter.toUpperCase() + "%" );
         
         if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
           listDto = new ArrayList< >();

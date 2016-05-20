@@ -30,7 +30,7 @@
     <p:column sortBy="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}"
       filterBy="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}" filterMatchMode="contains">
       <f:facet name="header">
-        <h:outputText value="#{msg.status}" />
+        <h:outputText value="#{msg.person_responsable}" />
       </f:facet>
       <h:outputText value="#{object.personGroup.person.names} #{object.personGroup.person.lastNames}" />
     </p:column>
