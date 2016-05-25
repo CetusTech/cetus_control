@@ -9,5 +9,14 @@
       <p:graphicImage name="ajax-loader.gif" library="images" />
     </div>
   </p:dialog>
+  
+    <!-- Dialogo para ver detalle del registro -->
+  <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="false"
+    header="#{msg.detalle_record} [#{searchTaskMBean.selectedObject.code}]" closable="true"
+    maximizable="false" width="98%" visible="#{searchTaskMBean.showViewDetail and !searchTaskMBean.showMenu}" position="top"
+    widgetVar="dialogViewVar" closeOnEscape="true">
+    <p:ajax listener="#{searchTaskMBean.closeDialogView()}" event="close" />
+    <ui:include src="/pages/modules/task/search_task/view.xhtml" />
+  </p:dialog>
 
 </ui:composition>

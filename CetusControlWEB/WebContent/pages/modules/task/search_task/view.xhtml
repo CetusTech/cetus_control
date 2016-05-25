@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:pe="http://primefaces.org/ui/extensions" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form prependId="false" id="formView" style="width: 100% !important">
+    <p:tabView id="viewtab" activeIndex="#{searchTaskMBean.indexTab}" style="width: 100% !important;" dynamic="true">
+      <p:tab title="#{msg.information}" id="info" style="width: 100% !important;">
+
+        <p:panelGrid id="pnlTab1" styleClass="column_100"
+          style="border-width: 1px !important; border-style: solid !important;">
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.code}" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.description}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.description}" />
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.person_responsable}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel
+                value="#{searchTaskMBean.selectedObject.personGroup.person.names} #{searchTaskMBean.selectedObject.personGroup.person.lastNames}" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.status.description}" />
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.area}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.area.description}" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.taskType}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.taskType.description}" />
+            </p:column>
+          </p:row>
+          <p:row>
+
+            <p:column>
+              <p:outputLabel value="#{msg.priority}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.priority.description}" />
+            </p:column>
+
+            <p:column>
+              <p:outputLabel value="#{msg.percentage}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.percentage}">
+                <f:convertNumber pattern="00.##" />
+              </p:outputLabel>
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.userFun}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.userFunctional}" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.requestor}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.requestor}" />
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.assingDate}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.assingDate}">
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+              </p:outputLabel>
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.deliveryDate}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.deliveryDate}">
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+              </p:outputLabel>
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.initDate}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.dateInit}">
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+              </p:outputLabel>
+            </p:column>
+
+            <p:column>
+              <p:outputLabel value="#{msg.date_end}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.dateEnd}">
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+              </p:outputLabel>
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.observation}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column colspan="3">
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.observation}" />
+            </p:column>
+          </p:row>
+
+          <p:row>
+            <p:column>
+              <p:outputLabel value="#{msg.observationRequestor}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{searchTaskMBean.selectedObject.observationRequestor}" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.approved}" styleClass="resaltar_negro" />
+            </p:column>
+            <p:column>
+              <p:outputLabel value="#{msg.yeah}" rendered="#{searchTaskMBean.selectedObject.approved == 1}" />
+              <p:outputLabel value="#{msg.no}" rendered="#{searchTaskMBean.selectedObject.approved == 0}" />
+            </p:column>
+          </p:row>
+
+          </p:panelGrid>
+      </p:tab>
+
+
+      <p:tab title="#{msg.attachment}" id="attachFiles">
+        <p:growl id="msgDel" for="msgDel" globalOnly="true" showDetail="true" />
+        <h:panelGrid columns="1" style="width:100%" cellspacing="1" cellpadding="1" id="pnlTab2">
+
+
+        </h:panelGrid>
+
+
+      </p:tab>
+
+      <p:tab title="#{msg.task_history}" id="taskHistory">
+        <h:panelGrid id="pnlTab3" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
+          <p:growl id="msgHistory" for="iconOnly" />
+
+
+        </h:panelGrid>
+      </p:tab>
+
+      <p:tab title="Trace">
+        <h:panelGrid id="pnlTab4" columns="2" style="width:100% !important;" columnClasses="c1,c2" cellspacing="2"
+          cellpadding="2">
+
+        </h:panelGrid>
+
+      </p:tab>
+
+      <p:tab title="#{msg.comment}" id="comment">
+        <h:panelGrid id="pnlTab3" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
+          <p:growl id="msgHistory" for="iconOnly" />
+
+
+        </h:panelGrid>
+      </p:tab>
+
+    </p:tabView>
+  </h:form>
+</ui:composition>
