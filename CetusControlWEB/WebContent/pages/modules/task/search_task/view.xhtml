@@ -4,12 +4,12 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:form prependId="false" id="formView" style="width: 100% !important">
-    <p:tabView id="viewtab" activeIndex="#{searchTaskMBean.indexTab}" style="width: 100% !important;" dynamic="true">
+    <p:tabView id="viewtab" activeIndex="#{searchTaskMBean.indexTab}"
+      style="width: 100% !important; height:430px !important;" dynamic="true">
       <p:tab title="#{msg.information}" id="info" style="width: 100% !important;">
 
-        <p:panelGrid id="pnlTab1" styleClass="column_100"
-          style="border-width: 1px !important; border-style: solid !important;">
-          <p:row>
+        <p:panelGrid id="pnlTab1" styleClass="column_100">
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.code}" styleClass="resaltar_negro" />
             </p:column>
@@ -24,7 +24,7 @@
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.person_responsable}" styleClass="resaltar_negro" />
             </p:column>
@@ -40,7 +40,7 @@
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.area}" styleClass="resaltar_negro" />
             </p:column>
@@ -54,8 +54,8 @@
               <p:outputLabel value="#{searchTaskMBean.selectedObject.taskType.description}" />
             </p:column>
           </p:row>
-          <p:row>
 
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.priority}" styleClass="resaltar_negro" />
             </p:column>
@@ -73,7 +73,7 @@
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.userFun}" styleClass="resaltar_negro" />
             </p:column>
@@ -88,13 +88,13 @@
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.assingDate}" styleClass="resaltar_negro" />
             </p:column>
             <p:column>
               <p:outputLabel value="#{searchTaskMBean.selectedObject.assingDate}">
-                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{searchTaskMBean.patterDate}" />
               </p:outputLabel>
             </p:column>
             <p:column>
@@ -102,18 +102,18 @@
             </p:column>
             <p:column>
               <p:outputLabel value="#{searchTaskMBean.selectedObject.deliveryDate}">
-                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{searchTaskMBean.patterDate}" />
               </p:outputLabel>
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.initDate}" styleClass="resaltar_negro" />
             </p:column>
             <p:column>
               <p:outputLabel value="#{searchTaskMBean.selectedObject.dateInit}">
-                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{searchTaskMBean.patterDate}" />
               </p:outputLabel>
             </p:column>
 
@@ -122,12 +122,12 @@
             </p:column>
             <p:column>
               <p:outputLabel value="#{searchTaskMBean.selectedObject.dateEnd}">
-                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{manualTaskMBean.patterDate}" />
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{searchTaskMBean.patterDate}" />
               </p:outputLabel>
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.observation}" styleClass="resaltar_negro" />
             </p:column>
@@ -136,7 +136,7 @@
             </p:column>
           </p:row>
 
-          <p:row>
+          <p:row styleClass="row_border_white">
             <p:column>
               <p:outputLabel value="#{msg.observationRequestor}" styleClass="resaltar_negro" />
             </p:column>
@@ -152,7 +152,7 @@
             </p:column>
           </p:row>
 
-          </p:panelGrid>
+        </p:panelGrid>
       </p:tab>
 
 
@@ -160,9 +160,56 @@
         <p:growl id="msgDel" for="msgDel" globalOnly="true" showDetail="true" />
         <h:panelGrid columns="1" style="width:100%" cellspacing="1" cellpadding="1" id="pnlTab2">
 
+          <p:dataTable id="fileTask" var="objFile" value="#{searchTaskMBean.listAttachFiles}"
+            rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index" paginator="true"
+            paginatorPosition="bottom" rowKey="#{objFile.id}" selection="#{searchTaskMBean.attachDTOSelected}"
+            selectionMode="single" emptyMessage="#{msg.list_empty}" rows="5"
+            rowsPerPageTemplate="1,#{searchTaskMBean.listAttachFiles.size()}">
+            <f:facet name="header">
+              <h:outputText value="#{msg.list_files}" />
+            </f:facet>
+
+            <p:ajax event="rowSelect" listener="#{searchTaskMBean.onRowSelectAttachment}" update="viewtab:fileTask"
+              process="@this" />
+
+            <p:column headerText="#{msg.name}" styleClass="column_80">
+              <h:outputText value="#{objFile.fileName}" />
+            </p:column>
+
+            <p:column headerText="#{msg.actions}" style="text-align: right" styleClass="column_20">
+              <p:commandButton id="downloadLink" ajax="false" icon="ui-icon-arrowthickstop-1-s" immediate="true"
+                title="#{msg.download}" actionListener="#{searchTaskMBean.prepDownload(objFile)}">
+                <p:fileDownload value="#{searchTaskMBean.download}" />
+              </p:commandButton>
+            </p:column>
+          </p:dataTable>
+          <p:dataTable value="#{searchTaskMBean.listFilesTask}" var="obj"
+            rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}"
+            rowsPerPageTemplate="1,#{searchTaskMBean.listFilesTask.size()}" rowIndexVar="index" paginator="false"
+            paginatorPosition="bottom" id="listFiles" emptyMessage="#{msg.msg_empty_list_file}">
+            <f:facet name="header">
+              <h:outputText value="#{msg.list_files_upload}" />
+            </f:facet>
+            <p:column headerText="#{msg.name}" style="width: 85% !important">
+              <h:outputText value="#{obj.fileName}" />
+            </p:column>
+            <p:column headerText="" style="width:15%;text-align: center">
+              <p:commandButton icon="ui-icon-circle-close" update="listFiles" id="test" process="listFiles">
+                <f:setPropertyActionListener value="#{obj}" target="#{searchTaskMBean.fileSelected}" for="test" />
+              </p:commandButton>
+            </p:column>
+          </p:dataTable>
+          <p:fileUpload fileUploadListener="#{searchTaskMBean.handleFileUpload}" mode="advanced" dragDropSupport="true"
+            label="#{msg.selected_file}" invalidSizeMessage="#{msg.file_limit_size}"
+            invalidFileMessage="#{msg.file_invalid}" auto="true" update="listFiles btnSave :viewtab:msgDel"
+            sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|txt|xls|xlsx|zip|rar|docx|jpe?g|png)$/" />
 
         </h:panelGrid>
-
+        <center>
+          <p:commandButton id="btnSave" value="#{msg.btn_save}" update=":formView :formConfirmSave:confirmSave"
+            disabled="#{ empty searchTaskMBean.listFilesTask ? true : false}" process="@form"
+            styleClass="button-general" icon="img-save" actionListener="#{searchTaskMBean.loadSave}" />
+        </center>
 
       </p:tab>
 
@@ -170,6 +217,49 @@
         <h:panelGrid id="pnlTab3" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
           <p:growl id="msgHistory" for="iconOnly" />
 
+          <p:toolbar styleClass="body_toolbar_nivel_3" id="bars">
+            <p:toolbarGroup align="left" id="group">
+
+              <p:selectCheckboxMenu id="columnHistory" value="#{searchTaskMBean.columnSelectedHistory}" label="Columnas"
+                filter="false" widgetVar="colHistory" onHide="true" filterMatchMode="startsWith"
+                panelStyle="width:250px">
+                <f:selectItems value="#{searchTaskMBean.listColumnLabelTaskHistory}" />
+
+                <p:ajax listener="#{searchTaskMBean.createDynamicColumnsHistory}" update="tableHistory" />
+                <p:ajax event="toggleSelect" listener="#{searchTaskMBean.createDynamicColumnsHistory}"
+                  update="tableHistory" process="@this" />
+
+              </p:selectCheckboxMenu>
+
+            </p:toolbarGroup>
+          </p:toolbar>
+
+          <p:dataTable value="#{searchTaskMBean.listTaskHystory}" rows="#{msg.rows_paginator}" id="tableHistory"
+            paginator="true" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
+            currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" liveScroll="true"
+            rowsPerPageTemplate="10,#{searchTaskMBean.listTaskHystory.size()}" scrollHeight="250"
+            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+            paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
+
+            <p:column styleClass="column_5">
+              <p:rowToggler />
+            </p:column>
+
+            <p:columns value="#{searchTaskMBean.columnsHistory}" var="column" columnIndexVar="colIndex"
+              filterMatchMode="contains" sortBy="#{object[column.property]}">
+              <f:facet name="header">
+                <h:outputText value="#{column.header}" />
+              </f:facet>
+              <h:outputText value="#{searchTaskMBean.getValueColumn(object[column.property])}" />
+            </p:columns>
+
+            <p:rowExpansion>
+              <br />
+              <ui:include src="/pages/modules/task/manual_task/view.xhtml" />
+              <br />
+            </p:rowExpansion>
+
+          </p:dataTable>
 
         </h:panelGrid>
       </p:tab>
@@ -178,16 +268,41 @@
         <h:panelGrid id="pnlTab4" columns="2" style="width:100% !important;" columnClasses="c1,c2" cellspacing="2"
           cellpadding="2">
 
+          <h:panelGrid columns="1" style="width:70% !important;">
+            <pe:timeline id="timeline" value="#{basicTimelineController.model}" height="250px" widgetVar="timelineVar"
+              var="trace" selectable="#{basicTimelineController.selectable}" locale="es"
+              start="#{searchTaskMBean.selectedObject.creationDate}" zoomable="#{basicTimelineController.zoomable}"
+              moveable="#{basicTimelineController.moveable}" stackEvents="#{basicTimelineController.stackEvents}"
+              axisOnTop="#{basicTimelineController.axisOnTop}" eventStyle="#{basicTimelineController.eventStyle}"
+              showCurrentTime="#{basicTimelineController.showCurrentTime}"
+              showNavigation="#{basicTimelineController.showNavigation}">
+              <p:ajax event="select" listener="#{basicTimelineController.onSelect}" update="detalleTrace" />
+              <h:outputText value="#{trace.status.description}" />
+            </pe:timeline>
+          </h:panelGrid>
+          <p:panel header="Detalle" id="detalleTrace" style="width:100% !important;"
+            visible="#{basicTimelineController.flag}">
+            <h:panelGrid columns="2" cellspacing="4" cellpadding="4">
+
+              <p:outputLabel value="#{msg.update_user}" styleClass="resaltar_negro" />
+              <h:outputText value="#{basicTimelineController.timelineEvent.data.creationUser}" />
+              <p:outputLabel value="#{msg.status_fechaCreacion}" styleClass="resaltar_negro" />
+              <h:outputText value="#{basicTimelineController.timelineEvent.data.creationDate}">
+                <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{searchTaskMBean.patterDate}" />
+              </h:outputText>
+              <p:outputLabel value="#{msg.note}" styleClass="resaltar_negro" />
+              <h:outputText value="#{basicTimelineController.timelineEvent.data.note}" />
+              <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+              <h:outputText value="#{basicTimelineController.timelineEvent.data.status.description}" />
+            </h:panelGrid>
+          </p:panel>
+
         </h:panelGrid>
 
       </p:tab>
 
       <p:tab title="#{msg.comment}" id="comment">
-        <h:panelGrid id="pnlTab3" columns="1" style="width:100% !important;" cellspacing="2" cellpadding="2">
-          <p:growl id="msgHistory" for="iconOnly" />
-
-
-        </h:panelGrid>
+        <ui:include src="/pages/modules/task/comment_task/ini.xhtml" />
       </p:tab>
 
     </p:tabView>

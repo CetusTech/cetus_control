@@ -998,5 +998,14 @@ public class CetusControlBean implements CetusControlBeanRemote {
     
   }
   
-  
+  public ResponseDTO findCommentByIdTask ( int idTask ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.findCommentByIdTask( idTask );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
 }

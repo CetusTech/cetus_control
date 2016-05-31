@@ -682,4 +682,14 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
+  public ResponseDTO findCommentByIdTask ( int idTask ){
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.findCommentByIdTask( idTask );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
+  
 }

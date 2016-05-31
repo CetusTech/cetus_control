@@ -9,14 +9,35 @@
       <p:graphicImage name="ajax-loader.gif" library="images" />
     </div>
   </p:dialog>
-  
-    <!-- Dialogo para ver detalle del registro -->
+
+  <!-- Dialogo para ver detalle del registro -->
   <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="false"
-    header="#{msg.detalle_record} [#{searchTaskMBean.selectedObject.code}]" closable="true"
-    maximizable="false" width="98%" visible="#{searchTaskMBean.showViewDetail and !searchTaskMBean.showMenu}" position="top"
+    header="#{msg.detalle_record} [#{searchTaskMBean.selectedObject.code}]" closable="true" maximizable="false"
+    width="98%" visible="#{searchTaskMBean.showViewDetail and !searchTaskMBean.showMenu}" position="top"
     widgetVar="dialogViewVar" closeOnEscape="true">
-    <p:ajax listener="#{searchTaskMBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/search_task/view.xhtml" />
   </p:dialog>
+
+  <p:dialog id="dialogView2" resizable="false" modal="true" appendToBody="false"
+    header="#{msg.detalle_record} [#{searchTaskMBean.selectedObject.code}]" closable="true" maximizable="false"
+    width="98%" visible="#{searchTaskMBean.showViewDetail and searchTaskMBean.showMenu}" position="top"
+    widgetVar="dialogView2Var" closeOnEscape="true">
+    <ui:include src="/pages/modules/task/search_task/view2.xhtml" />
+  </p:dialog>
+
+  <h:form id="formConfirmSave">
+    <p:confirmDialog message="#{msg.confirm_update_task}" id="confirmSave" header="#{msg.header_confirm_update_task}"
+      appendToBody="true" widgetVar="confirmSave" severity="alert" visible="#{searchTaskMBean.showDialogConfirmSave}">
+      <center>
+        <p:commandButton id="btnConfSave" value="#{msg.btn_acept}" update=":formView:viewtab"
+          styleClass="button-general" icon="img-ok" oncomplete="PF('confirmSave').hide()" process="@form"
+          action="#{searchTaskMBean.save}" />
+        <p:commandButton id="btnConfCancelSave" value="#{msg.btn_cancel}" oncomplete="PF('confirmSave').hide()"
+          styleClass="button-general" icon="img-cancel" />
+      </center>
+
+    </p:confirmDialog>
+  </h:form>
+
 
 </ui:composition>

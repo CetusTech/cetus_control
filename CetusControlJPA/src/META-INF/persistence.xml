@@ -24,6 +24,7 @@
 		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationSendMail</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.NotificationSetting</class>
 		<class>co.com.cetus.cetuscontrol.jpa.entity.TaskHistory</class>
+		<class>co.com.cetus.cetuscontrol.jpa.entity.CommentTask</class>
 		<properties>
 			<property name="hibernate.id.new_generator_mappings" value="false"/>
 		</properties>

@@ -39,6 +39,7 @@ import co.com.cetus.cetuscontrol.dto.AreaDTO;
 import co.com.cetus.cetuscontrol.dto.AreaTypeTaskDTO;
 import co.com.cetus.cetuscontrol.dto.AttachDTO;
 import co.com.cetus.cetuscontrol.dto.ClientDTO;
+import co.com.cetus.cetuscontrol.dto.CommentTaskDTO;
 import co.com.cetus.cetuscontrol.dto.ExceptionWorkdayDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTDTO;
 import co.com.cetus.cetuscontrol.dto.GroupTypeDTO;
@@ -63,6 +64,7 @@ import co.com.cetus.cetuscontrol.jpa.entity.Area;
 import co.com.cetus.cetuscontrol.jpa.entity.AreaTypeTask;
 import co.com.cetus.cetuscontrol.jpa.entity.Attach;
 import co.com.cetus.cetuscontrol.jpa.entity.Client;
+import co.com.cetus.cetuscontrol.jpa.entity.CommentTask;
 import co.com.cetus.cetuscontrol.jpa.entity.ExceptionWorkday;
 import co.com.cetus.cetuscontrol.jpa.entity.GroupT;
 import co.com.cetus.cetuscontrol.jpa.entity.GroupType;
@@ -2555,5 +2557,44 @@ public class CetusControlProcess {
     return responseDTO;
     
   }
+  
+  /**
+   * </p> Find comment by id task. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param idTask the id task
+   * @return el response dto
+   * @since CetusControlEJB (29/05/2016)
+   */
+  public ResponseDTO findCommentByIdTask ( int idTask ) {
+    ResponseDTO responseDTO = null;
+    List< CommentTask > listComm = null;
+    List< CommentTaskDTO > listCommDTO = null;
+    CommentTaskDTO dto = null;
+    TypedQuery< CommentTask > query = null;
+    try {
+      query = em.createNamedQuery( "CommentTask.findCommentByIdTask", CommentTask.class );
+      query.setParameter( "idTask", idTask );
+      
+      if ( query != null && query.getResultList() != null && query.getResultList().size() > 0 ) {
+        listCommDTO = new ArrayList< CommentTaskDTO >();
+        listComm = query.getResultList();
+        for ( CommentTask obj: listComm ) {
+          dto = new CommentTaskDTO();
+          converter.convertEntityToDto( obj, dto, false );
+          listCommDTO.add( dto );
+        }
+        responseDTO = createMessageSUCCESS();
+        responseDTO.setObjectResponse( listCommDTO );
+      } else {
+        return createMessageNORESULT();
+      }
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
+  
   
 }

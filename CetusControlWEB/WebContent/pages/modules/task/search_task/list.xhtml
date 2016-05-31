@@ -11,7 +11,7 @@
     paginatorPosition="bottom" rowKey="#{object.id}" selection="#{searchTaskMBean.selectedObject}"
     selectionMode="single" emptyMessage="#{msg.list_empty}" var="object">
 
-    <p:ajax event="rowDblselect" process="@form" listener="#{searchTaskMBean.onRowSelectTask}" update=":dialogView" />
+    <p:ajax event="rowDblselect" process="@form" listener="#{searchTaskMBean.onRowSelectTask}" update=":dialogView :dialogView2" />
 
     <p:column sortBy="#{object.code}" filterBy="#{object.code}" filterMatchMode="contains">
       <f:facet name="header">

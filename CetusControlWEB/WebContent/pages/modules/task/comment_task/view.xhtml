@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+  <p:panelGrid id="viewComment" styleClass="column_100"
+    style="border-width: 1px !important; border-style: solid !important; border-color:white !important;">
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.from}:  " styleClass="resaltar_negro" />
+        <p:outputLabel value="#{object.emitter}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.to}:  " styleClass="resaltar_negro" />
+        <p:outputLabel value="#{object.receiver}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{msg.subject}:  " styleClass="resaltar_negro" />
+        <p:outputLabel value="#{object.subject}" />
+      </p:column>
+    </p:row>
+
+    <p:row>
+      <p:column>
+        <p:outputLabel value="#{object.commentT}" />
+      </p:column>
+    </p:row>
+
+  </p:panelGrid>
+
+</ui:composition>

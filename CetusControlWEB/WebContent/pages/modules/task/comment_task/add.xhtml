@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formAdd" prependId="false">
+    <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
+
+    </h:panelGrid>
+    <center>
+      <p:commandButton value="#{msg.btn_send}" update="panelAdd" process="@form"
+        styleClass="button-general" icon="img-send" actionListener="#{commentTaskMBean.validateAdd}" />
+    </center>
+  </h:form>
+</ui:composition>
