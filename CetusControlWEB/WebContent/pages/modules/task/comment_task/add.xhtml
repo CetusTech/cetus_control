@@ -3,12 +3,38 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:form id="formAdd" prependId="false">
-    <h:panelGrid id="panelAdd" columns="3" cellspacing="4" cellpadding="4">
+    <p:panelGrid id="panelAddComment" cellspacing="4" cellpadding="4">
+      <p:row>
+        <p:column>
+          <p:outputLabel value="#{msg.to}" styleClass="resaltar_negro" />
+        </p:column>
+        <p:column colspan="2">
+          <p:inputTextarea id="receiver" value="#{commentTaskMBean.commentTaskDTO.receiver}" rows="2" cols="50"
+            maxlength="900" required="true" />
+        </p:column>
+      </p:row>
 
-    </h:panelGrid>
+      <p:row>
+        <p:column>
+          <p:outputLabel value="#{msg.subject}" styleClass="resaltar_negro" />
+        </p:column>
+        <p:column colspan="2">
+          <p:inputText id="subject" value="#{commentTaskMBean.commentTaskDTO.subject}" size="100" maxlength="100"
+            required="true" />
+        </p:column>
+      </p:row>
+
+      <p:row>
+        <p:column colspan="3">
+          <p:editor id="editor" value="#{commentTaskMBean.commentTaskDTO.commentT}" maxlength="800" width="600"
+            required="true" />
+        </p:column>
+      </p:row>
+      <p:messages autoUpdate="true" id="msgAdd" showDetail="true" />
+    </p:panelGrid>
     <center>
-      <p:commandButton value="#{msg.btn_send}" update="panelAdd" process="@form"
-        styleClass="button-general" icon="img-send" actionListener="#{commentTaskMBean.validateAdd}" />
+      <p:commandButton value="#{msg.btn_send}" update="panelAdd" process="@form" styleClass="button-general"
+        icon="img-send" actionListener="#{commentTaskMBean.validateAdd}" />
     </center>
   </h:form>
 </ui:composition>

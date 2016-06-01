@@ -27,8 +27,11 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
   private static final long      serialVersionUID = 1L;
                                                   
   private List< CommentTaskDTO > listComment      = null;
+  
+  private CommentTaskDTO commentTaskDTO = null;
                                                   
   public CommentTaskMBean () {
+    commentTaskDTO = new CommentTaskDTO();
   }
   
   /**
@@ -97,5 +100,15 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
     // TODO Auto-generated method stub
     return null;
   }
+
+  public CommentTaskDTO getCommentTaskDTO () {
+    return commentTaskDTO;
+  }
+
+  public void setCommentTaskDTO ( CommentTaskDTO commentTaskDTO ) {
+    this.commentTaskDTO = commentTaskDTO;
+  }
+
+  
   
 }
