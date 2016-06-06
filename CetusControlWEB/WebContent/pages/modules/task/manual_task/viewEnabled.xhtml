@@ -7,13 +7,25 @@
 
 
   <h:form>
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+      <center>
+        <p:commandButton value="#{msg.yeah}" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" process="@this"
+          update=":fromContenido:panel" action="#{manualTaskMBean.reopenTask}" />
+        <p:commandButton value="#{msg.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+      </center>
+    </p:confirmDialog>
     <p:toolbar styleClass="body_toolbar_nivel_3" id="bars2">
       <p:toolbarGroup align="left" id="group">
-        <h:commandLink actionListener="#{manualTaskMBean.generateReportViewTask}" id="btn" title="#{msg.download}"
+        <p:commandLink actionListener="#{manualTaskMBean.generateReportViewTask}" id="btn" title="#{msg.download}"
           onclick="PrimeFaces.monitorDownload(start, stop);">
           <p:fileDownload value="#{manualTaskMBean.fileTemplate}" />
           <p:graphicImage name="pdf.png" width="24" height="24" library="images" title="#{msg.download}" />
-        </h:commandLink>
+        </p:commandLink>
+        <p:separator />
+        <p:commandLink id="btnReopen" title="#{msg.reopen}">
+          <p:confirm header="#{msg.confirmation}" message="#{msg.confirm_reopen}" icon="ui-icon-alert" />
+          <p:graphicImage name="reopen.png" width="24" height="24" library="images" title="#{msg.reopen}" />
+        </p:commandLink>
       </p:toolbarGroup>
     </p:toolbar>
 

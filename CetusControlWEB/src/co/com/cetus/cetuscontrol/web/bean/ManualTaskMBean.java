@@ -833,7 +833,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA CANCELADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
-              if ( (( StatusDTO ) getObjectSession( "status" )).getId() != selectedObject.getStatus().getId() ) {
+              if ( ( ( StatusDTO ) getObjectSession( "status" ) ).getId() != selectedObject.getStatus().getId() ) {
                 //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
@@ -927,7 +927,7 @@ public class ManualTaskMBean extends GeneralManagedBean {
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA SUSPENDIDA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
-              if ( (( StatusDTO ) getObjectSession( "status" )).getId() != selectedObject.getStatus().getId() ) {
+              if ( ( ( StatusDTO ) getObjectSession( "status" ) ).getId() != selectedObject.getStatus().getId() ) {
                 //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
@@ -2088,6 +2088,82 @@ public class ManualTaskMBean extends GeneralManagedBean {
         fileTemplate = new DefaultStreamedContent( byteArrayInputStream, "application/pdf", ConstantWEB.NAME_FILE_PDG_REPORT );
       } else {
         addMessageError( null, ConstantWEB.MESSAGE_ERROR, ConstantWEB.MSG_ERROR_GEN_REPORT_TASK );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+      addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
+    }
+  }
+  
+  /**
+   * </p> Reopen task. </p>
+   *
+   * @author Andres Herrera - Cetus Technology
+   * @since CetusControlWEB (6/06/2016)
+   */
+  @SuppressWarnings ( "unchecked" )
+  public void reopenTask () {
+    ResponseDTO response = null;
+    int statusOld = 0;
+    try {
+      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+      
+      if ( selectedObject != null ) {
+        selectedObject.setModificationUser( getUserInSession() );
+        selectedObject.setModificationDate( currentDate );
+        statusOld = selectedObject.getStatus().getId();
+        selectedObject.getStatus().setId( ConstantWEB.STATUS_ASSIGNED );
+        response = generalDelegate.edit( selectedObject );
+      }
+      if ( UtilCommon.validateResponseSuccess( response ) ) {
+        //agregar history task
+        try {
+          ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+          TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+          taskHistoryDTO.setIdTtask( selectedObject.getId() );
+          taskHistoryDTO.setCreationDate( currentDate );
+          taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+          response = generalDelegate.create( taskHistoryDTO );
+          
+          ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+          
+        } catch ( Exception e ) {
+          ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+          addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+        }
+        
+        //Trazabilidad
+        if ( selectedObject.getStatus() != null ) {
+          //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
+          TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
+          traceTaskDTO.setTask( selectedObject );
+          traceTaskDTO.setNote( "REAPERTURA DE TAREA POR EL USUARIO :"+getUserInSession() );
+          traceTaskDTO.setStatus( new StatusDTO() );
+          traceTaskDTO.getStatus().setId( statusOld );
+          traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
+          traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
+          traceTaskDTO.setCreationDate( currentDate );
+          traceTaskDTO.setCreationUser( getUserInSession() );
+          response = generalDelegate.create( traceTaskDTO );
+          if ( UtilCommon.validateResponseSuccess( response ) ) {
+            ConstantWEB.WEB_LOG.info( "########## SE CREAR EL REGISTRO DE TRAZABILIDAD PARA LA TAREA " + selectedObject.getCode() );
+          }
+        }
+        //LIstar Tareas
+        response = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
+                                                                                                                            .getId() );
+        if ( UtilCommon.validateResponseSuccess( response ) ) {
+          //Tiene Usuario portal la persona seleecionada 
+          listRegister = ( ( List< TaskDTO > ) response.getObjectResponse() );
+        } else {
+          listRegister = new ArrayList< TaskDTO >();
+        }
+        addObjectSession( listRegister, "listRegister" );
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute( "PF('dialogViewDisabledVar').hide();" );
+        
+      } else {
+        ConstantWEB.WEB_LOG.error( "########## ERROR REABRIENDO LA TAREA " + selectedObject.getCode() );
       }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );

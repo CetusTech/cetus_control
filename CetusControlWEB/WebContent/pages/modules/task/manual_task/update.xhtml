@@ -354,6 +354,8 @@
             rendered="#{manualTaskMBean.status.id != 4 and manualTaskMBean.status.id != 3}"
             disabled="#{manualTaskMBean.selectedObject.status.id ==4 ? true : false}" process="@form"
             styleClass="button-general" icon="img-save" actionListener="#{manualTaskMBean.loadUpdate}" />
+
+          
         </center>
       </f:facet>
     </h:panelGrid>

@@ -98,6 +98,7 @@ public class ConstantWEB {
   public final static int        STATUS_COMPLETED                    = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_COMPLETED" ) );
   public final static int        STATUS_CANCELED                     = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_CANCELED" ) );
   public final static int        STATUS_SUSPENDED                    = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_SUSPENDED" ) );
+  public final static int        STATUS_REOPEN                       = Integer.parseInt( UtilWEB.getProperty( NAME_BUNDLE_WEB, "STATUS_REOPEN" ) );
   public final static String     MESSAGE_SUCCESS_UPLOAD_FILE         = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_SUCCESS_UPLOAD_FILE" );
   public final static String     PATTERN_DATE_WRITE_FILE             = UtilWEB.getProperty( NAME_BUNDLE_WEB, "PATTERN_DATE_WRITE_FILE" );
   public final static String     NAME_FILE_RESULT_PROCESS            = UtilWEB.getProperty( NAME_BUNDLE_WEB, "NAME_FILE_RESULT_PROCESS" );
@@ -155,7 +156,7 @@ public class ConstantWEB {
   public final static String     MESSAGE_ERROR_DELETE_AREA_TASK_TYPE = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_DELETE_AREA_TASK_TYPE" );
   public final static String     MESSAGE_ERROR_CREATE_AREA_TASK_TYPE = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CREATE_AREA_TASK_TYPE" );
   public final static String     FIELD_REQUIRED                      = UtilWEB.getProperty( NAME_BUNDLE_WEB, "field_required" );
-  
-  public final static String     URL_SEARCH_TASK                   = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_SEARCH_TASK" );
+                                                                     
+  public final static String     URL_SEARCH_TASK                     = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_SEARCH_TASK" );
                                                                      
 }
