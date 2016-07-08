@@ -15,7 +15,7 @@
   <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
   <h:form id="fromContenido">
     <p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
-    <h:panelGrid columns="2" columnClasses="column_25,column_75">
+    <h:panelGrid columns="2" columnClasses="align_top align_top">
       <p:panel id="panelGroup" header="#{msg.my_groups}">
         <ui:include src="/pages/modules/task/manual_task/listGroup.xhtml" />
       </p:panel>

@@ -12,7 +12,7 @@
 
   <!-- Dialogo para agregar registro -->
 
-  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_task}" width="98%"
+  <p:dialog id="dialogAdd" resizable="false" modal="true" appendToBody="true" header="#{msg.register_task}" width="98%" position="top"
     maximizable="true" visible="#{adminTaskBean.showAddDialog}" widgetVar="dialogAddVar" closeOnEscape="true">
     <p:ajax listener="#{adminTaskBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task_admin/add.xhtml" />
@@ -91,7 +91,7 @@
   <p:dialog id="dialogView" resizable="false" modal="true" appendToBody="false"
     header="#{msg.detalle_record} [#{adminTaskBean.selectedObject.status.description}]" closable="true"
     maximizable="false" width="98%" visible="#{adminTaskBean.showViewDetail}" position="top"
-    rendered="#{!adminTaskBean.showAlertSelectRow}" widgetVar="dialogViewVar" closeOnEscape="true">
+    rendered="#{!adminTaskBean.showAlertSelectRow and !adminTaskBean.showMenu}" widgetVar="dialogViewVar" closeOnEscape="true">
     <p:ajax listener="#{adminTaskBean.closeDialogView()}" event="close" update=":fromContenido:panel" />
     <ui:include src="/pages/modules/task/manual_task_admin/update.xhtml" />
   </p:dialog>
@@ -182,9 +182,9 @@
 
 
 
-  <p:dialog id="dialogViewDisabled" resizable="false" modal="true" appendToBody="true"
+  <p:dialog id="dialogViewDisabled" resizable="false" modal="true" appendToBody="true" position="top"
     header="#{msg.detalle_record} [#{adminTaskBean.selectedObject.status.description}]" width="80%"
-    visible="#{adminTaskBean.showViewDetail}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
+    visible="#{adminTaskBean.showMenu}" widgetVar="dialogViewDisabledVar" closeOnEscape="true">
     <p:ajax listener="#{adminTaskBean.closeDialogView()}" event="close" />
     <ui:include src="/pages/modules/task/manual_task_admin/viewEnabled.xhtml" />
   </p:dialog>

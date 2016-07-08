@@ -4,14 +4,14 @@
   <h:form>
     <h:panelGrid width="100%">
 
-      <p:dataTable value="#{manualTaskMBean.listPersonG}" rows="#{msg.rows_paginator}" id="tablePerson" paginator="true"
+      <p:dataTable value="#{adminTaskBean.listPersonG}" rows="#{msg.rows_paginator}" id="tablePerson" paginator="true"
         styleClass="column_100" rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
         currentPageReportTemplate="({currentPage} de {totalPages})"
         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-        paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{manualTaskMBean.selectedObjectPerson}"
+        paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{adminTaskBean.selectedObjectPerson}"
         selectionMode="single" emptyMessage="#{msg.list_empty}" var="objetc">
 
-        <p:ajax event="rowSelect" process="@form" listener="#{manualTaskMBean.onRowSelectPerson}" update=":dialogView" />
+        <p:ajax event="rowSelect" process="@form" listener="#{adminTaskBean.onRowSelectPerson}" update=":dialogView" />
 
         <p:column sortBy="#{objetc.person.names}">
           <f:facet name="header">

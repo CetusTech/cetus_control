@@ -62,6 +62,9 @@ a {
 	width: 80% !important;
 	vertical-align: top;
 }
+.align_top{
+	vertical-align: top;
+}
 
 .column_90 {
 	width: 90% !important;

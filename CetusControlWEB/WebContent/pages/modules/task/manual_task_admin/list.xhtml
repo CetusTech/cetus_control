@@ -50,8 +50,10 @@
     paginatorPosition="bottom" rowKey="#{objetc.id}" selection="#{adminTaskBean.selectedObject}" selectionMode="single"
     emptyMessage="#{msg.list_empty}" var="objetc">
 
-    <p:ajax event="rowSelect" process="@form" listener="#{adminTaskBean.onRowSelectTask}"
-      update=":fromContenido:panelTask :fromContenido:bars" />
+    <p:ajax event="rowDblselect" process="@form" listener="#{adminTaskBean.onRowSelectTask}"
+      update=":dialogView :alertSelectRowTask :dialogViewDisabled :alertSelectRowTask :fromContenido" />
+
+    
 
     <p:columns value="#{adminTaskBean.columns}" var="column" columnIndexVar="colIndex" filterMatchMode="contains"
       sortBy="#{objetc[column.property]}">

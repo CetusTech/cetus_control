@@ -126,9 +126,10 @@
               <p:outputLabel value="#{msg.area}" for="areaSelectedUpdate" styleClass="resaltar_negro" />
               <p:selectOneMenu value="#{adminTaskBean.selectedObject.area.id}" id="areaSelectedUpdate" required="true"
                 disabled="#{adminTaskBean.selectedObject.status.id ==4 ? true : false}">
-                <f:selectItem itemLabel="#{msg.selected_area}" itemValue="-1"  />
+                <f:selectItem itemLabel="#{msg.selected_area}" itemValue="-1" />
                 <f:selectItems value="#{adminTaskBean.listAreaItem}" />
-                <p:ajax event="change" update="taskTypeSelectedUpdate" process="@this" listener="#{adminTaskBean.changeAreaUpdate}" />
+                <p:ajax event="change" update="taskTypeSelectedUpdate" process="@this"
+                  listener="#{adminTaskBean.changeAreaUpdate}" />
               </p:selectOneMenu>
               <p:message for="areaSelectedUpdate" id="areaUpdateMsg" display="icon" />
 
@@ -268,6 +269,41 @@
               </p:dataTable>
 
             </h:panelGrid>
+          </p:tab>
+
+          <p:tab title="Trace">
+            <h:panelGrid id="pnlTrace" columns="2" style="width:100% !important;" columnClasses="c1,c2" cellspacing="2"
+              cellpadding="2">
+              <h:panelGrid columns="1" style="width:70% !important;">
+                <pe:timeline id="timeline" value="#{basicTimelineController.model}" height="250px"
+                  widgetVar="timelineVar" var="trace" selectable="#{basicTimelineController.selectable}" locale="es"
+                  start="#{adminTaskBean.selectedObject.creationDate}" zoomable="#{basicTimelineController.zoomable}"
+                  moveable="#{basicTimelineController.moveable}" stackEvents="#{basicTimelineController.stackEvents}"
+                  axisOnTop="#{basicTimelineController.axisOnTop}" eventStyle="#{basicTimelineController.eventStyle}"
+                  showCurrentTime="#{basicTimelineController.showCurrentTime}"
+                  showNavigation="#{basicTimelineController.showNavigation}">
+                  <p:ajax event="select" listener="#{basicTimelineController.onSelect}" update="detalleTrace" />
+                  <h:outputText value="#{trace.status.description}" />
+                </pe:timeline>
+              </h:panelGrid>
+              <p:panel header="Detalle" id="detalleTrace" style="width:100% !important;"
+                visible="#{basicTimelineController.flag}">
+                <h:panelGrid columns="2" cellspacing="4" cellpadding="4">
+
+                  <p:outputLabel value="#{msg.update_user}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.creationUser}" />
+                  <p:outputLabel value="#{msg.status_fechaCreacion}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.creationDate}">
+                    <f:convertDateTime type="both" timeZone="#{msg.time_zone}" pattern="#{adminTaskBean.patterDate}" />
+                  </h:outputText>
+                  <p:outputLabel value="#{msg.note}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.note}" />
+                  <p:outputLabel value="#{msg.status}" styleClass="resaltar_negro" />
+                  <h:outputText value="#{basicTimelineController.timelineEvent.data.status.description}" />
+                </h:panelGrid>
+              </p:panel>
+            </h:panelGrid>
+
           </p:tab>
 
         </p:tabView>

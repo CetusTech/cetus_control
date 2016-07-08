@@ -278,6 +278,77 @@ public class AdminTaskBean extends GeneralManagedBean {
     }
   }
   
+  @SuppressWarnings ( "unchecked" )
+  public void reopenTask () {
+    ResponseDTO response = null;
+    int statusOld = 0;
+    try {
+      selectedObject = ( TaskDTO ) getObjectSession( "selectedObject" );
+      
+      if ( selectedObject != null ) {
+        selectedObject.setModificationUser( getUserInSession() );
+        selectedObject.setModificationDate( currentDate );
+        statusOld = selectedObject.getStatus().getId();
+        selectedObject.getStatus().setId( ConstantWEB.STATUS_ASSIGNED );
+        response = generalDelegate.edit( selectedObject );
+      }
+      if ( UtilCommon.validateResponseSuccess( response ) ) {
+        //agregar history task
+        try {
+          ConstantWEB.WEB_LOG.debug( "Creando registro en la taskHistory " + selectedObject.getCode() );
+          TaskHistoryDTO taskHistoryDTO = new TaskHistoryDTO();
+          taskHistoryDTO.setIdTtask( selectedObject.getId() );
+          taskHistoryDTO.setCreationDate( currentDate );
+          taskHistoryDTO.setTaskObject( getTaskDTOToGson( selectedObject.getId() ) );
+          response = generalDelegate.create( taskHistoryDTO );
+          
+          ConstantWEB.WEB_LOG.debug( "Respuesta de la creacion taskHistory :: " + response.toString() );
+          
+        } catch ( Exception e ) {
+          ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+          addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE_TASK_HISTORY, null );
+        }
+        
+        //Trazabilidad
+        if ( selectedObject.getStatus() != null ) {
+          //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
+          TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
+          traceTaskDTO.setTask( selectedObject );
+          traceTaskDTO.setNote( "REAPERTURA DE TAREA POR EL USUARIO :"+getUserInSession() );
+          traceTaskDTO.setStatus( new StatusDTO() );
+          traceTaskDTO.getStatus().setId( statusOld );
+          traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
+          traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
+          traceTaskDTO.setCreationDate( currentDate );
+          traceTaskDTO.setCreationUser( getUserInSession() );
+          response = generalDelegate.create( traceTaskDTO );
+          if ( UtilCommon.validateResponseSuccess( response ) ) {
+            ConstantWEB.WEB_LOG.info( "########## SE CREAR EL REGISTRO DE TRAZABILIDAD PARA LA TAREA " + selectedObject.getCode() );
+          }
+        }
+        //LIstar Tareas
+        response = generalDelegate.findTaskByPersonGroup( selectedObject.getPersonGroup().getGroupT().getId(), userPortalDTO.getPerson()
+                                                                                                                            .getId() );
+        if ( UtilCommon.validateResponseSuccess( response ) ) {
+          //Tiene Usuario portal la persona seleecionada 
+          listRegister = ( ( List< TaskDTO > ) response.getObjectResponse() );
+        } else {
+          listRegister = new ArrayList< TaskDTO >();
+        }
+        addObjectSession( listRegister, "listRegister" );
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute( "PF('dialogViewDisabledVar').hide();" );
+        
+      } else {
+        ConstantWEB.WEB_LOG.error( "########## ERROR REABRIENDO LA TAREA " + selectedObject.getCode() );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+      addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
+    }
+  }
+  
+  
   /* (non-Javadoc)
    * @see co.com.cetus.cetuscontrol.web.bean.GeneralManagedBean#initElement()
    */
@@ -402,7 +473,7 @@ public class AdminTaskBean extends GeneralManagedBean {
           selectedObject.setCreationDate( taskDTO.getCreationDate() );
           if ( selectedObject.getStatus() == null || ( selectedObject.getStatus() != null && selectedObject.getStatus().getId() <= 0 ) ) {
             selectedObject.setStatus( new StatusDTO() );
-            selectedObject.getStatus().setId( ( int ) getObjectSession( "status" ) );
+            selectedObject.getStatus().setId( (( StatusDTO ) getObjectSession( "status" ) ).getId());
           }
           addObjectSession( taskDTO.getStatus(), "statusOld" );//Guardo el estado anterior
         }
@@ -497,7 +568,7 @@ public class AdminTaskBean extends GeneralManagedBean {
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
               ConstantWEB.WEB_LOG.info( "########## SE DA INICIO A LA TAREA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
-              if ( ( Integer ) getObjectSession( "status" ) != selectedObject.getStatus().getId() ) {
+              if ( (( StatusDTO ) getObjectSession( "status" )).getId() != selectedObject.getStatus().getId() ) {
                 //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
@@ -589,12 +660,13 @@ public class AdminTaskBean extends GeneralManagedBean {
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA COMPLETADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
-              if ( ( Integer ) getObjectSession( "status" ) != selectedObject.getStatus().getId() ) {
+              if ( ( int ) getObjectSession( "statusOldCompleted" ) != selectedObject.getStatus().getId() ) {
                 //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
                 traceTaskDTO.setNote( noteTask );
-                traceTaskDTO.setStatus( ( StatusDTO ) getObjectSession( "status" ) );
+                traceTaskDTO.setStatus( new StatusDTO() );
+                traceTaskDTO.getStatus().setId( ( int ) getObjectSession( "statusOldCompleted" ));
                 traceTaskDTO.setAssingDate( selectedObject.getAssingDate() );
                 traceTaskDTO.setIdPerson( selectedObject.getPersonGroup().getPerson().getId() );
                 traceTaskDTO.setCreationDate( currentDate );
@@ -730,7 +802,7 @@ public class AdminTaskBean extends GeneralManagedBean {
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA CANCELADA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
-              if ( ( int ) getObjectSession( "status" ) != selectedObject.getStatus().getId() ) {
+              if ( (( StatusDTO ) getObjectSession( "status" )).getId() != selectedObject.getStatus().getId() ) {
                 //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
@@ -823,7 +895,7 @@ public class AdminTaskBean extends GeneralManagedBean {
             if ( UtilCommon.validateResponseSuccess( response ) ) {
               ConstantWEB.WEB_LOG.info( "########## TAREA SUSPENDIDA  " + selectedObject.getCode() );
               //Insertar Trazabilidad 
-              if ( ( int ) getObjectSession( "status" ) != selectedObject.getStatus().getId() ) {
+              if ( (( StatusDTO ) getObjectSession( "status" )).getId() != selectedObject.getStatus().getId() ) {
                 //Si el estado anterior y el nuevo es diferente debe realizar una insercion a la trazabilidad
                 TraceTaskDTO traceTaskDTO = new TraceTaskDTO();
                 traceTaskDTO.setTask( selectedObject );
@@ -1070,11 +1142,11 @@ public class AdminTaskBean extends GeneralManagedBean {
             listStatusFilter.add( objDTO.getDescription() );
           }
         }
-        if ( ( Integer ) getObjectSession( "status" ) != null ) {
+        if ( ( StatusDTO ) getObjectSession( "status" ) != null ) {
           copy = new ArrayList< SelectItem >( listStatusItem );
           if ( listStatusItem != null ) {
             for ( SelectItem obj: listStatusItem ) {
-              if ( ( int ) obj.getValue() == ( int ) getObjectSession( "status" ) ) {
+              if ( ( int ) obj.getValue() == ( ( StatusDTO ) getObjectSession( "status" ) ).getId() ) {
                 copy.remove( obj );
               }
             }
@@ -1776,6 +1848,7 @@ public class AdminTaskBean extends GeneralManagedBean {
   @SuppressWarnings ( "unchecked" )
   public void onRowSelectTask ( SelectEvent event ) {
     ResponseDTO response = null;
+    int status = 0;
     try {
       selectedObject = ( ( TaskDTO ) event.getObject() );
       if ( selectedObject != null ) {
@@ -1812,9 +1885,13 @@ public class AdminTaskBean extends GeneralManagedBean {
         }
         
       }
-      
+      status = selectedObject.getStatus().getId();
       addObjectSession( selectedObject.getStatus(), "status" );
+      addObjectSession( status, "statusOldCompleted" );
       addObjectSession( selectedObject, "selectedObject" );
+      cleanObjectSession( "listTaskHystory" );
+      findTaskHistory( selectedObject.getId() );
+      listTaskType( selectedObject.getArea().getId() );
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
       addMessageError( null, ConstantWEB.MESSAGE_ERROR, e.getMessage() );
@@ -2572,7 +2649,7 @@ public class AdminTaskBean extends GeneralManagedBean {
    * @since CetusControlWEB (2/02/2016)
    */
   public int getStatus () {
-    status = getObjectSession( "status" ) != null ? ( int ) getObjectSession( "status" ) : 0;
+    status = getObjectSession( "status" ) != null ? ( ( StatusDTO ) getObjectSession( "status" ) ).getId() : 0;
     return status;
   }
   
