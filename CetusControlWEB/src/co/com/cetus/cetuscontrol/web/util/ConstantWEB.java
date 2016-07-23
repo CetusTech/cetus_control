@@ -156,6 +156,8 @@ public class ConstantWEB {
   public final static String     MESSAGE_ERROR_DELETE_AREA_TASK_TYPE = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_DELETE_AREA_TASK_TYPE" );
   public final static String     MESSAGE_ERROR_CREATE_AREA_TASK_TYPE = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_CREATE_AREA_TASK_TYPE" );
   public final static String     FIELD_REQUIRED                      = UtilWEB.getProperty( NAME_BUNDLE_WEB, "field_required" );
+  public static String                    USER_WS_MESSAGE_SERVICE            = "USER_WS_MESSAGE_SERVICE";
+  public static String                    PASSWORD_WS_MESSAGE_SERVICE        = "PASSWORD_WS_MESSAGE_SERVICE";
                                                                      
   public final static String     URL_SEARCH_TASK                     = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_SEARCH_TASK" );
                                                                      

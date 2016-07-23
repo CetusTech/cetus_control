@@ -56,6 +56,7 @@ import co.com.cetus.cetuscontrol.dto.TaskTypeDTO;
 import co.com.cetus.cetuscontrol.dto.TraceTaskDTO;
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.cetuscontrol.dto.WorkdayDTO;
+import co.com.cetus.cetuscontrol.ejb.delegate.CetusMessageServiceDelegate;
 import co.com.cetus.cetuscontrol.ejb.delegate.CetusVortalDelegate;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.cetuscontrol.ejb.util.EstatusUser;
@@ -89,6 +90,7 @@ import co.com.cetus.common.util.ConstantCommon;
 import co.com.cetus.common.util.Converter;
 import co.com.cetus.common.util.EFilterSearch;
 import co.com.cetus.common.util.UtilCommon;
+import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 import co.com.cetus.portal.ejb.service.CreateUserRequestDTO;
 import co.com.cetus.portal.ejb.service.CreateUserResponseDTO;
 import co.com.cetus.portal.ejb.service.DeleteUserRequestDTO;
@@ -2596,5 +2598,38 @@ public class CetusControlProcess {
     return responseDTO;
   }
   
+  /**
+   * </p> Send email. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param sendMailRequestDTO the send mail request dto
+   * @return el response dto
+   * @since CetusControlEJB (12/06/2016)
+   */
+  public ResponseDTO sendEmail ( SendMailRequestDTO sendMailRequestDTO ) {
+    co.com.cetus.messageservice.ejb.service.ResponseWSDTO responseWSDTO = null;
+    ResponseDTO responseDTO = null;
+    try {
+      String wsdlMessageService = getValueParameter( ConstantEJB.WSDL_CETUS_MESSAGE_SERVICE );
+      CetusMessageServiceDelegate messageServiceDelegate = new CetusMessageServiceDelegate( wsdlMessageService );
+      responseWSDTO = messageServiceDelegate.sendEmail( sendMailRequestDTO );
+      
+      if ( responseWSDTO != null ) {
+        ConstantEJB.CETUS_CONTROL_EJB_LOG.debug( "Respuesta del envio del email: " + responseWSDTO.toString() );
+        if ( responseWSDTO.getCode() != null && responseWSDTO.getCode().equals( ConstantCommon.WSResponse.CODE_ONE ) ) {
+          responseDTO = createMessageSUCCESS();
+        } else {
+          responseDTO = createMessageFAILURE();
+        }
+      } else {
+        responseDTO = createMessageFAILURE();
+      }
+      
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      responseDTO = createMessageFAILURE();
+    }
+    return responseDTO;
+  }
   
 }

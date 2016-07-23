@@ -13,6 +13,7 @@ import co.com.cetus.cetuscontrol.ejb.process.CetusControlProcess;
 import co.com.cetus.cetuscontrol.ejb.util.ConstantEJB;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.util.UtilCommon;
+import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1008,4 +1009,17 @@ public class CetusControlBean implements CetusControlBeanRemote {
     }
     return response;
   }
+  
+  
+  public ResponseDTO sendEmail ( SendMailRequestDTO sendMailRequestDTO ) {
+    ResponseDTO response = null;
+    try {
+      response = cetusControlProcess.sendEmail( sendMailRequestDTO );
+    } catch ( Exception e ) {
+      ConstantEJB.CETUS_CONTROL_EJB_LOG.error( e.getMessage(), e );
+      return createMessageFAILURE();
+    }
+    return response;
+  }
+  
 }

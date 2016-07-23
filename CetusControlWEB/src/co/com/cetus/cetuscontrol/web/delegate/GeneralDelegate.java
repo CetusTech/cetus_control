@@ -8,6 +8,7 @@ import co.com.cetus.cetuscontrol.ejb.bean.CetusControlBeanRemote;
 import co.com.cetus.cetuscontrol.web.util.ConstantWEB;
 import co.com.cetus.common.dto.ResponseDTO;
 import co.com.cetus.common.util.UtilCommon;
+import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 
 public class GeneralDelegate {
   
@@ -692,4 +693,13 @@ public class GeneralDelegate {
     return responseDTO;
   }
   
+  public ResponseDTO sendEmail ( SendMailRequestDTO sendMailRequestDTO ){
+    ResponseDTO responseDTO = null;
+    try {
+      responseDTO = beanRemote.sendEmail( sendMailRequestDTO );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+    return responseDTO;
+  }
 }

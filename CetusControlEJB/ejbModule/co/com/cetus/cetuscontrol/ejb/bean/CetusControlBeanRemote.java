@@ -7,6 +7,7 @@ import javax.ejb.Remote;
 
 import co.com.cetus.cetuscontrol.dto.UserPortalDTO;
 import co.com.cetus.common.dto.ResponseDTO;
+import co.com.cetus.messageservice.ejb.service.SendMailRequestDTO;
 
 /**
  * The Interface CetusControlBeanRemote.
@@ -140,4 +141,6 @@ public interface CetusControlBeanRemote {
   public ResponseDTO findTaskByFilter ( int idClient, String filter, String inputFilter );
   
   public ResponseDTO findCommentByIdTask ( int idTask );
+  
+  public ResponseDTO sendEmail ( SendMailRequestDTO sendMailRequestDTO );
 }

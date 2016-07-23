@@ -4,8 +4,8 @@
 
   <p:dataTable value="#{commentTaskMBean.listComment}" rows="#{msg.rows_paginator}" id="tableComment" paginator="true"
     rowStyleClass="#{index mod 2 == 0 ? null : 'row-color-2'}" rowIndexVar="index"
-    currentPageReportTemplate="({currentPage} de {totalPages})" scrollable="true" liveScroll="true"
-    rowsPerPageTemplate="10,#{searchTaskMBean.listTaskHystory.size()}" scrollHeight="280"
+    currentPageReportTemplate="({currentPage} de {totalPages})"
+    rowsPerPageTemplate="10,#{searchTaskMBean.listTaskHystory.size()}"
     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
     paginatorPosition="bottom" rowKey="#{object.id}" emptyMessage="#{msg.list_empty}" var="object">
 
@@ -36,9 +36,15 @@
 
   </p:dataTable>
 
-  <div align="right">
-    <p:commandButton id="btnNewComment" value="#{msg.btn_new}" oncomplete="PF('dialogAddCommentVar').show()"
-      styleClass="button-general" icon="img-new" />
-  </div>
+  <h:panelGroup id="panelAddComment">
+    <p:panel header="#{msg.comment_task}" visible="#{commentTaskMBean.showAddComment}">
+      <ui:include src="/pages/modules/task/comment_task/add.xhtml" />
+    </p:panel>
+  </h:panelGroup>
 
+  <div align="right">
+    <p:commandButton id="btnNewComment" value="#{msg.btn_new}" process="@this"
+      disabled="#{commentTaskMBean.disabledBtnAddComment}" actionListener="#{commentTaskMBean.openComment}"
+      styleClass="button-general" icon="img-new" update="panelAddComment btnNewComment" />
+  </div>
 </ui:composition>

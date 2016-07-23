@@ -78,5 +78,13 @@ public class CommentTaskDTO implements Serializable {
   public void setSubject ( String subject ) {
     this.subject = subject;
   }
+
+  @Override
+  public String toString () {
+    return "CommentTaskDTO [id=" + id + ", subject=" + subject + ", commentT=" + commentT + ", creationDate=" + creationDate + ", emitter=" + emitter
+           + ", task=" + task + ", receiver=" + receiver + "]";
+  }
+  
+  
   
 }
