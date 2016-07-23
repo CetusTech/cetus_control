@@ -2,7 +2,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
-  <h:form id="formAddComment" prependId="false">
     <p:panelGrid id="panelAddComm"
       style="border-width: 1px !important; border-style: solid !important; border-color:white !important;">
       <p:row styleClass="row_border_white">
@@ -11,7 +10,7 @@
         </p:column>
         <p:column>
           <p:inputTextarea id="idTo" value="#{commentTaskMBean.commentTaskDTO.receiver}" maxlength="990" cols="100"
-            rows="2" required="true" requiredMessage="#{msg.field_requiered}" />
+            rows="2" required="true" requiredMessage="#{msg.field_required}" />
         </p:column>
         <p:column>
           <p:message id="idTo_msg" for="idTo" display="icon" />
@@ -24,7 +23,7 @@
         </p:column>
         <p:column>
           <p:inputText id="idSubject" value="#{commentTaskMBean.commentTaskDTO.subject}" maxlength="58" required="true"
-            requiredMessage="#{msg.field_requiered}" size="100" />
+            requiredMessage="#{msg.field_required}" size="100" />
         </p:column>
         <p:column>
           <p:message id="idSubject_msg" for="idSubject" display="icon" />
@@ -35,7 +34,7 @@
       <p:row styleClass="row_border_white">
         <p:column colspan="2">
           <p:inputTextarea id="idComment" value="#{commentTaskMBean.commentTaskDTO.commentT}" maxlength="990" cols="112"
-            rows="7" required="true" requiredMessage="#{msg.field_requiered}" />
+            rows="7" required="true" requiredMessage="#{msg.field_required}" />
         </p:column>
         <p:column>
           <p:message id="idComment_msg" for="idComment" display="icon" />
@@ -44,8 +43,7 @@
 
     </p:panelGrid>
     <center>
-      <p:commandButton value="#{msg.btn_send}" update="panelAddComm" process="@form" styleClass="button-general"
+      <p:commandButton value="#{msg.btn_send}" update="panelAddComm tableComment panelAddComment btnNewComment growl" process="@form" styleClass="button-general"
         icon="img-send" actionListener="#{commentTaskMBean.validateAdd}" />
     </center>
-  </h:form>
 </ui:composition>

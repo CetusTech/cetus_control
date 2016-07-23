@@ -160,5 +160,6 @@ public class ConstantWEB {
   public static String                    PASSWORD_WS_MESSAGE_SERVICE        = "PASSWORD_WS_MESSAGE_SERVICE";
                                                                      
   public final static String     URL_SEARCH_TASK                     = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_SEARCH_TASK" );
+  public final static String     MESSAGE_ERROR_EMAIL_VALIDATOR       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_EMAIL_VALIDATOR" );
                                                                      
 }

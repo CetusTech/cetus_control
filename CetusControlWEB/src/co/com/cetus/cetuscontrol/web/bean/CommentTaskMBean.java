@@ -50,8 +50,16 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
     ResponseDTO responseDTO = null;
     try {
       if ( getUserDTO() != null ) {
+        cleanObjectSession( "disabledBtnAddComment" );
+        cleanObjectSession( "showAddComment" );
+        
         TaskDTO task = ( TaskDTO ) getObjectSession( "selectedObject" );
         if ( task != null ) {
+          if ( ( task.getStatus().getId() == ConstantWEB.STATUS_COMPLETED_VAL )
+              || task.getStatus().getId() == ConstantWEB.STATUS_CANCELED_VAL ) {
+           disabledBtnAddComment = true;
+           addObjectSession( disabledBtnAddComment, "disabledBtnAddComment" );  
+         }
           responseDTO = generalDelegate.findCommentByIdTask( task.getId() );
           if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
             listComment = ( List< CommentTaskDTO > ) responseDTO.getObjectResponse();
@@ -80,24 +88,43 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
     String[] vecEmail = null;
     String emailError = null;
     ResponseDTO responseDTO = null;
+    String emailsOK = null;
     try {
       if ( commentTaskDTO != null ) {
         vecEmail = commentTaskDTO.getReceiver().split( ";" );
         if ( vecEmail != null && vecEmail.length > 0 ) {
           for ( String email: vecEmail ) {
-            if ( !EmailValidator.validate( email ) ) {
-              emailError += email;
+            email = email.trim();
+            if( email.length() > 0 ){
+              if ( !EmailValidator.validate( email ) ) {
+                if( emailError == null ){
+                  emailError = email;
+                }else{
+                  emailError += "; " + email;
+                }
+              }else{
+                if( emailsOK == null ){
+                  emailsOK = email;
+                }else{
+                  emailsOK += ";"+email;
+                }
+              }
             }
           }
+          cleanObjectSession( "showAddComment" );
+          cleanObjectSession( "disabledBtnAddComment" );
+          
           if ( emailError != null ) {
-            addMessageError( "idTo", ConstantWEB.MESSAGE_ERROR, emailError );
+            addMessageError( null, ConstantWEB.MESSAGE_ERROR + ConstantWEB.MESSAGE_ERROR_EMAIL_VALIDATOR, emailError );
+            showAddComment = true;
+            disabledBtnAddComment = true;
           } else {
             ConstantWEB.WEB_LOG.info( "Se procede a enviar el comentario..." );
             
             commentTaskDTO.setCreationDate( getCurrentDateTime() );
             TaskDTO task = ( TaskDTO ) getObjectSession( "selectedObject" );
             commentTaskDTO.setTask( task );
-            commentTaskDTO.setEmitter( task.getPersonGroup().getPerson().getLastNames() + " " + task.getPersonGroup().getPerson().getNames() + " ("
+            commentTaskDTO.setEmitter( task.getPersonGroup().getPerson().getLastNames() + ", " + task.getPersonGroup().getPerson().getNames() + " ("
                                        + task.getPersonGroup().getPerson().getEmail() + ")" );
                                        
             ConstantWEB.WEB_LOG.info( commentTaskDTO.toString() );
@@ -107,24 +134,29 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
             sendMailRequestDTO.setPassword( generalDelegate.getValueParameter( ConstantWEB.PASSWORD_WS_MESSAGE_SERVICE ) );
             sendMailRequestDTO.setMessage( commentTaskDTO.getCommentT() );
             sendMailRequestDTO.setSubject( commentTaskDTO.getSubject() );
-            sendMailRequestDTO.setRecipients( vecEmail );
+            sendMailRequestDTO.setRecipients( emailsOK.split( ";" ) );
+            
             
             responseDTO = generalDelegate.sendEmail( sendMailRequestDTO );
             
             if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
+              commentTaskDTO.setReceiver( emailsOK );
               generalDelegate.create( commentTaskDTO );
               addMessageInfo( null, ConstantWEB.MESSAGE_SUCCES, ConstantWEB.MSG_DETAIL_SUCCESS );
+              initElement();
+              showAddComment = false;
+              disabledBtnAddComment = false;
             } else {
               addMessageError( null, ConstantWEB.MESSAGE_ERROR_CREATE, ConstantWEB.MSG_DETAIL_ERROR );
             }
           }
+          
+          addObjectSession( showAddComment, "showAddComment" );
+          addObjectSession( disabledBtnAddComment, "disabledBtnAddComment" );          
+          
         }
       }
-    } catch (
-    
-    Exception e )
-    
-    {
+    } catch (Exception e ){
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
     
@@ -134,6 +166,10 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
     commentTaskDTO = new CommentTaskDTO();
     showAddComment = true;
     disabledBtnAddComment = true;
+    
+    addObjectSession( showAddComment, "showAddComment" );
+    addObjectSession( disabledBtnAddComment, "disabledBtnAddComment" );
+    
   }
 
   
@@ -172,6 +208,7 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
   }
   
   public boolean isShowAddComment () {
+    showAddComment = (boolean) (getObjectSession( "showAddComment" ) != null ? getObjectSession( "showAddComment" ) : false );
     return showAddComment;
   }
   
@@ -180,6 +217,7 @@ public class CommentTaskMBean extends GeneralManagedBean implements Serializable
   }
   
   public boolean isDisabledBtnAddComment () {
+    disabledBtnAddComment = (boolean) (getObjectSession( "disabledBtnAddComment" ) != null ? getObjectSession( "disabledBtnAddComment" ) : false );
     return disabledBtnAddComment;
   }
   

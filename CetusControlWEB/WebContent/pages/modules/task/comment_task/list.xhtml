@@ -43,8 +43,11 @@
   </h:panelGroup>
 
   <div align="right">
-    <p:commandButton id="btnNewComment" value="#{msg.btn_new}" process="@this"
-      disabled="#{commentTaskMBean.disabledBtnAddComment}" actionListener="#{commentTaskMBean.openComment}"
-      styleClass="button-general" icon="img-new" update="panelAddComment btnNewComment" />
+    <h:panelGroup id="btnNewComment">
+      <p:commandButton value="#{msg.btn_new}" process="@this"
+        disabled="#{commentTaskMBean.disabledBtnAddComment}" rendered="#{!commentTaskMBean.disabledBtnAddComment}"
+        actionListener="#{commentTaskMBean.openComment}" styleClass="button-general" icon="img-new"
+        update="panelAddComment btnNewComment" />
+    </h:panelGroup>
   </div>
 </ui:composition>
