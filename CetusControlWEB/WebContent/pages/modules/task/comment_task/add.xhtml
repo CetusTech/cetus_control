@@ -2,38 +2,49 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
 
-  <h:form id="formAdd" prependId="false">
-    <p:panelGrid id="panelAddComment" cellspacing="4" cellpadding="4">
-      <p:row>
+  <h:form id="formAddComment" prependId="false">
+    <p:panelGrid id="panelAddComm"
+      style="border-width: 1px !important; border-style: solid !important; border-color:white !important;">
+      <p:row styleClass="row_border_white">
         <p:column>
-          <p:outputLabel value="#{msg.to}" styleClass="resaltar_negro" />
+          <p:outputLabel value="#{msg.to}: ( ; ) " styleClass="resaltar_negro" />
         </p:column>
-        <p:column colspan="2">
-          <p:inputTextarea id="receiver" value="#{commentTaskMBean.commentTaskDTO.receiver}" rows="2" cols="50"
-            maxlength="900" required="true" />
+        <p:column>
+          <p:inputTextarea id="idTo" value="#{commentTaskMBean.commentTaskDTO.receiver}" maxlength="990" cols="100"
+            rows="2" required="true" requiredMessage="#{msg.field_requiered}" />
+        </p:column>
+        <p:column>
+          <p:message id="idTo_msg" for="idTo" display="icon" />
         </p:column>
       </p:row>
 
-      <p:row>
+      <p:row styleClass="row_border_white">
         <p:column>
-          <p:outputLabel value="#{msg.subject}" styleClass="resaltar_negro" />
+          <p:outputLabel value="#{msg.subject}: " styleClass="resaltar_negro" />
         </p:column>
-        <p:column colspan="2">
-          <p:inputText id="subject" value="#{commentTaskMBean.commentTaskDTO.subject}" size="100" maxlength="100"
-            required="true" />
+        <p:column>
+          <p:inputText id="idSubject" value="#{commentTaskMBean.commentTaskDTO.subject}" maxlength="58" required="true"
+            requiredMessage="#{msg.field_requiered}" size="100" />
+        </p:column>
+        <p:column>
+          <p:message id="idSubject_msg" for="idSubject" display="icon" />
         </p:column>
       </p:row>
 
-      <p:row>
-        <p:column colspan="3">
-          <p:editor id="editor" value="#{commentTaskMBean.commentTaskDTO.commentT}" maxlength="800" width="600"
-            required="true" />
+
+      <p:row styleClass="row_border_white">
+        <p:column colspan="2">
+          <p:inputTextarea id="idComment" value="#{commentTaskMBean.commentTaskDTO.commentT}" maxlength="990" cols="112"
+            rows="7" required="true" requiredMessage="#{msg.field_requiered}" />
+        </p:column>
+        <p:column>
+          <p:message id="idComment_msg" for="idComment" display="icon" />
         </p:column>
       </p:row>
-      <p:messages autoUpdate="true" id="msgAdd" showDetail="true" />
+
     </p:panelGrid>
     <center>
-      <p:commandButton value="#{msg.btn_send}" update="panelAdd" process="@form" styleClass="button-general"
+      <p:commandButton value="#{msg.btn_send}" update="panelAddComm" process="@form" styleClass="button-general"
         icon="img-send" actionListener="#{commentTaskMBean.validateAdd}" />
     </center>
   </h:form>
