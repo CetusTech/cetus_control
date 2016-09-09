@@ -161,5 +161,6 @@ public class ConstantWEB {
                                                                      
   public final static String     URL_SEARCH_TASK                     = UtilWEB.getProperty( NAME_BUNDLE_WEB, "URL_SEARCH_TASK" );
   public final static String     MESSAGE_ERROR_EMAIL_VALIDATOR       = UtilWEB.getProperty( NAME_BUNDLE_WEB, "MESSAGE_ERROR_EMAIL_VALIDATOR" );
+  public final static String     CONFIGURATION_INVALID               = UtilWEB.getProperty( NAME_BUNDLE_WEB, "CONFIGURATION_INVALID" );
                                                                      
 }

@@ -7,8 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
@@ -36,7 +40,7 @@ import co.com.cetus.common.util.UtilCommon;
 public class ParametrizationMBean extends GeneralManagedBean {
   
   private static final long           serialVersionUID            = 1L;
-  
+                                                                  
   private boolean                     disabledTabWorkday          = true;
   private boolean                     disabledTabExceptionWorkday = true;
   private boolean                     showConfirmSaveParameter    = false;
@@ -59,7 +63,7 @@ public class ParametrizationMBean extends GeneralManagedBean {
   private boolean                     showCloneWorkday            = false;
   private List< String >              selectedCloneWorkday        = null;
   private List< SelectItem >          cloneListWeekDay            = null;
-  
+                                                                  
   private ExceptionWorkdayDTO         selectedObjectExcep         = null;
   private boolean                     showAlertSelectRowExcep     = false;
   private boolean                     showViewDetailExcep         = false;
@@ -72,7 +76,11 @@ public class ParametrizationMBean extends GeneralManagedBean {
   private List< SelectItem >          listJornadaExcep            = null;
   private boolean                     disableBtnAddException      = false;
   private boolean                     showAlertSelectDateBefore   = false;
-  
+  private int                         numberNotificatons          = 1;
+  private List< SelectItem >          listNotification            = null;
+  private String                      notificationMask            = "99";
+  private int                         sizeNotificaton             = 5;
+                                                                  
   public ParametrizationMBean () {
     parameterGeneralDTO = new ParameterGeneralDTO();
     selectedObject = new WorkdayDTO();
@@ -91,6 +99,7 @@ public class ParametrizationMBean extends GeneralManagedBean {
     userPortalDTO = getUserDTO();
     if ( userPortalDTO != null ) {
       loadParameterGeneral();
+      loadNotifications();
       if ( !disabledTabWorkday ) {
         listRegisterWorkday( userPortalDTO.getPerson().getClient().getClientCetus().getId() );
         loadWeekDay();
@@ -125,7 +134,7 @@ public class ParametrizationMBean extends GeneralManagedBean {
         if ( UtilCommon.validateResponseSuccess( responseDTO ) ) {
           ConstantWEB.WEB_LOG.info( "Jornada [" + selectedObject.getColDay() + "-" + selectedObject.getJornada()
                                     + "] eliminada exitosamente" );
-          
+                                    
           for ( WorkdayDTO workdayDTO: listRegisterWorkday ) {
             if ( workdayDTO.getColDay().equals( selectedObject.getColDay() )
                  && workdayDTO.getJornada() > selectedObject.getJornada() ) {
@@ -307,8 +316,9 @@ public class ParametrizationMBean extends GeneralManagedBean {
   public void loadSaveParameter ( ActionEvent event ) {
     try {
       if ( parameterGeneralDTO != null ) {
-        addObjectSession( parameterGeneralDTO, "parameterGeneralDTO" );
-        showConfirmSaveParameter = true;
+        
+          addObjectSession( parameterGeneralDTO, "parameterGeneralDTO" );
+          showConfirmSaveParameter = true;
       }
     } catch ( Exception e ) {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
@@ -1228,7 +1238,7 @@ public class ParametrizationMBean extends GeneralManagedBean {
                 addMessageError( "dateExcepAdd", ConstantWEB.ERROR_EXISTS_EXCEPTION_ALL_DAY, null );
                 disableBtnAddException = true;
                 break;
-              } else if ( (exceptionWorkdayDTO.getJornada() == (int)selectItem.getValue() )  ) {
+              } else if ( ( exceptionWorkdayDTO.getJornada() == ( int ) selectItem.getValue() ) ) {
                 if ( listJornadaExcep.size() > 1 ) {
                   listJornadaExcep.remove( i );
                   listJornadaExcep.remove( 0 );
@@ -1435,6 +1445,78 @@ public class ParametrizationMBean extends GeneralManagedBean {
       ConstantWEB.WEB_LOG.error( e.getMessage(), e );
     }
     return null;
+  }
+  
+  private void loadNotifications () {
+    listNotification = new ArrayList< SelectItem >();
+    try {
+      for ( int i = 1; i <= 9; i++ ) {
+        listNotification.add( new SelectItem( new Integer( i ), String.valueOf( i ) ) );
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  public void changeNotification () {
+    try {
+      cleanObjectSession( "notificationMask" );
+      cleanObjectSession( "sizeNotificaton" );
+      cleanObjectSession( "numberNotificatons" );
+      for ( int i = 0; i < numberNotificatons; i++ ) {
+        if ( i == 0 ) {
+          notificationMask = "99";
+        } else {
+          notificationMask += "-99";
+          sizeNotificaton += 3;
+        }
+      }
+      addObjectSession( numberNotificatons, "numberNotificatons" );
+      addObjectSession( notificationMask, "notificationMask" );
+      addObjectSession( sizeNotificaton, "sizeNotificaton" );
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
+  }
+  
+  /**
+   * </p> Validate conf notification. </p>
+   *
+   * @author Jose David Salcedo M. - Cetus Technology
+   * @param context the context
+   * @param comp the comp
+   * @param value the value
+   * @since CetusControlWEB (7/09/2016)
+   */
+  public void validateConfNotification ( FacesContext context, UIComponent comp, Object value ) {
+    String percentages = ( String ) value;
+    String[] arrPercentage = null;
+    int value1 = 0;
+    boolean success = true;
+    try {
+      arrPercentage = percentages.split( "-" );
+      if ( arrPercentage != null && arrPercentage.length > 1 ) {
+        forInitial: for ( int i = 0; i < ( arrPercentage.length - 1 ); i++ ) {
+          value1 = Integer.parseInt( arrPercentage[i] );
+          for ( int j = ( i + 1 ); j < arrPercentage.length; j++ ) {
+            if ( value1 >= Integer.parseInt( arrPercentage[j] ) ) {
+              success = false;
+              break forInitial;
+            }
+          }
+          
+        }
+        
+        if ( !success ) {
+          ( ( UIInput ) comp ).setValid( false );
+          FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, ConstantWEB.CONFIGURATION_INVALID, null );
+          context.addMessage( comp.getClientId( context ), message );
+        }
+        
+      }
+    } catch ( Exception e ) {
+      ConstantWEB.WEB_LOG.error( e.getMessage(), e );
+    }
   }
   
   public boolean isDisabledTabWorkday () {
@@ -1748,6 +1830,38 @@ public class ParametrizationMBean extends GeneralManagedBean {
   
   public void setShowAlertSelectDateBefore ( boolean showAlertSelectDateBefore ) {
     this.showAlertSelectDateBefore = showAlertSelectDateBefore;
+  }
+  
+  public int getNumberNotificatons () {
+    return getObjectSession( "numberNotificatons" ) != null ? ( int ) getObjectSession( "numberNotificatons" ) : numberNotificatons;
+  }
+  
+  public void setNumberNotificatons ( int numberNotificatons ) {
+    this.numberNotificatons = numberNotificatons;
+  }
+  
+  public List< SelectItem > getListNotification () {
+    return listNotification;
+  }
+  
+  public void setListNotification ( List< SelectItem > listNotification ) {
+    this.listNotification = listNotification;
+  }
+  
+  public String getNotificationMask () {
+    return getObjectSession( "notificationMask" ) != null ? ( String ) getObjectSession( "notificationMask" ) : notificationMask;
+  }
+  
+  public void setNotificationMask ( String notificationMask ) {
+    this.notificationMask = notificationMask;
+  }
+  
+  public int getSizeNotificaton () {
+    return getObjectSession( "sizeNotificaton" ) != null ? ( int ) getObjectSession( "sizeNotificaton" ) : sizeNotificaton;
+  }
+  
+  public void setSizeNotificaton ( int sizeNotificaton ) {
+    this.sizeNotificaton = sizeNotificaton;
   }
   
 }

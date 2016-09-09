@@ -3,7 +3,7 @@
   xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:pe="http://primefaces.org/ui/extensions">
 
-  <p:panel header="#{msg.parameter_general}" id="pnlParameterGeneral" styleClass="column_50">
+  <p:panel header="#{msg.parameter_general}" id="pnlParameterGeneral" styleClass="column_60">
     <h:panelGrid columns="3">
 
       <p:outputLabel value="#{msg.hour_format}:" for="hourFormatAdd" />
@@ -39,34 +39,37 @@
 
 
 
-  <p:panel header="#{msg.parameter_notification}" id="pnlParameterNotifications" styleClass="column_50">
-    <h:panelGrid columns="4">
+  <p:panel header="#{msg.parameter_notification}" id="pnlParameterNotifications" styleClass="column_60">
+    <h:panelGrid columns="3">
 
-      <p:outputLabel value="#{msg.time_before_expiration}:" />
-      <pe:inputNumber id="timeBeforeExpirationAdd" required="true" size="5"
-        value="#{parametrizationMBean.parameterGeneralDTO.timeBeforeExpiration}" requiredMessage="#{msg.field_required}"
-        maxlength="4" minValue="0" title="#{msg.title_time_before_expiration}" maxValue="9999" emptyValue="zero"
-        decimalPlaces="0" />
+      <p:outputLabel value="#{msg.advance_notification_task}:" />      
+        <p:selectOneMenu id="advanceNotificationTaskAdd" value="#{parametrizationMBean.numberNotificatons}" required="true"
+          requiredMessage="#{msg.field_required}" >
+          <f:selectItems value="#{parametrizationMBean.listNotification}" />
+          <p:ajax event="change" update="notificationPercentage" process="@this" listener="#{parametrizationMBean.changeNotification}" />
+        </p:selectOneMenu>
+      <p:message for="advanceNotificationTaskAdd" id="advanceNotificationTaskAddMsg" />
 
-      <p:outputLabel value="#{msg.minute}" />
-      <p:message for="timeBeforeExpirationAdd" id="timeBeforeExpirationAddMsg" />
+      <p:outputLabel value="#{msg.notification_percentage} (%):"  />
+      <p:inputMask id="notificationPercentage" required="true" size="#{parametrizationMBean.sizeNotificaton}"
+        value="#{parametrizationMBean.parameterGeneralDTO.colVarchar1}" requiredMessage="#{msg.field_required}"
+        mask="#{parametrizationMBean.notificationMask}" validator="#{parametrizationMBean.validateConfNotification}" />
 
+      <p:message for="notificationPercentage" id="notificationPercentageMsg" />
 
-      <p:outputLabel value="#{msg.time_after_expiration}:"  />
+      <p:outputLabel value="#{msg.time_after_expiration} (#{msg.minute}):"  />
       <pe:inputNumber id="timeAfterExpirationAdd" title="#{msg.title_time_after_expiration}" required="true" size="5"
         value="#{parametrizationMBean.parameterGeneralDTO.timeAfterExpiration}" requiredMessage="#{msg.field_required}"
         maxlength="4" minValue="0" maxValue="9999" emptyValue="zero" decimalPlaces="0" />
 
-      <p:outputLabel value="#{msg.minute}" />
       <p:message for="timeAfterExpirationAdd" id="timeAfterExpirationAddMsg" />
 
 
       <p:outputLabel value="#{msg.maximum_alerts_overdue_task}:"  />
-      <pe:inputNumber id="maximumAlertsOverdueTaskAdd" title="#{msg.title_time_after_expiration}" required="true" size="5"
+      <pe:inputNumber id="maximumAlertsOverdueTaskAdd" required="true" size="5"
         value="#{parametrizationMBean.parameterGeneralDTO.colNumber2}" requiredMessage="#{msg.field_required}"
         maxlength="1" minValue="0" maxValue="9" emptyValue="zero" decimalPlaces="0" />
 
-      <p:outputLabel value="" />
       <p:message for="maximumAlertsOverdueTaskAdd" id="maximumAlertsOverdueTaskAddMsg" />
 
 
@@ -74,7 +77,7 @@
   </p:panel>
   <div align="left">
     <p:commandButton value="#{msg.btn_save}"
-      update="pnlParameterGeneral pnlParameterNotifications :formSaveParameter:confirmSaveParameter" process="@form"
+      update=" pnlParameterGeneral pnlParameterNotifications :formSaveParameter:confirmSaveParameter" process="@form"
       styleClass="button-general" icon="img-save" actionListener="#{parametrizationMBean.loadSaveParameter}" />
   </div>
 </ui:composition>
